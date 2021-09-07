@@ -3,7 +3,7 @@ import { Layout } from "antd";
 import Chessboard from "./Chessboard";
 
 class Container extends React.Component {
-	render() {
+	render() {	
 		return (
 			<Layout>
 				<Layout.Header>
