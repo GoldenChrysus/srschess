@@ -1,8 +1,7 @@
 import React from "react";
 import Chessground from "react-chessground";
 import Chess from "chess.js";
-import Slider from "@material-ui/core/Slider";
-import Typography from "@material-ui/core/Typography";
+import { Slider, Switch } from "antd";
 
 import "react-chessground/dist/styles/chessground.css";
 
@@ -12,6 +11,7 @@ class Chessboard extends React.Component {
 
 		this.state = {
 			chess : new Chess(),
+			disabled : false
 		}
 	}
 
@@ -22,6 +22,7 @@ class Chessboard extends React.Component {
 			orig : "e2"
 		};
 
+		const { disabled } = this.state;
 		const config = {
 			movable : {
 				color : this.toColor(this.state.chess),
@@ -51,20 +52,15 @@ class Chessboard extends React.Component {
 					drawable={config.drawable}
 					onMove={this.onMove.bind(this)}
 				/>
-				<Typography id="discrete-slider-small-steps" gutterBottom>
-					Small steps
-				</Typography>
-				<Slider
-					defaultValue={3}
-					aria-labelledby="discrete-slider-small-steps"
-					step={1}
-					marks
-					min={1}
-					max={50}
-					valueLabelDisplay="auto"
-				/>
+				<Slider defaultValue={30} disabled={disabled} />
+				<Slider range defaultValue={[20, 50]} disabled={disabled} />
+				Disabled: <Switch size="small" checked={disabled} onChange={this.handleDisabledChange.bind(this)} />
 			</React.Fragment>
 		);
+	}
+
+	handleDisabledChange(disabled) {
+		this.setState({ disabled });
 	}
 
 	onMove(orig, dest) {
