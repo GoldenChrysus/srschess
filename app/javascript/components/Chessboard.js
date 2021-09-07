@@ -1,7 +1,7 @@
 import React from "react";
 import Chessground from "react-chessground";
 import Chess from "chess.js";
-import { Slider, Switch } from "antd";
+import { Row, Col, List, Layout } from "antd";
 
 import "react-chessground/dist/styles/chessground.css";
 
@@ -10,9 +10,24 @@ class Chessboard extends React.Component {
 		super();
 
 		this.state = {
-			chess : new Chess(),
-			disabled : false
+			chess    : new Chess(),
+			moves : [
+				[
+					"d4",
+					"d5"
+				],
+				[
+					"Bf4"
+				],
+			]
 		}
+
+		this.ground_ref = React.createRef();
+		this.renderListMove = this.renderListMove.bind(this);
+	}
+
+	componentDidMount() {
+		this.sizeBoard();
 	}
 
 	render() {
@@ -22,7 +37,6 @@ class Chessboard extends React.Component {
 			orig : "e2"
 		};
 
-		const { disabled } = this.state;
 		const config = {
 			movable : {
 				color : this.toColor(this.state.chess),
@@ -44,23 +58,48 @@ class Chessboard extends React.Component {
 		};
 
 		return (
-			<React.Fragment>
-				<Chessground
-					check={this.state.chess.in_check().toString()}
-					movable={config.movable}
-					draggable={config.draggable}
-					drawable={config.drawable}
-					onMove={this.onMove.bind(this)}
-				/>
-				<Slider defaultValue={30} disabled={disabled} />
-				<Slider range defaultValue={[20, 50]} disabled={disabled} />
-				Disabled: <Switch size="small" checked={disabled} onChange={this.handleDisabledChange.bind(this)} />
-			</React.Fragment>
+			<Row gutter={24} style={{ margin: "0 !important" }}>
+				<Col className="gutter-row" md={{ span: 8, order : 1 }} xs={{ span : 12, order: 2 }}>
+				</Col>
+				<Col className="gutter-row" md={{ span: 12, order : 2 }} xs={{ span : 24, order : 1 }}>
+					<Chessground
+						check={this.state.chess.in_check().toString()}
+						movable={config.movable}
+						draggable={config.draggable}
+						drawable={config.drawable}
+						onMove={this.onMove.bind(this)}
+						ref={this.ground_ref}
+					/>
+				</Col>
+				<Col className="gutter-row" md={{ span: 4, order : 3 }} xs={{ span : 12, order : 3 }}>
+					<List
+						itemLayout="vertical"
+						dataSource={this.state.moves}
+						renderItem={this.renderListMove}
+					/>
+				</Col>
+			</Row>
 		);
 	}
 
-	handleDisabledChange(disabled) {
-		this.setState({ disabled });
+	renderListMove(item, index) {
+		return (
+			<List.Item>
+				<Row>
+					<Col span={4}>{index + 1}</Col>
+					<Col span={10}>{item[0]}</Col>
+					<Col span={10}>{(item.length === 2) ? item[1] : ""}</Col>
+				</Row>
+			</List.Item>
+		);
+	}
+
+	sizeBoard() {
+		const board  = this.ground_ref.current.el;
+		const parent = board.parentElement;
+		const width  = parent.clientWidth - (+parent.style.paddingLeft.replace("px", "") * 2) - 10;
+
+		board.style.width = board.style.height = `${width}px`;
 	}
 
 	onMove(orig, dest) {
