@@ -1,24 +1,38 @@
 import React from "react";
 import Chessground from "react-chessground";
-import Chess from "chess.js";
+import Chess, { ChessInstance, Square } from "chess.js";
 import { Row, Col, List } from "antd";
 
 import "react-chessground/dist/styles/chessground.css";
 
-class Chessboard extends React.Component {
-	constructor() {
-		super();
+type ChessType = (fen?: string) => ChessInstance;
+const ChessImport = Chess as unknown;
+const Chess2 = ChessImport as ChessType;
+
+interface ChessboardState {
+	chess: ChessInstance,
+	tree: any,
+	tree_moves: any,
+	moves: Array<any[]>
+}
+
+class Chessboard extends React.Component<object, ChessboardState> {
+	private ground_ref = React.createRef<any>();
+
+	constructor(props: {}) {
+		super(props);
 
 		this.state = {
-			chess      : new Chess(),
+			chess      : Chess2(),
 			tree       : {},
 			tree_moves : {},
 			moves      : []
 		}
 
-		this.ground_ref = React.createRef();
 		this.renderListMove = this.renderListMove.bind(this);
 		this.onMove = this.onMove.bind(this);
+		this.toColor = this.toColor.bind(this);
+		this.toDests = this.toDests.bind(this);
 	}
 
 	componentDidMount() {
@@ -34,16 +48,16 @@ class Chessboard extends React.Component {
 
 		const config = {
 			movable : {
-				color : this.toColor(this.state.chess),
+				color : this.toColor(),
 				free  : false,
-				dests : this.toDests(this.state.chess)
+				dests : this.toDests()
 			},
 			draggable : {
 				showGhost : true
 			},
 			drawable : {
 				eraseOnClick : false,
-				onChange     : (shape) => {
+				onChange     : (shape: object) => {
 					console.log(shape)
 				},
 				shapes : [
@@ -77,7 +91,7 @@ class Chessboard extends React.Component {
 		);
 	}
 
-	renderListMove(item, index) {
+	renderListMove(item: any[], index: number) {
 		return (
 			<List.Item>
 				<Row>
@@ -90,14 +104,14 @@ class Chessboard extends React.Component {
 	}
 
 	sizeBoard() {
-		const board  = this.ground_ref.current.el;
+		const board = this.ground_ref.current.el;
 		const parent = board.parentElement;
 		const width  = parent.clientWidth - (+parent.style.paddingLeft.replace("px", "") * 2) - 10;
 
 		board.style.width = board.style.height = `${width}px`;
 	}
 
-	onMove(orig, dest) {
+	onMove(orig: Square, dest: Square) {
 		this.state.chess.move({
 			from : orig,
 			to   : dest
@@ -106,7 +120,7 @@ class Chessboard extends React.Component {
 		const history     = this.state.chess.history();
 		const movelist    = history.join(".");
 		const move_number = (history.length + 1) / 2.0;
-		const move_index  = Math.floor((history.length - 1) / 2).toFixed(0);
+		const move_index  = +Math.floor((history.length - 1) / 2).toFixed(0);
 
 		let tree = {
 			...this.state.tree
@@ -156,11 +170,11 @@ class Chessboard extends React.Component {
 		return (this.state.chess.turn() === "w") ? "white" : "black";
 	}
 
-	toDests(chess) {
+	toDests() {
 		const dests = new Map();
 
-		chess.SQUARES.forEach(s => {
-			const ms = chess.moves({
+		this.state.chess.SQUARES.forEach(s => {
+			const ms = this.state.chess.moves({
 				square  : s,
 				verbose : true
 			});
