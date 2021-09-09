@@ -147,15 +147,11 @@ class Chessboard extends React.Component<object, ChessboardState> {
 			tree_moves[move_number].push(movelist);
 		}
 
-		console.log(move_index);
-
 		if (!moves[move_index]) {
 			moves.push([]);
 		}
 
 		moves[move_index].push(history.at(-1));
-
-		console.log(moves);
 
 		this.setState({
 			chess : this.state.chess,
