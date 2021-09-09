@@ -8,10 +8,10 @@ export default class Move extends jsonapi(Model) {
 	static enableAutoId = false;
 
 	save(options?: IRequestOptions):Promise<IJsonapiModel>{
-		if (!this.id) {
-			let hash = crypto.createHash("md5").update(`${this.repertoire.id}-${this.move_number}-${this.move}`).digest("hex");
+		if (!this.meta.id) {
+			let hash = crypto.createHash("md5").update(`${this.repertoire.meta.id}-${this.move_number}-${this.move}`).digest("hex");
 			
-			this.id = [
+			this.meta.id = [
 				hash.substr(0, 8),
 				hash.substr(8, 4),
 				hash.substr(12, 4),
@@ -22,9 +22,6 @@ export default class Move extends jsonapi(Model) {
 
 		return super.save(options);
 	}
-
-	@Attribute()
-	public id!: string;
 
 	@Attribute()
 	public move_number!: bigint;

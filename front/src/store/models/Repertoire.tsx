@@ -6,9 +6,6 @@ export default class Repertoire extends jsonapi(Model) {
 	static type = "repertoire";
 
 	@Attribute()
-	public id!: bigint;
-
-	@Attribute()
 	public name!: string;
 
 	@Attribute()
