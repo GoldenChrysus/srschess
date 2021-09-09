@@ -34,10 +34,12 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		this.onMove         = this.onMove.bind(this);
 		this.toColor        = this.toColor.bind(this);
 		this.toDests        = this.toDests.bind(this);
+		this.sizeBoard      = this.sizeBoard.bind(this);
 	}
 
 	componentDidMount() {
 		this.sizeBoard();
+		window.addEventListener("resize", this.sizeBoard);
 	}
 
 	render() {
