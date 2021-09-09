@@ -178,10 +178,7 @@ class Chessboard extends React.Component<object, ChessboardState> {
 
 	checkColor() {
 		return (this.state.chess.in_check())
-			? ((this.state.chess.turn() === "w")
-				? "white"
-				: "black"
-			)
+			? this.toColor()
 			: "";
 	}
 
