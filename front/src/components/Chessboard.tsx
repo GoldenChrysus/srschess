@@ -37,6 +37,7 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		this.toDests        = this.toDests.bind(this);
 		this.checkColor     = this.checkColor.bind(this);
 		this.sizeBoard      = this.sizeBoard.bind(this);
+		this.lastMove       = this.lastMove.bind(this);
 	}
 
 	componentDidMount() {
@@ -45,6 +46,7 @@ class Chessboard extends React.Component<object, ChessboardState> {
 	}
 
 	render() {
+		console.log("gh1")
 		let shape = {
 			brush : "green",
 			dest : "f4",
@@ -52,6 +54,7 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		};
 
 		const config = {
+			fen     : this.state.chess.fen(),
 			movable : {
 				color : this.toColor(),
 				free  : false,
@@ -61,13 +64,17 @@ class Chessboard extends React.Component<object, ChessboardState> {
 				showGhost : true
 			},
 			drawable : {
+				enabled: true,
 				eraseOnClick : false,
 				onChange     : (shape: object) => {
 					console.log(shape)
 				},
-				shapes : [
+				autoShapes : [
 					shape
 				]
+			},
+			events : {
+				insert : this.sizeBoard
 			}
 		};
 
@@ -77,12 +84,16 @@ class Chessboard extends React.Component<object, ChessboardState> {
 				</Col>
 				<Col className="gutter-row" md={{ span: 12, order : 2 }} xs={{ span : 24, order : 1 }}>
 					<Chessground
+						fen={this.state.chess.fen()}
 						check={this.checkColor()}
 						movable={config.movable}
 						draggable={config.draggable}
 						drawable={config.drawable}
 						onMove={this.onMove}
 						promotion={this.onPromo}
+						lastMove={this.lastMove()}
+						turnColor={this.toColor()}
+						events={config.events}
 						ref={this.ground_ref}
 					/>
 				</Col>
@@ -95,6 +106,14 @@ class Chessboard extends React.Component<object, ChessboardState> {
 				</Col>
 			</Row>
 		);
+	}
+
+	lastMove() {
+		const history = this.state.chess.history({ verbose: true });
+
+		return (history.length)
+			? [history.at(-1)?.from, history.at(-1)?.to]
+			: null;
 	}
 
 	renderListMove(item: any[], index: number) {
@@ -110,6 +129,10 @@ class Chessboard extends React.Component<object, ChessboardState> {
 	}
 
 	sizeBoard() {
+		if (!this.ground_ref.current) {
+			return;
+		}
+
 		const board  = this.ground_ref.current.el;
 		const parent = board.parentElement;
 		const width  = parent.clientWidth - (+parent.style.paddingLeft.replace("px", "") * 2) - 10;
