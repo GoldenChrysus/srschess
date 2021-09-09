@@ -6,14 +6,15 @@ import { Row, Col, List } from "antd";
 import "react-chessground/dist/styles/chessground.css";
 
 type ChessType = (fen?: string) => ChessInstance;
+
 const ChessImport = Chess as unknown;
-const Chess2 = ChessImport as ChessType;
+const Chess2      = ChessImport as ChessType;
 
 interface ChessboardState {
-	chess: ChessInstance,
-	tree: any,
-	tree_moves: any,
-	moves: Array<any[]>
+	chess      : ChessInstance,
+	tree       : any,
+	tree_moves : any,
+	moves      : Array<any[]>
 }
 
 class Chessboard extends React.Component<object, ChessboardState> {
@@ -30,9 +31,9 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		}
 
 		this.renderListMove = this.renderListMove.bind(this);
-		this.onMove = this.onMove.bind(this);
-		this.toColor = this.toColor.bind(this);
-		this.toDests = this.toDests.bind(this);
+		this.onMove         = this.onMove.bind(this);
+		this.toColor        = this.toColor.bind(this);
+		this.toDests        = this.toDests.bind(this);
 	}
 
 	componentDidMount() {
