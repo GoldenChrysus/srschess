@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { config } from "@datx/jsonapi";
 
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { StoreProvider } from "./store/StoreProvider";
