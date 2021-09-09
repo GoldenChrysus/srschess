@@ -104,7 +104,7 @@ class Chessboard extends React.Component<object, ChessboardState> {
 	}
 
 	sizeBoard() {
-		const board = this.ground_ref.current.el;
+		const board  = this.ground_ref.current.el;
 		const parent = board.parentElement;
 		const width  = parent.clientWidth - (+parent.style.paddingLeft.replace("px", "") * 2) - 10;
 
