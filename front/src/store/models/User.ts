@@ -14,6 +14,6 @@ export default class User extends jsonapi(Model) {
 	@Attribute()
 	public bearer!: string;
 
-	@Attribute({ toMany: Repertoire })
-	public repertoires!: Repertoire;
+	@Attribute({ toMany: Repertoire, referenceProperty: "user" })
+	public repertoires!: Array<Repertoire>;
 }

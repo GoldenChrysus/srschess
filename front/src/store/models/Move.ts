@@ -37,10 +37,6 @@ export default class Move extends jsonapi(Model) {
 
 	@Attribute({ toOne: Repertoire })
 	public repertoire!: Repertoire;
-
-	@Attribute({ toOne: Move })
-	public parent!: Move;
-
-	@Attribute({ toMany: Move })
-	public children!: Move;
 }
+
+Attribute({ toMany: Move, referenceProperty: "parent" })(Move, "children")

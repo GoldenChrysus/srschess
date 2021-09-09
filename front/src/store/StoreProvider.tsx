@@ -1,6 +1,7 @@
-import { createContext, ReactNode } from 'react';
+import React from "react";
+import { createContext, ReactNode } from "react";
 
-import { store, PrimaryStore} from "./PrimaryStore";
+import { store, PrimaryStore } from "./PrimaryStore";
 
 interface IStores {
   store: PrimaryStore;

@@ -33,7 +33,14 @@
   "eslintConfig": {
     "extends": [
       "react-app"
-    ]
+    ],
+    "plugins": [
+      "react",
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "off"
+    }
   },
   "browserslist": {
     "production": [

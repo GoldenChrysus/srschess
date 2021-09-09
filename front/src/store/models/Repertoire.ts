@@ -10,7 +10,4 @@ export default class Repertoire extends jsonapi(Model) {
 
 	@Attribute()
 	public side!: string;
-
-	@Attribute({ toOne: User })
-	public user!: User;
 }
