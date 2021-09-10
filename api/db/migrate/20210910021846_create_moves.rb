@@ -9,7 +9,7 @@ class CreateMoves < ActiveRecord::Migration[6.1]
       t.integer :sort, null: false
 
       t.belongs_to :repertoire, null: false, foreign_key: true, index: true
-      t.belongs_to :move, type: :uuid, null: true, foreign_key: true, index: true
+      t.references :parent, type: :uuid, null: true, foreign_key: { to_table: :moves }, index: true
 
       t.timestamps
     end

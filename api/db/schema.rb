@@ -22,10 +22,10 @@ ActiveRecord::Schema.define(version: 2021_09_10_023640) do
     t.text "fen", null: false
     t.integer "sort", null: false
     t.bigint "repertoire_id", null: false
-    t.uuid "move_id"
+    t.uuid "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["move_id"], name: "index_moves_on_move_id"
+    t.index ["parent_id"], name: "index_moves_on_parent_id"
     t.index ["repertoire_id", "move_number", "move"], name: "index_moves_on_repertoire_id_and_move_number_and_move", unique: true
     t.index ["repertoire_id"], name: "index_moves_on_repertoire_id"
   end
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 2021_09_10_023640) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "moves", "moves"
+  add_foreign_key "moves", "moves", column: "parent_id"
   add_foreign_key "moves", "repertoires"
   add_foreign_key "repertoires", "users"
 end
