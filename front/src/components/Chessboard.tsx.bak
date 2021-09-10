@@ -198,7 +198,6 @@ class Chessboard extends React.Component<object, ChessboardState> {
 
 	playOtherSide() {
 		return (orig: Square, dest: Square) => {
-			console.log(dest);
 			// Update chess.js
 			// Note: we don't check the return value here which would tell
 			// us if this is a legal move.  That's because we only allowed legal moves by setting "dests"

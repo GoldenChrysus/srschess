@@ -46,7 +46,6 @@ class Chessboard extends React.Component<object, ChessboardState> {
 	}
 
 	render() {
-		console.log("gh1")
 		let shape = {
 			brush : "green",
 			dest : "f4",

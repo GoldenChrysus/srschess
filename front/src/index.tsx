@@ -1,21 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { config } from "@datx/jsonapi";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { StoreProvider } from "./store/StoreProvider";
+import coordinator from "./api/coordinator";
 
-config.baseUrl = "http://localhost:3001/api/";
+(async () => {
+	await coordinator.activate();
 
-ReactDOM.render(
-	<React.StrictMode>
-		<StoreProvider>
+	ReactDOM.render(
+		<React.StrictMode>
 			<App />
-		</StoreProvider>
-	</React.StrictMode>,
-	document.getElementById("root")
-);
+		</React.StrictMode>,
+		document.getElementById("root")
+	);
+})();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
