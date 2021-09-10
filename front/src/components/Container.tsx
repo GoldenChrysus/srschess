@@ -2,38 +2,17 @@ import React from "react";
 import { Layout } from "antd";
 import Chessboard from "./Chessboard";
 
-import { memory } from "../api/sources/memory";
+import User from "../api/models/User";
 
 class Container extends React.Component {
-	componentDidMount() {
-		/* memory.update(t =>
-			t.addRecord({
-				type : "user",
-				id: "",
-				attributes : {
-					email: "email3@email.com",
-					password: "1234"
-				}
-			})
-		).then(() => {
-			memory.query(q =>
-				q.findRecord({
-					type : "user",
-					id: "5"
-				})
-			).then((d) => {
-				console.log(d);
-			}); 
-		}); */
+	async componentDidMount() {
+		let user = await User.byId("1");
 
-		memory.query(q =>
-			q.findRecord({
-				type : "repertoire",
-				id: "1"
-			})
-		).then((d) => {
-			console.log(d);
-		});
+		console.log(user);
+
+		user = await User.byId("1");
+
+		console.log(user);
 	}
 
 	render() {

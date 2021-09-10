@@ -5,7 +5,18 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import coordinator from "./api/coordinator";
 
+import { schema } from "./api/schema";
+import User from "./api/models/User";
+import Repertoire from "./api/models/Repertoire";
+
 (async () => {
+	schema.upgrade({
+		models : {
+			user       : User.getSchema(),
+			repertoire : Repertoire.getSchema()
+		}
+	});
+
 	await coordinator.activate();
 
 	ReactDOM.render(
