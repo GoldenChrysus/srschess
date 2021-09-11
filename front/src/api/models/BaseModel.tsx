@@ -20,11 +20,26 @@ export default class Model {
 
 	public static readonly store = new BaseStore();
 
-	public static async byId(id: string | number) {
+	public static async byId(id: string | number, use_cache: boolean = true) {
 		const str_id: string = String(id);
 
-		if (this.store.records[str_id]) {
-			return this.store.records[str_id];
+		if (use_cache) {
+			if (this.store.records[str_id]) {
+				return this.store.records[str_id];
+			}
+
+			try {
+				let record = memory.cache.query(q =>
+					q.findRecord({
+						type : this.type,
+						id   : str_id
+					})
+				);
+
+				if (record) {
+					return record;
+				}
+			} catch {}
 		}
 
 		let record = await memory.query(q =>
@@ -60,23 +75,7 @@ export default class Model {
 
 		await memory.update(t => t.addRecord(data));
 
-		let record: any;
-
-		try {
-			record = memory.cache.query(q =>
-				q.findRecord({
-					type : this.type,
-					id   : id
-				})
-			);
-		} catch (e: any) {
-			record = await memory.query(q =>
-				q.findRecord({
-					type : this.type,
-					id   : id
-				})
-			);
-		}
+		let record = await this.byId(id);
 
 		if (record) {
 			this.store.add(record.id, record);
