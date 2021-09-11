@@ -1,6 +1,15 @@
 import React from "react";
 
-class ChessController extends React.Component {
+enum ChessControllerModes {
+	repertoire
+};
+
+interface ChessControllerProps {
+	mode        : keyof typeof ChessControllerModes,
+	repertoire? : any
+};
+
+class ChessController extends React.Component<ChessControllerProps> {
 	render() {
 		return "";
 	}

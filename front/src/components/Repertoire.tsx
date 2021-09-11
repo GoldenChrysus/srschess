@@ -26,9 +26,7 @@ class Repertoire extends React.Component<any, RepertoireState> {
 
 	render() {
 		return (
-			<ChessController>
-
-			</ChessController>
+			<ChessController mode="repertoire" repertoire={this.state.repertoire}/>
 		);
 	}
 }
