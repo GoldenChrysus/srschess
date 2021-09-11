@@ -13,6 +13,11 @@ export default class Repertoire extends Model {
 			type    : "hasOne",
 			model   : "user",
 			inverse : "repertoires"
+		},
+		moves : {
+			type    : "hasMany",
+			model   : "move",
+			inverse : "repertoire"
 		}
 	};
 }

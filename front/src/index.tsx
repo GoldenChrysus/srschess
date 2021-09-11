@@ -8,12 +8,14 @@ import coordinator from "./api/coordinator";
 import { schema } from "./api/schema";
 import User from "./api/models/User";
 import Repertoire from "./api/models/Repertoire";
+import Move from "./api/models/Move";
 
 (async () => {
 	schema.upgrade({
 		models : {
 			user       : User.getSchema(),
-			repertoire : Repertoire.getSchema()
+			repertoire : Repertoire.getSchema(),
+			move       : Move.getSchema()
 		}
 	});
 

@@ -7,11 +7,16 @@ class Move < ApplicationRecord
 	validates :sort, presence: true
 
 	belongs_to :repertoire, required: true
-	belongs_to :parent, class_name: "Move"
+	belongs_to :parent, class_name: "Move", required: false
 	has_many :moves, inverse_of: "parent"
 
 	# Callbacks
 	after_validation :set_id, on: :create
+
+	def self.attributes_protected_by_default
+		# default is ["id", "type"]
+		["type"]
+	end
 
 	private
 		def set_id

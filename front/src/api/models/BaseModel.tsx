@@ -6,6 +6,13 @@ interface Schema {
 	relationships? : {}
 }
 
+interface RecordData { 
+	type           : string,
+	id             : string,
+	attributes     : { [key: string]: any },
+	relationships? : { [key: string]: any }
+}
+
 export default class Model {
 	public static type: string;
 	public static attributes: {};
@@ -33,6 +40,51 @@ export default class Model {
 		}
 	}
 
+	public static async add(id: string, attributes: any, relationships?: any) {
+		id = id || this.calculateId(attributes, relationships);
+
+		const data: RecordData = {
+			type       : this.type,
+			id         : id,
+			attributes : attributes
+		};
+
+		if (relationships) {
+			data.relationships = {};
+
+			for (let key in relationships) {
+				data.relationships[key] = {
+					data : relationships[key]
+				};
+			}
+		}
+
+		await memory.update(t => t.addRecord(data));
+
+		let record: any;
+
+		try {
+			record = memory.cache.query(q =>
+				q.findRecord({
+					type : this.type,
+					id   : id
+				})
+			);
+		} catch (e: any) {
+			record = await memory.query(q =>
+				q.findRecord({
+					type : this.type,
+					id   : id
+				})
+			);
+		}
+
+		if (record) {
+			this.store.add(record.id, record);
+			return record;
+		}
+	}
+
 	public static getSchema() {
 		const schema: Schema = {
 			attributes : this.attributes
@@ -43,5 +95,9 @@ export default class Model {
 		}
 
 		return schema;
+	}
+
+	protected static calculateId(attributes: any, relationships: any): string {
+		return "";
 	}
 }

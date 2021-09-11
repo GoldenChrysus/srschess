@@ -5,5 +5,9 @@ module Api
 		belongs_to :repertoire
 		belongs_to :move
 		has_many :moves
+
+		def self.creatable_fields(context)
+			super + [:id]
+		  end
 	end
 end
