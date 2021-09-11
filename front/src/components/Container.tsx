@@ -3,10 +3,8 @@ import { observer } from "mobx-react";
 import { Layout } from "antd";
 import Chessboard from "./Chessboard";
 
-import User from "../api/models/User";
-import Repertoire from "../api/models/Repertoire";
-import Move from "../api/models/Move";
-import BaseStore from "../api/models/BaseStore";
+import { User, Repertoire, Move } from "../api/models/";
+import BaseStore from "../api/models/lib/BaseStore";
 
 interface ContainerProps {
 	users: BaseStore;

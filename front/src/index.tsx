@@ -6,21 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import coordinator from "./api/coordinator";
 
 import { schema } from "./api/schema";
-import User from "./api/models/User";
-import Repertoire from "./api/models/Repertoire";
-import Move from "./api/models/Move";
+import { map } from "./api/models/";
 
 (async () => {
-	schema.upgrade({
-		models : {
-			user       : User.getSchema(),
-			repertoire : Repertoire.getSchema(),
-			move       : Move.getSchema()
-		}
-	});
+	const new_schema: { [key: string]: any } = {};
 
+	for (let key in map) {
+		new_schema[map[key].type] = map[key].getSchema();
+	}
+
+	schema.upgrade(new_schema);
 	await coordinator.activate();
-
 	ReactDOM.render(
 		<React.StrictMode>
 			<App />

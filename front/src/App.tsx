@@ -2,8 +2,7 @@ import React from 'react';
 import './App.css';
 
 import Container from "./components/Container";
-
-import User from "./api/models/User";
+import { User } from "./api/models/";
 
 function App() {
 	return (

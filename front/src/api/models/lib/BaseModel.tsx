@@ -1,4 +1,4 @@
-import { memory } from "../sources/memory";
+import { memory } from "../../sources/memory";
 import BaseStore from "./BaseStore";
 
 interface Schema {
@@ -17,6 +17,14 @@ export default class Model {
 	public static type: string;
 	public static attributes: {};
 	public static relationships?: {};
+
+	public get type(): string {
+		return Object.getPrototypeOf(this).constructor.type;
+	}
+
+	public getSchema(): Schema {
+		return Object.getPrototypeOf(this).constructor.getSchema();
+	}
 
 	public static readonly store = new BaseStore();
 
