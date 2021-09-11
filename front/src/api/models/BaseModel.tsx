@@ -18,18 +18,18 @@ export default class Model {
 
 		if (this.store.records[str_id]) {
 			return this.store.records[str_id];
-		} else {
-			let record = await memory.query(q =>
-				q.findRecord({
-					type : this.type,
-					id   : str_id
-				})
-			);
+		}
 
-			if (record) {
-				this.store.add(record.id, record);
-				return record;
-			}
+		let record = await memory.query(q =>
+			q.findRecord({
+				type : this.type,
+				id   : str_id
+			})
+		);
+
+		if (record) {
+			this.store.add(record.id, record);
+			return record;
 		}
 	}
 
