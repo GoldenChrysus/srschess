@@ -31,7 +31,11 @@ export default class Move extends Model {
 	};
 
 	protected static calculateId(attributes: any, relationships: any): string {
-		let hash = crypto.createHash("md5").update(`${relationships.repertoire.id}:${attributes.move_number}:${attributes.move}`).digest("hex");
+		return this.generateId(relationships.repertoire.id, attributes.move_number, attributes.move);
+	}
+
+	public static generateId(repertoire_id: string, move_number: string, move: string): string {
+		let hash = crypto.createHash("md5").update(`${repertoire_id}:${move_number}:${move}`).digest("hex");
 		
 		return [
 			hash.substr(0, 8),
