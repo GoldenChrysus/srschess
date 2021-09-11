@@ -7,12 +7,14 @@ import coordinator from "./api/coordinator";
 
 import { schema } from "./api/schema";
 import { map } from "./api/models/";
+import { StoreRegistry } from "./api/stores/";
 
 (async () => {
-	const new_schema: { [key: string]: any } = {};
+	const new_schema: { [key: string]: any } = { models: {} };
 
 	for (let key in map) {
-		new_schema[map[key].type] = map[key].getSchema();
+		StoreRegistry.init(map[key].type);
+		new_schema.models[map[key].type] = map[key].getSchema();
 	}
 
 	schema.upgrade(new_schema);

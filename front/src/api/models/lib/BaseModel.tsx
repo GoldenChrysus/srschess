@@ -1,5 +1,5 @@
 import { memory } from "../../sources/memory";
-import BaseStore from "./BaseStore";
+import { StoreRegistry } from "../../stores/";
 
 interface Schema {
 	attributes     : {},
@@ -18,15 +18,9 @@ export default class Model {
 	public static attributes: {};
 	public static relationships?: {};
 
-	public get type(): string {
-		return Object.getPrototypeOf(this).constructor.type;
+	public static get store() {
+		return StoreRegistry.get(this.type);
 	}
-
-	public getSchema(): Schema {
-		return Object.getPrototypeOf(this).constructor.getSchema();
-	}
-
-	public static readonly store = new BaseStore();
 
 	public static async byId(id: string | number, use_cache: boolean = true) {
 		const str_id: string = String(id);
@@ -67,7 +61,7 @@ export default class Model {
 		return false;
 	}
 
-	public static async add(attributes: any, relationships?: any) {
+	public static async create(attributes: any, relationships?: any) {
 		const id: string       = this.calculateId(attributes, relationships);
 		const data: RecordData = {
 			type       : this.type,
@@ -109,5 +103,13 @@ export default class Model {
 
 	protected static calculateId(attributes: any, relationships: any): string {
 		return "";
+	}
+
+	public get type(): string {
+		return Object.getPrototypeOf(this).constructor.type;
+	}
+
+	public getSchema(): Schema {
+		return Object.getPrototypeOf(this).constructor.getSchema();
 	}
 }

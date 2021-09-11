@@ -10,4 +10,8 @@ export default class BaseStore {
 	public add(id: string, data: any): void {
 		this.records[id] = data;
 	}
+
+	public remove(id: string): void {
+		delete this.records[id];
+	}
 }

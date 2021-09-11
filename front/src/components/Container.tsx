@@ -4,7 +4,7 @@ import { Layout } from "antd";
 import Chessboard from "./Chessboard";
 
 import { User, Repertoire, Move } from "../api/models/";
-import BaseStore from "../api/models/lib/BaseStore";
+import { BaseStore } from "../api/stores/";
 
 interface ContainerProps {
 	users: BaseStore;
@@ -12,9 +12,8 @@ interface ContainerProps {
 
 class Container extends React.Component<ContainerProps> {
 	async componentDidMount() {
-		let rep = await Repertoire.byId(1);
-
-		let move = await Move.add(
+		let rep  = await Repertoire.byId(1);
+		let move = await Move.create(
 			{
 				move_number : 10,
 				move        : "d4",
