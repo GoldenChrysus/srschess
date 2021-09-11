@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router
 
 import MainLayout from "./MainLayout";
 import Chessboard from "./Chessboard";
-import RepertoireComponent from "./Repertoire";
+import RepertoireRoute from "./lib/routes/RepertoireRoute";
 
 import { Repertoire } from "../api/models/";
 
@@ -17,7 +17,7 @@ class Container extends React.Component {
 							<Chessboard/>
 						</Route>
 						<Route exact path="/repertoires/:id?">
-							<RepertoireComponent repertoires={Repertoire.store}/>
+							<RepertoireRoute repertoires={Repertoire.store}/>
 						</Route>
 					</Switch>
 				</Router>

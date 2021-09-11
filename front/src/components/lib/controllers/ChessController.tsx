@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { BaseStore } from "../../../api/stores";
 
 enum ChessControllerModes {
-	repertoire
+	repertoire = "repertoire"
 };
 
 interface ChessControllerProps {
@@ -14,7 +14,13 @@ interface ChessControllerProps {
 
 class ChessController extends React.Component<ChessControllerProps> {
 	render() {
-		return "";
+		switch (this.props.mode) {
+			case ChessControllerModes.repertoire:
+				return "";
+			
+			default:
+				return "";
+		}
 	}
 }
 

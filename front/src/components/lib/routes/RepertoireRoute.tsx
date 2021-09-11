@@ -2,14 +2,14 @@ import React from "react";
 import { observer } from "mobx-react";
 import { withRouter } from "react-router-dom";
 
-import ChessController from "./lib/controllers/ChessController";
-import { Repertoire as RepertoireModel } from "../api/models";
+import ChessController from "../controllers/ChessController";
+import { Repertoire } from "../../../api/models";
 
-interface RepertoireState {
+interface RepertoireRouteState {
 	repertoire?: any
 };
 
-class Repertoire extends React.Component<any, RepertoireState> {
+class RepertoireRoute extends React.Component<any, RepertoireRouteState> {
 	constructor(props: any) {
 		super(props);
 
@@ -20,7 +20,7 @@ class Repertoire extends React.Component<any, RepertoireState> {
 		const id = this.props.match.params.id;
 
 		this.setState({
-			repertoire : (id) ? await RepertoireModel.byId(id) : undefined
+			repertoire : (id) ? await Repertoire.byId(id) : undefined
 		});
 	}
 
@@ -31,4 +31,4 @@ class Repertoire extends React.Component<any, RepertoireState> {
 	}
 }
 
-export default withRouter(observer(Repertoire));
+export default withRouter(observer(RepertoireRoute));
