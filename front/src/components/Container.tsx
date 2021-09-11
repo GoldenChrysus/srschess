@@ -1,51 +1,29 @@
 import React from "react";
-import { observer } from "mobx-react";
-import { Layout } from "antd";
+import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
+
+import MainLayout from "./MainLayout";
 import Chessboard from "./Chessboard";
+import RepertoireComponent from "./Repertoire";
 
-import { User, Repertoire, Move } from "../api/models/";
-import { BaseStore } from "../api/stores/";
+import { Repertoire } from "../api/models/";
 
-interface ContainerProps {
-	users: BaseStore;
-}
-
-class Container extends React.Component<ContainerProps> {
-	async componentDidMount() {
-		let rep  = await Repertoire.byId(1);
-		let move = await Move.create(
-			{
-				move_number : 10,
-				move        : "d4",
-				fen         : "test",
-				sort        : 0,
-			},
-			{
-				repertoire : {
-					type : "repertoire",
-					id   : rep.id
-				}
-			}
-		);
-	}
-
+class Container extends React.Component {
 	render() {
 		return (
-			<Layout>
-				<Layout.Header>
-					Header
-				</Layout.Header>
-				<Layout>
-					<Layout.Content>
-						<Chessboard/>
-					</Layout.Content>
-				</Layout>
-				<Layout.Footer>
-					Footer
-				</Layout.Footer>
-			</Layout>
+			<MainLayout>
+				<Router>
+					<Switch>
+						<Route exact path="/">
+							<Chessboard/>
+						</Route>
+						<Route exact path="/repertoires/:id?">
+							<RepertoireComponent repertoires={Repertoire.store}/>
+						</Route>
+					</Switch>
+				</Router>
+			</MainLayout>
 		);
 	}
 }
 
-export default observer(Container);
+export default Container;

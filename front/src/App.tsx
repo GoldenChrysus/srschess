@@ -1,13 +1,12 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
 import Container from "./components/Container";
-import { User } from "./api/models/";
 
-function App() {
-	return (
-		<Container users={User.store}/>
-	);
+class App extends React.Component {
+	render() {
+		return <Container/>;
+	}
 }
 
 export default App;
