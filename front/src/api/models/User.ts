@@ -3,14 +3,6 @@ import Model from "./BaseModel";
 export default class User extends Model {
 	public static type = "user";
 
-	public static schema = {
-		attributes : {
-			email    : { type : "string" },
-			password : { type : "string" },
-			bearer   : { type : "string" }
-		}
-	}
-
 	public static attributes = {
 		email    : { type : "string" },
 		password : { type : "string" },

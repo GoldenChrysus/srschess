@@ -1,25 +1,34 @@
 import React from "react";
+import { observer } from "mobx-react";
 import { Layout } from "antd";
 import Chessboard from "./Chessboard";
 
 import User from "../api/models/User";
+import BaseStore from "../api/models/BaseStore";
 
-class Container extends React.Component {
+interface ContainerProps {
+	users: BaseStore;
+}
+
+class Container extends React.Component<ContainerProps> {
 	async componentDidMount() {
-		let user = await User.byId("1");
-
-		console.log(user);
-
-		user = await User.byId("1");
-
-		console.log(user);
+		setTimeout(() => {
+			User.byId(1);
+		}, 2000);
 	}
 
 	render() {
+		console.log(this.props.users.records);
+		let users = [];
+
+		for (let user_id in this.props.users.records) {
+			users.push(user_id);
+		}
+
 		return (
 			<Layout>
 				<Layout.Header>
-					Header
+					{users.join(",")}
 				</Layout.Header>
 				<Layout>
 					<Layout.Content>
@@ -34,4 +43,4 @@ class Container extends React.Component {
 	}
 }
 
-export default Container;
+export default observer(Container);

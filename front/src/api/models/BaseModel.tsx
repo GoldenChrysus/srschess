@@ -1,5 +1,5 @@
-import { KeyMap } from "@orbit/data";
 import { memory } from "../sources/memory";
+import BaseStore from "./BaseStore";
 
 interface Schema {
 	attributes     : {},
@@ -11,22 +11,23 @@ export default class Model {
 	public static attributes: {};
 	public static relationships?: {};
 
-	public static readonly records: { [id: string]: any } = {};
+	public static readonly store = new BaseStore();
 
-	public static async byId(id: string) {
-		if (this.records[id]) {
-			return this.records[id];
+	public static async byId(id: string | number) {
+		const str_id: string = String(id);
+
+		if (this.store.records[str_id]) {
+			return this.store.records[str_id];
 		} else {
 			let record = await memory.query(q =>
 				q.findRecord({
 					type : this.type,
-					id   : id
+					id   : str_id
 				})
 			);
 
 			if (record) {
-				this.records[record.id] = record;
-
+				this.store.add(record.id, record);
 				return record;
 			}
 		}
@@ -42,13 +43,5 @@ export default class Model {
 		}
 
 		return schema;
-	}
-
-	private static getAttributes() {
-		return this.attributes;
-	}
-
-	private static getRelationships() {
-		return this.relationships;
 	}
 }
