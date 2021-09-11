@@ -40,9 +40,8 @@ export default class Model {
 		}
 	}
 
-	public static async add(id: string, attributes: any, relationships?: any) {
-		id = id || this.calculateId(attributes, relationships);
-
+	public static async add(attributes: any, relationships?: any) {
+		const id: string       = this.calculateId(attributes, relationships);
 		const data: RecordData = {
 			type       : this.type,
 			id         : id,

@@ -20,8 +20,9 @@ class Container extends React.Component<ContainerProps> {
 
 		let rep = await Repertoire.byId(1);
 
+		console.log(rep);
+
 		Move.add(
-			"",
 			{
 				move_number : 10,
 				move        : "d4",
