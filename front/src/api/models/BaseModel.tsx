@@ -23,36 +23,40 @@ export default class Model {
 	public static async byId(id: string | number, use_cache: boolean = true) {
 		const str_id: string = String(id);
 
+		let record: any;
+
 		if (use_cache) {
 			if (this.store.records[str_id]) {
 				return this.store.records[str_id];
 			}
 
 			try {
-				let record = memory.cache.query(q =>
+				record = memory.cache.query(q =>
 					q.findRecord({
 						type : this.type,
 						id   : str_id
 					})
 				);
-
-				if (record) {
-					return record;
-				}
 			} catch {}
 		}
 
-		let record = await memory.query(q =>
-			q.findRecord({
-				type : this.type,
-				id   : str_id
-			})
-		);
+		if (!record) {
+			record = await memory.query(q =>
+				q.findRecord({
+					type : this.type,
+					id   : str_id
+				})
+			);
+		}
 
 		if (record) {
+			record.local_type = this.type;
+
 			this.store.add(record.id, record);
 			return record;
 		}
+
+		return false;
 	}
 
 	public static async add(attributes: any, relationships?: any) {

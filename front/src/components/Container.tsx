@@ -14,15 +14,9 @@ interface ContainerProps {
 
 class Container extends React.Component<ContainerProps> {
 	async componentDidMount() {
-		setTimeout(() => {
-			User.byId(1);
-		}, 2000);
-
 		let rep = await Repertoire.byId(1);
 
-		console.log(rep);
-
-		Move.add(
+		let move = await Move.add(
 			{
 				move_number : 10,
 				move        : "d4",
@@ -39,17 +33,10 @@ class Container extends React.Component<ContainerProps> {
 	}
 
 	render() {
-		console.log(this.props.users.records);
-		let users = [];
-
-		for (let user_id in this.props.users.records) {
-			users.push(user_id);
-		}
-
 		return (
 			<Layout>
 				<Layout.Header>
-					{users.join(",")}
+					Header
 				</Layout.Header>
 				<Layout>
 					<Layout.Content>

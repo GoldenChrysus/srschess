@@ -3,5 +3,6 @@ module Api
 		attributes :name, :side, :created_at
 
 		belongs_to :user
+		has_many :moves
 	end
 end
