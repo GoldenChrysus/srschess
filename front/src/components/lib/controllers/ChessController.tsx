@@ -4,13 +4,13 @@ import { BaseStore } from "../../../api/stores";
 
 enum ChessControllerModes {
 	repertoire = "repertoire"
-};
+}
 
 interface ChessControllerProps {
 	mode         : keyof typeof ChessControllerModes,
 	repertoire?  : any,
 	repertoires? : BaseStore
-};
+}
 
 class ChessController extends React.Component<ChessControllerProps> {
 	render() {

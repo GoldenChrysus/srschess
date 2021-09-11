@@ -7,7 +7,7 @@ import { Repertoire } from "../../../api/models";
 
 interface RepertoireRouteState {
 	repertoire?: any
-};
+}
 
 class RepertoireRoute extends React.Component<any, RepertoireRouteState> {
 	constructor(props: any) {
