@@ -2,6 +2,7 @@ import Coordinator, { RequestStrategy, SyncStrategy } from "@orbit/coordinator";
 
 import { memory } from "./sources/memory";
 import { remote } from "./sources/remote";
+import { BaseStore, StoreRegistry } from "./stores";
 
 const coordinator = new Coordinator({
 	sources : [ memory, remote ]
@@ -37,5 +38,38 @@ coordinator.addStrategy(
 		blocking : true
 	})
 );
+
+
+memory.on("transform", (data) => {
+	let store: BaseStore;
+
+	for (const op of data.operations) {
+		switch (op.op) {
+			case "addRecord":
+			case "updateRecord":
+				store = StoreRegistry.get(op.record.type);
+
+				if (!store) {
+					break;
+				}
+
+				store.add(op.record.id, op.record);
+				break;
+
+			case "removeRecord":
+				store = StoreRegistry.get(op.record.type);
+
+				if (!store) {
+					break;
+				}
+
+				store.remove(op.record.id);
+				break;
+
+			default:
+				break;
+		}
+	}
+});
 
 export default coordinator;

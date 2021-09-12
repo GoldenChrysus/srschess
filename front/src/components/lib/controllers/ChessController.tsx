@@ -9,7 +9,8 @@ enum ChessControllerModes {
 interface ChessControllerProps {
 	mode         : keyof typeof ChessControllerModes,
 	repertoire?  : any,
-	repertoires? : BaseStore
+	repertoires? : BaseStore,
+	moves?       : BaseStore
 }
 
 class ChessController extends React.Component<ChessControllerProps> {

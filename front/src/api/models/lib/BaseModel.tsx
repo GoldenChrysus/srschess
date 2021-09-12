@@ -51,14 +51,7 @@ export default class Model {
 			);
 		}
 
-		if (record) {
-			record.local_type = this.type;
-
-			this.store.add(record.id, record);
-			return record;
-		}
-
-		return false;
+		return record;
 	}
 
 	public static async create(attributes: any, relationships?: any) {
@@ -80,13 +73,17 @@ export default class Model {
 		}
 
 		await memory.update(t => t.addRecord(data));
+		return await this.byId(id);
+	}
 
-		let record = await this.byId(id);
+	public static async where(filter: any) {
+		const records = await memory.query(q =>
+			q
+				.findRecords(this.type)
+				.filter(filter)
+		);
 
-		if (record) {
-			this.store.add(record.id, record);
-			return record;
-		}
+		return records;
 	}
 
 	public static getSchema() {
