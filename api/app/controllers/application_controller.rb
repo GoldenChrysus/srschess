@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-	include JSONAPI::ActsAsResourceController
+	# include JSONAPI::ActsAsResourceController
 	include Pundit
 
 	protect_from_forgery with: :null_session

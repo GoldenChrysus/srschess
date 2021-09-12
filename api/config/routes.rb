@@ -6,4 +6,10 @@ Rails.application.routes.draw do
 		jsonapi_resources :repertoires
 		jsonapi_resources :moves
 	end
+
+	post "/graphql", to: "graphql#execute"
+
+	if Rails.env.development?
+		mount GraphiQL::Rails::Engine, at: "/gql", graphql_path: "graphql#execute"
+	end
 end

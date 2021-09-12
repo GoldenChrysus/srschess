@@ -8,7 +8,7 @@ class Move < ApplicationRecord
 
 	belongs_to :repertoire, required: true
 	belongs_to :parent, class_name: "Move", required: false
-	has_many :moves, inverse_of: "parent"
+	has_many :moves, inverse_of: "parent", foreign_key: :parent_id
 
 	# Callbacks
 	after_validation :set_id, on: :create
