@@ -1,10 +1,10 @@
 import React from "react";
+import { Spin } from "antd";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_REPERTOIRE } from "../api/queries";
 
+import { GET_REPERTOIRE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
-import { Spin } from "antd";
 
 interface RepertoireRouteParams {
 	id?: string
