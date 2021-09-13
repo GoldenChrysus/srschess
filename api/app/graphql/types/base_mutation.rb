@@ -1,4 +1,4 @@
-module Mutations
+module Types
 	class BaseMutation < GraphQL::Schema::RelayClassicMutation
 		argument_class Types::BaseArgument
 		field_class Types::BaseField

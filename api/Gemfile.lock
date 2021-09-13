@@ -93,6 +93,9 @@ GEM
       railties
       sprockets-rails
     graphql (1.12.16)
+    graphql-voyager-rails (1.0.4)
+      railties
+      sprockets-rails
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     interactor (3.1.2)
@@ -268,6 +271,7 @@ DEPENDENCIES
   figaro
   graphiql-rails
   graphql
+  graphql-voyager-rails
   interactor
   jbuilder (~> 2.7)
   jsonapi-resources

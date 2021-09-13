@@ -24,5 +24,13 @@ module Srschess
 
 		config.public_file_server.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
 		config.public_file_server.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+
+		if Rails.env.development?
+			config.assets.precompile += [
+				"graphql/voyager/rails/application.css",
+				"graphql/voyager/rails/application.js",
+				"graphql/voyager/rails/voyager.js"
+			]
+		end
 	end
 end

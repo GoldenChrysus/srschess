@@ -11,5 +11,6 @@ Rails.application.routes.draw do
 
 	if Rails.env.development?
 		mount GraphiQL::Rails::Engine, at: "/gql", graphql_path: "graphql#execute"
+		mount Graphql::Voyager::Rails::Engine, at: "/voyager", graphql_path: "/graphql"
 	end
 end
