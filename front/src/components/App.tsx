@@ -1,7 +1,7 @@
 import React from "react";
-import "./App.css";
 
-import Container from "./components/Container";
+import "../styles/app.css";
+import Container from "./Container";
 
 class App extends React.Component {
 	render() {
