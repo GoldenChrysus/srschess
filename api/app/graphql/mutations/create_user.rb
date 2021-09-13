@@ -3,7 +3,7 @@ module Mutations
 		argument :email, String, required: true
 		argument :password, String, required: true
 
-		field :user, Types::UserType, null: true
+		field :user, Types::Models::UserType, null: true
 		field :errors, [String], null: false
 
 		def resolve(email:, password:)

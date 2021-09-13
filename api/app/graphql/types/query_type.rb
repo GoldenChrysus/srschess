@@ -5,7 +5,7 @@ module Types
 		include GraphQL::Types::Relay::HasNodesField
 
 		# /users
-		field :users, Types::UserType, null: false do
+		field :users, Types::Models::UserType, null: false do
 			argument :user_id, ID, required: true
 		end
 
@@ -14,7 +14,7 @@ module Types
 		end
 
 		# /repertoires
-		field :repertoires, [Types::RepertoireType], null: false do
+		field :repertoires, [Types::Models::RepertoireType], null: false do
 			argument :user_id, ID, required: true
 		end
 
@@ -23,7 +23,7 @@ module Types
 		end
 
 		# /moves
-		field :moves, [Types::MoveType], null: false do
+		field :moves, [Types::Models::MoveType], null: false do
 			argument :repertoire_id, ID, required: true
 		end
 

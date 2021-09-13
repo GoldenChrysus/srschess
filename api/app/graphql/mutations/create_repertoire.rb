@@ -4,7 +4,7 @@ module Mutations
 		argument :side, String, required: true
 		argument :user_id, ID, required: true
 
-		field :repertoire, Types::RepertoireType, null: true
+		field :repertoire, Types::Models::RepertoireType, null: true
 		field :errors, [String], null: false
 
 		def resolve(name:, side:, user_id:)
