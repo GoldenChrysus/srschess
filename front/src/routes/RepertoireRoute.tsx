@@ -1,52 +1,34 @@
 import React from "react";
-import { observer } from "mobx-react";
-import { withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_REPERTOIRE } from "../api/queries";
 
 import ChessController from "../controllers/ChessController";
-import { Repertoire, Move } from "../api/models";
+import { Spin } from "antd";
 
-interface RepertoireRouteState {
-	repertoire?: any
+interface RepertoireRouteParams {
+	id?: string
 }
 
-class RepertoireRoute extends React.Component<any, RepertoireRouteState> {
-	constructor(props: any) {
-		super(props);
-
-		this.state = {};
-	}
-
-	async componentDidMount() {
-		const id = this.props.match.params.id;
-
-		if (id) {
-			Move.store.empty();
-			await Move.where(
-				{
-					relation : Repertoire.type,
-					record   : {
-						type : Repertoire.type,
-						id   : id
-					}
-				}
-			);
+function RepertoireRoute() {
+	const { id } = useParams<RepertoireRouteParams>();
+	const { loading, error, data } = useQuery(
+		GET_REPERTOIRE,
+		{
+			variables : {
+				id : id
+			}
 		}
+	);
 
-		this.setState({
-			repertoire : (id) ? await Repertoire.byId(id) : undefined
-		});
-	}
-
-	render() {
-		return (
+	return (
+		<Spin size="large" spinning={loading}>
 			<ChessController
 				mode="repertoire"
-				repertoire={this.state.repertoire}
-				repertoires={this.props.repertoires}
-				moves={Move.store}
+				repertoire={data?.repertoire}
 			/>
-		);
-	}
-}
+		</Spin>
+	)
+};
 
-export default withRouter(observer(RepertoireRoute));
+export default RepertoireRoute;

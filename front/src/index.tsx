@@ -3,25 +3,20 @@ import ReactDOM from "react-dom";
 
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
-import coordinator from "./api/coordinator";
 
-import { schema } from "./api/schema";
-import { map } from "./api/models/";
-import { StoreRegistry } from "./api/stores/";
+import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+
+const client = new ApolloClient({
+	uri   : "http://localhost:3001/graphql",
+	cache : new InMemoryCache()
+});
 
 (async () => {
-	const new_schema: { [key: string]: any } = { models: {} };
-
-	for (let key in map) {
-		StoreRegistry.init(map[key].type);
-		new_schema.models[map[key].type] = map[key].getSchema();
-	}
-
-	schema.upgrade(new_schema);
-	await coordinator.activate();
 	ReactDOM.render(
 		<React.StrictMode>
-			<App />
+			<ApolloProvider client={client}>
+				<App />
+			</ApolloProvider>
 		</React.StrictMode>,
 		document.getElementById("root")
 	);

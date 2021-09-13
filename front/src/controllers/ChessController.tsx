@@ -1,6 +1,5 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { BaseStore } from "../api/stores";
 
 enum ChessControllerModes {
 	repertoire = "repertoire"
@@ -9,20 +8,28 @@ enum ChessControllerModes {
 interface ChessControllerProps {
 	mode         : keyof typeof ChessControllerModes,
 	repertoire?  : any,
-	repertoires? : BaseStore,
-	moves?       : BaseStore
+	repertoires? : Array<any>
+	moves?       : Array<any>
 }
 
-class ChessController extends React.Component<ChessControllerProps> {
-	render() {
-		switch (this.props.mode) {
-			case ChessControllerModes.repertoire:
-				return "";
-			
-			default:
-				return "";
-		}
+function ChessController(props: ChessControllerProps) {
+	let data = "";
+
+	switch (props.mode) {
+		case ChessControllerModes.repertoire:
+			data = "repertoire";
+
+			break;
+		
+		default:
+			data = "none";
+
+			break;
 	}
+
+	return (
+		<div>{props.repertoire?.id}</div>
+	);
 }
 
-export default observer(ChessController);
+export default ChessController;

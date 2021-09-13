@@ -13,6 +13,9 @@ module Types
 		# /repertoires
 		field :repertoires, resolver: Types::Queries::Repertoires
 
+		# /repertoire
+		field :repertoire, resolver: Types::Queries::Repertoire
+
 		# /moves
 		field :moves, resolver: Types::Queries::Moves
 	end

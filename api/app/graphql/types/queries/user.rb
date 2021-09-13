@@ -3,10 +3,10 @@ module Types
 		class User < Types::BaseQuery
 			# /user
 			type Types::Models::UserType, null: false
-			argument :user_id, ID, required: true
+			argument :id, ID, required: true
 
-			def resolve(user_id:)
-				::User.find(user_id)
+			def resolve(id:)
+				::User.find(id)
 			end
 		end
 	end

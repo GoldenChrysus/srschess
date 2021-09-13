@@ -5,8 +5,6 @@ import MainLayout from "./MainLayout";
 import Chessboard from "./Chessboard";
 import RepertoireRoute from "../routes/RepertoireRoute";
 
-import { Repertoire } from "../api/models/";
-
 class Container extends React.Component {
 	render() {
 		return (
@@ -17,7 +15,7 @@ class Container extends React.Component {
 							<Chessboard/>
 						</Route>
 						<Route exact path="/repertoires/:id?">
-							<RepertoireRoute repertoires={Repertoire.store}/>
+							<RepertoireRoute/>
 						</Route>
 					</Switch>
 				</Router>
