@@ -1,7 +1,6 @@
 import React from "react";
 import Chessground from "react-chessground";
 import Chess, { ChessInstance, Square } from "chess.js";
-import { Row, Col, List } from "antd";
 
 import MoveList from "./chess/MoveList";
 
@@ -33,7 +32,6 @@ class Chessboard extends React.Component<object, ChessboardState> {
 			moves      : []
 		}
 
-		this.renderListMove = this.renderListMove.bind(this);
 		this.onMove         = this.onMove.bind(this);
 		this.onPromo        = this.onPromo.bind(this);
 		this.toColor        = this.toColor.bind(this);
@@ -81,8 +79,8 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		};
 
 		return (
-			<div className="flex flex-wrap">
-				<div className="flex-grow order-2 md:order-1">z</div>
+			<div className="flex flex-wrap gap-x-8">
+				<div className="flex-1 order-2 md:order-1">z</div>
 				<div className="flow-grow-0 order-1 md:order-2">
 					<Chessground
 						fen={this.state.chess.fen()}
@@ -98,7 +96,7 @@ class Chessboard extends React.Component<object, ChessboardState> {
 						ref={this.ground_ref}
 					/>
 				</div>
-				<MoveList/>
+				<MoveList moves={this.state.moves}/>
 			</div>
 		);
 	}
@@ -109,18 +107,6 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		return (history.length)
 			? [history.at(-1)?.from, history.at(-1)?.to]
 			: null;
-	}
-
-	renderListMove(item: any[], index: number) {
-		return (
-			<List.Item>
-				<Row>
-					<Col span={4}>{index + 1}</Col>
-					<Col span={10}>{item[0]}</Col>
-					<Col span={10}>{(item.length === 2) ? item[1] : ""}</Col>
-				</Row>
-			</List.Item>
-		);
 	}
 
 	sizeBoard() {
