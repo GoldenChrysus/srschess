@@ -4,6 +4,9 @@ module Types
 		include GraphQL::Types::Relay::HasNodeField
 		include GraphQL::Types::Relay::HasNodesField
 
+		# /auth
+		field :auth, resolver: Types::Queries::Auth
+
 		# /user
 		field :user, resolver: Types::Queries::User
 

@@ -32,7 +32,7 @@ class User < ApplicationRecord
 			.first
 
 		if (!user)
-			# raise ApiErrors::AuthenticationError::LoginFailed.new
+			raise ::ApiErrors::AuthenticationError::LoginFailed.new
 		end
 
 		user.password = nil
