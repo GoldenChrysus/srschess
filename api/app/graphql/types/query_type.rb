@@ -5,10 +5,12 @@ module Types
 		include GraphQL::Types::Relay::HasNodesField
 
 		# /users
-		field :users, [Types::UserType], null: false
+		field :users, Types::UserType, null: false do
+			argument :user_id, ID, required: true
+		end
 
-		def users
-			User.all
+		def users(user_id:)
+			User.find(user_id)
 		end
 
 		# /repertoires
