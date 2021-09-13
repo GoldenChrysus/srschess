@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { withRouter } from "react-router-dom";
 
 import ChessController from "../controllers/ChessController";
-import { Repertoire, Move } from "../../../api/models";
+import { Repertoire, Move } from "../api/models";
 
 interface RepertoireRouteState {
 	repertoire?: any

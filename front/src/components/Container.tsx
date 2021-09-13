@@ -1,9 +1,9 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import MainLayout from "./MainLayout";
 import Chessboard from "./Chessboard";
-import RepertoireRoute from "./lib/routes/RepertoireRoute";
+import RepertoireRoute from "../routes/RepertoireRoute";
 
 import { Repertoire } from "../api/models/";
 

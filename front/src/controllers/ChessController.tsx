@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { BaseStore } from "../../../api/stores";
+import { BaseStore } from "../api/stores";
 
 enum ChessControllerModes {
 	repertoire = "repertoire"
