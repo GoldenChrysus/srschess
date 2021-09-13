@@ -1,0 +1,37 @@
+body .cg-wrap coords.files {
+	bottom: 0;
+	text-align: left;
+}
+
+body .cg-wrap coords.files coord {
+	padding-left: 0.25em;
+}
+
+body .cg-wrap coords.ranks {
+	right: 0;
+}
+
+body .cg-wrap coords.ranks coord {
+	text-align: right;
+	padding-right: 0.25em;
+	transform: none;
+}
+
+body .cg-wrap coords coord {
+	font-weight: bold;
+	font-size: 1.25em;
+}
+
+body .cg-wrap.orientation-white coords.files coord:nth-child(even),
+body .cg-wrap.orientation-white coords.ranks coord:nth-child(odd),
+body .cg-wrap.orientation-black coords.files coord:nth-child(odd),
+body .cg-wrap.orientation-black coords.ranks coord:nth-child(even) {
+	color:rgba(0, 0, 0, 0.75);
+}
+
+body .cg-wrap.orientation-white coords.files coord:nth-child(odd),
+body .cg-wrap.orientation-white coords.ranks coord:nth-child(even),
+body .cg-wrap.orientation-black coords.files coord:nth-child(even),
+body .cg-wrap.orientation-black coords.ranks coord:nth-child(odd) {
+	color:rgba(255, 255, 255, 0.75);
+}

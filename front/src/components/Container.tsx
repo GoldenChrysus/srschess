@@ -8,8 +8,8 @@ import RepertoireRoute from "../routes/RepertoireRoute";
 class Container extends React.Component {
 	render() {
 		return (
-			<MainLayout>
-				<Router>
+			<Router>
+				<MainLayout>				
 					<Switch>
 						<Route exact path="/">
 							<Chessboard/>
@@ -18,8 +18,8 @@ class Container extends React.Component {
 							<RepertoireRoute/>
 						</Route>
 					</Switch>
-				</Router>
-			</MainLayout>
+				</MainLayout>
+			</Router>
 		);
 	}
 }

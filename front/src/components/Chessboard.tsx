@@ -3,7 +3,10 @@ import Chessground from "react-chessground";
 import Chess, { ChessInstance, Square } from "chess.js";
 import { Row, Col, List } from "antd";
 
+import MoveList from "./chess/MoveList";
+
 import "react-chessground/dist/styles/chessground.css";
+import "../styles/chessboard.css";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -78,10 +81,9 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		};
 
 		return (
-			<Row gutter={24} style={{ margin: "0 !important" }}>
-				<Col className="gutter-row" md={{ span: 8, order : 1 }} xs={{ span : 12, order: 2 }}>
-				</Col>
-				<Col className="gutter-row" md={{ span: 12, order : 2 }} xs={{ span : 24, order : 1 }}>
+			<div className="flex flex-wrap">
+				<div className="flex-grow order-2 md:order-1">z</div>
+				<div className="flow-grow-0 order-1 md:order-2">
 					<Chessground
 						fen={this.state.chess.fen()}
 						check={this.checkColor()}
@@ -95,15 +97,9 @@ class Chessboard extends React.Component<object, ChessboardState> {
 						events={config.events}
 						ref={this.ground_ref}
 					/>
-				</Col>
-				<Col className="gutter-row" md={{ span: 4, order : 3 }} xs={{ span : 12, order : 3 }}>
-					<List
-						itemLayout="vertical"
-						dataSource={this.state.moves}
-						renderItem={this.renderListMove}
-					/>
-				</Col>
-			</Row>
+				</div>
+				<MoveList/>
+			</div>
 		);
 	}
 
@@ -132,9 +128,8 @@ class Chessboard extends React.Component<object, ChessboardState> {
 			return;
 		}
 
-		const board  = this.ground_ref.current.el;
-		const parent = board.parentElement;
-		const width  = parent.clientWidth - (+parent.style.paddingLeft.replace("px", "") * 2) - 10;
+		const board = this.ground_ref.current.el;
+		const width = Math.min(document.getElementById("content")!.offsetHeight, window.screen.width);
 
 		board.style.width = board.style.height = `${width}px`;
 	}
