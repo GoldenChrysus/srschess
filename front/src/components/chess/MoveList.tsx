@@ -1,5 +1,4 @@
 import React from "react";
-import { List } from "antd";
 
 interface MoveListProps {
 	moves: Array<any[]>
