@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import Chess, { ChessInstance } from "chess.js";
 
 type ChessType = (fen?: string) => ChessInstance;
