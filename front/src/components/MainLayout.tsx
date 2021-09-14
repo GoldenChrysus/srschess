@@ -18,8 +18,7 @@ class MainLayout extends React.Component<any> {
 		const content_classes = [
 			"flex-1",
 			"h-full",
-			"relative",
-			"mb-32"
+			"relative"
 		];
 
 		let footer: any = (
@@ -34,6 +33,8 @@ class MainLayout extends React.Component<any> {
 			layout_classes.push("md:overflow-y-hidden");
 
 			footer = null;
+		} else {
+			content_classes.push("mb-32");
 		}
 
 		return (

@@ -1,4 +1,5 @@
 import Chess, { ChessInstance } from "chess.js";
+import { COLOR } from "cm-chessboard";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -17,15 +18,15 @@ export interface ChessControllerProps {
 }
 
 export interface ChessControllerState {
-	chess      : ChessInstance,
-	tree       : any,
-	tree_moves : any,
-	moves      : Array<any[]>
+	chess : ChessInstance,
+	fen   : string,
+	color : string | boolean,
+	moves : Array<string>
 }
 
 export const initial_state: ChessControllerState = {
-	chess      : Chess2(),
-	tree       : {},
-	tree_moves : {},
-	moves      : []
+	chess : Chess2(),
+	fen   : "start",
+	color : COLOR.white,
+	moves : []
 };

@@ -534,6 +534,7 @@ module.exports = {
       min: 'min-content',
       max: 'max-content',
       prose: '65ch',
+      chess: "calc(100vw * 0.6)", // custom
       ...breakpoints(theme('screens')),
     }),
     minHeight: {
@@ -793,6 +794,7 @@ module.exports = {
       screen: '100vw',
       min: 'min-content',
       max: 'max-content',
+      chess: "calc(100vh - 4rem)" // custom
     }),
     zIndex: {
       auto: 'auto',

@@ -22,12 +22,10 @@ function RepertoireRoute() {
 	);
 
 	return (
-		<Spin size="large" spinning={loading}>
-			<ChessController
-				mode="repertoire"
-				repertoire={data?.repertoire}
-			/>
-		</Spin>
+		<ChessController
+			mode="repertoire"
+			repertoire={data?.repertoire}
+		/>
 	)
 };
 
