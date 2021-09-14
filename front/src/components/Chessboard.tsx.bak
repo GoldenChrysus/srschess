@@ -1,12 +1,11 @@
 import React from "react";
-import { Chessground } from "chessground";
-import ChessgroundTypes from "chessground/types";
-import { DrawShape } from "chessground/draw";
+import Chessground from "react-chessground";
 import Chess, { ChessInstance, Square } from "chess.js";
-import { Row, Col, List } from "antd";
-import { observer } from "mobx-react";
+
+import MoveList from "./chess/MoveList";
 
 import "react-chessground/dist/styles/chessground.css";
+import "../styles/chessboard.css";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -23,8 +22,6 @@ interface ChessboardState {
 class Chessboard extends React.Component<object, ChessboardState> {
 	private ground_ref = React.createRef<any>();
 
-	private ground:any;
-
 	constructor(props: {}) {
 		super(props);
 
@@ -35,39 +32,44 @@ class Chessboard extends React.Component<object, ChessboardState> {
 			moves      : []
 		}
 
-		this.renderListMove = this.renderListMove.bind(this);
 		this.onMove         = this.onMove.bind(this);
+		this.onPromo        = this.onPromo.bind(this);
 		this.toColor        = this.toColor.bind(this);
 		this.toDests        = this.toDests.bind(this);
+		this.checkColor     = this.checkColor.bind(this);
 		this.sizeBoard      = this.sizeBoard.bind(this);
-		this.playOtherSide  = this.playOtherSide.bind(this);
+		this.lastMove       = this.lastMove.bind(this);
 	}
 
-	componentDidMount() {		
-		let shape:DrawShape = {
+	componentDidMount() {
+		this.sizeBoard();
+		window.addEventListener("resize", this.sizeBoard);
+	}
+
+	render() {
+		let shape = {
 			brush : "green",
 			dest : "f4",
 			orig : "e2"
 		};
 
 		const config = {
+			fen     : this.state.chess.fen(),
 			movable : {
-				color  : this.toColor(),
-				free   : false,
-				dests  : this.toDests(),
-				events : {
-					after : this.onMove
-				}
+				color : this.toColor(),
+				free  : false,
+				dests : this.toDests()
 			},
 			draggable : {
 				showGhost : true
 			},
 			drawable : {
+				enabled: true,
 				eraseOnClick : false,
 				onChange     : (shape: object) => {
 					console.log(shape)
 				},
-				shapes : [
+				autoShapes : [
 					shape
 				]
 			},
@@ -76,62 +78,52 @@ class Chessboard extends React.Component<object, ChessboardState> {
 			}
 		};
 
-		this.ground = Chessground(document.getElementById("chessboard")!, config);
-
-		window.addEventListener("resize", this.sizeBoard);
-	}
-
-	render() {
 		return (
-			<Row gutter={24} style={{ margin: "0 !important" }}>
-				<Col className="gutter-row" md={{ span: 8, order : 1 }} xs={{ span : 12, order: 2 }}>
-				</Col>
-				<Col className="gutter-row" md={{ span: 12, order : 2 }} xs={{ span : 24, order : 1 }}>
-					<div id="chessboard" key="chessboard" ref={this.ground_ref}/>
-				</Col>
-				<Col className="gutter-row" md={{ span: 4, order : 3 }} xs={{ span : 12, order : 3 }}>
-					<List
-						itemLayout="vertical"
-						dataSource={this.state.moves}
-						renderItem={this.renderListMove}
+			<div className="flex flex-wrap gap-x-8">
+				<div className="flex-1 order-2 md:order-1">z</div>
+				<div className="flow-grow-0 order-1 md:order-2">
+					<Chessground
+						fen={this.state.chess.fen()}
+						check={this.checkColor()}
+						movable={config.movable}
+						draggable={config.draggable}
+						drawable={config.drawable}
+						onMove={this.onMove}
+						promotion={this.onPromo}
+						lastMove={this.lastMove()}
+						turnColor={this.toColor()}
+						events={config.events}
+						ref={this.ground_ref}
 					/>
-				</Col>
-			</Row>
+				</div>
+				<MoveList moves={this.state.moves}/>
+			</div>
 		);
 	}
 
-	renderListMove(item: any[], index: number) {
-		return (
-			<List.Item>
-				<Row>
-					<Col span={4}>{index + 1}</Col>
-					<Col span={10}>{item[0]}</Col>
-					<Col span={10}>{(item.length === 2) ? item[1] : ""}</Col>
-				</Row>
-			</List.Item>
-		);
+	lastMove() {
+		const history = this.state.chess.history({ verbose: true });
+
+		return (history.length)
+			? [history.at(-1)?.from, history.at(-1)?.to]
+			: null;
 	}
 
 	sizeBoard() {
-		const board  = this.ground_ref.current;
-		const parent = board.parentElement;
-		const width  = parent.clientWidth - (+parent.style.paddingLeft.replace("px", "") * 2) - 0;
+		if (!this.ground_ref.current) {
+			return;
+		}
+
+		const board = this.ground_ref.current.el;
+		const width = Math.min(document.getElementById("content")!.offsetHeight, window.screen.width);
 
 		board.style.width = board.style.height = `${width}px`;
 	}
 
-	onMove(orig: ChessgroundTypes.Key, dest: ChessgroundTypes.Key, metadata: ChessgroundTypes.MoveMetadata) {
+	onMove(orig: Square, dest: Square) {
 		this.state.chess.move({
-			from : orig as Square,
-			to   : dest as Square
-		});
-
-		this.ground.set({
-			check   : this.state.chess.in_check(),
-			movable : {
-				color : this.toColor(),
-				dests : this.toDests()
-			}
+			from : orig,
+			to   : dest
 		});
 
 		const history     = this.state.chess.history();
@@ -139,9 +131,13 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		const move_number = (history.length + 1) / 2.0;
 		const move_index  = +Math.floor((history.length - 1) / 2).toFixed(0);
 
-		let tree       = {...this.state.tree};
-		let tree_moves = {...this.state.tree_moves};
-		let moves      = [...this.state.moves];
+		let tree = {
+			...this.state.tree
+		};
+		let tree_moves = {
+			...this.state.tree_moves
+		};
+		let moves = this.state.moves;
 
 		if (!tree[movelist]) {
 			tree[movelist] = {
@@ -175,8 +171,18 @@ class Chessboard extends React.Component<object, ChessboardState> {
 		});
 	}
 
-	toColor(): ChessgroundTypes.Color {
+	onPromo(e:any) {
+		console.log(e);
+	}
+
+	toColor() {
 		return (this.state.chess.turn() === "w") ? "white" : "black";
+	}
+
+	checkColor() {
+		return (this.state.chess.in_check())
+			? this.toColor()
+			: "";
 	}
 
 	toDests() {
@@ -195,34 +201,6 @@ class Chessboard extends React.Component<object, ChessboardState> {
 
 		return dests;
 	}
-
-	playOtherSide() {
-		return (orig: Square, dest: Square) => {
-			// Update chess.js
-			// Note: we don't check the return value here which would tell
-			// us if this is a legal move.  That's because we only allowed legal moves by setting "dests"
-			// on the board.
-			this.state.chess.move({
-				from : orig, 
-				to   : dest
-			});
-			
-			this.ground.set({
-				// I'm not sure what this does! You can comment it out and not much changes
-				// turnColor: toColor(chess),
-				
-				// this highlights the checked king in red
-				check   : this.state.chess.in_check(),
-				movable : {
-					// Only allow moves by whoevers turn it is
-					color : this.toColor(),
-					
-					// Only allow legal moves
-					dests : this.toDests()
-				}
-			});
-		};
-	}
 }
 
-export default observer(Chessboard);
+export default Chessboard;
