@@ -1,36 +1,6 @@
 import React, { useReducer } from "react";
 import { useObserver } from "mobx-react";
-import Chess, { ChessInstance } from "chess.js";
-
-type ChessType = (fen?: string) => ChessInstance;
-
-const ChessImport = Chess as unknown;
-const Chess2      = ChessImport as ChessType;
-
-enum ChessControllerModes {
-	repertoire = "repertoire"
-}
-
-interface ChessControllerProps {
-	mode         : keyof typeof ChessControllerModes,
-	repertoire?  : any,
-	repertoires? : Array<any>
-	moves?       : Array<any>
-}
-
-interface ChessControllerState {
-	chess      : ChessInstance,
-	tree       : any,
-	tree_moves : any,
-	moves      : Array<any[]>
-}
-
-const initial_state: ChessControllerState = {
-	chess      : Chess2(),
-	tree       : {},
-	tree_moves : {},
-	moves      : []
-};
+import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 
 function ChessController(props: ChessControllerProps) {
 	const [state, dispatch] = useReducer(reducer, initial_state);
