@@ -25,7 +25,16 @@ interface ChessControllerState {
 	moves      : Array<any[]>
 }
 
+const initial_state: ChessControllerState = {
+	chess      : Chess2(),
+	tree       : {},
+	tree_moves : {},
+	moves      : []
+};
+
 function ChessController(props: ChessControllerProps) {
+	const [state, dispatch] = useReducer(reducer, initial_state);
+
 	let data = "";
 
 	switch (props.mode) {
@@ -50,6 +59,10 @@ function ChessController(props: ChessControllerProps) {
 			</div>
 		</div>
 	);
+}
+
+function reducer(state: ChessControllerState, action: any) {
+	return state;
 }
 
 export default ChessController;
