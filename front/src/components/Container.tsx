@@ -12,7 +12,9 @@ class Container extends React.Component {
 				<MainLayout>				
 					<Switch>
 						<Route exact path="/">
-							<Chessboard/>
+							<div>
+								Hello<br/>
+							</div>
 						</Route>
 						<Route exact path="/repertoires/:id?">
 							<RepertoireRoute/>
