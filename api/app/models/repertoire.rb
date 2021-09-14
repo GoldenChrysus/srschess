@@ -7,5 +7,5 @@ class Repertoire < ApplicationRecord
 	enum side: {white: "W", black: "B"}
 
 	belongs_to :user, required: true
-	has_many :moves
+	has_many :moves, -> { order("move_number ASC, sort ASC") }
 end

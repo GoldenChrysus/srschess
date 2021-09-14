@@ -12,10 +12,7 @@ export const GET_REPERTOIRE = gql`
 				moveNumber
 				move
 				sort
-				moves {
-					moveNumber
-					sort
-				}
+				parentId
 			}
 		}
 	}

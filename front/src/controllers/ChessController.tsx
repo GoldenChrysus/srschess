@@ -124,7 +124,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	
 				switch (this.props.mode) {
 					case ChessControllerModes.repertoire:
-						const new_idx   = this.props.tree![move_num]?.length ?? 0;
+						const num_tree  = this.props.tree![move_num];
+						const new_idx   = (num_tree) ? Object.values(num_tree).at(-1)!.sort + 1 : 0;
 						const hash      = crypto.createHash("md5").update(`${this.props.repertoire?.id}:${move_num}:${last_move}`).digest("hex");
 						const uuid      = [
 							hash.substr(0, 8),

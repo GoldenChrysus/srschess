@@ -15,8 +15,14 @@ export interface ChessControllerProps {
 	repertoire?  : any,
 	repertoires? : Array<any>,
 	moves?       : { [id: string]: {} },
-	tree?        : { [move_num: number] : Array<any> },
-	onMove       : Function
+	tree?        : {
+		[move_num: number] : {
+			[sort: number] : {
+				[key: string] : any
+			}
+		}
+	},
+	onMove : Function
 }
 
 export interface ChessControllerState {

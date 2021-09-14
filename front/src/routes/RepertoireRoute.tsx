@@ -5,14 +5,21 @@ import { useQuery, useMutation } from "@apollo/client";
 
 import { GET_REPERTOIRE, CREATE_MOVE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
+import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 
 interface RepertoireRouteParams {
 	id?: string
 }
 
+// TODO:
+// Add backup route-level cache that holds moves by ID's to use for lookup in tree building in case a subsequent move
+// is not in the GET_REPERTOIRE data if a user completes another move before the query request is complete (race condition).
+// May be mitigatable from Apollo manual recaching in the CREATE_MOVE mutation, but need to see if the recache occurs before
+// or after the mutation request. If after, the possibility of a race condition still exists, so a route-level cache is needed.
+
 function RepertoireRoute() {
 	const { id } = useParams<RepertoireRouteParams>();
-	const [ createMove, {} ] = useMutation(CREATE_MOVE, {
+	const [ createMove ] = useMutation(CREATE_MOVE, {
 		refetchQueries : [ GET_REPERTOIRE ]
 	});
 	const { loading, error, data } = useQuery(
@@ -24,28 +31,31 @@ function RepertoireRoute() {
 		}
 	);
 
-	const moves: { [id: string]: {} } = {};
-	const tree: { [move_num: number] : Array<any> } = {};
+	const moves: { [id: string]: any } = {};
+	const tree: ChessControllerProps["tree"] = {};
 
 	if (data?.repertoire?.moves) {
 		for (const move of data?.repertoire.moves) {
 			moves[move.id] = move;
 
-			if (!tree[move.moveNumber]) {
-				tree[move.moveNumber] = [];
+			const tmp_move = {...move};
+
+			if (!tree[tmp_move.moveNumber]) {
+				tree[tmp_move.moveNumber] = {};
 			}
 
-			tree[move.moveNumber].push(move);
-		}
+			tmp_move.moves = [];
 
-		for (const move_number in tree) {
-			tree[move_number].sort((a: any, b: any) => {
-				if (a.sort === b.sort) {
-					return 0;
-				}
+			tree[tmp_move.moveNumber][tmp_move.sort] = tmp_move;
 
-				return (a.sort < b.sort) ? -1 : 1;
-			});
+			if (tmp_move.parentId) {
+				const parent = moves[tmp_move.parentId];
+
+				tree[parent.moveNumber][parent.sort].moves.push({
+					sort       : tmp_move.sort,
+					moveNumber : tmp_move.moveNumber
+				});
+			}
 		}
 	}
 
