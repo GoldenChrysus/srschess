@@ -5,5 +5,8 @@ module Types
 
 		# /create_repertoire
 		field :create_repertoire, mutation: Types::Mutations::CreateRepertoire
+
+		# /create_move
+		field :create_move, mutation: Types::Mutations::CreateMove
 	end
 end

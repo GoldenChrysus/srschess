@@ -1,21 +1,21 @@
 const default_theme = require("tailwindcss/defaultTheme");
 
 module.exports = {
-	purge: [],
-	presets: [],
-	darkMode: false, // or 'media' or 'class'
-	theme: {
+	purge    : [],
+	presets  : [],
+	darkMode : false, // or 'media' or 'class'
+	theme    : {
 		...default_theme,
-		extend: {
-			maxWidth: {
-				chess: "calc(100vw * 0.6)"
+		extend : {
+			maxWidth : {
+				chess : "calc(100vw * 0.6)"
 			},
-			width: {
-				chess: "calc(100vh - 4rem)"
+			width : {
+				chess : "calc(100vh - 4rem)"
 			}
 		}
 	},
-	variantOrder: [
+	variantOrder : [
 		'first',
 		'last',
 		'odd',
@@ -33,7 +33,7 @@ module.exports = {
 		'active',
 		'disabled',
 	],
-	variants: {
+	variants : {
 		accessibility: ['responsive', 'focus-within', 'focus'],
 		alignContent: ['responsive'],
 		alignItems: ['responsive'],
@@ -178,5 +178,5 @@ module.exports = {
 		wordBreak: ['responsive'],
 		zIndex: ['responsive', 'focus-within', 'focus'],
 	},
-	plugins: [],
+	plugins : [],
 }

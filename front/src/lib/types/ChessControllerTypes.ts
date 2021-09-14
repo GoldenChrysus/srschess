@@ -13,20 +13,24 @@ export enum ChessControllerModes {
 export interface ChessControllerProps {
 	mode         : keyof typeof ChessControllerModes,
 	repertoire?  : any,
-	repertoires? : Array<any>
-	moves?       : Array<any>
+	repertoires? : Array<any>,
+	moves?       : { [id: string]: {} },
+	tree?        : { [move_num: number] : Array<any> },
+	onMove       : Function
 }
 
 export interface ChessControllerState {
-	chess : ChessInstance,
-	fen   : string,
-	color : string | boolean,
-	moves : Array<string>
+	chess     : ChessInstance,
+	fen       : string,
+	last_uuid : string | null,
+	color     : string | boolean,
+	moves     : Array<string>
 }
 
 export const initial_state: ChessControllerState = {
-	chess : Chess2(),
-	fen   : "start",
-	color : COLOR.white,
-	moves : []
+	chess     : Chess2(),
+	fen       : "start",
+	last_uuid : null,
+	color     : COLOR.white,
+	moves     : []
 };
