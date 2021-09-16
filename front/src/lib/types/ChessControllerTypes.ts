@@ -18,7 +18,7 @@ export interface ChessControllerProps {
 	tree?        : {
 		[move_num: number] : {
 			[sort: number] : {
-				[key: string] : any
+				[key: string | number] : any
 			}
 		}
 	},

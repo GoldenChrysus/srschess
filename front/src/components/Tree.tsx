@@ -1,26 +1,31 @@
 import React from "react";
 
+import Directory from "./tree/Directory";
+import Item from "./tree/Item";
+import ItemSpan from "./tree/ItemSpan";
+
 class Tree extends React.Component<any> {
 	tree: any = {};
 
 	render() {
-		this.tree = this.buildTree(this.props.tree);
+		this.tree = (Object.keys(this.props.tree).length > 0) ? this.buildTree() : {};
 
 		const html = (Object.keys(this.tree).length === 0) ? null : this.buildHtml(this.tree);
 
 		return (
-			<ul className="list-disc">
+			<Directory root={true}>
 				{html}
-			</ul>
+			</Directory>
 		);
 	}
 
-	buildTree(base_tree: any, move_num: number = 10) {
-		const tree: any = {};
+	buildTree(move_num: number = 10, focus_sort?: number) {
+		const tree: any     = {};
+		const allowed_sorts = (focus_sort !== undefined) ? [focus_sort] : Object.keys(this.props.tree[move_num]);
 
-		for (let sort in base_tree![move_num]) {
-			const item = base_tree![move_num][sort];
-	
+		for (const sort of allowed_sorts) {
+			const item = this.props.tree![move_num][sort];
+
 			tree[sort] = {
 				id         : item.id,
 				fen        : item.fen,
@@ -28,9 +33,9 @@ class Tree extends React.Component<any> {
 				moveNumber : item.moveNumber,
 				children   : {}
 			};
-	
-			for (let next_sort in item.moves) {
-				tree[sort].children = this.buildTree(base_tree, item.moves[next_sort].moveNumber);
+
+			for (let index in item.moves) {
+				tree[sort].children = Object.assign(tree[sort].children, this.buildTree(item.moves[index].moveNumber, item.moves[index].sort));
 			}
 		}
 	
@@ -52,9 +57,9 @@ class Tree extends React.Component<any> {
 				: (
 					(child_count> 1)
 						? (
-							<ul className="list-disc">
+							<Directory>
 								{this.buildHtml(move.children, false)}
-							</ul>
+							</Directory>
 						) :
 						this.buildHtml(Object.values(move.children)[0], true)
 				);
@@ -62,16 +67,16 @@ class Tree extends React.Component<any> {
 			if (single) {
 				return (
 					<>
-						{move.move}&nbsp;
+						<ItemSpan key={"span" + move.id} move={move}/>
 						{ul}
 					</>
 				);
 			} else {
 				html.push(
-					<li key={move.id} data-id={move.id}>
-						 {move.move}&nbsp;
+					<Item key={"item" + move.id} move={move}>
+						 <ItemSpan key={"span-" + move.id} start={true} move={move}/>
 						{ul}
-					</li>
+					</Item>
 				);
 			}
 		}
