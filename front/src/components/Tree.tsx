@@ -1,27 +1,24 @@
 import React from "react";
 
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
-import Directory from "./tree/Directory";
-import Item from "./tree/Item";
-import ItemSpan from "./tree/ItemSpan";
+import Branch from "./tree/Branch";
 
 interface TreeProps {
 	tree: ChessControllerProps["tree"],
-	active_uuid?: string
+	active_uuid?: string,
+	new_move?: boolean
 }
 
 class Tree extends React.Component<any> {
 	tree: any = {};
 
 	render() {
-		this.tree = (Object.keys(this.props.tree).length > 0) ? this.buildTree() : {};
-
-		const html = (Object.keys(this.tree).length === 0) ? null : this.buildHtml(this.tree);
+		if (this.props.new_move || Object.keys(this.tree).length === 0) {
+			this.tree = (Object.keys(this.props.tree).length > 0) ? this.buildTree() : {};
+		}
 
 		return (
-			<Directory root={true}>
-				{html}
-			</Directory>
+			<Branch root={true} active={true} tree={this.tree} active_uuid={this.props.active_uuid}/>
 		);
 	}
 
@@ -46,55 +43,6 @@ class Tree extends React.Component<any> {
 		}
 	
 		return tree;
-	}
-
-	buildHtml(segment: any, single: boolean = false): any {
-		if (single) {
-			segment = [segment];
-		}
-
-		const html = [];
-
-		for (let sort in segment) {
-			const move           = segment[sort];
-			const child_count    = Object.keys(move.children).length;
-			const has_grandchild = (
-				child_count > 1 ||
-				(
-					child_count === 1 &&
-					Object.keys((Object.values(move.children)[0] as any).children).length > 1
-				)
-			);
-			const ul             = (child_count === 0)
-				? ""
-				: (
-					(child_count> 1)
-						? (
-							<Directory>
-								{this.buildHtml(move.children, false)}
-							</Directory>
-						) :
-						this.buildHtml(Object.values(move.children)[0], true)
-				);
-
-			if (single) {
-				return (
-					<>
-						<ItemSpan key={"span" + move.id} active={this.props.active_uuid === move.id} has_children={child_count > 0} move={move}/>
-						{ul}
-					</>
-				);
-			} else {
-				html.push(
-					<Item key={"item" + move.id} move={move}>
-						<ItemSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={has_grandchild} move={move}/>
-						{ul}
-					</Item>
-				);
-			}
-		}
-
-		return html;
 	}
 }
 

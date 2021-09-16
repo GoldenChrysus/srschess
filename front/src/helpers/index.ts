@@ -25,11 +25,11 @@ export function getMoveNumFromDB(db_move_num: number, black_suffix?: string, whi
 export function generateUUID(move_num: number, move: string, fen: string, repertoire_id?: number) {
 	const hash = crypto.createHash("md5").update(`${repertoire_id}:${move_num}:${move}:${fen}`).digest("hex");
 
-	return [
-		hash.substr(0, 8),
-		hash.substr(8, 4),
-		hash.substr(12, 4),
-		hash.substr(16, 4),
-		hash.substr(20, 12)
-	].join("-");
+	return (
+		hash.slice(0, 8) + "-" + 
+		hash.slice(8, 12) + "-" +
+		hash.slice(12, 16) + "-" +
+		hash.slice(16, 20) + "-" +
+		hash.slice(20, 32)
+	);
 }

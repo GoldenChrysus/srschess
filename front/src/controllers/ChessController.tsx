@@ -19,7 +19,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		return (
 			<div className="flex flex-wrap gap-x-8 min-h-full">
 				<div className="flex-1 order-2 md:order-1">
-					<Tree tree={this.props.tree} active_uuid={this.state.last_uuid}/>
+					<Tree tree={this.props.tree} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new}/>
 				</div>
 				<div className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
@@ -57,12 +57,13 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				if (!res) {
 					return res;
 				}
+
+				const fen = this.state.chess.fen();
 	
-				event.chessboard.removeMarkers(undefined, MARKER_TYPE.square);
 				event.chessboard.removeMarkers(undefined, MARKER_TYPE.frame);
 				event.chessboard.addMarker(event.squareFrom, MARKER_TYPE.square);
 				event.chessboard.disableMoveInput();
-				event.chessboard.setPosition(this.state.chess.fen());
+				event.chessboard.setPosition(fen);
 	
 				const next_color = this.state.chess.turn();
 	
@@ -99,7 +100,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					type  : "move",
 					data  : {
 						color : (!this.state.chess.game_over()) ? COLOR[(next_color === "w") ? "white" : "black"] : false,
-						fen   : this.state.chess.fen(),
+						fen   : fen,
 						moves : this.state.chess.history()
 					}
 				});
@@ -112,7 +113,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	reducer(action: any) {
-		const new_state: ChessControllerState = Object.assign({}, this.state);
+		const new_state: any = {};
 
 		switch (action.type) {
 			case "move":
@@ -125,12 +126,14 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	
 				switch (this.props.mode) {
 					case ChessControllerModes.repertoire:
-						const num_tree = this.props.tree![move_num];
-						const new_idx  = (num_tree) ? Object.values(num_tree).at(-1)!.sort + 1 : 0;
-						const fen      = this.state.chess.fen();
-						const uuid     = generateUUID(move_num, last_move!, fen, this.props.repertoire?.id);
+						const uuid = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
 
 						if (!this.props.moves![uuid]) {
+							const num_tree = this.props.tree![move_num];
+							const new_idx  = (num_tree) ? Object.values(num_tree).at(-1)!.sort + 1 : 0;
+
+							new_state.last_is_new = true;
+
 							this.props.onMove(
 								{
 									id        : uuid,
@@ -138,7 +141,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 									move_num  : move_num,
 									move      : last_move,
 									sort      : new_idx,
-									fen       : fen
+									fen       : new_state.fen
 								}
 							);
 						}

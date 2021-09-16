@@ -26,11 +26,12 @@ export interface ChessControllerProps {
 }
 
 export interface ChessControllerState {
-	chess     : ChessInstance,
-	fen       : string,
-	last_uuid : string | null,
-	color     : string | boolean,
-	moves     : Array<string>
+	chess        : ChessInstance,
+	fen          : string,
+	last_uuid    : string | null,
+	last_is_new? : boolean,
+	color        : string | boolean,
+	moves        : Array<string>
 }
 
 export const initial_state: ChessControllerState = {

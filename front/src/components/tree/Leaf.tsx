@@ -1,10 +1,10 @@
 import React from "react";
 
-interface ItemProps {
+interface LeafProps {
 	move: any
 };
 
-class Item extends React.Component<ItemProps> {
+class Leaf extends React.Component<LeafProps> {
 	render() {
 		return(
 			<li className="mt-1" data-id={this.props.move.id}>
@@ -14,4 +14,4 @@ class Item extends React.Component<ItemProps> {
 	}
 }
 
-export default Item;
+export default Leaf;
