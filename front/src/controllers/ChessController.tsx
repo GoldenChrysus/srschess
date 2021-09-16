@@ -6,6 +6,7 @@ import { INPUT_EVENT_TYPE, COLOR, MARKER_TYPE } from "cm-chessboard";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import MoveList from "../components/chess/MoveList";
 import Chessboard from "../components/Chessboard";
+import Tree from "../components/Tree";
 
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
 	constructor(props: ChessControllerProps) {
@@ -19,6 +20,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			<div className="flex flex-wrap gap-x-8 min-h-full">
 				<div className="flex-1 order-2 md:order-1">
 					{this.props.repertoire?.id}
+					<Tree tree={this.props.tree}/>
 				</div>
 				<div className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
