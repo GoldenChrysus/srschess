@@ -80,7 +80,7 @@ class Branch extends React.Component<BranchProps, BranchState> {
 			if (single) {
 				return (
 					<>
-						<LeafSpan key={"leaf-span" + move.id} active={this.props.active_uuid === move.id} has_children={child_count > 0} children_active={this.state.child_active} move={move}/>
+						<LeafSpan key={"leaf-span" + move.id} active={this.props.active_uuid === move.id} has_children={child_count > 0} children_active={this.state.child_active} onClick={this.toggle} move={move}/>
 						{ul}
 					</>
 				);
