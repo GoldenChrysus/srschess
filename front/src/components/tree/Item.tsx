@@ -7,7 +7,7 @@ interface ItemProps {
 class Item extends React.Component<ItemProps> {
 	render() {
 		return(
-			<li data-id={this.props.move.id}>
+			<li className="mt-1" data-id={this.props.move.id}>
 				{this.props.children}
 			</li>
 		)

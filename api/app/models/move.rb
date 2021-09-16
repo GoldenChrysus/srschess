@@ -20,7 +20,7 @@ class Move < ApplicationRecord
 
 	private
 		def set_id
-			hash = Digest::MD5.hexdigest (self.repertoire.id.to_s + ":" + self.move_number.to_s + ":" + self.move)
+			hash = Digest::MD5.hexdigest (self.repertoire.id.to_s + ":" + self.move_number.to_s + ":" + self.move + ":" + self.fen)
 			
 			self.id = ([hash[0, 8], hash[8, 4], hash[12, 4], hash[16, 4], hash[20..-1]]).join("-")
 		end

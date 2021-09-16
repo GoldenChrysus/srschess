@@ -64,7 +64,7 @@ function RepertoireRoute() {
 	}
 
 	const addMove = function(move_data: any) {
-		console.log(move_data);
+		// console.log(move_data);
 		createMove({
 			variables : {
 				id           : move_data.id,
@@ -88,27 +88,5 @@ function RepertoireRoute() {
 		/>
 	)
 };
-
-function buildTree(base_tree: ChessControllerProps["tree"], move_num: number = 10) {
-	const tree: any = {};
-
-	for (let sort in base_tree![move_num]) {
-		const item = base_tree![move_num][sort];
-
-		tree[sort] = {
-			id         : item.id,
-			fen        : item.fen,
-			move       : item.move,
-			moveNumber : item.moveNumber,
-			children   : {}
-		};
-
-		for (let next_sort in item.moves) {
-			tree[sort].children = buildTree(base_tree, item.moves[next_sort].moveNumber);
-		}
-	}
-
-	return tree;
-}
 
 export default RepertoireRoute;

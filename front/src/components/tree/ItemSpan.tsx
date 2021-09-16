@@ -1,28 +1,34 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 import { getMoveNumFromDB } from "../../helpers";
 
 interface ItemSpanProps {
 	move: any,
-	start?: boolean
+	start?: boolean,
+	has_children: boolean,
+	active?: boolean
 };
 
-class ItemSpan extends React.Component<ItemSpanProps> {
+class ItemSpan extends React.Component<ItemSpanProps, any> {
 	render() {
-		const classes    = ["hover:bg-blue-100 transition cursor-pointer"];
-		const black_text = "...";
+		const classes      = ["transition cursor-pointer px-0.5"];
+		const icon_classes = ["-ml-4.5 cursor-pointer mr-1 transform transition"];
+		const move_num     = getMoveNumFromDB(this.props.move.moveNumber, "... ", ". ", (this.props.start) ? undefined : "");
 
+		classes.push((this.props.active) ? "bg-green-600" : "hover:bg-blue-800");
+		classes.push((move_num.indexOf("...") !== -1 || move_num.indexOf(".") === -1) ? "mr-1.5" : "mr-0.5");
 
-		let move_num = getMoveNumFromDB(this.props.move.moveNumber, (this.props.start) ? black_text : "");
-
-		if (move_num && move_num !== black_text) {
-			move_num += ". ";
-		}
-
-		classes.push((move_num && move_num !== black_text) ? "mr-1" : "mr-2");
+		const icon = (this.props.start && this.props.has_children)
+			? <FontAwesomeIcon className={icon_classes.join(" ")} icon={faChevronCircleRight}/>
+			: "";
 
 		return (
-			<span className={classes.join(" ")}>{move_num}{this.props.move.move}</span>
+			<>
+				{icon}
+				<span className={classes.join(" ")}>{move_num}{this.props.move.move}</span>
+			</>
 		)
 	}
 }

@@ -7,6 +7,10 @@ module.exports = {
 	theme    : {
 		...default_theme,
 		extend : {
+			spacing  : {
+				"4.5"  : "1.125rem",
+				"-4.5" : "-1.125rem"
+			},
 			maxWidth : {
 				chess : "calc(100vw * 0.6)"
 			},

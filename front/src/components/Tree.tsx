@@ -1,8 +1,14 @@
 import React from "react";
 
+import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import Directory from "./tree/Directory";
 import Item from "./tree/Item";
 import ItemSpan from "./tree/ItemSpan";
+
+interface TreeProps {
+	tree: ChessControllerProps["tree"],
+	active_uuid?: string
+}
 
 class Tree extends React.Component<any> {
 	tree: any = {};
@@ -50,9 +56,16 @@ class Tree extends React.Component<any> {
 		const html = [];
 
 		for (let sort in segment) {
-			const move        = segment[sort];
-			const child_count = Object.keys(move.children).length;
-			const ul          = (child_count === 0)
+			const move           = segment[sort];
+			const child_count    = Object.keys(move.children).length;
+			const has_grandchild = (
+				child_count > 1 ||
+				(
+					child_count === 1 &&
+					Object.keys((Object.values(move.children)[0] as any).children).length > 1
+				)
+			);
+			const ul             = (child_count === 0)
 				? ""
 				: (
 					(child_count> 1)
@@ -67,14 +80,14 @@ class Tree extends React.Component<any> {
 			if (single) {
 				return (
 					<>
-						<ItemSpan key={"span" + move.id} move={move}/>
+						<ItemSpan key={"span" + move.id} active={this.props.active_uuid === move.id} has_children={child_count > 0} move={move}/>
 						{ul}
 					</>
 				);
 			} else {
 				html.push(
 					<Item key={"item" + move.id} move={move}>
-						 <ItemSpan key={"span-" + move.id} start={true} move={move}/>
+						<ItemSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={has_grandchild} move={move}/>
 						{ul}
 					</Item>
 				);

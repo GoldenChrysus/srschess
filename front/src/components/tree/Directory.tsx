@@ -10,7 +10,9 @@ class Directory extends React.Component<DirectoryProps> {
 
 		if (!this.props.root) {
 			classes.push("pl-2");
-			classes.push("ml-2");
+			classes.push("ml-1");
+		} else {
+			classes.push("ml-4.5");
 		}
 
 		return (
