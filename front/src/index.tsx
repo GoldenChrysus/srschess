@@ -8,22 +8,19 @@ import ActionCable from "actioncable";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
 import { ApolloProvider, ApolloLink, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 
-const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
-const httpLink = createHttpLink({
-	uri: 'http://localhost:3001/graphql'
-});
-const hasSubscriptionOperation = ({  }) => {
+const cable          = ActionCable.createConsumer("ws://localhost:3001/cable")
+const http_link      = createHttpLink({ uri: "http://localhost:3001/graphql" });
+const shouldUseCable = () => {
 	return true;
 };
-const link = ApolloLink.split(
-  hasSubscriptionOperation,
-  new ActionCableLink({cable}),
-  httpLink
-)
-
-const client = new ApolloClient({
-//	uri   : "http://localhost:3001/graphql",
-	link: link,
+const cable_link     = new ActionCableLink({cable, connectionParams: { test: "1"}});
+const link           = ApolloLink.split(
+	shouldUseCable,
+	cable_link,
+	http_link,
+);
+const client         = new ApolloClient({
+	link  : link,
 	cache : new InMemoryCache()
 });
 
