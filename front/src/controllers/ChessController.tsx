@@ -70,12 +70,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	reducer(action: any) {
-		let new_state: any = {};
+		let new_state = action.data;
 
 		switch (action.type) {
 			case "move":
-				new_state = action.data;
-
 				const last_move = new_state.moves.at(-1);
 				const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
 	

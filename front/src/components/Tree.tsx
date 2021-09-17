@@ -22,12 +22,9 @@ class Tree extends React.Component<any> {
 		const branches = [];
 		
 		for (let sort in this.tree) {
-			const sub_tree: any = {};
-			const move_idx = Math.round(this.tree[sort].moveNumber / 10) - 1;
+			const move_idx = Math.round(this.tree[sort].moveNumber / 5) - 2;
 
 			let active_uuid = this.props.active_uuid;
-
-			sub_tree[sort] = this.tree[sort];
 
 			if (this.props.moves[move_idx] !== this.tree[sort].move) {
 				active_uuid = "";
@@ -38,7 +35,8 @@ class Tree extends React.Component<any> {
 					key={"root-branch-" + sort}
 					root={true}
 					active={true}
-					tree={sub_tree}
+					tree={this.tree[sort]}
+					moves={(active_uuid) ? this.props.moves : false}
 					active_uuid={active_uuid}
 					onMoveClick={this.props.onMoveClick}
 				/>

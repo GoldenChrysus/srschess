@@ -7,6 +7,7 @@ interface BranchProps {
 	tree: any,
 	root?: boolean,
 	active?: boolean,
+	moves: any,
 	active_uuid?: string,
 	parent_uuid?: string,
 	onMoveClick: any
@@ -52,7 +53,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 	}
 
 	buildHtml(segment: any, single: boolean = false): any {
-		if (single) {
+		if (single || this.props.root) {
 			segment = [segment];
 		}
 
@@ -68,12 +69,22 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 					Object.keys((Object.values(move.children)[0] as any).children).length > 1
 				)
 			);
+			let active_uuid      = this.props.active_uuid;
+
+			if (child_count > 1) {
+				const move_idx = Math.round(move.moveNumber / 5) - 2;
+
+				if (this.props.moves && this.props.moves[move_idx] !== move.move) {
+					active_uuid = "";
+				}
+			}
+
 			const ul             = (child_count === 0)
 				? ""
 				: (
 					(child_count > 1)
 						? (
-							<Branch key={"branch-" + move.id} parent_uuid={move.id} active={this.state.child_active} tree={move.children} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}/>
+							<Branch key={"branch-" + move.id} parent_uuid={move.id} active={this.state.child_active} tree={move.children} moves={(active_uuid) ? this.props.moves : false} active_uuid={active_uuid} onMoveClick={this.props.onMoveClick}/>
 						) :
 						this.buildHtml(Object.values(move.children)[0], true)
 				);
