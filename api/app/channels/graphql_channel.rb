@@ -46,6 +46,8 @@ class GraphqlChannel < ApplicationCable::Channel
 		logger.error e.message
 		logger.error e.backtrace.join("\n")
 
-		render json: { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }, status: 500
+		transmit({
+			:result => { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }
+		})
 	end
 end

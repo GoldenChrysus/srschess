@@ -31,6 +31,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					<Chessboard
 						key="chessboard"
 						fen={this.state.fen}
+						pgn={this.state.pgn}
 						orientation={this.props.repertoire?.side}
 						onMove={this.reducer}
 					/>
@@ -61,7 +62,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		}
 
 		this.reducer({
-			type  : "move",
+			type  : "click",
 			data  : {
 				fen   : this.chess.fen(),
 				moves : this.chess.history()
@@ -73,13 +74,21 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		let new_state = action.data;
 
 		switch (action.type) {
+			case "click":
 			case "move":
 				const last_move = new_state.moves.at(-1);
 				const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
+				const prev_uuid = this.state.last_uuid;
 	
 				switch (this.props.mode) {
 					case ChessControllerModes.repertoire:
 						const uuid = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
+
+						new_state.last_uuid = uuid;
+
+						if (action.type === "click") {
+							new_state.pgn = this.chess.pgn();
+						}
 
 						if (!this.props.moves![uuid]) {
 							const num_tree = this.props.tree![move_num];
@@ -87,19 +96,20 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 							new_state.last_is_new = true;
 
+							this.setState(new_state);
 							this.props.onMove(
 								{
 									id        : uuid,
-									parent_id : this.state.last_uuid,
+									parent_id : prev_uuid,
 									move_num  : move_num,
 									move      : last_move,
 									sort      : new_idx,
 									fen       : new_state.fen
 								}
 							);
+						} else {
+							this.setState(new_state);
 						}
-
-						new_state.last_uuid = uuid;
 
 						break;
 
@@ -112,8 +122,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			default:
 				break;
 		}
-	
-		this.setState(new_state);
 	}
 }
 

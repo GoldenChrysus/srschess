@@ -12,9 +12,8 @@ const Chess2      = ChessImport as ChessType;
 interface ChessboardProps {
 	orientation?: string,
 	fen?: string,
-	color?: string | boolean,
+	pgn?: string,
 	onMove: Function,
-	check_coord?: string
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
@@ -43,13 +42,23 @@ class Chessboard extends React.Component<ChessboardProps> {
 			this.board.setOrientation(COLOR[this.props.orientation]);
 		}
 
-		if (this.props.fen !== this.fen) {
+		if (this.props.pgn && prev_props.pgn !== this.props.pgn) {
+			this.fen = this.props.fen || "start";
+
+			this.chess.load_pgn(this.props.pgn);
+			this.board.setPosition(this.fen);
+			this.toggleMoveInput();
+		} else if (this.props.fen !== this.fen) {
 			this.fen = this.props.fen || "start";
 
 			this.chess.load(this.fen);
-			this.board.setPosition(this.props.fen);
+			this.board.setPosition(this.fen);
 			this.toggleMoveInput();
 		}
+	}
+
+	shouldComponentUpdate(next_props: ChessboardProps) {
+		return (this.fen !== next_props.fen || next_props.orientation !== this.props.orientation || next_props.pgn !== this.props.pgn);
 	}
 
 	startup() {
@@ -73,7 +82,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 	render() {
 		return (
-			<div id="chessboard" ref={this.board_ref} style={{overflow: 'hidden'}}/>
+			<div key="chessboard" id="chessboard" ref={this.board_ref}/>
 		);
 	}
 
@@ -103,13 +112,14 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 				this.fen = this.chess.fen();
 
-				event.chessboard.setPosition(this.fen);
 				this.toggleMoveInput();
+				event.chessboard.setPosition(this.fen);
 				event.chessboard.removeMarkers(undefined, MARKER_TYPE.frame);
 				this.props.onMove({
 					type  : "move",
 					data  : {
 						fen   : this.fen,
+						pgn   : this.chess.pgn(),
 						moves : this.chess.history(),
 					}
 				});	
