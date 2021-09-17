@@ -16,7 +16,7 @@ interface BranchState {
 	child_active: boolean
 }
 
-class Branch extends React.Component<BranchProps, BranchState> {
+class Branch extends React.PureComponent<BranchProps, BranchState> {
 	ref = React.createRef<any>();
 
 	constructor(props: BranchProps) {
@@ -87,7 +87,7 @@ class Branch extends React.Component<BranchProps, BranchState> {
 				);
 			} else {
 				html.push(
-					<Leaf key={"leaf" + move.id} move={move}>
+					<Leaf key={"leaf-" + move.id} move={move}>
 						<LeafSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={has_grandchild} children_active={this.state.child_active} move={move} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
 						{ul}
 					</Leaf>

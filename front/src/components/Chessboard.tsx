@@ -94,8 +94,6 @@ class Chessboard extends React.Component<ChessboardProps> {
 				return (moves.length > 0);
 	
 			case INPUT_EVENT_TYPE.moveDone:
-				event.chessboard.disableMoveInput();
-
 				const move = {from: event.squareFrom, to: event.squareTo};
 				const res  = this.chess.move(move);
 	
@@ -104,20 +102,17 @@ class Chessboard extends React.Component<ChessboardProps> {
 				}
 
 				this.fen = this.chess.fen();
-	
-				event.chessboard.removeMarkers(undefined, MARKER_TYPE.frame);
-				event.chessboard.addMarker(event.squareFrom, MARKER_TYPE.square);
+
 				event.chessboard.setPosition(this.fen);
 				this.toggleMoveInput();
-
+				event.chessboard.removeMarkers(undefined, MARKER_TYPE.frame);
 				this.props.onMove({
 					type  : "move",
 					data  : {
 						fen   : this.fen,
 						moves : this.chess.history(),
 					}
-				});
-	
+				});	
 				break;
 	
 			default:

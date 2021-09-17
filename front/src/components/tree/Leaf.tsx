@@ -4,7 +4,7 @@ interface LeafProps {
 	move: any
 };
 
-class Leaf extends React.Component<LeafProps> {
+class Leaf extends React.PureComponent<LeafProps> {
 	render() {
 		return(
 			<li key={"leaf-li" + this.props.move.id} className="mt-1" data-id={this.props.move.id}>

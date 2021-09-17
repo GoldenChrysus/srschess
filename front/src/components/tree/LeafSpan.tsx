@@ -14,7 +14,7 @@ interface LeafSpanProps {
 	onClick: any,
 };
 
-class LeafSpan extends React.Component<LeafSpanProps, any> {
+class LeafSpan extends React.PureComponent<LeafSpanProps, any> {
 	render() {
 		const classes      = ["select-none transition cursor-pointer px-0.5 rounded-sm"];
 		const icon_classes = ["-ml-4.5 cursor-pointer mr-1 transform transition"];

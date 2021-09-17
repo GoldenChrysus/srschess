@@ -1,6 +1,4 @@
-import React, { useReducer } from "react";
-import { useObserver } from "mobx-react";
-import { INPUT_EVENT_TYPE, COLOR, MARKER_TYPE } from "cm-chessboard";
+import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
@@ -22,6 +20,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 		this.state = initial_state;
 
+		this.reducer     = this.reducer.bind(this);
 		this.onMoveClick = this.onMoveClick.bind(this);
 	}
 
@@ -33,11 +32,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						key="chessboard"
 						fen={this.state.fen}
 						orientation={this.props.repertoire?.side}
-						onMove={this.reducer.bind(this)}
+						onMove={this.reducer}
 					/>
 				</div>
 				<div key="tree-outer" className="flex-1 order-2 md:order-1">
-					<Tree key="tree" tree={this.props.tree} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
+					<Tree key="tree" tree={this.props.tree} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
 				</div>
 				<MoveList key="movelist" moves={this.state.moves} onMoveClick={this.onMoveClick}/>
 			</div>

@@ -1,13 +1,14 @@
 import React from "react";
 
-import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
+import { ChessControllerProps, ChessControllerState } from "../lib/types/ChessControllerTypes";
 import Branch from "./tree/Branch";
 
 interface TreeProps {
 	tree: ChessControllerProps["tree"],
 	active_uuid?: string,
 	new_move?: boolean,
-	onMoveClick: any
+	onMoveClick: any,
+	moves: ChessControllerState["moves"]
 }
 
 class Tree extends React.Component<any> {
@@ -18,8 +19,34 @@ class Tree extends React.Component<any> {
 			this.tree = (Object.keys(this.props.tree).length > 0) ? this.buildTree() : {};
 		}
 
+		const branches = [];
+		
+		for (let sort in this.tree) {
+			const sub_tree: any = {};
+			const move_idx = Math.round(this.tree[sort].moveNumber / 10) - 1;
+
+			let active_uuid = this.props.active_uuid;
+
+			sub_tree[sort] = this.tree[sort];
+
+			if (this.props.moves[move_idx] !== this.tree[sort].move) {
+				active_uuid = "";
+			}
+
+			branches.push(
+				<Branch
+					key={"root-branch-" + sort}
+					root={true}
+					active={true}
+					tree={sub_tree}
+					active_uuid={active_uuid}
+					onMoveClick={this.props.onMoveClick}
+				/>
+			);
+		}
+
 		return (
-			<Branch key="root-branch" root={true} active={true} tree={this.tree} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}/>
+			branches
 		);
 	}
 
