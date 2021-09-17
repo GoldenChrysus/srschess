@@ -31,6 +31,9 @@ function RepertoireRoute() {
 		}
 	);
 
+	console.log(data);
+	console.log(error);
+
 	const moves: { [id: string]: any } = {};
 	const tree: ChessControllerProps["tree"] = {};
 	const fens: { [key: string]: string } = {};

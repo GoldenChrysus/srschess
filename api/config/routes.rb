@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 		jsonapi_resources :moves
 	end
 
+	mount ActionCable.server => "/cable"
+
 	post "/graphql", to: "graphql#execute"
 
 	if Rails.env.development?

@@ -4,10 +4,26 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 
-import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import ActionCable from "actioncable";
+import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
+import { ApolloProvider, ApolloLink, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+
+const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
+const httpLink = createHttpLink({
+	uri: 'http://localhost:3001/graphql'
+});
+const hasSubscriptionOperation = ({  }) => {
+	return true;
+};
+const link = ApolloLink.split(
+  hasSubscriptionOperation,
+  new ActionCableLink({cable}),
+  httpLink
+)
 
 const client = new ApolloClient({
-	uri   : "http://localhost:3001/graphql",
+//	uri   : "http://localhost:3001/graphql",
+	link: link,
 	cache : new InMemoryCache()
 });
 
