@@ -28,13 +28,13 @@ class LeafSpan extends React.Component<LeafSpanProps, any> {
 		}
 
 		const icon = (this.props.start && this.props.has_children)
-			? <FontAwesomeIcon onClick={this.props.onArrowClick} className={icon_classes.join(" ")} icon={faChevronCircleRight}/>
+			? <FontAwesomeIcon key={"leafspan-icon-" + this.props.move.id} onClick={this.props.onArrowClick} className={icon_classes.join(" ")} icon={faChevronCircleRight}/>
 			: "";
 
 		return (
 			<>
 				{icon}
-				<span onClick={() => this.props.onClick(this.props.move.id)} className={classes.join(" ")}>{move_num}{this.props.move.move}</span>
+				<span key={"leafspan-span-" + this.props.move.id} onClick={() => this.props.onClick(this.props.move.id)} className={classes.join(" ")}>{move_num}{this.props.move.move}</span>
 			</>
 		)
 	}

@@ -19,7 +19,7 @@ class Tree extends React.Component<any> {
 		}
 
 		return (
-			<Branch root={true} active={true} tree={this.tree} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}/>
+			<Branch key="root-branch" root={true} active={true} tree={this.tree} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}/>
 		);
 	}
 

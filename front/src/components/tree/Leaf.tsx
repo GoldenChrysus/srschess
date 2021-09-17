@@ -7,7 +7,7 @@ interface LeafProps {
 class Leaf extends React.Component<LeafProps> {
 	render() {
 		return(
-			<li className="mt-1" data-id={this.props.move.id}>
+			<li key={"leaf-li" + this.props.move.id} className="mt-1" data-id={this.props.move.id}>
 				{this.props.children}
 			</li>
 		)

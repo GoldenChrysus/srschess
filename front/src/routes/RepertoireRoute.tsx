@@ -31,8 +31,6 @@ function RepertoireRoute() {
 		}
 	);
 
-	console.log("gh1");
-
 	const moves: { [id: string]: any } = {};
 	const tree: ChessControllerProps["tree"] = {};
 	const fens: { [key: string]: string } = {};
@@ -66,7 +64,6 @@ function RepertoireRoute() {
 	}
 
 	const addMove = function(move_data: any) {
-		// console.log(move_data);
 		createMove({
 			variables : {
 				id           : move_data.id,
@@ -82,6 +79,7 @@ function RepertoireRoute() {
 
 	return (
 		<ChessController
+			key="chess-controller"
 			mode="repertoire"
 			repertoire={data?.repertoire}
 			moves={moves}

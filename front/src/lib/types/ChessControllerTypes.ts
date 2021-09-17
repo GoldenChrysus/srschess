@@ -30,19 +30,14 @@ export interface ChessControllerProps {
 }
 
 export interface ChessControllerState {
-	chess        : ChessInstance,
 	fen          : string,
 	last_uuid    : string | null,
 	last_is_new? : boolean,
-	color        : string | boolean,
 	moves        : Array<string>,
-	check_coord? : string
 }
 
 export const initial_state: ChessControllerState = {
-	chess     : Chess2(),
 	fen       : "start",
 	last_uuid : null,
-	color     : COLOR.white,
 	moves     : []
 };

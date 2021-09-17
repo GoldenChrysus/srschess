@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import { useObserver } from "mobx-react";
 import { INPUT_EVENT_TYPE, COLOR, MARKER_TYPE } from "cm-chessboard";
+import Chess, { ChessInstance } from "chess.js";
 
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import MoveList from "../components/chess/MoveList";
@@ -8,7 +9,14 @@ import Chessboard from "../components/Chessboard";
 import Tree from "../components/Tree";
 import { generateUUID } from "../helpers";
 
+type ChessType = (fen?: string) => ChessInstance;
+
+const ChessImport = Chess as unknown;
+const Chess2      = ChessImport as ChessType;
+
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
+	private chess = Chess2();
+
 	constructor(props: ChessControllerProps) {
 		super(props);
 
@@ -19,75 +27,25 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	render() {
 		return (
-			<div className="flex flex-wrap gap-x-8 min-h-full">
-				<div className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
+			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full">
+				<div key="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
+						key="chessboard"
 						fen={this.state.fen}
-						color={this.state.color}
 						orientation={this.props.repertoire?.side}
-						onMove={this.onMove.bind(this)}
-						check_coord={this.state.check_coord}
+						onMove={this.reducer.bind(this)}
 					/>
 				</div>
-				<div className="flex-1 order-2 md:order-1">
-					<Tree tree={this.props.tree} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
+				<div key="tree-outer" className="flex-1 order-2 md:order-1">
+					<Tree key="tree" tree={this.props.tree} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
 				</div>
-				<MoveList moves={this.state.moves} onMoveClick={this.onMoveClick}/>
+				<MoveList key="movelist" moves={this.state.moves} onMoveClick={this.onMoveClick}/>
 			</div>
 		);
 	}
 
-	onMove(event: any) {
-		event.chessboard.removeMarkers(undefined, MARKER_TYPE.dot);
-		event.chessboard.removeMarkers(undefined, MARKER_TYPE.square);
-	
-		switch (event.type) {
-			case INPUT_EVENT_TYPE.moveStart:
-				const moves = this.state.chess.moves({square: event.square, verbose: true});
-	
-				event.chessboard.addMarker(event.square, MARKER_TYPE.square);
-	
-				for (const move of moves) {
-					event.chessboard.addMarker(move.to, MARKER_TYPE.dot);
-				}
-	
-				return (moves.length > 0);
-	
-			case INPUT_EVENT_TYPE.moveDone:
-				const move = {from: event.squareFrom, to: event.squareTo};
-				const res  = this.state.chess.move(move);
-	
-				if (!res) {
-					return res;
-				}
-
-				const fen = this.state.chess.fen();
-	
-				event.chessboard.removeMarkers(undefined, MARKER_TYPE.frame);
-				event.chessboard.addMarker(event.squareFrom, MARKER_TYPE.square);
-				event.chessboard.disableMoveInput();
-	
-				const next_color = this.state.chess.turn();
-
-				this.reducer({
-					type  : "move",
-					data  : {
-						color       : (!this.state.chess.game_over()) ? COLOR[(next_color === "w") ? "white" : "black"] : false,
-						fen         : fen,
-						moves       : this.state.chess.history(),
-						check_coord : this.handleCheck(next_color)
-					}
-				});
-	
-				break;
-	
-			default:
-				break;
-		}
-	}
-
 	onMoveClick(uuid: string) {
-		this.state.chess.reset();
+		this.chess.reset();
 
 		const sequence = [uuid];
 
@@ -100,57 +58,19 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		const reverse_sequence = sequence.reverse();
 
 		for (const tmp_uuid of reverse_sequence) {
-			this.state.chess.move(this.props.moves![tmp_uuid].move);
+			this.chess.move(this.props.moves![tmp_uuid].move);
 		}
-
-		const next_color = this.state.chess.turn();
 
 		this.reducer({
 			type  : "move",
 			data  : {
-				color       : (!this.state.chess.game_over()) ? COLOR[(next_color === "w") ? "white" : "black"] : false,
-				fen         : this.state.chess.fen(),
-				moves       : this.state.chess.history(),
-				check_coord : this.handleCheck(next_color)
+				fen   : this.chess.fen(),
+				moves : this.chess.history()
 			}
 		});
 	}
 
-	handleCheck(next_color: string) {
-		if (this.state.chess.in_check()) {
-			const board = this.state.chess.board();
-
-			let king_coord;
-
-			for (const rank_idx in board) {
-				const rank = board[rank_idx];
-
-				if (king_coord) {
-					break;
-				}
-
-				for (const file_idx in rank) {
-					const file = rank[file_idx];
-
-					if (file?.color === next_color && file?.type === "k") {
-						const rank  = 8 - +rank_idx;
-						const file  = (Array.from({ length: 8 }, (_, i) => String.fromCharCode("a".charCodeAt(0) + i)))[+file_idx];
-						
-						king_coord = file + rank;
-
-						break;
-					}
-				}
-			}
-
-			return king_coord;
-		}
-
-		return null;
-	}
-
 	reducer(action: any) {
-		const time = Date.now();
 		let new_state: any = {};
 
 		switch (action.type) {
