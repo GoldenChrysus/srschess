@@ -13,23 +13,26 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		super(props);
 
 		this.state = initial_state;
+
+		this.onMoveClick = this.onMoveClick.bind(this);
 	}
 
 	render() {
 		return (
 			<div className="flex flex-wrap gap-x-8 min-h-full">
-				<div className="flex-1 order-2 md:order-1">
-					<Tree tree={this.props.tree} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new}/>
-				</div>
 				<div className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
 						fen={this.state.fen}
 						color={this.state.color}
 						orientation={this.props.repertoire?.side}
 						onMove={this.onMove.bind(this)}
+						check_coord={this.state.check_coord}
 					/>
 				</div>
-				<MoveList moves={this.state.moves}/>
+				<div className="flex-1 order-2 md:order-1">
+					<Tree tree={this.props.tree} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
+				</div>
+				<MoveList moves={this.state.moves} onMoveClick={this.onMoveClick}/>
 			</div>
 		);
 	}
@@ -63,45 +66,16 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				event.chessboard.removeMarkers(undefined, MARKER_TYPE.frame);
 				event.chessboard.addMarker(event.squareFrom, MARKER_TYPE.square);
 				event.chessboard.disableMoveInput();
-				event.chessboard.setPosition(fen);
 	
 				const next_color = this.state.chess.turn();
-	
-				if (this.state.chess.in_check()) {
-					const board = this.state.chess.board();
-	
-					let king_coord;
-	
-					for (const rank_idx in board) {
-						const rank = board[rank_idx];
-	
-						if (king_coord) {
-							break;
-						}
-	
-						for (const file_idx in rank) {
-							const file = rank[file_idx];
-	
-							if (file?.color === next_color && file?.type === "k") {
-								const rank  = 8 - +rank_idx;
-								const file  = (Array.from({ length: 8 }, (_, i) => String.fromCharCode("a".charCodeAt(0) + i)))[+file_idx];
-								
-								king_coord = file + rank;
-	
-								break;
-							}
-						}
-					}
-	
-					event.chessboard.addMarker(king_coord, MARKER_TYPE.frame);
-				}
-	
+
 				this.reducer({
 					type  : "move",
 					data  : {
-						color : (!this.state.chess.game_over()) ? COLOR[(next_color === "w") ? "white" : "black"] : false,
-						fen   : fen,
-						moves : this.state.chess.history()
+						color       : (!this.state.chess.game_over()) ? COLOR[(next_color === "w") ? "white" : "black"] : false,
+						fen         : fen,
+						moves       : this.state.chess.history(),
+						check_coord : this.handleCheck(next_color)
 					}
 				});
 	
@@ -112,14 +86,76 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		}
 	}
 
+	onMoveClick(uuid: string) {
+		this.state.chess.reset();
+
+		const sequence = [uuid];
+
+		while (this.props.moves![uuid].parentId) {
+			uuid = this.props.moves![uuid].parentId;
+
+			sequence.push(uuid);
+		}
+
+		const reverse_sequence = sequence.reverse();
+
+		for (const tmp_uuid of reverse_sequence) {
+			this.state.chess.move(this.props.moves![tmp_uuid].move);
+		}
+
+		const next_color = this.state.chess.turn();
+
+		this.reducer({
+			type  : "move",
+			data  : {
+				color       : (!this.state.chess.game_over()) ? COLOR[(next_color === "w") ? "white" : "black"] : false,
+				fen         : this.state.chess.fen(),
+				moves       : this.state.chess.history(),
+				check_coord : this.handleCheck(next_color)
+			}
+		});
+	}
+
+	handleCheck(next_color: string) {
+		if (this.state.chess.in_check()) {
+			const board = this.state.chess.board();
+
+			let king_coord;
+
+			for (const rank_idx in board) {
+				const rank = board[rank_idx];
+
+				if (king_coord) {
+					break;
+				}
+
+				for (const file_idx in rank) {
+					const file = rank[file_idx];
+
+					if (file?.color === next_color && file?.type === "k") {
+						const rank  = 8 - +rank_idx;
+						const file  = (Array.from({ length: 8 }, (_, i) => String.fromCharCode("a".charCodeAt(0) + i)))[+file_idx];
+						
+						king_coord = file + rank;
+
+						break;
+					}
+				}
+			}
+
+			return king_coord;
+		}
+
+		return null;
+	}
+
 	reducer(action: any) {
-		const new_state: any = {};
+		const time = Date.now();
+		let new_state: any = {};
 
 		switch (action.type) {
 			case "move":
-				new_state.color = action.data.color;
-				new_state.fen   = action.data.fen;
-				new_state.moves = action.data.moves;
+				new_state = action.data;
 
 				const last_move = new_state.moves.at(-1);
 				const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);

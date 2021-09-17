@@ -1,4 +1,4 @@
-import * as crypto from "crypto";
+import SparkMD5 from "spark-md5";
 
 export function getMoveNumFromIndex(index: number) {
 	return Math.floor(index / 2) + 1;
@@ -23,7 +23,7 @@ export function getMoveNumFromDB(db_move_num: number, black_suffix?: string, whi
 }
 
 export function generateUUID(move_num: number, move: string, fen: string, repertoire_id?: number) {
-	const hash = crypto.createHash("md5").update(`${repertoire_id}:${move_num}:${move}:${fen}`).digest("hex");
+	const hash = SparkMD5.hash(repertoire_id + ":" + move_num + ":" + move + ":" + fen);
 
 	return (
 		hash.slice(0, 8) + "-" + 

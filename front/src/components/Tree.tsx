@@ -6,7 +6,8 @@ import Branch from "./tree/Branch";
 interface TreeProps {
 	tree: ChessControllerProps["tree"],
 	active_uuid?: string,
-	new_move?: boolean
+	new_move?: boolean,
+	onMoveClick: any
 }
 
 class Tree extends React.Component<any> {
@@ -18,7 +19,7 @@ class Tree extends React.Component<any> {
 		}
 
 		return (
-			<Branch root={true} active={true} tree={this.tree} active_uuid={this.props.active_uuid}/>
+			<Branch root={true} active={true} tree={this.tree} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}/>
 		);
 	}
 

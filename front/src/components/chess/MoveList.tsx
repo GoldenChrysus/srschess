@@ -1,7 +1,8 @@
 import React from "react";
 
 interface MoveListProps {
-	moves: Array<string>
+	moves: Array<string>,
+	onMoveClick: Function
 }
 
 class MoveList extends React.Component<MoveListProps> {

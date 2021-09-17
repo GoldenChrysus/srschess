@@ -7,7 +7,8 @@ interface ChessboardProps {
 	orientation?: string,
 	fen?: string,
 	color?: string | boolean,
-	onMove: Function
+	onMove: Function,
+	check_coord?: string
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
@@ -28,8 +29,20 @@ class Chessboard extends React.Component<ChessboardProps> {
 			this.board.setOrientation(COLOR[this.props.orientation]);
 		}
 
-		if (prev_props.fen !== this.props.fen && this.props.color !== false) {
-			this.board.enableMoveInput(this.props.onMove, this.props.color);
+		if (prev_props.fen !== this.props.fen) {
+			this.board.setPosition(this.props.fen);
+
+			if (this.props.color !== false) {
+				this.board.enableMoveInput(this.props.onMove, this.props.color);
+			}
+		}
+
+		if (prev_props.check_coord !== this.props.check_coord) {
+			this.board.removeMarkers(undefined, MARKER_TYPE.frame);
+			
+			if (this.props.check_coord) {
+				this.board.addMarker(this.props.check_coord, MARKER_TYPE.frame);
+			}
 		}
 	}
 
@@ -54,7 +67,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 	render() {
 		return (
-			<div id="chessboard" ref={this.board_ref}/>
+			<div id="chessboard" ref={this.board_ref} style={{overflow: 'hidden'}}/>
 		);
 	}
 }

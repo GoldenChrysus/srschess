@@ -10,7 +10,8 @@ interface LeafSpanProps {
 	has_children: boolean,
 	children_active: boolean,
 	active?: boolean,
-	onClick?: any
+	onArrowClick?: any,
+	onClick: any,
 };
 
 class LeafSpan extends React.Component<LeafSpanProps, any> {
@@ -27,13 +28,13 @@ class LeafSpan extends React.Component<LeafSpanProps, any> {
 		}
 
 		const icon = (this.props.start && this.props.has_children)
-			? <FontAwesomeIcon onClick={this.props.onClick} className={icon_classes.join(" ")} icon={faChevronCircleRight}/>
+			? <FontAwesomeIcon onClick={this.props.onArrowClick} className={icon_classes.join(" ")} icon={faChevronCircleRight}/>
 			: "";
 
 		return (
 			<>
 				{icon}
-				<span className={classes.join(" ")}>{move_num}{this.props.move.move}</span>
+				<span onClick={() => this.props.onClick(this.props.move.id)} className={classes.join(" ")}>{move_num}{this.props.move.move}</span>
 			</>
 		)
 	}

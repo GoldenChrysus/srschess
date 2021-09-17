@@ -7,8 +7,8 @@ interface BranchProps {
 	tree: any,
 	root?: boolean,
 	active?: boolean,
-	onClick?: Function,
-	active_uuid?: string
+	active_uuid?: string,
+	onMoveClick: any
 };
 
 interface BranchState {
@@ -72,7 +72,7 @@ class Branch extends React.Component<BranchProps, BranchState> {
 				: (
 					(child_count > 1)
 						? (
-							<Branch active={this.state.child_active} tree={move.children} active_uuid={this.props.active_uuid}/>
+							<Branch active={this.state.child_active} tree={move.children} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}/>
 						) :
 						this.buildHtml(Object.values(move.children)[0], true)
 				);
@@ -80,14 +80,14 @@ class Branch extends React.Component<BranchProps, BranchState> {
 			if (single) {
 				return (
 					<>
-						<LeafSpan key={"leaf-span" + move.id} active={this.props.active_uuid === move.id} has_children={child_count > 0} children_active={this.state.child_active} onClick={this.toggle} move={move}/>
+						<LeafSpan key={"leaf-span" + move.id} active={this.props.active_uuid === move.id} has_children={child_count > 0} children_active={this.state.child_active} onArrowClick={this.toggle} move={move} onClick={this.props.onMoveClick}/>
 						{ul}
 					</>
 				);
 			} else {
 				html.push(
 					<Leaf key={"leaf" + move.id} move={move}>
-						<LeafSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={has_grandchild} children_active={this.state.child_active} move={move} onClick={this.toggle}/>
+						<LeafSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={has_grandchild} children_active={this.state.child_active} move={move} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
 						{ul}
 					</Leaf>
 				);
