@@ -14,19 +14,8 @@ export interface ChessControllerProps {
 	mode         : keyof typeof ChessControllerModes,
 	repertoire?  : any,
 	repertoires? : Array<any>,
-	moves?       : {
-		[id: string]: {
-			[key: string] : any
-		}
-	},
-	tree?        : {
-		[move_num: number] : {
-			[sort: number] : {
-				[key: string | number] : any
-			}
-		}
-	},
-	onMove : Function
+	client       : any,
+	onMove       : Function
 }
 
 export interface ChessControllerState {

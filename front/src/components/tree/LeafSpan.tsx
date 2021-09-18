@@ -14,7 +14,16 @@ interface LeafSpanProps {
 	onClick: any,
 };
 
-class LeafSpan extends React.PureComponent<LeafSpanProps, any> {
+class LeafSpan extends React.Component<LeafSpanProps, any> {
+	shouldComponentUpdate(next_props: LeafSpanProps) {
+		return (
+			this.props.move.id !== next_props.move.id ||
+			this.props.has_children !== next_props.has_children ||
+			this.props.children_active !== next_props.children_active ||
+			this.props.active !== next_props.active
+		);
+	}
+
 	render() {
 		const classes      = ["select-none transition cursor-pointer px-0.5 rounded-sm"];
 		const icon_classes = ["-ml-4.5 cursor-pointer mr-1 transform transition"];

@@ -18,6 +18,16 @@ export const GET_REPERTOIRE = gql`
 	}
 `;
 
+export const GET_MOVE = gql`
+	fragment MyMove on Move {
+		id
+		parentId
+		move
+		sort
+		moveNumber
+	}
+`;
+
 export const GET_REPERTOIRES = gql`
 	query Repertoires($userId: ID!) {
 		repertoires(userId: $userId) {
@@ -29,15 +39,13 @@ export const GET_REPERTOIRES = gql`
 `;
 
 export const CREATE_MOVE = gql`
-	mutation CreateMove($id: String!, $repertoireId: ID!, $fen: String! $moveNumber: Int!, $move: String!, $sort: Int!, $parentId: ID) {
+	mutation CreateMove($id: String!, $repertoireId: ID!, $fen: String! $moveNumber: Int!, $move: String!, $parentId: ID) {
 		createMove(input: {
 			id: $id,
-			repertoireId:
-			$repertoireId,
+			repertoireId: $repertoireId,
 			fen: $fen,
 			moveNumber: $moveNumber,
 			move: $move,
-			sort: $sort,
 			parentId: $parentId
 		}) {
 			move {

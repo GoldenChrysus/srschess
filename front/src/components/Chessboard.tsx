@@ -20,6 +20,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 	private board_ref    = React.createRef<any>();
 	private chess        = Chess2();
 	private fen?: string = "start";
+	private pgn?: string = "";
 
 	private board: any;
 
@@ -42,7 +43,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 			this.board.setOrientation(COLOR[this.props.orientation]);
 		}
 
-		if (this.props.pgn && prev_props.pgn !== this.props.pgn) {
+		if (this.props.pgn && this.props.pgn !== this.pgn && prev_props.pgn !== this.props.pgn) {
 			this.fen = this.props.fen || "start";
 
 			this.chess.load_pgn(this.props.pgn);
@@ -58,7 +59,14 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	shouldComponentUpdate(next_props: ChessboardProps) {
-		return (this.fen !== next_props.fen || next_props.orientation !== this.props.orientation || next_props.pgn !== this.props.pgn);
+		return (
+			this.fen !== next_props.fen ||
+			next_props.orientation !== this.props.orientation ||
+			(
+				next_props.pgn !== this.pgn &&
+				next_props.pgn !== this.props.pgn
+			)
+		);
 	}
 
 	startup() {
@@ -111,6 +119,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 				}
 
 				this.fen = this.chess.fen();
+				this.pgn = this.chess.pgn();
 
 				this.toggleMoveInput();
 				event.chessboard.setPosition(this.fen);
@@ -119,7 +128,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 					type  : "move",
 					data  : {
 						fen   : this.fen,
-						pgn   : this.chess.pgn(),
+						pgn   : this.pgn,
 						moves : this.chess.history(),
 					}
 				});	

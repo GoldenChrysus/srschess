@@ -18,5 +18,8 @@ module Types
 
 		# /moves
 		field :moves, resolver: Types::Queries::Moves
+
+		# /move
+		field :move, resolver: Types::Queries::Move
 	end
 end

@@ -1,22 +1,71 @@
 import React from "react";
 
+import { GET_MOVE } from "../api/queries";
 import { ChessControllerProps, ChessControllerState } from "../lib/types/ChessControllerTypes";
 import Branch from "./tree/Branch";
 
 interface TreeProps {
-	tree: ChessControllerProps["tree"],
-	active_uuid?: string,
-	new_move?: boolean,
-	onMoveClick: any,
-	moves: ChessControllerState["moves"]
+	client       : any,
+	repertoire   : ChessControllerProps["repertoire"],
+	active_uuid? : string,
+	new_move?    : boolean,
+	onMoveClick  : any,
+	moves        : ChessControllerState["moves"]
 }
 
-class Tree extends React.Component<any> {
-	tree: any = {};
+interface TreeState {
+	base_tree : {
+		[move_num: number] : {
+			[sort: number] : {
+				[key: string | number] : any
+			}
+		}
+	}
+}
+
+class Tree extends React.Component<any, TreeState> {
+	tree : any = {};
+
+	constructor(props: any) {
+		super(props);
+
+		this.state = {
+			base_tree : {}
+		};
+	}
+	
+	componentDidUpdate(prev_props: any) {
+		if (this.props.repertoire?.moves && this.props.repertoire.moves.length !== prev_props.repertoire?.moves.length) {
+			const tree: TreeState["base_tree"] = {};
+
+			for (const move of this.props.repertoire.moves) {
+				const tmp_move = {...move};
+	
+				if (!tree[tmp_move.moveNumber]) {
+					tree[tmp_move.moveNumber] = {};
+				}
+	
+				tmp_move.moves = [];
+	
+				tree[tmp_move.moveNumber][tmp_move.sort] = tmp_move;
+	
+				if (tmp_move.parentId) {
+					const parent = this.getMove(tmp_move.parentId);
+	
+					tree[parent.moveNumber][parent.sort].moves.push({
+						sort       : tmp_move.sort,
+						moveNumber : tmp_move.moveNumber
+					});
+				}
+			}
+
+			this.setState({ base_tree : tree });
+		}
+	}
 
 	render() {
 		if (this.props.new_move || Object.keys(this.tree).length === 0) {
-			this.tree = (Object.keys(this.props.tree).length > 0) ? this.buildTree() : {};
+			this.tree = (Object.keys(this.state.base_tree).length > 0) ? this.buildTree() : {};
 		}
 
 		const branches = [];
@@ -50,10 +99,10 @@ class Tree extends React.Component<any> {
 
 	buildTree(move_num: number = 10, focus_sort?: number) {
 		const tree: any     = {};
-		const allowed_sorts = (focus_sort !== undefined) ? [focus_sort] : Object.keys(this.props.tree[move_num]);
+		const allowed_sorts = (focus_sort !== undefined) ? [focus_sort] : Object.keys(this.state.base_tree[move_num]);
 
 		for (const sort of allowed_sorts) {
-			const item = this.props.tree![move_num][sort];
+			const item = this.state.base_tree![move_num][sort as number];
 
 			tree[sort] = {
 				id         : item.id,
@@ -69,6 +118,13 @@ class Tree extends React.Component<any> {
 		}
 	
 		return tree;
+	}
+
+	getMove(id: string) {
+		return this.props.client.readFragment({
+			id       : "Move:" + id,
+			fragment : GET_MOVE
+		});
 	}
 }
 

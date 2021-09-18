@@ -1,6 +1,7 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
+import { GET_MOVE } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import MoveList from "../components/chess/MoveList";
 import Chessboard from "../components/Chessboard";
@@ -37,7 +38,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					/>
 				</div>
 				<div key="tree-outer" className="flex-1 order-2 md:order-1">
-					<Tree key="tree" tree={this.props.tree} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
+					<Tree key="tree" client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
 				</div>
 				<MoveList key="movelist" moves={this.state.moves} onMoveClick={this.onMoveClick}/>
 			</div>
@@ -47,18 +48,20 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	onMoveClick(uuid: string) {
 		this.chess.reset();
 
-		const sequence = [uuid];
+		const sequence = [];
 
-		while (this.props.moves![uuid].parentId) {
-			uuid = this.props.moves![uuid].parentId;
+		do {
+			const move = this.getMove(uuid);
 
-			sequence.push(uuid);
-		}
+			sequence.push(move.move);
+
+			uuid = move.parentId;
+		} while (uuid);
 
 		const reverse_sequence = sequence.reverse();
 
-		for (const tmp_uuid of reverse_sequence) {
-			this.chess.move(this.props.moves![tmp_uuid].move);
+		for (const move of reverse_sequence) {
+			this.chess.move(move);
 		}
 
 		this.reducer({
@@ -90,10 +93,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 							new_state.pgn = this.chess.pgn();
 						}
 
-						if (!this.props.moves![uuid]) {
-							const num_tree = this.props.tree![move_num];
-							const new_idx  = (num_tree) ? Object.values(num_tree).at(-1)!.sort + 1 : 0;
-
+						if (!this.getMove(uuid)) {
 							new_state.last_is_new = true;
 
 							this.setState(new_state);
@@ -103,7 +103,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 									parent_id : prev_uuid,
 									move_num  : move_num,
 									move      : last_move,
-									sort      : new_idx,
 									fen       : new_state.fen
 								}
 							);
@@ -122,6 +121,13 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			default:
 				break;
 		}
+	}
+
+	getMove(id: string) {
+		return this.props.client.readFragment({
+			id       : "Move:" + id,
+			fragment : GET_MOVE
+		});
 	}
 }
 

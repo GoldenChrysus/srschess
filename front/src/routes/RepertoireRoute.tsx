@@ -1,7 +1,6 @@
 import React from "react";
-import { Spin } from "antd";
 import { useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useApolloClient, ApolloConsumer } from "@apollo/client";
 
 import { GET_REPERTOIRE, CREATE_MOVE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
@@ -31,35 +30,13 @@ function RepertoireRoute() {
 		}
 	);
 
-	const moves: { [id: string]: any } = {};
-	const tree: ChessControllerProps["tree"] = {};
 	const fens: { [key: string]: string } = {};
 
 	if (data?.repertoire?.moves) {
 		for (const move of data?.repertoire.moves) {
-			moves[move.id] = move;
-
 			const fen_key  = `${move.moveNumber}:${move.move}:${move.fen}`;
-			const tmp_move = {...move};
 
 			fens[fen_key] = move.id;
-
-			if (!tree[tmp_move.moveNumber]) {
-				tree[tmp_move.moveNumber] = {};
-			}
-
-			tmp_move.moves = [];
-
-			tree[tmp_move.moveNumber][tmp_move.sort] = tmp_move;
-
-			if (tmp_move.parentId) {
-				const parent = moves[tmp_move.parentId];
-
-				tree[parent.moveNumber][parent.sort].moves.push({
-					sort       : tmp_move.sort,
-					moveNumber : tmp_move.moveNumber
-				});
-			}
 		}
 	}
 
@@ -71,21 +48,23 @@ function RepertoireRoute() {
 				moveNumber   : move_data.move_num,
 				move         : move_data.move,
 				fen          : move_data.fen,
-				sort         : move_data.sort,
 				parentId     : move_data.parent_id
 			}
 		});
 	}
 
 	return (
-		<ChessController
-			key="chess-controller"
-			mode="repertoire"
-			repertoire={data?.repertoire}
-			moves={moves}
-			tree={tree}
-			onMove={addMove}
-		/>
+		<ApolloConsumer>
+			{client => 
+				<ChessController
+					key="chess-controller"
+					mode="repertoire"
+					repertoire={data?.repertoire}
+					client={client}
+					onMove={addMove}
+				/>
+			}
+		</ApolloConsumer>
 	)
 };
 

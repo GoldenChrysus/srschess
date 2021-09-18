@@ -1,11 +1,13 @@
 import React from "react";
 
+import Move from "./move-list/Move";
+
 interface MoveListProps {
 	moves: Array<string>,
 	onMoveClick: Function
 }
 
-class MoveList extends React.Component<MoveListProps> {
+class MoveList extends React.PureComponent<MoveListProps> {
 	render() {
 		return (
 			<div key="movelist" className="flex-1 order-3 md:order-3 overflow-y-scroll">
@@ -21,13 +23,7 @@ class MoveList extends React.Component<MoveListProps> {
 			return;
 		}
 
-		return (
-			<div key={"moveitem-item-" + index} className="grid grid-cols-12">
-				<div key={"movelist-item-num-" + index} className="col-span-1">{Math.floor(index / 2) + 1}</div>
-				<div key={"movelist-item-white-" + index} className="col-span-4">{item}</div>
-				<div key={"movelist-item-black-" + index} className="col-span-7">{moves[index + 1]}</div>
-			</div>
-		);
+		return <Move key={"movelist-move-" + index} index={index} white={item} black={moves[index + 1]}/>;
 	}
 }
 
