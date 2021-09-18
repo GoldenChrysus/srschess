@@ -5,15 +5,16 @@ import { withRouter } from "react-router-dom";
 class MainLayout extends React.Component<any> {
 	render() {
 		const layout_classes  = [
-			"bg-gray-500",
+			"bg-gray-800",
 			"min-h-screen",
 			"flex",
-			"flex-col"
+			"flex-col",
 		];
 		const header_classes  = [
 			"bg-gray-900",
-			"h-16",
-			"flex"
+			"flex",
+			"h-11",
+			"min-h-11",
 		];
 		const content_classes = [
 			"flex-1",
@@ -22,7 +23,7 @@ class MainLayout extends React.Component<any> {
 		];
 
 		let footer: any = (
-			<div className="bg-gray-300 h-32 absolute -bottom-32 w-full">
+			<div className="bg-gray-500 h-32 absolute -bottom-32 w-full">
 				Footer
 			</div>
 		);

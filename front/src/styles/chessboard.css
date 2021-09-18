@@ -45,50 +45,76 @@ body .cg-wrap.orientation-black coords.ranks coord:nth-child(odd) {
 	color: #ecdab9;
 }
 
-body .cg-wrap piece.black.pawn {
+body .piece-store {
+	text-align: right;
+	align-items: center;
+}
+
+body .standalone.piece {
+	width: 20px;
+	height: 20px;
+	line-height: 25px;
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+body .cg-wrap piece.black.pawn,
+body .standalone.piece.black.p {
 	background-image: url("../assets/chess/pieces/staunty/black-pawn.svg");
 }
 
-body .cg-wrap piece.black.rook {
+body .cg-wrap piece.black.rook,
+body .standalone.piece.black.r {
 	background-image: url("../assets/chess/pieces/staunty/black-rook.svg");
 }
 
-body .cg-wrap piece.black.knight {
+body .cg-wrap piece.black.knight,
+body .standalone.piece.black.n {
 	background-image: url("../assets/chess/pieces/staunty/black-knight.svg");
 }
 
-body .cg-wrap piece.black.bishop {
+body .cg-wrap piece.black.bishop,
+body .standalone.piece.black.b {
 	background-image: url("../assets/chess/pieces/staunty/black-bishop.svg");
 }
 
-body .cg-wrap piece.black.queen {
+body .cg-wrap piece.black.queen,
+body .standalone.piece.black.q {
 	background-image: url("../assets/chess/pieces/staunty/black-queen.svg");
 }
 
-body .cg-wrap piece.black.king {
+body .cg-wrap piece.black.king,
+body .standalone.piece.black.k {
 	background-image: url("../assets/chess/pieces/staunty/black-king.svg");
 }
 
-body .cg-wrap piece.white.pawn {
+body .cg-wrap piece.white.pawn,
+body .standalone.piece.white.p {
 	background-image: url("../assets/chess/pieces/staunty/white-pawn.svg");
 }
 
-body .cg-wrap piece.white.rook {
+body .cg-wrap piece.white.rook,
+body .standalone.piece.white.r {
 	background-image: url("../assets/chess/pieces/staunty/white-rook.svg");
 }
 
-body .cg-wrap piece.white.knight {
+body .cg-wrap piece.white.knight,
+body .standalone.piece.white.n {
 	background-image: url("../assets/chess/pieces/staunty/white-knight.svg");
 }
 
-body .cg-wrap piece.white.bishop {
+body .cg-wrap piece.white.bishop,
+body .standalone.piece.white.b {
 	background-image: url("../assets/chess/pieces/staunty/white-bishop.svg");
 }
 
-body .cg-wrap piece.white.queen {
+body .cg-wrap piece.white.queen,
+body .standalone.piece.white.q {
 	background-image: url("../assets/chess/pieces/staunty/white-queen.svg");
 }
 
-body .cg-wrap piece.white.king {
+body .cg-wrap piece.white.king,
+body .standalone.piece.white.k {
 	background-image: url("../assets/chess/pieces/staunty/white-king.svg");
 }

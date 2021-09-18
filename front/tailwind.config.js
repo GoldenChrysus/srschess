@@ -11,11 +11,14 @@ module.exports = {
 				"4.5"  : "1.125rem",
 				"-4.5" : "-1.125rem"
 			},
+			minHeight : {
+				"11" : "2.75rem"
+			},
 			maxWidth : {
-				chess : "calc(100vw * 0.6)"
+				chess : "calc(100vw * 0.4)"
 			},
 			width : {
-				chess : "calc(100vh - 4rem)"
+				chess : "calc(100vh - 20rem)"
 			}
 		}
 	},
@@ -182,5 +185,7 @@ module.exports = {
 		wordBreak: ['responsive'],
 		zIndex: ['responsive', 'focus-within', 'focus'],
 	},
-	plugins : [],
+	plugins : [
+		require("tailwind-scrollbar")
+	],
 }

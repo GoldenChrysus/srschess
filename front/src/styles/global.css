@@ -1,0 +1,25 @@
+body {
+	overflow-x: hidden;
+}
+
+#chess-left-menu .ant-collapse-content {
+	min-height: calc(100vh - 47px - 46px - 2.75rem);
+	max-height: calc(100vh - 47px - 46px - 2.75rem);
+	overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #374151 !important;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #065f46 !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #064E3B !important;
+}

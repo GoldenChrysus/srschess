@@ -92,9 +92,7 @@ class Tree extends React.Component<any, TreeState> {
 			);
 		}
 
-		return (
-			branches
-		);
+		return branches;
 	}
 
 	buildTree(move_num: number = 10, focus_sort?: number) {

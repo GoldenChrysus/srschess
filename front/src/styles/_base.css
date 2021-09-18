@@ -3,7 +3,4 @@
 @tailwind utilities;
 @import "antd/dist/antd.dark.min.css";
 @import "./antd.css";
-
-body {
-	overflow-x: hidden;
-}
+@import "./global.css";

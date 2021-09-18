@@ -2,6 +2,8 @@ import React from "react";
 import Chessground from "react-chessground";
 import Chess, { ChessInstance } from "chess.js";
 
+import Piece from "./chess/Piece";
+
 import "react-chessground/dist/styles/chessground.css";
 import "../styles/chessboard.css";
 
@@ -57,15 +59,23 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 	render() {
 		return (
-			<Chessground
-				check={this.checkColor()}
-				turnColor={this.toColor()}
-				movable={this.toDests()}
-				fen={this.props.fen}
-				lastMove={this.lastMove()}
-				onMove={this.onMove}
-				ref={this.board_ref}
-			/>
+			<>
+				<div className="piece-store w-full" style={{ height: "25px" }}>
+					{this.renderCaptures("top")}
+				</div>
+				<Chessground
+					check={this.checkColor()}
+					turnColor={this.toColor()}
+					movable={this.toDests()}
+					fen={this.props.fen}
+					lastMove={this.lastMove()}
+					onMove={this.onMove}
+					ref={this.board_ref}
+				/>
+				<div className="piece-store w-full" style={{ height: "25px" }}>
+					{this.renderCaptures("bottom")}
+				</div>
+			</>
 		);
 	}
 
@@ -74,10 +84,17 @@ class Chessboard extends React.Component<ChessboardProps> {
 			return;
 		}
 
-		const board = this.board_ref.current.el;
-		const width = Math.min(window.screen.height, board.closest(".order-1").offsetWidth);
+		const board  = this.board_ref.current.el;
+		const parent = board.closest(".order-1");
+		const width  = Math.min(parent.offsetHeight- 50, parent.offsetWidth) + "px";
 
-		board.style.width = board.style.height = `${width}px`;
+		for (const child of parent.children) {
+			child.style.width = width;
+
+			if (child.classList.contains("cg-wrap")) {
+				child.style.height = width;
+			}
+		}
 	}
 
 	lastMove() {
@@ -140,6 +157,28 @@ class Chessboard extends React.Component<ChessboardProps> {
 			free: false,
 			dests: dests
 		};
+	}
+
+	renderCaptures(section: string) {
+		const player = ((this.props.orientation === "white" && section === "bottom") || (this.props.orientation === "black" && section === "top"))
+			? "w"
+			: "b";
+		const moves  = this.chess.history({ verbose: true });
+		const pieces = [];
+
+		for (let i in moves) {
+			if (moves[i].color !== player) {
+				continue;
+			}
+
+			if (moves[i].captured) {
+				pieces.push(
+					<Piece key={"captures-" + player + "-" + i} type={moves[i].captured!} color={(player === "w") ? "black" : "white"}/>
+				)
+			}
+		}
+
+		return pieces;
 	}
 }
 

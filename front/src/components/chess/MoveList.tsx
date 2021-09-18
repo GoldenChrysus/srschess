@@ -10,7 +10,7 @@ interface MoveListProps {
 class MoveList extends React.PureComponent<MoveListProps> {
 	render() {
 		return (
-			<div key="movelist" className="flex-1 order-3 md:order-3 overflow-y-scroll">
+			<div key="movelist" className="flex-1 order-3 md:order-3 overflow-y-auto">
 				<div key="movelist-inner" className="max-w-full md:max-w-sm">
 					{this.props.moves?.map((move, i, moves) => this.renderListMove(move, i, moves))}
 				</div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Collapse } from "antd";
 import Chess, { ChessInstance } from "chess.js";
 
 import { GET_MOVE } from "../api/queries";
@@ -27,7 +28,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	render() {
 		return (
-			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full">
+			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">
 				<div key="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
 						key="chessboard"
@@ -37,8 +38,15 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						onMove={this.reducer}
 					/>
 				</div>
-				<div key="tree-outer" className="flex-1 order-2 md:order-1">
-					<Tree key="tree" client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
+				<div key="tree-outer" id="chess-left-menu" className="flex-1 order-2 md:order-1" style={{ maxHeight: "calc(100vh - 2.75rem)" }}>
+					<Collapse accordion bordered={false} defaultActiveKey={(this.props.repertoire?.id) ? "tree-panel" : "repertoires-panel"}>
+						<Collapse.Panel id="tree-panel" header="Move Tree" key="tree-panel" forceRender={true}>
+							<Tree key="tree" client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}></Tree>
+						</Collapse.Panel>
+						<Collapse.Panel id="repertoires-panel" header="Repertoires" key="repertoires-panel">
+							<p>Test</p>
+						</Collapse.Panel>
+					</Collapse>
 				</div>
 				<MoveList key="movelist" moves={this.state.moves} onMoveClick={this.onMoveClick}/>
 			</div>
