@@ -24,11 +24,13 @@ export interface ChessControllerState {
 	last_uuid    : string | null,
 	last_is_new? : boolean,
 	moves        : Array<string>,
+	history      : Array<any>
 }
 
 export const initial_state: ChessControllerState = {
 	fen       : "start",
 	pgn       : "",
 	last_uuid : null,
-	moves     : []
+	moves     : [],
+	history   : [],
 };

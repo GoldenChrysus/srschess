@@ -1,22 +1,45 @@
+import { move } from "chessground/draw";
 import React from "react";
 
 interface MoveProps {
 	index: number,
-	white?: string,
-	black?: string
+	white?: any,
+	black?: any,
+	active_color: string | null,
+	onClick: any
 }
 
 class Move extends React.PureComponent<MoveProps> {
 	render() {
 		return (
-			<div key={"moveitem-item-" + this.props.index} className="grid grid-cols-12 gap-x-3.5">
+			<div key={"moveitem-item-" + this.props.index} className="grid grid-cols-12">
 				<div key={"movelist-item-num-" + this.props.index} className="text-center col-span-2 move-number py-1">
 					{Math.floor(this.props.index / 2) + 1}
 				</div>
-				<div key={"movelist-item-white-" + this.props.index} className="col-span-5 py-1">{this.props.white}</div>
-				<div key={"movelist-item-black-" + this.props.index} className="col-span-5 py-1">{this.props.black}</div>
+				{this.getMoves()}
 			</div>
 		);
+	}
+
+	getMoves() {
+		const moves = [];
+
+		for (const color of ["white", "black"]) {
+			if (color === "black" && !this.props.black) {
+				continue;
+			}
+
+			const active_class = (this.props.active_color === color) ? "bg-gray-700" : "";
+			const move         = (color === "white") ? this.props.white : this.props.black;
+
+			moves.push(
+				<div key={"movelist-item-" + color + "-" + this.props.index} className={"col-span-5 p-1 py-1 px-3.5 hover:bg-green-700 cursor-pointer " + active_class} onClick={() => this.props.onClick(move.id)}>
+					{move.move}
+				</div>
+			);
+		}
+
+		return moves;
 	}
 }
 

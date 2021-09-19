@@ -43,36 +43,58 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						onMove={this.reducer}
 					/>
 				</div>
-				<LeftMenu client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
-				<MoveList key="movelist" moves={this.state.moves} onMoveClick={this.onMoveClick}/>
+				<LeftMenu client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick.bind(this, "tree")}/>
+				<MoveList key="movelist" client={this.props.client} active_uuid={this.state.last_uuid} moves={this.state.history} onMoveClick={this.onMoveClick.bind(this, "history")}/>
 			</div>
 		);
 	}
 
-	onMoveClick(uuid: string) {
-		this.chess.reset();
+	generateHistory(uuid?: string | null) {
+		const data: { [ key: string] : any } = {
+			moves   : [],
+			history : [],
+		};
 
-		const sequence = [];
+		if (!uuid) {
+			return data;
+		}
 
 		do {
 			const move = this.getMove(uuid);
 
-			sequence.push(move.move);
+			data.history.push({
+				id   : uuid,
+				move : move.move
+			});
+
+			data.moves.push(move.move);
 
 			uuid = move.parentId;
 		} while (uuid);
 
-		const reverse_sequence = sequence.reverse();
+		data.moves   = data.moves.reverse();
+		data.history = data.history.reverse();
 
-		for (const move of reverse_sequence) {
+		return data;
+	}
+
+	onMoveClick(source: string, uuid: string) {
+		this.chess.reset();
+
+		const data = this.generateHistory(uuid);
+
+		for (const move of data.moves) {
 			this.chess.move(move);
 		}
 
 		this.reducer({
-			type  : "click",
+			type  : "click-" + source,
 			data  : {
-				fen   : this.chess.fen(),
-				moves : this.chess.history()
+				pgn       : this.chess.pgn(),
+				last_uuid : uuid,
+				fen       : this.chess.fen(),
+				moves     : data.moves,
+				history   : (source === "tree") ? data.history : this.state.history,
 			}
 		});
 	}
@@ -81,7 +103,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		let new_state = action.data;
 
 		switch (action.type) {
-			case "click":
+			case "click-history":
+			case "click-tree":
+				this.setState(new_state);
+				break;
+
 			case "move":
 				const last_move = new_state.moves.at(-1);
 				const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
@@ -93,8 +119,13 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 						new_state.last_uuid = uuid;
 
-						if (action.type === "click") {
-							new_state.pgn = this.chess.pgn();
+						if (!this.historyContainsUUID(uuid)) {
+							new_state.history   = this.generateHistory(prev_uuid).history;
+
+							new_state.history.push({
+								id   : uuid,
+								move : last_move
+							});
 						}
 
 						if (!this.getMove(uuid)) {
@@ -125,6 +156,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			default:
 				break;
 		}
+	}
+
+	historyContainsUUID(uuid: string) {
+		return (this.state.history.filter(x => x.id === uuid).length > 0);
 	}
 
 	getMove(id: string) {
