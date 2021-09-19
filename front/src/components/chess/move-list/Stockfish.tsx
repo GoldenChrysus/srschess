@@ -24,8 +24,9 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	constructor(props: StockfishProps) {
 		super(props);
 
-		this.toggle = this.toggle.bind(this);
-		this.state  = {
+		this.receiveEval = this.receiveEval.bind(this);
+		this.toggle      = this.toggle.bind(this);
+		this.state       = {
 			score   : "-",
 			depth   : 0,
 			enabled : false
@@ -37,6 +38,12 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	componentDidUpdate(prev_props: StockfishProps) {
 		if (prev_props.fen !== this.props.fen) {
 			this.runEval();
+		}
+	}
+
+	componentWillUnmount() {
+		if (window.sf && this.set_listener) {
+			window.sf.removeMessageListener(this.receiveEval);
 		}
 	}
 
@@ -120,7 +127,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 
 		this.set_listener = true;
 
-		window.sf.addMessageListener(this.receiveEval.bind(this));
+		window.sf.addMessageListener(this.receiveEval);
 	}
 
 	runEval(force?: boolean) {
