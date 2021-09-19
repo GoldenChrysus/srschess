@@ -107,6 +107,10 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	onMove(orig: any, dest: any) {
+		if (!this.props.orientation) {
+			return false;
+		}
+
 		const res = this.chess.move({
 			from : orig,
 			to   : dest
@@ -142,17 +146,19 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 	toDests() {
 		const dests = new Map();
+		
+		if (this.props.orientation) {
+			this.chess.SQUARES.forEach(s => {
+				const ms = this.chess.moves({
+					square  : s,
+					verbose : true
+				});
 
-		this.chess.SQUARES.forEach(s => {
-			const ms = this.chess.moves({
-				square  : s,
-				verbose : true
+				if (ms.length) {
+					dests.set(s, ms.map(m => m.to));
+				}
 			});
-
-			if (ms.length) {
-				dests.set(s, ms.map(m => m.to));
-			}
-		});
+		}
 
 		return {
 			free: false,

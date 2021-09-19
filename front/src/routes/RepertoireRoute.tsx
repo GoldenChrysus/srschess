@@ -25,7 +25,8 @@ function RepertoireRoute() {
 		{
 			variables : {
 				id : id
-			}
+			},
+			skip : !id
 		}
 	);
 
