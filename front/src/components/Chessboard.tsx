@@ -5,7 +5,7 @@ import Chess, { ChessInstance } from "chess.js";
 import Piece from "./chess/Piece";
 
 import "react-chessground/dist/styles/chessground.css";
-import "../styles/chessboard.css";
+import "../styles/chess/chessboard.css";
 
 type ChessType = (fen?: string) => ChessInstance;
 

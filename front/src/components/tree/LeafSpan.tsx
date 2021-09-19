@@ -26,7 +26,7 @@ class LeafSpan extends React.Component<LeafSpanProps, any> {
 
 	render() {
 		const classes      = ["select-none transition cursor-pointer px-0.5 rounded-sm"];
-		const icon_classes = ["-ml-4.5 cursor-pointer mr-1 transform transition"];
+		const icon_classes = ["-ml-4.5 cursor-pointer mr-3 transform transition"];
 		const move_num     = getMoveNumFromDB(this.props.move.moveNumber, "... ", ". ", (this.props.start) ? undefined : "");
 
 		classes.push((this.props.active) ? "bg-green-600" : "hover:bg-blue-800");

@@ -5,6 +5,8 @@ import { ChessControllerProps, ChessControllerState } from "../../lib/types/Ches
 import Tree from "../Tree";
 import Repertoires from "./left-menu/Repertoires";
 
+import "../../styles/chess/repertoires.css";
+
 interface LeftMenuProps {
 	client: ChessControllerProps["client"],
 	repertoire?: ChessControllerProps["repertoire"],

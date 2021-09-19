@@ -25,6 +25,15 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		this.onMoveClick = this.onMoveClick.bind(this);
 	}
 
+	componentDidUpdate(prev_props: ChessControllerProps) {
+		if (prev_props.repertoire?.id !== this.props.repertoire?.id) {
+			this.setState({
+				fen : "start",
+				pgn : "start"
+			});
+		}
+	}
+
 	render() {
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">

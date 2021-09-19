@@ -36,7 +36,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 
 		if (!this.props.root) {
 			classes.push("pl-2");
-			classes.push("ml-1");
+			classes.push("ml-1.5");
 		} else {
 			classes.push("ml-4.5");
 		}
