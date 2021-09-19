@@ -3,9 +3,9 @@ import Chess, { ChessInstance } from "chess.js";
 
 import { GET_MOVE } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
-import MoveList from "../components/chess/MoveList";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
+import RightMenu from "../components/chess/RightMenu";
 import { generateUUID } from "../helpers";
 
 type ChessType = (fen?: string) => ChessInstance;
@@ -43,8 +43,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						onMove={this.reducer}
 					/>
 				</div>
-				<LeftMenu client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick.bind(this, "tree")}/>
-				<MoveList key="movelist" client={this.props.client} active_uuid={this.state.last_uuid} moves={this.state.history} onMoveClick={this.onMoveClick.bind(this, "history")}/>
+				<LeftMenu key="chess-left-menu-component" client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick.bind(this, "tree")}/>
+				<RightMenu key="chess-right-menu-component" client={this.props.client} active_uuid={this.state.last_uuid} moves={this.state.history} fen={this.state.fen} onMoveClick={this.onMoveClick.bind(this, "history")}/>
 			</div>
 		);
 	}

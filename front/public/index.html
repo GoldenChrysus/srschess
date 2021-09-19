@@ -32,10 +32,6 @@
 			Stockfish().then((sf) => {
 				window.sf = sf;
 
-				sf.addMessageListener((line) => {
-					console.log(line);
-				});
-
 				sf.postMessage("uci");
 			});
 		</script>
