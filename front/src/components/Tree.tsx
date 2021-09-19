@@ -35,7 +35,7 @@ class Tree extends React.Component<any, TreeState> {
 	}
 	
 	componentDidUpdate(prev_props: any) {
-		if (this.props.repertoire?.moves && this.props.repertoire.moves.length !== prev_props.repertoire?.moves.length) {
+		if (this.props.repertoire && this.props.repertoire.moves.length !== prev_props.repertoire?.moves.length) {
 			const tree: TreeState["base_tree"] = {};
 
 			for (const move of this.props.repertoire.moves) {
@@ -58,6 +58,8 @@ class Tree extends React.Component<any, TreeState> {
 					});
 				}
 			}
+
+			this.tree = {};
 
 			this.setState({ base_tree : tree });
 		}

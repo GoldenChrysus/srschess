@@ -1,12 +1,11 @@
 import React from "react";
-import { Collapse } from "antd";
 import Chess, { ChessInstance } from "chess.js";
 
 import { GET_MOVE } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import MoveList from "../components/chess/MoveList";
 import Chessboard from "../components/Chessboard";
-import Tree from "../components/Tree";
+import LeftMenu from "../components/chess/LeftMenu";
 import { generateUUID } from "../helpers";
 
 type ChessType = (fen?: string) => ChessInstance;
@@ -38,16 +37,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						onMove={this.reducer}
 					/>
 				</div>
-				<div key="tree-outer" id="chess-left-menu" className="flex-1 order-2 md:order-1" style={{ maxHeight: "calc(100vh - 2.75rem)" }}>
-					<Collapse accordion bordered={false} defaultActiveKey={(this.props.repertoire?.id) ? "tree-panel" : "repertoires-panel"}>
-						<Collapse.Panel id="tree-panel" header="Move Tree" key="tree-panel" forceRender={true}>
-							<Tree key="tree" client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}></Tree>
-						</Collapse.Panel>
-						<Collapse.Panel id="repertoires-panel" header="Repertoires" key="repertoires-panel">
-							<p>Test</p>
-						</Collapse.Panel>
-					</Collapse>
-				</div>
+				<LeftMenu client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick}/>
 				<MoveList key="movelist" moves={this.state.moves} onMoveClick={this.onMoveClick}/>
 			</div>
 		);

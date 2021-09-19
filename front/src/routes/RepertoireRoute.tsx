@@ -1,10 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useQuery, useMutation, useApolloClient, ApolloConsumer } from "@apollo/client";
+import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
 import { GET_REPERTOIRE, CREATE_MOVE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
-import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 
 interface RepertoireRouteParams {
 	id?: string
