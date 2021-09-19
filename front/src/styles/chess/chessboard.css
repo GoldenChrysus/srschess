@@ -32,7 +32,7 @@ body .cg-wrap coords coord {
 body .cg-wrap.orientation-white coords.files coord:nth-child(even),
 body .cg-wrap.orientation-white coords.ranks coord:nth-child(even),
 body .cg-wrap.orientation-black coords.files coord:nth-child(odd),
-body .cg-wrap.orientation-black coords.ranks coord:nth-child(even) {
+body .cg-wrap.orientation-black coords.ranks coord:nth-child(odd) {
 	/* color:rgba(0, 0, 0, 0.75); */
 	color: #c5a076;
 }
@@ -40,7 +40,7 @@ body .cg-wrap.orientation-black coords.ranks coord:nth-child(even) {
 body .cg-wrap.orientation-white coords.files coord:nth-child(odd),
 body .cg-wrap.orientation-white coords.ranks coord:nth-child(odd),
 body .cg-wrap.orientation-black coords.files coord:nth-child(even),
-body .cg-wrap.orientation-black coords.ranks coord:nth-child(odd) {
+body .cg-wrap.orientation-black coords.ranks coord:nth-child(even) {
 	/* color:rgba(255, 255, 255, 0.75); */
 	color: #ecdab9;
 }

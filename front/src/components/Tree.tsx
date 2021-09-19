@@ -73,8 +73,6 @@ class Tree extends React.Component<any, TreeState> {
 				}
 			}
 
-			console.log(tree);
-
 			this.tree = {};
 
 			this.setState({ base_tree : tree });

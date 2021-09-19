@@ -65,6 +65,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 				</div>
 				<Chessground
 					check={this.checkColor()}
+					orientation={this.props.orientation || "white"}
 					turnColor={this.toColor()}
 					movable={this.toDests()}
 					fen={this.props.fen}
