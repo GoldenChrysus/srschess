@@ -27,10 +27,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	componentDidUpdate(prev_props: ChessControllerProps) {
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id) {
-			this.setState({
-				fen : "start",
-				pgn : "start"
-			});
+			this.setState(initial_state);
 		}
 	}
 
