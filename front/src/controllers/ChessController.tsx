@@ -44,7 +44,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					/>
 				</div>
 				<LeftMenu key="chess-left-menu-component" client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick.bind(this, "tree")}/>
-				<RightMenu key="chess-right-menu-component" client={this.props.client} active_uuid={this.state.last_uuid} moves={this.state.history} fen={this.state.fen} onMoveClick={this.onMoveClick.bind(this, "history")}/>
+				<RightMenu key="chess-right-menu-component" client={this.props.client} active_num={this.state.last_num} moves={this.state.history} fen={this.state.fen} onMoveClick={this.onMoveClick.bind(this, "history")}/>
 			</div>
 		);
 	}
@@ -102,6 +102,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	reducer(action: any) {
 		let new_state = action.data;
 
+		const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
+
+		new_state.last_num  = move_num;
+
 		switch (action.type) {
 			case "click-history":
 			case "click-tree":
@@ -110,7 +114,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 			case "move":
 				const last_move = new_state.moves.at(-1);
-				const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
 				const prev_uuid = this.state.last_uuid;
 	
 				switch (this.props.mode) {

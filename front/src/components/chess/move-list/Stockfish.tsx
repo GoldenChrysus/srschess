@@ -9,7 +9,7 @@ declare global {
 
 interface StockfishProps {
 	fen: string,
-	move: any
+	num?: number
 }
 
 interface StockfishState {
@@ -88,7 +88,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		const node_index = line.indexOf("nodes", score_index);
 		const score_text = line.slice(score_index + 6, (node_index !== -1) ? node_index - 1 : 100);
 		const score_data = score_text.split(" ");
-		const multiplier = (this.props.move.moveNumber % 10 !== 0) ? 1 : -1;
+		const multiplier = ((this.props.num ?? 0) % 10 !== 0) ? 1 : -1;
 
 		switch (score_data[0]) {
 			case "cp":
@@ -127,6 +127,10 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		this.setListener();
 
 		if (!this.state.enabled && !force) {
+			return;
+		}
+
+		if (!this.props.fen || !this.props.num) {
 			return;
 		}
 

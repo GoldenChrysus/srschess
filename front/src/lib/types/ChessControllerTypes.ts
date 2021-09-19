@@ -21,6 +21,7 @@ export interface ChessControllerProps {
 export interface ChessControllerState {
 	fen          : string,
 	pgn          : string,
+	last_num     : number,
 	last_uuid    : string | null,
 	last_is_new? : boolean,
 	moves        : Array<string>,
@@ -30,6 +31,7 @@ export interface ChessControllerState {
 export const initial_state: ChessControllerState = {
 	fen       : "start",
 	pgn       : "",
+	last_num  : 10,
 	last_uuid : null,
 	moves     : [],
 	history   : [],
