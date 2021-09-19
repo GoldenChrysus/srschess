@@ -45,6 +45,14 @@ body .cg-wrap.orientation-black coords.ranks coord:nth-child(even) {
 	color: #ecdab9;
 }
 
+#stockfish {
+	background: rgba(0, 0, 0, 0.15);
+}
+
+#movelist .move-number {
+	background: rgba(255, 255, 255, 0.05);
+}
+
 body .piece-store {
 	text-align: right;
 	align-items: center;

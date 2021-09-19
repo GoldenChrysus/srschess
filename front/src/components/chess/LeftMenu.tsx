@@ -19,7 +19,7 @@ interface LeftMenuProps {
 class LeftMenu extends React.Component<LeftMenuProps> {
 	render() {
 		return (
-			<div key="tree-outer" id="chess-left-menu" className="flex-1 order-2 md:order-1" style={{ maxHeight: "calc(100vh - 2.75rem)" }}>
+			<div key="chess-left-menu" id="chess-left-menu" className="flex-1 order-2 md:order-1" style={{ maxHeight: "calc(100vh - 2.75rem)" }}>
 				<Collapse accordion bordered={false} defaultActiveKey={(this.props.repertoire) ? "tree-panel" : "repertoires-panel"}>
 					<Collapse.Panel id="tree-panel" header="Move Tree" key="tree-panel" forceRender={true}>
 						<Tree key="tree" client={this.props.client} repertoire={this.props.repertoire} moves={this.props.moves} active_uuid={this.props.active_uuid} new_move={this.props.new_move} onMoveClick={this.props.onMoveClick}></Tree>
