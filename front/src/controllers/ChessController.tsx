@@ -34,7 +34,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	render() {
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">
-				<div key="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
+				<div key="chessboard-outer" id="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
 						key="chessboard"
 						fen={this.state.fen}

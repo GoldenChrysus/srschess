@@ -4,6 +4,15 @@
 	overflow-y: auto;
 }
 
+#chess-right-menu .ant-collapse-content {
+	max-height: calc(100vh - 47px - 46px - 2.75rem - 500px);
+	overflow-y: auto;
+}
+
+#chess-right-menu #movelist {
+	overflow-y: auto;
+}
+
 #repertoire-menu {
 	background: none;
 }

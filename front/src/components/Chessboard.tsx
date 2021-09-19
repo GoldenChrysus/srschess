@@ -85,9 +85,10 @@ class Chessboard extends React.Component<ChessboardProps> {
 			return;
 		}
 
-		const board  = this.board_ref.current.el;
-		const parent = board.closest(".order-1");
-		const width  = Math.min(parent.offsetHeight- 50, parent.offsetWidth) + "px";
+		const board    = this.board_ref.current.el;
+		const parent   = board.closest(".order-1");
+		const width    = Math.min(parent.offsetHeight- 50, parent.offsetWidth) + "px";
+		const movelist = document.getElementById("movelist");
 
 		for (const child of parent.children) {
 			child.style.width = width;
@@ -95,6 +96,10 @@ class Chessboard extends React.Component<ChessboardProps> {
 			if (child.classList.contains("cg-wrap")) {
 				child.style.height = width;
 			}
+		}
+
+		if (movelist) {
+			movelist.style.maxHeight = width;
 		}
 	}
 

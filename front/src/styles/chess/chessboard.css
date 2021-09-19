@@ -1,3 +1,7 @@
+#chessboard-outer {
+	min-width: 430px;
+}
+
 body .cg-wrap {
 	overflow: hidden;
 }
