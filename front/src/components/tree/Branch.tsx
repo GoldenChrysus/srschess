@@ -60,16 +60,9 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 		const html = [];
 
 		for (let sort in segment) {
-			const move           = segment[sort];
-			const child_count    = Object.keys(move.children).length;
-			const has_grandchild = (
-				child_count > 1 ||
-				(
-					child_count === 1 &&
-					Object.keys((Object.values(move.children)[0] as any).children).length > 1
-				)
-			);
-			let active_uuid      = this.props.active_uuid;
+			const move        = segment[sort];
+			const child_count = Object.keys(move.children).length;
+			let active_uuid   = this.props.active_uuid;
 
 			if (child_count > 1) {
 				const move_idx = Math.round(move.moveNumber / 5) - 2;
@@ -99,7 +92,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 			} else {
 				html.push(
 					<Leaf key={"leaf-" + move.id} move={move}>
-						<LeafSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={has_grandchild} children_active={this.state.child_active} move={move} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
+						<LeafSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={move.has_children} children_active={this.state.child_active} move={move} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
 						{ul}
 					</Leaf>
 				);

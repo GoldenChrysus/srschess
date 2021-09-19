@@ -50,14 +50,30 @@ class Tree extends React.Component<any, TreeState> {
 				tree[tmp_move.moveNumber][tmp_move.sort] = tmp_move;
 	
 				if (tmp_move.parentId) {
-					const parent = this.getMove(tmp_move.parentId);
+					let parent = this.getMove(tmp_move.parentId);
 	
 					tree[parent.moveNumber][parent.sort].moves.push({
 						sort       : tmp_move.sort,
 						moveNumber : tmp_move.moveNumber
 					});
+
+					let has_children = false;
+
+					while (parent.parentId) {
+						parent = this.getMove(parent.parentId);
+
+						const parent_parent = (parent.parentId) ? this.getMove(parent.parentId) : false;
+
+						if (tree[parent.moveNumber][parent.sort].moves.length > 1 && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
+							has_children = true;							
+						}
+						
+						tree[parent.moveNumber][parent.sort].has_children = has_children;
+					}
 				}
 			}
+
+			console.log(tree);
 
 			this.tree = {};
 
@@ -105,11 +121,12 @@ class Tree extends React.Component<any, TreeState> {
 			const item = this.state.base_tree![move_num][sort as number];
 
 			tree[sort] = {
-				id         : item.id,
-				fen        : item.fen,
-				move       : item.move,
-				moveNumber : item.moveNumber,
-				children   : {}
+				id           : item.id,
+				fen          : item.fen,
+				move         : item.move,
+				moveNumber   : item.moveNumber,
+				has_children : (item.has_children || item.moves.length > 1),
+				children     : {}
 			};
 
 			for (let index in item.moves) {
