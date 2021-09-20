@@ -10,11 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_16_115916) do
+ActiveRecord::Schema.define(version: 2021_09_20_070006) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "ltree"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "master_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "white", null: false
+    t.string "black", null: false
+    t.integer "white_elo"
+    t.integer "black_elo"
+    t.integer "year"
+    t.integer "month"
+    t.integer "day"
+    t.string "eco"
+    t.text "pgn", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.ltree "movelist", null: false
+    t.string "result", null: false
+    t.string "location"
+    t.index ["movelist"], name: "index_master_games_on_movelist", using: :gist
+  end
 
   create_table "moves", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "move_number", null: false

@@ -1,0 +1,64 @@
+import json
+import chess.pgn
+import re
+import sqlite3
+from os import listdir
+from os import rename
+from os import remove
+from os.path import isfile, join
+
+conn      = sqlite3.connect("../../api/data/seeds.db")
+path      = "data/master-games/"
+save_path = "../../api/data/master-games/";
+exporter  = chess.pgn.StringExporter(headers=True, variations=True, comments=True)
+
+files = [file for file in sorted(listdir(path)) if isfile(join(path, file))]
+
+for file in files:
+	break
+	if (len(re.findall("pgn$", file)) == 0):
+		continue
+
+	save = save_path + file.replace(".pgn", ".json")
+	data = open(path + file)
+	game = chess.pgn.read_game(data)
+
+	remove(save)
+
+	with open(save, "a", encoding = "utf8") as json_file:
+		while (game != None):
+			record = {}
+			moves  = []
+
+			for move in game.mainline():
+				moves.append(move.san())
+
+			record["movelist"]  = ".".join(moves)
+			record["eco"]       = None if ("ECO" not in game.headers) else game.headers["ECO"]
+			record["white"]     = game.headers["White"]
+			record["black"]     = game.headers["Black"]
+			record["white_elo"] = 0 if ("WhiteElo" not in game.headers) else 0 if (game.headers["WhiteElo"] == "") else int(game.headers["WhiteElo"])
+			record["black_elo"] = 0 if ("BlackElo" not in game.headers) else 0 if (game.headers["BlackElo"] == "") else int(game.headers["BlackElo"])
+
+			result = game.headers["Result"]
+			result = (("draw", "black")[result == "0-1"], "white")[result == "1-0"]
+
+			record["result"]   = result
+			record["location"] = game.headers["Site"]
+
+			date = game.headers["Date"].split(".")
+
+			record["year"]  = None if (date[0] == "????") else int(date[0])
+			record["month"] = None if (date[1] == "??") else int(date[1])
+			record["day"]   = None if (date[2] == "??") else int(date[2])
+			record["pgn"]   = game.accept(exporter)
+
+			json_file.write(json.dumps(record, separators = (",", ":"), ensure_ascii = False))
+			json_file.write("\n")
+
+			game = chess.pgn.read_game(data)
+
+	json_file.close()
+	rename(path + file, path + "processed/" + file)
+
+conn.close()

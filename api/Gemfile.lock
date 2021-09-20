@@ -130,6 +130,9 @@ GEM
     parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
+    pg_ltree (1.1.8)
+      activerecord (>= 4.0.0, <= 7.0.0.rc1)
+      pg (>= 0.17.0, < 2)
     public_suffix (4.0.6)
     puma (5.4.0)
       nio4r (~> 2.0)
@@ -277,6 +280,7 @@ DEPENDENCIES
   jsonapi-resources
   listen (~> 3.3)
   pg
+  pg_ltree
   puma (~> 5.0)
   pundit
   rack-cors

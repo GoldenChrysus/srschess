@@ -1,0 +1,1 @@
+CREATE TABLE master_games (id VARCHAR NOT NULL PRIMARY KEY, movelist TEXT, eco VARCHAR, white VARCHAR, black VARCHAR, white_elo INTEGER, black_elo INTEGER, result VARCHAR, location VARCHAR, year INTEGER, month INTEGER, day INTEGER, pgn TEXT);
