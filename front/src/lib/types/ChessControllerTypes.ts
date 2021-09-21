@@ -7,7 +7,9 @@ const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
 export enum ChessControllerModes {
-	repertoire = "repertoire"
+	repertoire = "repertoire",
+	openings = "opening",
+	database = "database"
 }
 
 export interface ChessControllerProps {

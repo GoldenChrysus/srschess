@@ -43,8 +43,23 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						onMove={this.reducer}
 					/>
 				</div>
-				<LeftMenu key="chess-left-menu-component" client={this.props.client} repertoire={this.props.repertoire} moves={this.state.moves} active_uuid={this.state.last_uuid} new_move={this.state.last_is_new} onMoveClick={this.onMoveClick.bind(this, "tree")}/>
-				<RightMenu key="chess-right-menu-component" client={this.props.client} active_num={this.state.last_num} moves={this.state.history} fen={this.state.fen} onMoveClick={this.onMoveClick.bind(this, "history")}/>
+				<LeftMenu
+					key="chess-left-menu-component"
+					client={this.props.client}
+					repertoire={this.props.repertoire}
+					moves={this.state.moves}
+					active_uuid={this.state.last_uuid}
+					new_move={this.state.last_is_new}
+					onMoveClick={this.onMoveClick.bind(this, "tree")}
+				/>
+				<RightMenu
+					key="chess-right-menu-component"
+					client={this.props.client}
+					active_num={this.state.last_num}
+					moves={this.state.history}
+					fen={this.state.fen}
+					onMoveClick={this.onMoveClick.bind(this, "history")}
+				/>
 			</div>
 		);
 	}

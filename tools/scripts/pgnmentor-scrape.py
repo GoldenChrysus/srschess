@@ -10,8 +10,8 @@ from os import remove
 from os.path import isfile, join
 from zipfile import ZipFile
 
-path  = "data/master-games/"
-rails = "../../api/data/master-games/"
+path  = "data/pgnmentor/"
+rails = "../../api/data/pgnmentor/"
 url   = "https://www.pgnmentor.com/"
 page  = requests.get(url + "files.html")
 html  = BeautifulSoup(page.content, "html.parser")
@@ -26,7 +26,7 @@ for link in links:
 	link = url + href
 	name = href.split("/")[1]
 
-	urllib.request.urlretrieve(link, "data/master-games/" + name)
+	urllib.request.urlretrieve(link, path + name)
 
 files = [file for file in listdir(path) if isfile(join(path, file))]
 

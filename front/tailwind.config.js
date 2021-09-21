@@ -7,18 +7,24 @@ module.exports = {
 	theme    : {
 		...default_theme,
 		extend : {
-			spacing  : {
+			spacing : {
 				"4.5"  : "1.125rem",
 				"-4.5" : "-1.125rem"
+			},
+			height : {
+				"full-header" : "calc(100% - 2.75rem)"
+			},
+			maxHeight : {
+				"full-header" : "calc(100% - 2.75rem)"
 			},
 			minHeight : {
 				"11" : "2.75rem"
 			},
-			maxWidth : {
-				chess : "calc(100vw * 0.4)"
-			},
 			width : {
 				chess : "calc(100vh - 20rem)"
+			},
+			maxWidth : {
+				chess : "calc(100vw * 0.4)"
 			}
 		}
 	},
