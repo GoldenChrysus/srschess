@@ -9,6 +9,7 @@ export const GET_REPERTOIRE = gql`
 			moves {
 				id
 				fen
+				uci
 				moveNumber
 				move
 				sort
@@ -25,6 +26,9 @@ export const GET_MOVE = gql`
 		move
 		sort
 		moveNumber
+		moves {
+			uci
+		}
 	}
 `;
 
@@ -39,11 +43,12 @@ export const GET_REPERTOIRES = gql`
 `;
 
 export const CREATE_MOVE = gql`
-	mutation CreateMove($id: String!, $repertoireId: ID!, $fen: String! $moveNumber: Int!, $move: String!, $parentId: ID) {
+	mutation CreateMove($id: String!, $repertoireId: ID!, $fen: String!, $uci: String!, $moveNumber: Int!, $move: String!, $parentId: ID) {
 		createMove(input: {
 			id: $id,
 			repertoireId: $repertoireId,
 			fen: $fen,
+			uci: $uci,
 			moveNumber: $moveNumber,
 			move: $move,
 			parentId: $parentId

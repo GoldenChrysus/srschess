@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_21_091417) do
+ActiveRecord::Schema.define(version: 2021_09_24_131214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2021_09_21_091417) do
     t.uuid "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "uci", null: false
     t.index ["parent_id"], name: "index_moves_on_parent_id"
     t.index ["repertoire_id", "move_number", "move", "fen"], name: "index_moves_on_repertoire_id_and_move_number_and_move_and_fen", unique: true
     t.index ["repertoire_id"], name: "index_moves_on_repertoire_id"

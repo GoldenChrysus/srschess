@@ -4,6 +4,7 @@ module Types
 			argument :id, String, required: true
 			argument :repertoire_id, ID, required: true
 			argument :fen, String, required: true
+			argument :uci, String, required: true
 			argument :move_number, Integer, required: true
 			argument :move, String, required: true
 			argument :parent_id, ID, required: false
@@ -11,11 +12,12 @@ module Types
 			field :move, Types::Models::MoveType, null: true
 			field :errors, [String], null: false
 
-			def resolve(id:, repertoire_id:, fen:, move_number:, move:, parent_id:)
+			def resolve(id:, repertoire_id:, fen:, uci:, move_number:, move:, parent_id:)
 				move = Move.new(
 					id: id,
 					repertoire: Repertoire.find(repertoire_id),
 					fen: fen,
+					uci: uci,
 					move_number: move_number,
 					move: move,
 					parent: if parent_id != nil then Move.find(parent_id) else nil end

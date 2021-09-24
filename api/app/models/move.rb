@@ -4,6 +4,7 @@ class Move < ApplicationRecord
 	validates :move_number, presence: true
 	validates :move, presence: true
 	validates :fen, presence: true
+	validates :uci, presence: true
 	validates :sort, presence: true
 
 	belongs_to :repertoire, required: true
