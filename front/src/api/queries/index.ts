@@ -14,6 +14,9 @@ export const GET_REPERTOIRE = gql`
 				move
 				sort
 				parentId
+				moves {
+					uci
+				}
 			}
 		}
 	}

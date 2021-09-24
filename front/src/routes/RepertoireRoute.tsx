@@ -48,6 +48,7 @@ function RepertoireRoute() {
 				moveNumber   : move_data.move_num,
 				move         : move_data.move,
 				fen          : move_data.fen,
+				uci          : move_data.uci,
 				parentId     : move_data.parent_id
 			}
 		});

@@ -17,6 +17,7 @@ interface ChessboardProps {
 	fen?: string,
 	pgn?: string,
 	onMove: Function,
+	children: Array<any>
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
@@ -30,6 +31,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 		this.onMove    = this.onMove.bind(this);
 		this.sizeBoard = this.sizeBoard.bind(this);
+		this.onDraw    = this.onDraw.bind(this);
 	}
 
 	componentDidMount() {
@@ -58,6 +60,32 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	render() {
+		const drawable: any = {
+			autoShapes : [],
+			onChange   : this.onDraw,
+			brushes: {
+					green: { key: "g", color: "#15781B", opacity: 1, lineWidth: 10 },
+					red: { key: "r", color: "#882020", opacity: 1, lineWidth: 10 },
+					blue: { key: "b", color: "#003088", opacity: 1, lineWidth: 10 },
+					yellow: { key: "y", color: "#e68f00", opacity: 1, lineWidth: 10 },
+					paleBlue: { key: "pb", color: "#003088", opacity: 0.4, lineWidth: 15 },
+					paleGreen: { key: "pg", color: "#15781B", opacity: 0.4, lineWidth: 15 },
+					paleRed: { key: "pr", color: "#882020", opacity: 0.4, lineWidth: 15 },
+					paleGrey: { key: "pgr", color: "#4a4a4a", opacity: 0.35, lineWidth: 15 },
+					magenta : { key: "m", color: "#800080", opacity: 1, linewidth: 10 }
+				},
+		};
+
+		if (this.props)
+		for (const move of this.props.children) {
+			drawable.autoShapes.push({
+				brush   : "magenta",
+				orig    : move.uci.substring(0, 2),
+				mouseSq : move.uci.substring(2, 4),
+				dest    : move.uci.substring(2, 4),
+			});
+		}
+
 		return (
 			<>
 				<div className="piece-store w-full" style={{ height: "25px" }}>
@@ -72,6 +100,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 					lastMove={this.lastMove()}
 					onMove={this.onMove}
 					ref={this.board_ref}
+					drawable={drawable}
 				/>
 				<div className="piece-store w-full" style={{ height: "25px" }}>
 					{this.renderCaptures("bottom")}
@@ -170,6 +199,14 @@ class Chessboard extends React.Component<ChessboardProps> {
 			free: false,
 			dests: dests
 		};
+	}
+
+	onDraw(shapes: any) {
+		const data: any = [];
+
+		for (const shape of shapes) {
+			data.push(shape.orig + ":" + shape.dest + ":" + shape.brush);
+		}
 	}
 
 	renderCaptures(section: string) {

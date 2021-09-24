@@ -32,6 +32,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	render() {
+		const last_move = (this.state.last_uuid) ? this.getMove(this.state.last_uuid) : false;
+
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">
 				<div key="chessboard-outer" id="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
@@ -41,6 +43,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						pgn={this.state.pgn}
 						orientation={this.props.repertoire?.side}
 						onMove={this.reducer}
+						children={(last_move) ? last_move.moves : []}
 					/>
 				</div>
 				<LeftMenu
