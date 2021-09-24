@@ -8,8 +8,10 @@ const Chess2      = ChessImport as ChessType;
 
 export enum ChessControllerModes {
 	repertoire = "repertoire",
-	openings = "opening",
-	database = "database"
+	review     = "review",
+	lesson     = "lesson",
+	openings   = "opening",
+	database   = "database",
 }
 
 export interface ChessControllerProps {

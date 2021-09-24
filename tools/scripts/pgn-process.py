@@ -3,12 +3,53 @@ import re
 import psycopg2
 import hashlib
 import yaml
+import sys
 from os import listdir
 from os import rename
 from os.path import isfile, join
+from getopt import getopt
 
-enviro = "development"
-source = "pgnmentor"
+enviro = False
+source = False
+valid  = {
+	"enviro" : [
+		"development",
+		"test",
+		"production"
+	],
+	"source" : [
+		"pgnmentor",
+		"chessbomb"
+	],
+	"result" : [
+		"1/2-1/2",
+		"1-0",
+		"0-1"
+	]
+}
+
+try:
+	opts, args = getopt(sys.argv[1:], "e:s:")
+except getopt.GetoptError:
+	print("pgn-process.py -e <environment> -s <source>")
+	sys.exit(2)
+
+for opt, arg in opts:
+	if opt == "-e":
+		enviro = arg
+	elif opt == "-s":
+		source = arg
+	else:
+		print("Invalid option: " + opt)
+		sys.exit(2)
+
+if enviro not in valid["enviro"]:
+	print("Invalid environment.")
+	sys.exit(2)
+
+if source not in valid["source"]:
+	print("Invalid source.")
+	sys.exit(2)
 
 with open("../../api/config/application.yml", "r") as stream:
 	yaml_data = yaml.safe_load(stream);
@@ -25,6 +66,18 @@ path = "data/" + source + "/games/"
 
 files = [file for file in sorted(listdir(path)) if isfile(join(path, file))]
 
+def getGame(data):
+	good = False
+
+	while (good == False):
+		try:
+			game = chess.pgn.read_game(data)
+			good = True
+		except:
+			good = False
+
+	return game
+
 for file in files:
 	print(file)
 	if (len(re.findall("pgn$", file)) == 0):
@@ -36,6 +89,12 @@ for file in files:
 	while (game != None):
 		record = {}
 		moves  = []
+		result = game.headers["Result"]
+
+		if result not in valid["result"] or ("WhiteElo" in game.headers and ":" in game.headers["WhiteElo"]):
+			game = getGame(data)
+
+			continue
 
 		for move in game.mainline():
 			moves.append(move.san())
@@ -46,16 +105,15 @@ for file in files:
 		record["eco"]           = None if ("ECO" not in game.headers) else game.headers["ECO"]
 		record["white"]         = game.headers["White"].replace(", ", ",").replace(",", ", ")
 		record["black"]         = game.headers["Black"].replace(", ", ",").replace(",", ", ")
-		record["white_elo"]     = 0 if ("WhiteElo" not in game.headers) else 0 if (game.headers["WhiteElo"] == "") else int(game.headers["WhiteElo"])
-		record["black_elo"]     = 0 if ("BlackElo" not in game.headers) else 0 if (game.headers["BlackElo"] == "") else int(game.headers["BlackElo"])
+		record["white_elo"]     = 0 if ("WhiteElo" not in game.headers) else 0 if (game.headers["WhiteElo"] in ["", "?"]) else int(game.headers["WhiteElo"])
+		record["black_elo"]     = 0 if ("BlackElo" not in game.headers) else 0 if (game.headers["BlackElo"] in ["", "?"]) else int(game.headers["BlackElo"])
 		record["white_title"]   = None if ("WhiteTitle" not in game.headers) else game.headers["WhiteTitle"]
 		record["black_title"]   = None if ("BlackTitle" not in game.headers) else game.headers["BlackTitle"]
 		record["white_fide_id"] = None if ("WhiteFIDE" not in game.headers) else game.headers["WhiteFIDE"]
 		record["black_fide_id"] = None if ("BlackFIDE" not in game.headers) else game.headers["BlackFIDE"]
 		record["source"]        = source
 
-		result = game.headers["Result"]
-		result = (("draw", "black")[result == "0-1"], "white")[result == "1-0"]
+		result = (("D", "B")[result == "0-1"], "W")[result == "1-0"]
 
 		record["result"]   = result
 		record["location"] = game.headers["Site"]
@@ -65,12 +123,12 @@ for file in files:
 
 		record["year"]  = None if (date[0] == "????") else int(date[0])
 		record["month"] = None if (date[1] == "??") else int(date[1])
-		record["day"]   = None if (date[2] == "??") else int(date[2])
+		record["day"]   = None if (date[2] == "??" or len(date[2]) == 0) else int(date[2])
 		record["pgn"]   = game.accept(exporter)
 		record["id"]    = hashlib.md5(
 			(
 				re.sub("[^A-Za-z]", "", record["white"].split(",")[0]) + ":" +
-				re.sub("[^A-Za-z]", "", record["black"].split(",")[0]) + ":" ++
+				re.sub("[^A-Za-z]", "", record["black"].split(",")[0]) + ":" +
 				record["result"] + ":" +
 				str(record["year"]) + ":" +
 				str(record["month"]) + ":" +
@@ -80,17 +138,25 @@ for file in files:
 		).hexdigest()
 		record["id"]    = record["id"][0:8] + "-" + record["id"][8:12] + "-" + record["id"][12:16] + "-" + record["id"][16:20] + "-" + record["id"][20:32]
 
+		print(record["white"], record["black"])
 		cur.execute("""
 			INSERT INTO
 				master_games
 					(
 						id,
+						source,
+						event,
+						round,
 						movelist,
 						eco,
 						white,
 						black,
 						white_elo,
 						black_elo,
+						white_title,
+						black_title,
+						white_fide_id,
+						black_fide_id,
 						result,
 						location,
 						year,
@@ -103,12 +169,19 @@ for file in files:
 			VALUES
 				(
 					%(id)s,
+					%(source)s,
+					%(event)s,
+					%(round)s,
 					%(movelist)s,
 					%(eco)s,
 					%(white)s,
 					%(black)s,
 					%(white_elo)s,
 					%(black_elo)s,
+					%(white_title)s,
+					%(black_title)s,
+					%(white_fide_id)s,
+					%(black_fide_id)s,
 					%(result)s,
 					%(location)s,
 					%(year)s,
@@ -124,7 +197,7 @@ for file in files:
 			record
 		)
 
-		game = chess.pgn.read_game(data)
+		game = getGame(data)
 
 	data.close()
 	conn.commit()

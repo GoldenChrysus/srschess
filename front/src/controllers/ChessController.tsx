@@ -138,7 +138,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						new_state.last_uuid = uuid;
 
 						if (!this.historyContainsUUID(uuid)) {
-							new_state.history   = this.generateHistory(prev_uuid).history;
+							new_state.history = this.generateHistory(prev_uuid).history;
 
 							new_state.history.push({
 								id   : uuid,
@@ -156,6 +156,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 									parent_id : prev_uuid,
 									move_num  : move_num,
 									move      : last_move,
+									uci       : action.uci,
 									fen       : new_state.fen
 								}
 							);

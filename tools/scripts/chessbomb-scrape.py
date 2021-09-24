@@ -50,8 +50,14 @@ def getGame(room_slug, round, game_slug):
 
 # after = None
 after = [
-	"2021-08-20T20:55:00.000Z",
-	5660
+	"2017-10-09T23:55:00.000Z",
+	2931
+]
+
+valid_res = [
+	"1/2-1/2",
+	"1-0",
+	"0-1"
 ]
 
 with open(path + "state/latest.txt", "w+") as file:
@@ -78,8 +84,10 @@ with open(path + "state/latest.txt", "w+") as file:
 				for game in room["games"]:
 					if "?" in game["roundSlug"]:
 						continue
+					
+					if game["result"] not in valid_res:
+						continue
 
-					print(room["room"]["slug"], game["roundSlug"], game["slug"])
 					game = getGame(room["room"]["slug"], game["roundSlug"], game["slug"])
 
 					if (game == False or game["game"] == None):
@@ -87,6 +95,11 @@ with open(path + "state/latest.txt", "w+") as file:
 
 					game_info = game["game"]
 					pgn       = chess.pgn.Game()
+
+					if "black" not in game_info or "white" not in game_info:
+						continue
+
+					print(room["room"]["slug"], game_info["roundSlug"], game_info["slug"])
 
 					pgn.headers["Event"]      = room["room"]["name"]
 					pgn.headers["Date"]       = room["room"]["startAt"]
@@ -122,7 +135,6 @@ with open(path + "state/latest.txt", "w+") as file:
 			if good == False:
 				remove(room_path)
 
-			file.truncate()
 			file.write(str(room["room"]["id"]) + " :: " + room["room"]["endAt"] + "\n")
 
 		if "more" not in page or page["more"] == None or len(page["more"]) == 0 or page["more"] == after:

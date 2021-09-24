@@ -131,6 +131,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 		this.props.onMove({
 			type  : "move",
+			uci   : orig + dest,
 			data  : {
 				fen   : this.fen,
 				pgn   : this.pgn,
