@@ -76,13 +76,12 @@ class Chessboard extends React.Component<ChessboardProps> {
 				},
 		};
 
-		if (this.props)
-		for (const move of this.props.children) {
+		for (const uci of this.props.children) {
 			drawable.autoShapes.push({
 				brush   : "magenta",
-				orig    : move.uci.substring(0, 2),
-				mouseSq : move.uci.substring(2, 4),
-				dest    : move.uci.substring(2, 4),
+				orig    : uci.substring(0, 2),
+				mouseSq : uci.substring(2, 4),
+				dest    : uci.substring(2, 4),
 			});
 		}
 

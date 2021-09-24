@@ -31,12 +31,25 @@ function RepertoireRoute() {
 	);
 
 	const fens: { [key: string]: string } = {};
+	const arrows: { [key: string]: Array<any> } = {}
 
 	if (data?.repertoire?.moves) {
 		for (const move of data?.repertoire.moves) {
 			const fen_key  = `${move.moveNumber}:${move.move}:${move.fen}`;
 
 			fens[fen_key] = move.id;
+
+			if (!arrows[move.id]) {
+				arrows[move.id] = [];
+			}
+
+			if (move.parentId) {
+				if (!arrows[move.parentId]) {
+					arrows[move.parentId] = [];
+				}
+
+				arrows[move.parentId].push(move.uci);
+			}
 		}
 	}
 
@@ -63,6 +76,7 @@ function RepertoireRoute() {
 					repertoire={data?.repertoire}
 					client={client}
 					onMove={addMove}
+					arrows={arrows}
 				/>
 			}
 		</ApolloConsumer>

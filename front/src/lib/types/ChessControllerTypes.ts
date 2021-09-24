@@ -19,7 +19,8 @@ export interface ChessControllerProps {
 	repertoire?  : any,
 	repertoires? : Array<any>,
 	client       : any,
-	onMove       : Function
+	onMove       : Function,
+	arrows       : { [key: string]: Array<any> }
 }
 
 export interface ChessControllerState {
