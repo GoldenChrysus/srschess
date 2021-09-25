@@ -59,35 +59,13 @@ function renderRepertoires(data: any, color: string, props: RepertoiresProps, t:
 			continue;
 		}
 
-		if (repertoire.id !== props.active_id) {
-			items.push(
-				<Menu.Item key={"repertoire-" + repertoire.id}>
-					<Link to={{ pathname: "/repertoires/" + repertoire.id }}>
-						{repertoire.name}
-					</Link>
-				</Menu.Item>
-			);
-		} else {
-			items.push(
-				<Menu.ItemGroup title={repertoire.name} key={"repertoire-" + repertoire.id}>
-					<Menu.Item key={"repertoire-repertoires-" + repertoire.id}>
-						<Link to={{ pathname: "/repertoires/" + repertoire.id }}>
-							{t("repertoire_builder")}
-						</Link>
-					</Menu.Item>
-					<Menu.Item key={"repertoire-lessons-" + repertoire.id}>
-						<Link to={{ pathname: "/lessons/" + repertoire.id }}>
-							Lessons: 10 Available
-						</Link>
-					</Menu.Item>
-					<Menu.Item key={"repertoire-reviews-" + repertoire.id}>
-						<Link to={{ pathname: "/reviews/" + repertoire.id }}>
-							Reviews: 10 Available
-						</Link>
-					</Menu.Item>
-				</Menu.ItemGroup>
-			);
-		}
+		items.push(
+			<Menu.Item key={"repertoire-" + repertoire.id}>
+				<Link to={{ pathname: "/repertoires/" + repertoire.id }}>
+					{repertoire.name}
+				</Link>
+			</Menu.Item>
+		);
 	}
 
 	return items;

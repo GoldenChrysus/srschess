@@ -4,6 +4,7 @@ import { Collapse, Input } from "antd";
 import { ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
 import MoveList from "./MoveList";
+import Repertoire from "./right-menu/Repertoire";
 
 interface RightMenuProps {
 	client: any,
@@ -11,6 +12,8 @@ interface RightMenuProps {
 	fen: string,
 	moves: Array<string>,
 	mode: ChessControllerProps["mode"],
+	repertoire_id?: string,
+	repertoire_name?: string,
 	onMoveClick: Function
 }
 
@@ -18,6 +21,7 @@ class RightMenu extends React.PureComponent<RightMenuProps> {
 	render() {
 		return (
 			<div key="chess-right-menu-inner" id="chess-right-menu" className="flex-1 order-3 md:order-3" style={{ maxHeight: "calc(100vh - 2.75rem)" }}>
+				{this.renderRepertoire()}
 				<MoveList client={this.props.client} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
 				<Translation ns="chess">
 					{
@@ -32,6 +36,14 @@ class RightMenu extends React.PureComponent<RightMenuProps> {
 				</Translation>
 			</div>
 		);
+	}
+
+	renderRepertoire() {
+		if (this.props.repertoire_id) {
+			return (
+				<Repertoire mode={this.props.mode} id={this.props.repertoire_id} name={this.props.repertoire_name}/>
+			)
+		}
 	}
 }
 

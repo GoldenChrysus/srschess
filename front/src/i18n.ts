@@ -18,7 +18,7 @@ i18n
 			useSuspense: false
 		},
 		fallbackLng: "en",
-		ns: ["repertoires"],
+		ns: ["chess", "common", "repertoires"],
 		interpolation: {
 			escapeValue: false
 		}

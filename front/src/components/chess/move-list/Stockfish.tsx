@@ -10,8 +10,7 @@ declare global {
 
 interface StockfishProps {
 	fen: string,
-	num?: number,
-	t: any
+	num?: number
 }
 
 interface StockfishState {

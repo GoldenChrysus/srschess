@@ -2,6 +2,15 @@ body {
 	overflow-x: hidden;
 }
 
+body .ant-collapse > .ant-collapse-item,
+body .bottom-border {
+	border-bottom: 1px solid #434343;
+}
+
+body .padded-section {
+	padding: 12px 16px;
+}
+
 ::-webkit-scrollbar {
 	width: 7px;
 }

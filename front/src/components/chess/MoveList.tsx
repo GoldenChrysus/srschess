@@ -19,7 +19,7 @@ class MoveList extends React.PureComponent<MoveListProps> {
 		return (
 			<>
 				<Stockfish fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>
-				<div key="movelist" id="movelist" className="max-w-full md:max-w-sm">
+				<div key="movelist" id="movelist" className="max-w-full md:max-w-sm bottom-border">
 					{this.props.moves?.map((move, i, moves) => this.renderListMove(move, i, moves))}
 				</div>
 			</>
