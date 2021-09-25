@@ -1,4 +1,5 @@
 import React from "react";
+import { Translation } from "react-i18next";
 import { Switch } from "antd";
 
 declare global {
@@ -9,7 +10,8 @@ declare global {
 
 interface StockfishProps {
 	fen: string,
-	num?: number
+	num?: number,
+	t: any
 }
 
 interface StockfishState {
@@ -52,16 +54,24 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 			<div key="stockfish" id="stockfish" className="max-w-full">
 				<div className="max-w-full 2xl:max-w-sm">
 					<div key="stockfish-grid" className="grid grid-cols-12 p-2">
-						<div key="stockfish-eval" className="flex justify-center items-center text-center text-2xl font-bold col-span-3">
-							<span>{(this.state.enabled) ? this.state.score || "-" : "-"}</span>
-						</div>
-						<div key="stockfish-feedback" className="text-left text-xs text-gray-400 col-span-6">
-							<p>Stockfish 14+ <span className="text-green-500 font-medium">NNUE</span></p>
-							<p>{(this.state.depth && this.state.enabled) ? "Depth: " + this.state.depth + "/20" : "Waiting..."}</p>
-						</div>
-						<div key="stockfish-switch-container" className="flex justify-end items-center col-span-3">
-							<Switch onChange={this.toggle}/>
-						</div>
+						<Translation ns="chess">
+							{
+								(t) => (
+									<>
+										<div key="stockfish-eval" className="flex justify-center items-center text-center text-2xl font-bold col-span-3">
+											<span>{(this.state.enabled) ? this.state.score || "-" : "-"}</span>
+										</div>
+										<div key="stockfish-feedback" className="text-left text-xs text-gray-400 col-span-6">
+											<p>Stockfish 14+ <span className="text-green-500 font-medium">NNUE</span></p>
+											<p>{(this.state.depth && this.state.enabled) ? t("depth") + ": " + this.state.depth + "/20" : t("waiting")}</p>
+										</div>
+										<div key="stockfish-switch-container" className="flex justify-end items-center col-span-3">
+											<Switch onChange={this.toggle}/>
+										</div>
+									</>
+								)
+							}
+						</Translation>
 					</div>
 				</div>
 			</div>

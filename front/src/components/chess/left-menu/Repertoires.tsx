@@ -1,4 +1,5 @@
 import React from "react";
+import { Translation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Menu, Spin } from "antd";
 import { useQuery } from "@apollo/client";
@@ -23,24 +24,30 @@ function Repertoires(props: RepertoiresProps) {
 
 	return (
 		<Spin spinning={loading}>
-			<Menu
-				id="repertoire-menu"
-				mode="inline"
-				defaultOpenKeys={["white-repertoires", "black-repertoires"]}
-				selectedKeys={[ "repertoire-" + props.active_id, "repertoire-" + props.mode + "s-" + props.active_id ]}
-			>
-				<Menu.SubMenu title="White Repertoires" key="white-repertoires">
-					{renderRepertoires(data, "white", props)}
-				</Menu.SubMenu>
-				<Menu.SubMenu title="Black Repertoires" key="black-repertoires">
-					{renderRepertoires(data, "black", props)}
-				</Menu.SubMenu>
-			</Menu>
+			<Translation ns="repertoires">
+				{
+					(t) => (
+						<Menu
+							id="repertoire-menu"
+							mode="inline"
+							defaultOpenKeys={["white-repertoires", "black-repertoires"]}
+							selectedKeys={[ "repertoire-" + props.active_id, "repertoire-" + props.mode + "s-" + props.active_id ]}
+						>
+							<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
+								{renderRepertoires(data, "white", props, t)}
+							</Menu.SubMenu>
+							<Menu.SubMenu title={t("black_repertoires")} key="black-repertoires">
+								{renderRepertoires(data, "black", props, t)}
+							</Menu.SubMenu>
+						</Menu>
+					)
+				}
+			</Translation>
 		</Spin>
 	);
 }
 
-function renderRepertoires(data: any, color: string, props: RepertoiresProps) {
+function renderRepertoires(data: any, color: string, props: RepertoiresProps, t: any) {
 	if (!data) {
 		return null;
 	}
@@ -65,7 +72,7 @@ function renderRepertoires(data: any, color: string, props: RepertoiresProps) {
 				<Menu.ItemGroup title={repertoire.name} key={"repertoire-" + repertoire.id}>
 					<Menu.Item key={"repertoire-repertoires-" + repertoire.id}>
 						<Link to={{ pathname: "/repertoires/" + repertoire.id }}>
-							Repertoire Builder
+							{t("repertoire_builder")}
 						</Link>
 					</Menu.Item>
 					<Menu.Item key={"repertoire-lessons-" + repertoire.id}>

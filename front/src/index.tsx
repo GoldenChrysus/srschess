@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import i18n from "./i18n";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 
@@ -23,6 +24,8 @@ const client         = new ApolloClient({
 	link  : link,
 	cache : new InMemoryCache()
 });
+
+i18n.setDefaultNamespace("common");
 
 (async () => {
 	ReactDOM.render(
