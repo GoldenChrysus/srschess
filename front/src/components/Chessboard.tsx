@@ -2,6 +2,7 @@ import React from "react";
 import Chessground from "react-chessground";
 import Chess, { ChessInstance } from "chess.js";
 
+import { START_FEN } from "../lib/constants/chess";
 import Piece from "./chess/Piece";
 
 import "react-chessground/dist/styles/chessground.css";
@@ -23,7 +24,7 @@ interface ChessboardProps {
 class Chessboard extends React.Component<ChessboardProps> {
 	private board_ref    = React.createRef<any>();
 	private chess        = Chess2();
-	private fen?: string = "start";
+	private fen?: string = START_FEN;
 	private pgn?: string = "";
 
 	constructor(props: ChessboardProps) {
@@ -41,8 +42,8 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 	shouldComponentUpdate(next_props: ChessboardProps) {
 		if (this.props.fen !== next_props.fen) {
-			this.fen = next_props.fen || "start";
-			this.pgn = next_props.pgn || "start";
+			this.fen = next_props.fen || START_FEN;
+			this.pgn = next_props.pgn || START_FEN;
 
 			this.chess.load(this.fen);
 			this.chess.load_pgn(this.pgn);
@@ -50,7 +51,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 		}
 
 		if (next_props.pgn !== this.props.pgn) {
-			this.pgn = next_props.pgn || "start";
+			this.pgn = next_props.pgn || START_FEN;
 
 			this.chess.load_pgn(this.pgn);
 			return true;

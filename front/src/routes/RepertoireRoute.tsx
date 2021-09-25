@@ -4,9 +4,11 @@ import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
 import { GET_REPERTOIRE, CREATE_MOVE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
+import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 
 interface RepertoireRouteParams {
-	id?: string
+	id?: string,
+	mode: ChessControllerProps["mode"]
 }
 
 // TODO:
@@ -15,7 +17,7 @@ interface RepertoireRouteParams {
 // May be mitigatable from Apollo manual recaching in the CREATE_MOVE mutation, but need to see if the recache occurs before
 // or after the mutation request. If after, the possibility of a race condition still exists, so a route-level cache is needed.
 
-function RepertoireRoute() {
+function RepertoireRoute(props: RepertoireRouteParams) {
 	const { id } = useParams<RepertoireRouteParams>();
 	const [ createMove ] = useMutation(CREATE_MOVE, {
 		refetchQueries : [ GET_REPERTOIRE ]
@@ -72,7 +74,7 @@ function RepertoireRoute() {
 			{client => 
 				<ChessController
 					key="chess-controller"
-					mode="repertoire"
+					mode={props.mode}
 					repertoire={data?.repertoire}
 					client={client}
 					onMove={addMove}

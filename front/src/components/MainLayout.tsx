@@ -28,7 +28,7 @@ class MainLayout extends React.Component<any> {
 			</div>
 		);
 
-		if (this.props.location.pathname.substr(0, 12) === "/repertoires") {
+		if (["repertoires", "reviews", "lessons"].includes(this.props.location.pathname.split("/").at(-2))) {
 			layout_classes.push("md:h-screen");
 			layout_classes.push("md:max-h-screen");
 			layout_classes.push("md:overflow-y-hidden");

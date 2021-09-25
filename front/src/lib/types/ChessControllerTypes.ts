@@ -1,5 +1,5 @@
 import Chess, { ChessInstance } from "chess.js";
-import { COLOR } from "cm-chessboard";
+import { START_FEN } from "../constants/chess";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -34,7 +34,7 @@ export interface ChessControllerState {
 }
 
 export const initial_state: ChessControllerState = {
-	fen       : "start",
+	fen       : START_FEN,
 	pgn       : "",
 	last_num  : 10,
 	last_uuid : null,

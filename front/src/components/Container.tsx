@@ -17,7 +17,13 @@ class Container extends React.Component {
 							</div>
 						</Route>
 						<Route exact path="/repertoires/:id?">
-							<RepertoireRoute/>
+							<RepertoireRoute mode="repertoire"/>
+						</Route>
+						<Route exact path="/lessons/:id?">
+							<RepertoireRoute mode="lesson"/>
+						</Route>
+						<Route exact path="/reviews/:id?">
+							<RepertoireRoute mode="review"/>
 						</Route>
 					</Switch>
 				</MainLayout>

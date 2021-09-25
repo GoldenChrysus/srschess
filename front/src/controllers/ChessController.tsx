@@ -26,7 +26,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	componentDidUpdate(prev_props: ChessControllerProps) {
-		if (prev_props.repertoire?.id !== this.props.repertoire?.id) {
+		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
 			this.setState(initial_state);
 		}
 	}
@@ -53,6 +53,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					moves={this.state.moves}
 					active_uuid={this.state.last_uuid}
 					new_move={this.state.last_is_new}
+					mode={this.props.mode}
 					onMoveClick={this.onMoveClick.bind(this, "tree")}
 				/>
 				<RightMenu
@@ -61,6 +62,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					active_num={this.state.last_num}
 					moves={this.state.history}
 					fen={this.state.fen}
+					mode={this.props.mode}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>
