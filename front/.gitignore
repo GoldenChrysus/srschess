@@ -23,7 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build files
-/src/styles/app.css
+src/styles/app.css
 
 # Private keys
 localazy.json
