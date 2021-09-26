@@ -32,7 +32,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	render() {
-		const children = (this.state.last_uuid) ? this.props.arrows[this.state.last_uuid] || [] : [];
+		const children = (this.state.last_uuid) ? this.props.arrows[this.state.last_uuid] || [] : this.props.arrows["root"] || [];
 
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">

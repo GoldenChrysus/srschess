@@ -50,8 +50,8 @@ def getGame(room_slug, round, game_slug):
 
 # after = None
 after = [
-	"2017-05-14T23:55:00.000Z",
-	2577
+	"2014-12-02T23:55:00.000Z",
+	678
 ]
 
 valid_res = [

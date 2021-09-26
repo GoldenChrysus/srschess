@@ -7,6 +7,10 @@ body .bottom-border {
 	border-bottom: 1px solid #434343;
 }
 
+body .top-border {
+	border-top: 1px solid #434343;
+}
+
 body .padded-section {
 	padding: 12px 16px;
 }

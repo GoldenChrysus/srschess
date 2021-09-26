@@ -1,8 +1,8 @@
 import React from "react";
-import Chessground from "react-chessground";
 import Chess, { ChessInstance } from "chess.js";
 
 import { START_FEN } from "../lib/constants/chess";
+import ChessgroundBoard from "./chess/ChessgroundBoard";
 import Piece from "./chess/Piece";
 
 import "react-chessground/dist/styles/chessground.css";
@@ -22,7 +22,6 @@ interface ChessboardProps {
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
-	private board_ref    = React.createRef<any>();
 	private chess        = Chess2();
 	private fen?: string = START_FEN;
 	private pgn?: string = "";
@@ -30,14 +29,8 @@ class Chessboard extends React.Component<ChessboardProps> {
 	constructor(props: ChessboardProps) {
 		super(props);
 
-		this.onMove    = this.onMove.bind(this);
-		this.sizeBoard = this.sizeBoard.bind(this);
-		this.onDraw    = this.onDraw.bind(this);
-	}
-
-	componentDidMount() {
-		this.sizeBoard();
-		window.addEventListener("resize", this.sizeBoard);
+		this.onMove = this.onMove.bind(this);
+		this.onDraw = this.onDraw.bind(this);
 	}
 
 	shouldComponentUpdate(next_props: ChessboardProps) {
@@ -65,21 +58,22 @@ class Chessboard extends React.Component<ChessboardProps> {
 			autoShapes : [],
 			onChange   : this.onDraw,
 			brushes: {
-					green: { key: "g", color: "#15781B", opacity: 1, lineWidth: 10 },
-					red: { key: "r", color: "#882020", opacity: 1, lineWidth: 10 },
-					blue: { key: "b", color: "#003088", opacity: 1, lineWidth: 10 },
-					yellow: { key: "y", color: "#e68f00", opacity: 1, lineWidth: 10 },
-					paleBlue: { key: "pb", color: "#003088", opacity: 0.4, lineWidth: 15 },
-					paleGreen: { key: "pg", color: "#15781B", opacity: 0.4, lineWidth: 15 },
-					paleRed: { key: "pr", color: "#882020", opacity: 0.4, lineWidth: 15 },
-					paleGrey: { key: "pgr", color: "#4a4a4a", opacity: 0.35, lineWidth: 15 },
-					magenta : { key: "m", color: "#800080", opacity: 1, linewidth: 10 }
+					green     : { key: "g", color: "#15781B", opacity: 1, lineWidth: 10 },
+					red       : { key: "r", color: "#882020", opacity: 1, lineWidth: 10 },
+					blue      : { key: "b", color: "#003088", opacity: 1, lineWidth: 10 },
+					yellow    : { key: "y", color: "#e68f00", opacity: 1, lineWidth: 10 },
+					paleBlue  : { key: "pb", color: "#003088", opacity: 0.4, lineWidth: 15 },
+					paleGreen : { key: "pg", color: "#15781B", opacity: 0.4, lineWidth: 15 },
+					paleRed   : { key: "pr", color: "#882020", opacity: 0.4, lineWidth: 15 },
+					paleGrey  : { key: "pgr", color: "#4a4a4a", opacity: 0.35, lineWidth: 15 },
+					nextMove  : { key: "m", color: "#800080", opacity: 0.5, linewidth: 10 },
+					bestMove  : { key: "bm", color: "#a52a2a", opacity: 0.7, linewidth: 10 }
 				},
 		};
 
 		for (const uci of this.props.children) {
 			drawable.autoShapes.push({
-				brush   : "magenta",
+				brush   : "nextMove",
 				orig    : uci.substring(0, 2),
 				mouseSq : uci.substring(2, 4),
 				dest    : uci.substring(2, 4),
@@ -91,15 +85,14 @@ class Chessboard extends React.Component<ChessboardProps> {
 				<div className="piece-store w-full" style={{ height: "25px" }}>
 					{this.renderCaptures("top")}
 				</div>
-				<Chessground
+				<ChessgroundBoard
 					check={this.checkColor()}
 					orientation={this.props.orientation || "white"}
-					turnColor={this.toColor()}
+					turn_color={this.toColor()}
 					movable={this.toDests()}
 					fen={this.props.fen}
-					lastMove={this.lastMove()}
+					last_move={this.lastMove()}
 					onMove={this.onMove}
-					ref={this.board_ref}
 					drawable={drawable}
 				/>
 				<div className="piece-store w-full" style={{ height: "25px" }}>
@@ -107,29 +100,6 @@ class Chessboard extends React.Component<ChessboardProps> {
 				</div>
 			</>
 		);
-	}
-
-	sizeBoard() {
-		if (!this.board_ref.current) {
-			return;
-		}
-
-		const board    = this.board_ref.current.el;
-		const parent   = board.closest(".order-1");
-		const width    = Math.min(parent.offsetHeight- 50, parent.offsetWidth) + "px";
-		const movelist = document.getElementById("movelist");
-
-		for (const child of parent.children) {
-			child.style.width = width;
-
-			if (child.classList.contains("cg-wrap")) {
-				child.style.height = width;
-			}
-		}
-
-		if (movelist) {
-			movelist.style.maxHeight = width;
-		}
 	}
 
 	lastMove() {

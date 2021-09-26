@@ -2,6 +2,8 @@ import React from "react";
 import { Translation } from "react-i18next";
 import { Switch } from "antd";
 
+import ChessState from "../../../stores/ChessState";
+
 declare global {
 	interface Window {
 		sf : any
@@ -91,6 +93,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		if (line.slice(0, 8) === "bestmove") {
 			const move = line.split(" ")[1];
 
+			ChessState.setBestMove(move);
 			return;
 		}
 
@@ -140,6 +143,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	}
 
 	runEval(force?: boolean) {
+		ChessState.setBestMove("");
 		this.setListener();
 
 		if (!this.state.enabled && !force) {

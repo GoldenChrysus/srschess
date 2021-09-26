@@ -26,7 +26,7 @@ class RightMenu extends React.PureComponent<RightMenuProps> {
 				<Translation ns="chess">
 					{
 						(t) => (
-							<Collapse accordion bordered={false} defaultActiveKey="position-panel">
+							<Collapse accordion bordered={false} defaultActiveKey="position-panel" className="top-border">
 								<Collapse.Panel id="position-panel" header={t("position_data")} key="position-panel">
 									<Input addonBefore="FEN" value={this.props.fen}/>
 								</Collapse.Panel>

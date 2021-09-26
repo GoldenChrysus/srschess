@@ -37,7 +37,7 @@ function RepertoireRoute(props: RepertoireRouteParams) {
 
 	if (data?.repertoire?.moves) {
 		for (const move of data?.repertoire.moves) {
-			const fen_key  = `${move.moveNumber}:${move.move}:${move.fen}`;
+			const fen_key = move.moveNumber + ":" + move.move + ":" + move.fen;
 
 			fens[fen_key] = move.id;
 
@@ -45,13 +45,13 @@ function RepertoireRoute(props: RepertoireRouteParams) {
 				arrows[move.id] = [];
 			}
 
-			if (move.parentId) {
-				if (!arrows[move.parentId]) {
-					arrows[move.parentId] = [];
-				}
+			const parent_id = move.parentId || "root";
 
-				arrows[move.parentId].push(move.uci);
+			if (!arrows[parent_id]) {
+				arrows[parent_id] = [];
 			}
+
+			arrows[parent_id].push(move.uci);
 		}
 	}
 
