@@ -153,7 +153,9 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 							});
 						}
 
-						if (!this.getMove(uuid)) {
+						const cached_move = this.getMove(uuid);
+
+						if (!cached_move) {
 							new_state.last_is_new = true;
 
 							this.setState(new_state);
@@ -167,6 +169,14 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 									fen       : new_state.fen
 								}
 							);
+						} else if (prev_uuid && cached_move.parentId !== prev_uuid) {
+							const prev_move = this.getMove(prev_uuid);
+
+							if (prev_move && prev_move.transpositionId !== uuid) {
+								this.props.onTransposition(uuid, prev_uuid);
+							}
+
+							this.setState(new_state);
 						} else {
 							this.setState(new_state);
 						}

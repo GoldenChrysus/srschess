@@ -1,3 +1,4 @@
+import { transcode } from "buffer";
 import React from "react";
 
 import Leaf from "./Leaf";
@@ -82,17 +83,19 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 						this.buildHtml(Object.values(move.children)[0], true)
 				);
 
+			const active = (!move.transpose && this.props.active_uuid === move.id);
+
 			if (single) {
 				return (
 					<>
-						<LeafSpan key={"leaf-span-" + move.id} active={this.props.active_uuid === move.id} has_children={child_count > 0} children_active={this.state.child_active} onArrowClick={this.toggle} move={move} onClick={this.props.onMoveClick}/>
+						<LeafSpan key={"leaf-span-" + move.id} active={active} has_children={child_count > 0} children_active={this.state.child_active} onArrowClick={this.toggle} move={move} onClick={this.props.onMoveClick}/>
 						{ul}
 					</>
 				);
 			} else {
 				html.push(
 					<Leaf key={"leaf-" + move.id} move={move}>
-						<LeafSpan key={"span-" + move.id} active={this.props.active_uuid === move.id} start={true} has_children={move.has_children} children_active={this.state.child_active} move={move} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
+						<LeafSpan key={"span-" + move.id} active={active} start={true} has_children={move.has_children} children_active={this.state.child_active} move={move} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
 						{ul}
 					</Leaf>
 				);

@@ -10,11 +10,14 @@ module Types
 			field :created_at, GraphQL::Types::ISO8601DateTime, null: false
 			field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 			field :parent_id, String, null: true
+			field :transposition_id, String, null: true
 
 			# Relationships
 			field :repertoire, Types::Models::RepertoireType, null: false
 			field :parent, Types::Models::MoveType, null: true
 			field :moves, [Types::Models::MoveType], null: true
+			field :transposition, Types::Models::MoveType, null: true
+			field :transpositions, [Types::Models::MoveType], null: true
 		end
 	end
 end

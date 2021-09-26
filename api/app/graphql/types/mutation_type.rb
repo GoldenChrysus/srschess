@@ -8,5 +8,8 @@ module Types
 
 		# /create_move
 		field :create_move, mutation: Types::Mutations::CreateMove
+
+		# /transpose_move
+		field :transpose_move, mutation: Types::Mutations::TransposeMove
 	end
 end

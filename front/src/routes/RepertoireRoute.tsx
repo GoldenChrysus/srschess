@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
-import { GET_REPERTOIRE, CREATE_MOVE } from "../api/queries";
+import { GET_REPERTOIRE, CREATE_MOVE, TRANSPOSE_MOVE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 
@@ -22,6 +22,9 @@ function RepertoireRoute(props: RepertoireRouteParams) {
 	const [ createMove ] = useMutation(CREATE_MOVE, {
 		refetchQueries : [ GET_REPERTOIRE ]
 	});
+	const [ transposeMove ] = useMutation(TRANSPOSE_MOVE, {
+		refetchQueries : [ GET_REPERTOIRE ]
+	});
 	const { loading, error, data } = useQuery(
 		GET_REPERTOIRE,
 		{
@@ -33,7 +36,7 @@ function RepertoireRoute(props: RepertoireRouteParams) {
 	);
 
 	const fens: { [key: string]: string } = {};
-	const arrows: { [key: string]: Array<any> } = {}
+	const arrows: { [key: string]: Array<any> } = {};
 
 	if (data?.repertoire?.moves) {
 		for (const move of data?.repertoire.moves) {
@@ -69,6 +72,15 @@ function RepertoireRoute(props: RepertoireRouteParams) {
 		});
 	}
 
+	const setTransposition = function(current_uuid: string, prev_uuid: string) {
+		transposeMove({
+			variables : {
+				id              : prev_uuid,
+				transpositionId : current_uuid
+			}
+		});
+	}
+
 	return (
 		<ApolloConsumer>
 			{client => 
@@ -78,6 +90,7 @@ function RepertoireRoute(props: RepertoireRouteParams) {
 					repertoire={data?.repertoire}
 					client={client}
 					onMove={addMove}
+					onTransposition={setTransposition}
 					arrows={arrows}
 				/>
 			}

@@ -14,6 +14,7 @@ export const GET_REPERTOIRE = gql`
 				move
 				sort
 				parentId
+				transpositionId
 			}
 		}
 	}
@@ -23,6 +24,7 @@ export const GET_MOVE = gql`
 	fragment MyMove on Move {
 		id
 		parentId
+		transpositionId
 		move
 		sort
 		moveNumber
@@ -52,6 +54,21 @@ export const CREATE_MOVE = gql`
 		}) {
 			move {
 				id
+			}
+			errors
+		}
+	}
+`;
+
+export const TRANSPOSE_MOVE = gql`
+	mutation TransposeMove($id: String!, $transpositionId: String!) {
+		transposeMove(input: {
+			id: $id,
+			transpositionId: $transpositionId
+		}) {
+			move {
+				id
+				transpositionId
 			}
 			errors
 		}

@@ -15,12 +15,13 @@ export enum ChessControllerModes {
 }
 
 export interface ChessControllerProps {
-	mode         : keyof typeof ChessControllerModes,
-	repertoire?  : any,
-	repertoires? : Array<any>,
-	client       : any,
-	onMove       : Function,
-	arrows       : { [key: string]: Array<any> }
+	mode            : keyof typeof ChessControllerModes,
+	repertoire?     : any,
+	repertoires?    : Array<any>,
+	client          : any,
+	onMove          : Function,
+	onTransposition : Function,
+	arrows          : { [key: string]: Array<any> }
 }
 
 export interface ChessControllerState {

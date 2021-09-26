@@ -5,9 +5,11 @@ import chess
 import chess.pgn
 from os import path
 from os import remove
+from datetime import datetime
 
 api_path  = "https://www.chessbomb.com/api/"
 path      = "data/chessbomb/"
+date_fmt  = "%Y-%m-%dT%H:%M:%S.%fZ"
 headers   = {
 	"Content-Type" : "application/json",
 	"Accept"       : "application/json",
@@ -48,12 +50,9 @@ def getGame(room_slug, round, game_slug):
 
 	return res.json()
 
-# after = None
-after = [
-	"2014-12-02T23:55:00.000Z",
-	678
-]
-
+after     = None
+last_run  = "2021-09-26T14:00:00.000Z";
+last_run  = datetime.strptime(last_run, date_fmt)
 valid_res = [
 	"1/2-1/2",
 	"1-0",
@@ -61,6 +60,8 @@ valid_res = [
 ]
 
 with open(path + "state/latest.txt", "w+") as file:
+	ended = False
+
 	while (True):
 		page = getPage(after)
 
@@ -68,8 +69,15 @@ with open(path + "state/latest.txt", "w+") as file:
 			break
 
 		for room in page["rooms"]:
-			room = getRoom(room["slug"])
-			good = True
+			room      = getRoom(room["slug"])
+			good_room = True
+
+			if (room != False and
+				datetime.strptime(room["room"]["updateAt"], date_fmt) <= last_run and
+				datetime.strptime(room["room"]["endAt"], date_fmt) <= last_run):
+				ended = True
+
+				break
 
 			if (room == False or room["games"] == None or len(room["games"]) == 0):
 				continue
@@ -126,18 +134,18 @@ with open(path + "state/latest.txt", "w+") as file:
 						pgn.add_line(moves)
 						pgn.accept(exporter)
 					except:
-						good = False
+						good_room = False
 
 						break
 				
 				pgn_file.close()
 			
-			if good == False:
+			if good_room == False:
 				remove(room_path)
 
 			file.write(str(room["room"]["id"]) + " :: " + room["room"]["endAt"] + "\n")
 
-		if "more" not in page or page["more"] == None or len(page["more"]) == 0 or page["more"] == after:
+		if ended == True or "more" not in page or page["more"] == None or len(page["more"]) == 0 or page["more"] == after:
 			break
 		
 		after = page["more"]

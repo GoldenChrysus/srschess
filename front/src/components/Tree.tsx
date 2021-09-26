@@ -84,6 +84,18 @@ class Tree extends React.Component<any, TreeState> {
 
 			tmp_move.moves = [];
 
+			if (tmp_move.transpositionId) {
+				const transposition = this.getMove(tmp_move.transpositionId);
+
+				if (transposition) {
+					tmp_move.moves.push({
+						sort       : transposition.sort,
+						moveNumber : transposition.moveNumber,
+						transpose  : true
+					});
+				}
+			}
+
 			tree[tmp_move.moveNumber][tmp_move.sort] = tmp_move;
 
 			if (tmp_move.parentId) {
@@ -94,14 +106,15 @@ class Tree extends React.Component<any, TreeState> {
 					moveNumber : tmp_move.moveNumber
 				});
 
-				let has_children = false;
+				let has_children       = false;
+				let local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
 
 				while (parent.parentId) {
 					parent = this.getMove(parent.parentId);
 
 					const parent_parent = (parent.parentId) ? this.getMove(parent.parentId) : false;
 
-					if (tree[parent.moveNumber][parent.sort].moves.length > 1 && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
+					if ((local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
 						has_children = true;							
 					}
 					
@@ -115,7 +128,7 @@ class Tree extends React.Component<any, TreeState> {
 		return tree;
 	}
 
-	buildTree(move_num: number = 10, focus_sort?: number) {
+	buildTree(move_num: number = 10, focus_sort?: number, transpose?: boolean) {
 		const tree: any     = {};
 		const allowed_sorts = (focus_sort !== undefined) ? [focus_sort] : Object.keys(this.state.base_tree[move_num]);
 
@@ -128,11 +141,12 @@ class Tree extends React.Component<any, TreeState> {
 				move         : item.move,
 				moveNumber   : item.moveNumber,
 				has_children : (item.has_children || item.moves.length > 1),
-				children     : {}
+				children     : {},
+				transpose    : transpose || false
 			};
 
 			for (let index in item.moves) {
-				tree[sort].children = Object.assign(tree[sort].children, this.buildTree(item.moves[index].moveNumber, item.moves[index].sort));
+				tree[sort].children = Object.assign(tree[sort].children, this.buildTree(item.moves[index].moveNumber, item.moves[index].sort, item.moves[index].transpose));
 			}
 		}
 	
