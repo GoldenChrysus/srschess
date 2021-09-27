@@ -6,7 +6,10 @@ module Types
 			argument :id, ID, required: true
 	
 			def resolve(id:)
-				::Move.find(id)
+				move = ::Move.find(id)
+
+				authorize move, :show?
+				move
 			end
 		end
 	end

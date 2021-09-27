@@ -13,14 +13,22 @@ module Types
 			field :errors, [String], null: false
 
 			def resolve(id:, repertoire_id:, fen:, uci:, move_number:, move:, parent_id:)
-				move = Move.new(
+				repertoire = ::Repertoire.find(repertoire_id)
+
+				authorize repertoire, :update?
+
+				parent = if parent_id != nil then Move.find(parent_id) else nil end
+
+				authorize parent, :update? unless parent == nil
+
+				move = ::Move.new(
 					id: id,
-					repertoire: Repertoire.find(repertoire_id),
+					repertoire: repertoire,
 					fen: fen,
 					uci: uci,
 					move_number: move_number,
 					move: move,
-					parent: if parent_id != nil then Move.find(parent_id) else nil end
+					parent: parent
 				)
 
 				if (move.save)

@@ -6,7 +6,10 @@ module Types
 			argument :id, ID, required: true
 			
 			def resolve(id:)
-				::Repertoire.find(id)
+				repertoire = ::Repertoire.find(id)
+
+				authorize repertoire, :show?
+				repertoire
 			end
 		end
 	end

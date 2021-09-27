@@ -10,7 +10,13 @@ module Types
 			def resolve(id:, transposition_id:)
 				move = Move.find(id)
 
-				move.transposition = Move.find(transposition_id)
+				authorize move, :update?
+
+				transposition = Move.find(transposition_id)
+
+				authorize transposition, :update?
+
+				move.transposition = transposition
 
 				if (move.save)
 					{
