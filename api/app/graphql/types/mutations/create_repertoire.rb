@@ -3,16 +3,15 @@ module Types
 		class CreateRepertoire < BaseMutation
 			argument :name, String, required: true
 			argument :side, String, required: true
-			argument :user_id, ID, required: true
 
 			field :repertoire, Types::Models::RepertoireType, null: true
 			field :errors, [String], null: false
 
-			def resolve(name:, side:, user_id:)
+			def resolve(name:, side:)
 				repertoire = Repertoire.new(
 					name: name,
 					side: side,
-					user: User.find(user_id)
+					user: context[:user]
 				)
 
 				if (repertoire.save)

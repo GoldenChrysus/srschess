@@ -62,6 +62,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "pg_ltree"
 
 gem "graphql"
+gem "jwt"
 
 # JSON API base
 gem "jsonapi-resources"

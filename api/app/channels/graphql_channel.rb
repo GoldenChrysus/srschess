@@ -1,4 +1,5 @@
 class GraphqlChannel < ApplicationCable::Channel
+	include ::Secured
 	# If accessing from outside this domain, nullify the session
 	# This allows for outside API access while preventing CSRF attacks,
 	# but you'll have to authenticate your user separately
@@ -9,7 +10,8 @@ class GraphqlChannel < ApplicationCable::Channel
 		query = data["query"]
 		operation_name = data["operationName"]
 		context = {
-			channel: self
+			channel: self,
+			user: @current_user
 		}
 		result = SrschessSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
 		transmit({ 

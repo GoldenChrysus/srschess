@@ -20,17 +20,10 @@ function Repertoires(props: RepertoiresProps) {
 		refetchQueries : [ GET_REPERTOIRES ]
 	});
 	const { loading, error, data } = useQuery(
-		GET_REPERTOIRES,
-		{
-			variables : {
-				userId : "1"
-			}
-		}
+		GET_REPERTOIRES
 	);
 
 	const onSubmit = (values: any) => {
-		values.userId = "1";
-
 		setModalActive(false);
 		createRepertoire({
 			variables : values

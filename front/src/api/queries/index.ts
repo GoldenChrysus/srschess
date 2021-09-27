@@ -15,11 +15,10 @@ export const CREATE_USER = gql`
 `;
 
 export const CREATE_REPERTOIRE = gql`
-	mutation CreateRepertoire($name: String!, $side: String!, $userId: ID!) {
+	mutation CreateRepertoire($name: String!, $side: String!) {
 		createRepertoire(input: {
 			name: $name,
-			side: $side,
-			userId: $userId
+			side: $side
 		}) {
 			repertoire {
 				id
@@ -50,8 +49,8 @@ export const GET_REPERTOIRE = gql`
 `;
 
 export const GET_REPERTOIRES = gql`
-	query Repertoires($userId: ID!) {
-		repertoires(userId: $userId) {
+	query Repertoires {
+		repertoires {
 			id
 			name
 			side
