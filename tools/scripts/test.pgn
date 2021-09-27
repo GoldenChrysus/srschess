@@ -1,0 +1,31 @@
+[Event "XXV Open"]
+[Site "Novi Becej SRB"]
+[Date "2007.06.09"]
+[Round "1"]
+[White "Zarkovic, Mila"]
+[Black "Popovic, PR...."]
+[Result "0-1"]
+[ECO "B17"]
+[BlackElo "2241"]
+[Annotator "AlexYermo"]
+[SetUp "1"]
+[FEN "8/8/6pp/2k1pp2/7P/5P2/4BP2/4K1n1 w - - 0 44"]
+[PlyCount "32"]
+[EventDate "2007.06.09"]
+[EventType "swiss"]
+[EventRounds "9"]
+[EventCountry "YUG"]
+[SourceTitle "The Week in Chess 658"]
+[Source "Mark Crowther"]
+[SourceDate "2007.06.18"]
+[SourceVersion "1"]
+[SourceVersionDate "2007.06.18"]
+[SourceQuality "2"]
+
+{[#]} 44. Bd1 Kd4 45. Kf1 Nh3 46. Kg2 Nf4+ 47. Kg3 Kd3 48. Ba4 Nh5+ (48... Ke2
+$1 49. Bb5+ Ke1 50. Ba6 Nd5 51. Kg2 f4 52. Bb5 h5 53. Be8 Ne7 54. Kg1 Ke2 55.
+Kg2 Nf5 $19) 49. Kg2 Nf6 50. Bb3 f4 $2 51. Ba2 Ke2 52. Bb1 g5 53. hxg5 hxg5 54.
+Bf5 Nd5 55. Be6 $2 (55. Bc8 Ke1 56. Bd7 Nc3 57. Kh3 Kxf2 (57... Nd5 58. Be6 Nf6
+59. Kg2 $15) 58. Kg4 e4 59. fxe4 Nxe4 60. Bc6 Ke3 61. Bb5 f3 62. Ba6 $11 f2 63.
+Bf1 $1 Kd2 64. Bg2 Ke2 65. Kf5) 55... Nc3 56. Bb3 Nd1 57. Bxd1+ Kxd1 58. Kh1 g4
+59. fxg4 e4 0-1
