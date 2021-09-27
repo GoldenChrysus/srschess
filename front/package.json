@@ -15,7 +15,6 @@
 		"axios": "^0.21.4",
 		"chess.js": "^0.12.0",
 		"chessground": "^8.1.7",
-		"cm-chessboard": "^3.15.1",
 		"env-cmd": "^10.1.0",
 		"eslint": "^7.32.0",
 		"firebase": "^9.1.0",
@@ -41,7 +40,7 @@
 	"scripts": {
 		"build:css": "tailwind build -i src/styles/_base.css -o src/styles/app.css",
 		"start": "npm run build:css && env-cmd -e default react-scripts start",
-		"build": "env-cmd -e default react-scripts build",
+		"build": "NODE_ENV=production npm run build:css && env-cmd -e default react-scripts build",
 		"test": "env-cmd -e default react-scripts test",
 		"eject": "react-scripts eject"
 	},

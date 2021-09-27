@@ -29,6 +29,8 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 			],
 			callbacks: {
 				signInSuccessWithAuthResult: (result) => {
+					AuthState.setData(result.user.uid, result.user.accessToken);
+
 					client
 						.mutate({
 							mutation       : CREATE_USER,
@@ -41,9 +43,10 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 							}
 						})
 						.then(() => {
-							AuthState.setData(result.user.uid, result.user.accessToken);
+							// All good
 						})
 						.catch((err) => {
+							// TODO: Revoke the session
 							console.error(err);
 						});
 
