@@ -29,7 +29,6 @@ module Types
 						errors: []
 					}
 				else
-					puts move.errors
 					{
 						move: nil,
 						errors: move.errors.full_messages
