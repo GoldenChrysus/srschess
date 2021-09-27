@@ -1,7 +1,7 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, EmailAuthProvider } from "firebase/auth";
-import * as FirebaseUI from "firebaseui";
+import { auth as FirebaseUIAuth } from "firebaseui";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 import "firebaseui/dist/firebaseui.css";
@@ -19,7 +19,7 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 		appId             : process.env.REACT_APP_FIREBASE_APP,
 		measurementId     : process.env.REACT_APP_FIREBASE_MEASUREMENT
 	});
-	const ui = new FirebaseUI.auth.AuthUI(getAuth(app));
+	const ui = new FirebaseUIAuth.AuthUI(getAuth(app));
 
 	ui.start(
 		"#firebase-auth",

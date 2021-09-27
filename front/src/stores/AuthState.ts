@@ -12,7 +12,8 @@ class AuthState {
 
 		this.token = localStorage.getItem("firebase-token") || "";
 		this.uid   = localStorage.getItem("firebase-uid") || "";
-		
+
+		this.updateLinkConnection();
 		this.updateAuthenticated();
 	}
 
@@ -22,6 +23,7 @@ class AuthState {
 
 		localStorage.setItem("firebase-token", this.token);
 		localStorage.setItem("firebase-uid", this.uid);
+		this.updateLinkConnection();
 		this.updateAuthenticated();
 	}
 
