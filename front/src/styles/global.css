@@ -15,6 +15,14 @@ body .padded-section {
 	padding: 12px 16px;
 }
 
+body .firebase-login .ant-modal-body {
+	padding: 0;
+}
+
+body .firebase-login .ant-modal-close-x {
+	color: #000;
+}
+
 ::-webkit-scrollbar {
 	width: 7px;
 }

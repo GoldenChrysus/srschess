@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import i18n from "./i18n";
+import FirebaseAuth from "./lib/Firebase";
+import AuthState from "./stores/AuthState";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 
@@ -14,7 +16,7 @@ const http_link      = createHttpLink({ uri: "http://localhost:3001/graphql" });
 const shouldUseCable = () => {
 	return true;
 };
-const cable_link     = new ActionCableLink({cable, connectionParams: { test: "1"}});
+const cable_link     = new ActionCableLink({cable, connectionParams: { token : AuthState.token }});
 const link           = ApolloLink.split(
 	shouldUseCable,
 	cable_link,
@@ -25,6 +27,7 @@ const client         = new ApolloClient({
 	cache : new InMemoryCache()
 });
 
+FirebaseAuth(client);
 i18n.setDefaultNamespace("common");
 
 (async () => {

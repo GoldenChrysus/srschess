@@ -27,3 +27,4 @@ src/styles/app.css
 
 # Private keys
 localazy.json
+.env-cmdrc

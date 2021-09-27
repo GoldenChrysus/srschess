@@ -1,6 +1,7 @@
 import React from "react";
-import { Layout } from "antd";
 import { withRouter } from "react-router-dom";
+
+import Login from "./layout/Login";
 
 class MainLayout extends React.Component<any> {
 	render() {
@@ -41,7 +42,7 @@ class MainLayout extends React.Component<any> {
 		return (
 			<div className={layout_classes.join(" ")}>
 				<div className={header_classes.join(" ")}>
-					Header
+					<Login/>
 				</div>
 				<div id="content" className={content_classes.join(" ")}>
 					{this.props.children}

@@ -2,15 +2,21 @@ module Types
 	module Mutations
 		class CreateUser < BaseMutation
 			argument :email, String, required: true
-			argument :password, String, required: true
+			argument :uid, String, required: true
 
 			field :user, Types::Models::UserType, null: true
 			field :errors, [String], null: false
 
-			def resolve(email:, password:)
-				user = User.new(email: email, password: password)
+			def resolve(email:, uid:)
+				user = User.where({ uid: uid }).first
+				good = (user != nil)
 
-				if (user.save)
+				if (!good)
+					user = User.new(email: email, uid: uid)
+					good = user.save
+				end
+
+				if (good)
 					{
 						user: user,
 						errors: []

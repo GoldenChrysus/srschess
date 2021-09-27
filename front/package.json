@@ -16,7 +16,10 @@
 		"chess.js": "^0.12.0",
 		"chessground": "^8.1.7",
 		"cm-chessboard": "^3.15.1",
+		"env-cmd": "^10.1.0",
 		"eslint": "^7.32.0",
+		"firebase": "^9.1.0",
+		"firebaseui": "^0.600.0",
 		"graphql": "^15.5.3",
 		"graphql-ruby-client": "^1.10.0",
 		"i18next": "^21.1.0",
@@ -37,9 +40,9 @@
 	},
 	"scripts": {
 		"build:css": "tailwind build -i src/styles/_base.css -o src/styles/app.css",
-		"start": "npm run build:css && react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"start": "npm run build:css && env-cmd -e default react-scripts start",
+		"build": "env-cmd -e default react-scripts build",
+		"test": "env-cmd -e default react-scripts test",
 		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {

@@ -1,5 +1,19 @@
 import { gql } from "@apollo/client";
 
+export const CREATE_USER = gql`
+	mutation CreateUser($email: String!, $uid: String!) {
+		createUser(input: {
+			email: $email,
+			uid: $uid
+		}) {
+			user {
+				id
+			}
+			errors
+		}
+	}
+`;
+
 export const CREATE_REPERTOIRE = gql`
 	mutation CreateRepertoire($name: String!, $side: String!, $userId: ID!) {
 		createRepertoire(input: {
