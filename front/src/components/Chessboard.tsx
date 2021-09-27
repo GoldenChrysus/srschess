@@ -14,6 +14,7 @@ const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
 interface ChessboardProps {
+	repertoire_id: string,
 	orientation?: string,
 	fen?: string,
 	pgn?: string,
@@ -50,7 +51,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 			return true;
 		}
 
-		return (next_props.orientation !== this.props.orientation);
+		return (next_props.orientation !== this.props.orientation || next_props.repertoire_id !== this.props.repertoire_id);
 	}
 
 	render() {

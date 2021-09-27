@@ -1,5 +1,20 @@
 import { gql } from "@apollo/client";
 
+export const CREATE_REPERTOIRE = gql`
+	mutation CreateRepertoire($name: String!, $side: String!, $userId: ID!) {
+		createRepertoire(input: {
+			name: $name,
+			side: $side,
+			userId: $userId
+		}) {
+			repertoire {
+				id
+			}
+			errors
+		}
+	}
+`;
+
 export const GET_REPERTOIRE = gql`
 	query Repertoire($id: ID!) {
 		repertoire(id: $id) {
@@ -17,17 +32,6 @@ export const GET_REPERTOIRE = gql`
 				transpositionId
 			}
 		}
-	}
-`;
-
-export const GET_MOVE = gql`
-	fragment MyMove on Move {
-		id
-		parentId
-		transpositionId
-		move
-		sort
-		moveNumber
 	}
 `;
 
@@ -57,6 +61,17 @@ export const CREATE_MOVE = gql`
 			}
 			errors
 		}
+	}
+`;
+
+export const GET_MOVE = gql`
+	fragment MyMove on Move {
+		id
+		parentId
+		transpositionId
+		move
+		sort
+		moveNumber
 	}
 `;
 

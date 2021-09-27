@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Translation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Menu, Spin } from "antd";
-import { useQuery } from "@apollo/client";
+import { Menu, Spin, Button } from "antd";
+import { useQuery, useMutation } from "@apollo/client";
 
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
-import { GET_REPERTOIRES } from "../../../api/queries";
+import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
+
+import AddRepertoire from "./AddRepertoire";
 
 interface RepertoiresProps {
 	active_id?: string,
@@ -13,6 +15,10 @@ interface RepertoiresProps {
 }
 
 function Repertoires(props: RepertoiresProps) {
+	const [ modal_active, setModalActive ] = useState(false);
+	const [ createRepertoire ] = useMutation(CREATE_REPERTOIRE, {
+		refetchQueries : [ GET_REPERTOIRES ]
+	});
 	const { loading, error, data } = useQuery(
 		GET_REPERTOIRES,
 		{
@@ -21,6 +27,15 @@ function Repertoires(props: RepertoiresProps) {
 			}
 		}
 	);
+
+	const onSubmit = (values: any) => {
+		values.userId = "1";
+
+		setModalActive(false);
+		createRepertoire({
+			variables : values
+		});
+	};
 
 	return (
 		<Spin spinning={loading}>
@@ -33,6 +48,7 @@ function Repertoires(props: RepertoiresProps) {
 							defaultOpenKeys={["white-repertoires", "black-repertoires"]}
 							selectedKeys={[ "repertoire-" + props.active_id, "repertoire-" + props.mode + "s-" + props.active_id ]}
 						>
+							<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
 							<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
 								{renderRepertoires(data, "white", props, t)}
 							</Menu.SubMenu>
@@ -43,6 +59,7 @@ function Repertoires(props: RepertoiresProps) {
 					)
 				}
 			</Translation>
+			<AddRepertoire visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit}/>
 		</Spin>
 	);
 }

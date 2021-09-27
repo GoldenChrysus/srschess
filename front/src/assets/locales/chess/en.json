@@ -1,5 +1,9 @@
 {
+	"black": "Black",
+	"choose_side": "Please choose a side.",
 	"depth": "Depth",
 	"position_data": "Position Data",
-	"waiting": "Waiting..."
+	"side": "Side",
+	"waiting": "Waiting...",
+	"white": "White"
 }

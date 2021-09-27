@@ -42,6 +42,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						fen={this.state.fen}
 						pgn={this.state.pgn}
 						orientation={this.props.repertoire?.side}
+						repertoire_id={this.props.repertoire?.id}
 						onMove={this.reducer}
 						children={children}
 					/>

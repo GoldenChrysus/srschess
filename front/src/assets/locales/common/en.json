@@ -1,3 +1,7 @@
 {
-	"edit": "Edit"
+	"cancel": "Cancel",
+	"create": "Create",
+	"edit": "Edit",
+	"input_name": "Please input a name.",
+	"name": "Name"
 }
