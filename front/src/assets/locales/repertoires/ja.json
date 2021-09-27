@@ -1,11 +1,13 @@
 {
-  "black_repertoires": "ブラック・レパートリー",
+  "black_repertoires": "ブラック・レパートリーズ",
+  "create_repertoire": "レパートリーの作成",
   "lessons": "レッスン",
   "move_tree": "指し手図",
+  "personal_repertoires": "個人レパートリーズ",
   "repertoire_builder": "レパートリー・ビルダー",
-  "repertoires": "レパートリー",
+  "repertoires": "レパートリーズ",
   "review": "レビュー",
   "reviews": "レビュー",
   "train": "訓練",
-  "white_repertoires": "ホワイト・レパートリー"
+  "white_repertoires": "ホワイト・レパートリーズ"
 }

@@ -25,9 +25,9 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 				<Translation ns={["repertoires"]}>
 					{
 						(t) => (
-							<Collapse accordion bordered={false} defaultActiveKey={(this.props.repertoire) ? "tree-panel" : "repertoires-panel"}>
+							<Collapse accordion bordered={false} defaultActiveKey={(this.props.repertoire) ? "tree-panel" : "personal-repertoires-panel"}>
 								{this.renderTree(t)}
-								<Collapse.Panel id="repertoires-panel" header={t("repertoires")} key="repertoires-panel">
+								<Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
 									<Repertoires active_id={this.props.repertoire?.id} mode={this.props.mode}/>
 								</Collapse.Panel>
 							</Collapse>

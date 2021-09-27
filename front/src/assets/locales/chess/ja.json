@@ -1,5 +1,9 @@
 {
+  "black": "ブラック",
+  "choose_side": "サイドをお選びください。",
   "depth": "深さ",
   "position_data": "局面データ",
-  "waiting": "待機中…"
+  "side": "サイド",
+  "waiting": "待機中…",
+  "white": "ホワイト"
 }
