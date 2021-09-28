@@ -5,11 +5,26 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Launch React",
+			"type": "node-terminal",
+			"request": "launch",
+			"command": "cd front && npm start",
+		},
+		{
+			"name": "Launch Chrome",
 			"type": "pwa-chrome",
 			"request": "launch",
-			"name": "Launch Chrome against localhost",
 			"url": "http://localhost:3000",
-			"webRoot": "${workspaceFolder}"
+			"webRoot": "${workspaceFolder}",
+		}
+	],
+	"compounds": [
+		{
+			"name": "SRS Chess Front Debug",
+			"configurations": [
+				"Launch React"
+				"Launch Chrome"
+			]
 		}
 	]
 }
