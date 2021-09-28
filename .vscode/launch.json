@@ -22,7 +22,7 @@
 		{
 			"name": "SRS Chess Front Debug",
 			"configurations": [
-				"Launch React"
+				"Launch React",
 				"Launch Chrome"
 			]
 		}
