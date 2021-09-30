@@ -20,9 +20,10 @@ class Repertoire < ApplicationRecord
 		}
 		sql    =
 			"WITH
-				RECURSIVE movetree(id, move, uci, sort, level, movelist, path) AS (
+				RECURSIVE movetree(id, repertoire_id, move, uci, sort, level, movelist, path) AS (
 					SELECT
 						m.id,
+						m.repertoire_id,
 						m.move,
 						m.uci,
 						m.sort,
@@ -39,6 +40,7 @@ class Repertoire < ApplicationRecord
 					
 					SELECT
 						m.id,
+						m.repertoire_id,
 						m.move,
 						m.uci,
 						m.sort,
@@ -52,18 +54,27 @@ class Repertoire < ApplicationRecord
 						m.parent_id = mt.id
 				)
 			SELECT
-				mt.id,
-				mt.move,
-				mt.uci,
-				array_to_json(mt.movelist) AS movelist
+				mt.id, mt.move, mt.uci, mt.movelist
 			FROM
 				movetree mt
+			JOIN
+				repertoires r
+			ON
+				r.id = mt.repertoire_id
 			LEFT JOIN
 				learned_items li
 			ON
 				li.move_id = mt.id
 			WHERE
-				li.id IS NULL
+				li.id IS NULL AND
+				CASE
+					WHEN
+						r.side = 'W'
+					THEN
+						mt.level % 2 = 1
+					ELSE
+						mt.level % 2 = 0
+				END
 			ORDER BY
 				-- mt.path ASC; -- depth-first
 				mt.level ASC, mt.sort ASC; -- breadth-first"

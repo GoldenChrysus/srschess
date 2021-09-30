@@ -34,6 +34,7 @@ export const GET_REPERTOIRE = gql`
 			id
 			name
 			side
+			lessonQueueLength
 			moves {
 				id
 				fen
@@ -43,6 +44,22 @@ export const GET_REPERTOIRE = gql`
 				sort
 				parentId
 				transpositionId
+			}
+		}
+	}
+`;
+
+export const GET_REPERTOIRE_LESSONS = gql`
+	query Repertoire($id: ID!) {
+		repertoire(id: $id) {
+			id
+			name
+			side
+			lessonQueue {
+				id
+				move
+				uci
+				movelist
 			}
 		}
 	}

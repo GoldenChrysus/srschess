@@ -14,6 +14,8 @@ interface RightMenuProps {
 	mode: ChessControllerProps["mode"],
 	repertoire_id?: string,
 	repertoire_name?: string,
+	lesson_count?: number
+	review_count?: number
 	onMoveClick: Function
 }
 
@@ -41,7 +43,7 @@ class RightMenu extends React.PureComponent<RightMenuProps> {
 	renderRepertoire() {
 		if (this.props.repertoire_id) {
 			return (
-				<Repertoire mode={this.props.mode} id={this.props.repertoire_id} name={this.props.repertoire_name}/>
+				<Repertoire mode={this.props.mode} id={this.props.repertoire_id} name={this.props.repertoire_name} lesson_count={this.props.lesson_count} review_count={this.props.review_count}/>
 			)
 		}
 	}

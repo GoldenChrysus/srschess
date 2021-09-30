@@ -66,6 +66,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					mode={this.props.mode}
 					repertoire_id={this.props.repertoire?.id}
 					repertoire_name={this.props.repertoire?.name}
+					lesson_count={this.props.repertoire?.lessonQueueLength ?? this.props.repertoire?.lessonQueue.length}
+					review_count={this.props.repertoire?.reviewQueueLength}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>

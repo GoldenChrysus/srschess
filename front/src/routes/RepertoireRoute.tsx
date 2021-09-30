@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
-import { GET_REPERTOIRE, CREATE_MOVE, TRANSPOSE_MOVE } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 
@@ -18,15 +18,29 @@ interface RepertoireRouteParams {
 // or after the mutation request. If after, the possibility of a race condition still exists, so a route-level cache is needed.
 
 function RepertoireRoute(props: RepertoireRouteParams) {
+	let main_query = GET_REPERTOIRE;
+
+	switch (props.mode) {
+		case "repertoire":
+			main_query = GET_REPERTOIRE;
+
+			break;
+
+		case "lesson":
+			main_query = GET_REPERTOIRE_LESSONS;
+
+			break;
+	}
+
 	const { id } = useParams<RepertoireRouteParams>();
 	const [ createMove ] = useMutation(CREATE_MOVE, {
-		refetchQueries : [ GET_REPERTOIRE ]
+		refetchQueries : [ main_query ]
 	});
 	const [ transposeMove ] = useMutation(TRANSPOSE_MOVE, {
-		refetchQueries : [ GET_REPERTOIRE ]
+		refetchQueries : [ main_query ]
 	});
 	const { loading, error, data } = useQuery(
-		GET_REPERTOIRE,
+		main_query,
 		{
 			variables : {
 				id : id
