@@ -32,7 +32,10 @@ class Move < ApplicationRecord
 		end
 
 		def set_sort
-			move = self.class.where({ move_number: self.move_number }).order(sort: :desc).first
+			move = self
+				.class
+				.where({ move_number: self.move_number, repertoire: self.repertoire })
+				.order(sort: :desc).first
 
 			self.sort = (move != nil) ? move.sort + 1 : 0
 		end
