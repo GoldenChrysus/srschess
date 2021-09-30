@@ -9,6 +9,7 @@ class MasterGame < ApplicationRecord
 	validates :pgn, presence: true
 	validates :source, presence: true
 
+	# Types
 	enum result: {white: "W", black: "B", draw: "D"}
 	enum source: {pgnmentor: "pgnmentor", chessbomb: "chessbomb", local: "local"}
 end

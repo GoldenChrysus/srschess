@@ -7,6 +7,7 @@ class Move < ApplicationRecord
 	validates :uci, presence: true
 	validates :sort, presence: true
 
+	# Relationships
 	belongs_to :repertoire, required: true
 	belongs_to :parent, class_name: "Move", required: false
 	belongs_to :transposition, class_name: "Move", required: false
