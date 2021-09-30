@@ -8,6 +8,7 @@ from os import listdir
 from os import rename
 from os.path import isfile, join
 from getopt import getopt
+from datetime import datetime
 
 enviro = False
 source = False
@@ -121,11 +122,26 @@ for file in files:
 		date     = game.headers["Date"].split(".")
 		exporter = chess.pgn.StringExporter(headers=True, variations=True, comments=True)
 
-		record["year"]  = None if (date[0] == "????") else int(date[0])
-		record["month"] = None if (date[1] == "??") else int(date[1])
-		record["day"]   = None if (date[2] == "??" or len(date[2]) == 0) else int(date[2])
-		record["pgn"]   = game.accept(exporter)
-		record["id"]    = hashlib.md5(
+		if (source == "pgnmentor"):
+			record["year"]  = None if (date[0] == "????") else int(date[0])
+			record["month"] = None if (date[1] == "??") else int(date[1])
+			record["day"]   = None if (date[2] == "??" or len(date[2]) == 0) else int(date[2])
+		elif (source == "chessbomb"):
+			date = datetime.strptime(game.headers["Date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+
+			record["year"]  = date.strftime("%Y")
+			record["month"] = date.strftime("%m")
+			record["day"]   = date.strftime("%d")
+
+			header_year = game.headers["Event"][-4:]
+
+			if (str(record["year"]) != header_year and header_year.isdigit()):
+				record["year"]  = header_year
+				record["month"] = None
+				record["day"]   = None
+
+		record["pgn"] = game.accept(exporter)
+		record["id"]  = hashlib.md5(
 			(
 				re.sub("[^A-Za-z]", "", record["white"].split(",")[0]) + ":" +
 				re.sub("[^A-Za-z]", "", record["black"].split(",")[0]) + ":" +
@@ -136,9 +152,27 @@ for file in files:
 				record["movelist"]
 			).lower().encode("utf-8")
 		).hexdigest()
-		record["id"]    = record["id"][0:8] + "-" + record["id"][8:12] + "-" + record["id"][12:16] + "-" + record["id"][16:20] + "-" + record["id"][20:32]
+		record["id"]  = record["id"][0:8] + "-" + record["id"][8:12] + "-" + record["id"][12:16] + "-" + record["id"][16:20] + "-" + record["id"][20:32]
 
-		print(record["white"], record["black"])
+		# print(record["white"], record["black"])
+		conflict = "NOTHING" if enviro == "pgnmentor" else """
+			UPDATE SET
+				event = EXCLUDED.event,
+				round = EXCLUDED.round,
+				year = EXCLUDED.year,
+				month = EXCLUDED.month,
+				day = EXCLUDED.day,
+				white_elo = EXCLUDED.white_elo,
+				black_elo = EXCLUDED.black_elo,
+				white_title = EXCLUDED.white_title,
+				black_title = EXCLUDED.black_title,
+				white_fide_id = EXCLUDED.white_fide_id,
+				black_fide_id = EXCLUDED.black_fide_id,
+				white = EXCLUDED.white,
+				black = EXCLUDED.black,
+				pgn = EXCLUDED.pgn
+		"""
+
 		cur.execute("""
 			INSERT INTO
 				master_games
@@ -191,9 +225,8 @@ for file in files:
 					CURRENT_TIMESTAMP,
 					CURRENT_TIMESTAMP
 				)
-			ON CONFLICT
-				DO NOTHING
-			""",
+			ON CONFLICT (id)
+				DO """ + conflict,
 			record
 		)
 

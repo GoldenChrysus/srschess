@@ -172,6 +172,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	onMoveClick(source: string, uuid: string) {
+		if (this.props.mode !== "repertoire") {
+			return false;
+		}
+
 		this.chess.reset();
 
 		const data = this.generateHistory(uuid);
@@ -212,7 +216,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
 		const last_move = new_state.moves.at(-1);
 
-		new_state.last_num  = move_num;
+		new_state.last_num = move_num;
 
 		switch (action.type) {
 			case "click-history":
@@ -233,6 +237,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					pgn         : new_state.pgn,
 					history     : this.buildQueueHistory(new_state),
 					moves       : new_state.moves,
+					last_num    : move_num,
 					preloading  : true
 				});
 				this.chess.move(last_move);
