@@ -31,14 +31,18 @@ export interface ChessControllerState {
 	last_uuid    : string | null,
 	last_is_new? : boolean,
 	moves        : Array<string>,
-	history      : Array<any>
+	history      : Array<any>,
+	queue_index  : number,
+	preloading   : boolean
 }
 
 export const initial_state: ChessControllerState = {
-	fen       : START_FEN,
-	pgn       : "",
-	last_num  : 10,
-	last_uuid : null,
-	moves     : [],
-	history   : [],
+	fen         : START_FEN,
+	pgn         : "",
+	last_num    : 10,
+	last_uuid   : null,
+	moves       : [],
+	history     : [],
+	queue_index : 0,
+	preloading  : true
 };

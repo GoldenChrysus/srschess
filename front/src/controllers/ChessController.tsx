@@ -14,7 +14,9 @@ const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
-	private chess = Chess2();
+	private chess                          = Chess2();
+	private chunk_limit                    = 5;
+	private preloaded_moves: Array<string> = [];
 
 	constructor(props: ChessControllerProps) {
 		super(props);
@@ -28,16 +30,22 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	componentDidUpdate(prev_props: ChessControllerProps) {
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
 			this.setState(initial_state);
+
+			this.chunk_limit = 5;
+
+			this.progressQueue();
 		}
 	}
 
 	render() {
-		const children = (this.state.last_uuid) ? this.props.arrows[this.state.last_uuid] || [] : this.props.arrows["root"] || [];
+		const children   = (this.state.last_uuid) ? this.props.arrows[this.state.last_uuid] || [] : this.props.arrows["root"] || [];
+		const queue_item = (this.props.mode === "lesson") ? this.props.repertoire?.lessonQueue[this.state.queue_index] : null;
 
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">
 				<div key="chessboard-outer" id="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
+						mode={this.props.mode}
 						key="chessboard"
 						fen={this.state.fen}
 						pgn={this.state.pgn}
@@ -45,6 +53,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						repertoire_id={this.props.repertoire?.id}
 						onMove={this.reducer}
 						children={children}
+						queue_item={(this.state.preloading) ? null : queue_item}
 					/>
 				</div>
 				<LeftMenu
@@ -72,6 +81,65 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				/>
 			</div>
 		);
+	}
+
+	progressQueue() {
+		if (this.props.mode !== "lesson") {
+			return;
+		}
+
+		const move = this.props.repertoire?.lessonQueue[this.state.queue_index];
+
+		if (!move) {
+			return;
+		}
+
+		let pre_moves      = JSON.parse(move.movelist).slice(0, -1);
+		let pre_move_index = -1;
+
+		if (pre_moves.slice(0, -1).join(":") === this.preloaded_moves.join(":")) {
+			pre_moves = pre_moves.slice(-1);
+		} else {
+			this.preloaded_moves = [];
+
+			this.chess.reset();
+		}
+
+		if (pre_moves.length) {
+			const pre_move_interval = setInterval(
+				() => {
+					pre_move_index++;
+
+					if (pre_move_index >= pre_moves.length) {
+						clearInterval(pre_move_interval);
+						return;
+					}
+
+					const move = pre_moves[pre_move_index];
+
+					this.preloaded_moves.push(move);
+					this.chess.move(move);
+
+					const history = this.chess.history();
+
+					this.reducer({
+						type  : "queue-premove",
+						data  : {
+							preloading : (pre_move_index !== (pre_moves.length - 1)),
+							pgn        : this.chess.pgn(),
+							fen        : this.chess.fen(),
+							moves      : history,
+							history    : history
+						}
+					});
+				},
+				500
+			);
+		} else {
+			this.setState({
+				preloading : false
+			});
+		}
 	}
 
 	generateHistory(uuid?: string | null) {
@@ -124,10 +192,25 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		});
 	}
 
+	buildQueueHistory(new_state: any) {
+		const real_history = [];
+		let history_id = 0;
+
+		for (const move of new_state.moves) {
+			real_history.push({
+				id   : --history_id,
+				move : move
+			});
+		}
+
+		return real_history;
+	}
+
 	reducer(action: any) {
 		let new_state = action.data;
 
 		const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
+		const last_move = new_state.moves.at(-1);
 
 		new_state.last_num  = move_num;
 
@@ -137,8 +220,27 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				this.setState(new_state);
 				break;
 
-			case "move":
-				const last_move = new_state.moves.at(-1);
+			case "queue-premove":
+				new_state.history = this.buildQueueHistory(new_state);
+
+				this.setState(new_state);
+				break;
+
+			case "move-lesson":
+				this.setState({
+					queue_index : this.state.queue_index + 1,
+					fen         : new_state.fen,
+					pgn         : new_state.pgn,
+					history     : this.buildQueueHistory(new_state),
+					moves       : new_state.moves,
+					preloading  : true
+				});
+				this.chess.move(last_move);
+				this.preloaded_moves.push(new_state.moves.at(-1));
+				this.progressQueue()
+				break;
+
+			case "move-repertoire":
 				const prev_uuid = this.state.last_uuid;
 	
 				switch (this.props.mode) {

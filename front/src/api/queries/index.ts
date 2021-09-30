@@ -57,6 +57,7 @@ export const GET_REPERTOIRE_LESSONS = gql`
 			side
 			lessonQueue {
 				id
+				parentId
 				move
 				uci
 				movelist

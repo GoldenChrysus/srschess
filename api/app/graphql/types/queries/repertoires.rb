@@ -5,7 +5,7 @@ module Types
 			type [Types::Models::RepertoireType], null: false
 			
 			def resolve
-				::User.find(context[:user].id).repertoires
+				context[:user].repertoires
 			end
 		end
 	end

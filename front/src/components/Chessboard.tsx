@@ -1,6 +1,7 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
+import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { START_FEN } from "../lib/constants/chess";
 import ChessgroundBoard from "./chess/ChessgroundBoard";
 import Piece from "./chess/Piece";
@@ -14,12 +15,14 @@ const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
 interface ChessboardProps {
+	mode: ChessControllerProps["mode"],
 	repertoire_id: string,
 	orientation?: string,
 	fen?: string,
 	pgn?: string,
 	onMove: Function,
 	children: Array<any>
+	queue_item: { [key: string] : any } | undefined | null
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
@@ -51,7 +54,12 @@ class Chessboard extends React.Component<ChessboardProps> {
 			return true;
 		}
 
-		return (next_props.orientation !== this.props.orientation || next_props.repertoire_id !== this.props.repertoire_id);
+		return (
+			next_props.orientation !== this.props.orientation ||
+			next_props.repertoire_id !== this.props.repertoire_id ||
+			next_props.queue_item?.id !== this.props.queue_item?.id ||
+			next_props.mode !== this.props.mode
+		);
 	}
 
 	render() {
@@ -68,17 +76,36 @@ class Chessboard extends React.Component<ChessboardProps> {
 					paleRed   : { key: "pr", color: "#882020", opacity: 0.4, lineWidth: 15 },
 					paleGrey  : { key: "pgr", color: "#4a4a4a", opacity: 0.35, lineWidth: 15 },
 					nextMove  : { key: "m", color: "#800080", opacity: 0.5, linewidth: 10 },
-					bestMove  : { key: "bm", color: "#a52a2a", opacity: 0.7, linewidth: 10 }
+					bestMove  : { key: "bm", color: "#a52a2a", opacity: 0.7, linewidth: 10 },
+					queueMove : { key: "qm", color: "#ffff00", opacity: 0.7, linewidth: 10 }
 				},
 		};
 
-		for (const uci of this.props.children) {
-			drawable.autoShapes.push({
-				brush   : "nextMove",
-				orig    : uci.substring(0, 2),
-				mouseSq : uci.substring(2, 4),
-				dest    : uci.substring(2, 4),
-			});
+		switch (this.props.mode) {
+			case "repertoire":
+				for (const uci of this.props.children) {
+					drawable.autoShapes.push({
+						brush   : "nextMove",
+						orig    : uci.slice(0, 2),
+						mouseSq : uci.slice(2, 4),
+						dest    : uci.slice(2, 4),
+					});
+				}
+
+				break;
+
+			case "lesson":
+				if (!this.props.queue_item) {
+					break;
+				}
+
+				drawable.autoShapes.push({
+					brush   : "queueMove",
+					orig    : this.props.queue_item.uci.slice(0, 2),
+					mouseSq : this.props.queue_item.uci.slice(2, 4),
+					dest    : this.props.queue_item.uci.slice(2, 4),
+				});
+				break;
 		}
 
 		return (
@@ -130,7 +157,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 		this.pgn = this.chess.pgn();
 
 		this.props.onMove({
-			type  : "move",
+			type  : "move-" + this.props.mode,
 			uci   : orig + dest,
 			data  : {
 				fen   : this.fen,
@@ -153,17 +180,33 @@ class Chessboard extends React.Component<ChessboardProps> {
 	toDests() {
 		const dests = new Map();
 		
-		if (this.props.orientation) {
-			this.chess.SQUARES.forEach(s => {
-				const ms = this.chess.moves({
-					square  : s,
-					verbose : true
-				});
+		switch (this.props.mode) {
+			case "repertoire":
+				if (this.props.orientation) {
+					this.chess.SQUARES.forEach(s => {
+						const ms = this.chess.moves({
+							square  : s,
+							verbose : true
+						});
 
-				if (ms.length) {
-					dests.set(s, ms.map(m => m.to));
+						if (ms.length) {
+							dests.set(s, ms.map(m => m.to));
+						}
+					});
 				}
-			});
+
+				break;
+
+			case "lesson":
+				if (!this.props.queue_item) {
+					break;
+				}
+
+				const from = this.props.queue_item?.uci.slice(0, 2);
+				const to   = this.props.queue_item?.uci.slice(2, 4);
+
+				dests.set(from, [to]);
+				break;
 		}
 
 		return {

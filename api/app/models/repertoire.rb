@@ -20,15 +20,16 @@ class Repertoire < ApplicationRecord
 		}
 		sql    =
 			"WITH
-				RECURSIVE movetree(id, repertoire_id, move, uci, sort, level, movelist, path) AS (
+				RECURSIVE movetree(id, parent_id, repertoire_id, move, uci, sort, level, movelist, path) AS (
 					SELECT
 						m.id,
+						m.parent_id,
 						m.repertoire_id,
 						m.move,
 						m.uci,
 						m.sort,
 						1,
-						ARRAY[m.move],
+						ARRAY['', m.move],
 						ARRAY[ROW(m.move_number, m.sort)]
 					FROM
 						moves m
@@ -40,6 +41,7 @@ class Repertoire < ApplicationRecord
 					
 					SELECT
 						m.id,
+						m.parent_id,
 						m.repertoire_id,
 						m.move,
 						m.uci,
@@ -54,7 +56,11 @@ class Repertoire < ApplicationRecord
 						m.parent_id = mt.id
 				)
 			SELECT
-				mt.id, mt.move, mt.uci, mt.movelist
+				mt.id,
+				mt.parent_id,
+				mt.move,
+				mt.uci,
+				array_to_json(mt.movelist) AS movelist
 			FROM
 				movetree mt
 			JOIN
@@ -76,8 +82,8 @@ class Repertoire < ApplicationRecord
 						mt.level % 2 = 0
 				END
 			ORDER BY
-				-- mt.path ASC; -- depth-first
-				mt.level ASC, mt.sort ASC; -- breadth-first"
+				mt.path ASC; -- depth-first
+				-- mt.level ASC, mt.sort ASC; -- breadth-first"
 
 		sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 		

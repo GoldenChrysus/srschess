@@ -3,6 +3,7 @@ module Types
 		class RepertoireType < Types::BaseObject
 			class QueueItem < Types::BaseObject
 				field :id, ID, null: false
+				field :parent_id, String, null: true
 				field :move, String, null: false
 				field :uci, String, null: false
 				field :movelist, String, null: false
