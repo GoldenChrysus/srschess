@@ -12,6 +12,7 @@ class Move < ApplicationRecord
 	belongs_to :transposition, class_name: "Move", required: false
 	has_many :moves, inverse_of: "parent", foreign_key: :parent_id
 	has_many :transpositions, class_name: "Move", inverse_of: "transposition", foreign_key: :transposition_id
+	has_one :learned_item, required: false
 
 	# Callbacks
 	before_validation :set_sort, on: :create

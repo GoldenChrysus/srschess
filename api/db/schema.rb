@@ -10,12 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_27_165847) do
+ActiveRecord::Schema.define(version: 2021_09_30_032500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "learned_items", force: :cascade do |t|
+    t.uuid "move_id", null: false
+    t.integer "level"
+    t.datetime "next_review"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["move_id"], name: "index_learned_items_on_move_id", unique: true
+  end
 
 # Could not dump table "master_games" because of following StandardError
 #   Unknown type 'game_source' for column 'source'
@@ -47,6 +56,7 @@ ActiveRecord::Schema.define(version: 2021_09_27_165847) do
     t.text "uid", null: false
   end
 
+  add_foreign_key "learned_items", "moves"
   add_foreign_key "moves", "moves", column: "parent_id"
   add_foreign_key "moves", "moves", column: "transposition_id"
   add_foreign_key "moves", "repertoires"

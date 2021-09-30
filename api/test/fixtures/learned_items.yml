@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  move: one
+  level: 1
+  next_review: 2021-09-30 12:08:17
+
+two:
+  move: two
+  level: 1
+  next_review: 2021-09-30 12:08:17
