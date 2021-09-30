@@ -39,7 +39,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	render() {
 		const children   = (this.state.last_uuid) ? this.props.arrows[this.state.last_uuid] || [] : this.props.arrows["root"] || [];
-		const queue_item = (this.props.mode === "lesson") ? this.props.repertoire?.lessonQueue[this.state.queue_index] : null;
+		const queue_item = (this.props.mode === "lesson") ? this.props.repertoire?.lessonQueue![this.state.queue_index] : null;
 
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">
@@ -75,8 +75,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					mode={this.props.mode}
 					repertoire_id={this.props.repertoire?.id}
 					repertoire_name={this.props.repertoire?.name}
-					lesson_count={this.props.repertoire?.lessonQueueLength ?? this.props.repertoire?.lessonQueue.length}
-					review_count={this.props.repertoire?.reviewQueueLength}
+					lesson_count={this.props.repertoire?.lessonQueueLength ?? this.props.repertoire?.lessonQueue?.length}
+					review_count={0}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>
@@ -88,7 +88,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			return;
 		}
 
-		const move = this.props.repertoire?.lessonQueue[this.state.queue_index];
+		const move = this.props.repertoire?.lessonQueue![this.state.queue_index];
 
 		if (!move) {
 			return;
@@ -242,7 +242,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				});
 				this.chess.move(last_move);
 				this.preloaded_moves.push(new_state.moves.at(-1));
-				this.progressQueue()
+				this.progressQueue();
 				break;
 
 			case "move-repertoire":

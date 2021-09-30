@@ -1,10 +1,17 @@
+import { ApolloClient } from "@apollo/client";
 import Chess, { ChessInstance } from "chess.js";
 import { START_FEN } from "../constants/chess";
+import { RepertoireRouteRepertoire } from "./RepertoireRouteTypes";
 
 type ChessType = (fen?: string) => ChessInstance;
 
 const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
+
+export interface ChessControllerHistoryItem {
+	id: number | string,
+	move: string
+}
 
 export enum ChessControllerModes {
 	repertoire = "repertoire",
@@ -16,9 +23,9 @@ export enum ChessControllerModes {
 
 export interface ChessControllerProps {
 	mode            : keyof typeof ChessControllerModes,
-	repertoire?     : any,
-	repertoires?    : Array<any>,
-	client          : any,
+	repertoire?     : RepertoireRouteRepertoire,
+	repertoires?    : Array<RepertoireRouteRepertoire>,
+	client          : ApolloClient<object>,
 	onMove          : Function,
 	onTransposition : Function,
 	arrows          : { [key: string]: Array<any> }
@@ -31,7 +38,7 @@ export interface ChessControllerState {
 	last_uuid    : string | null,
 	last_is_new? : boolean,
 	moves        : Array<string>,
-	history      : Array<any>,
+	history      : Array<ChessControllerHistoryItem>,
 	queue_index  : number,
 	preloading   : boolean
 }
@@ -39,7 +46,7 @@ export interface ChessControllerState {
 export const initial_state: ChessControllerState = {
 	fen         : START_FEN,
 	pgn         : "",
-	last_num    : 10,
+	last_num    : 5,
 	last_uuid   : null,
 	moves       : [],
 	history     : [],

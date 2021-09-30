@@ -8,15 +8,15 @@ interface ChessgroundProps {
 	check: string,
 	orientation: string,
 	turn_color: string,
-	movable: any,
+	movable: { free: boolean, dests: Map<string, Array<string>> },
 	fen?: string,
-	last_move?: Array<any> | null,
+	last_move: Array<string> | null,
 	onMove: Function,
 	drawable: any
 }
 
 class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
-	private board_ref = React.createRef<any>();
+	private board_ref = React.createRef<typeof Chessground>();
 
 	constructor(props: ChessgroundProps) {
 		super(props);

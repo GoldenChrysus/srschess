@@ -1,15 +1,16 @@
-import React from "react";
+import { ApolloClient } from "@apollo/client";
+import React, { MouseEventHandler } from "react";
 
 import { GET_MOVE } from "../api/queries";
 import { ChessControllerProps, ChessControllerState } from "../lib/types/ChessControllerTypes";
 import Branch from "./tree/Branch";
 
 interface TreeProps {
-	client       : any,
+	client       : ApolloClient<object>,
 	repertoire   : ChessControllerProps["repertoire"],
 	active_uuid? : string,
 	new_move?    : boolean,
-	onMoveClick  : any,
+	onMoveClick  : MouseEventHandler,
 	moves        : ChessControllerState["moves"]
 }
 

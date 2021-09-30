@@ -1,11 +1,16 @@
 import { makeAutoObservable } from "mobx";
+import { RepertoireRouteRepertoire } from "../lib/types/RepertoireRouteTypes";
 
 interface ChessStateTypes {
-	repertoire: { [key: string]: any }
+	repertoire: RepertoireRouteRepertoire
 }
 
 class ChessState {
-	repertoire: ChessStateTypes["repertoire"] = {};
+	repertoire: ChessStateTypes["repertoire"] = {
+		id   : 0,
+		name : "",
+		side : ""
+	};
 	best_move: string = "";
 
 	constructor() {

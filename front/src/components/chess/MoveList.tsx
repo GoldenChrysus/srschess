@@ -1,20 +1,29 @@
 import React from "react";
-import { ChessControllerState } from "../../lib/types/ChessControllerTypes";
+import { ChessControllerHistoryItem, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
 import { GET_MOVE } from "../../api/queries";
 
 import Move from "./move-list/Move";
 import Stockfish from "./move-list/Stockfish";
+import { ApolloClient } from "@apollo/client";
 
 interface MoveListProps {
-	client: any,
+	client: ApolloClient<object>,
 	active_num?: ChessControllerState["last_num"],
 	fen: string,
-	moves: Array<string>,
+	moves: ChessControllerState["history"],
 	onMoveClick: Function
 }
 
-class MoveList extends React.PureComponent<MoveListProps> {
+class MoveList extends React.Component<MoveListProps> {
+	shouldComponentUpdate(next_props: MoveListProps) {
+		return (
+			next_props.fen !== this.props.fen ||
+			next_props.active_num !== this.props.active_num ||
+			JSON.stringify(next_props.moves) !== JSON.stringify(this.props.moves)
+		);
+	}
+
 	render() {
 		return (
 			<>
@@ -26,7 +35,7 @@ class MoveList extends React.PureComponent<MoveListProps> {
 		);
 	}
 
-	renderListMove(item: string, index: number, moves: any) {
+	renderListMove(item: ChessControllerHistoryItem, index: number, moves: MoveListProps["moves"]) {
 		if (index % 2 === 1) {
 			return;
 		}

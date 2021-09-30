@@ -4,12 +4,14 @@ import { Modal } from "antd";
 
 import AuthState from "../../stores/AuthState";
 
+interface LoginProps {
+}
 interface LoginState {
 	modal_visible : boolean
 }
 
-class Login extends React.Component<any, LoginState> {
-	constructor(props: any) {
+class Login extends React.Component<LoginProps, LoginState> {
+	constructor(props: LoginProps) {
 		super(props);
 
 		this.login = this.login.bind(this);

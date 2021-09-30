@@ -11,7 +11,7 @@ interface BranchProps {
 	moves: any,
 	active_uuid?: string,
 	parent_uuid?: string,
-	onMoveClick: any
+	onMoveClick: Function
 };
 
 interface BranchState {

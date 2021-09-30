@@ -23,6 +23,7 @@ interface StockfishState {
 
 class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	set_listener = false;
+	engine = null;
 
 	constructor(props: StockfishProps) {
 		super(props);
@@ -157,6 +158,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		const sf = window.sf;
 		
 		if (sf) {
+			sf.postMessage("ucinewgame");
 			sf.postMessage("position fen " + this.props.fen);
 			sf.postMessage("go depth 20");
 		}

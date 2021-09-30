@@ -8,9 +8,10 @@ import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
 
 import AddRepertoire from "./AddRepertoire";
+import { TFunction } from "i18next";
 
 interface RepertoiresProps {
-	active_id?: string,
+	active_id?: number,
 	mode: ChessControllerProps["mode"]
 }
 
@@ -43,10 +44,10 @@ function Repertoires(props: RepertoiresProps) {
 						>
 							<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
 							<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
-								{renderRepertoires(data, "white", props, t)}
+								{renderRepertoires(data, "white", t)}
 							</Menu.SubMenu>
 							<Menu.SubMenu title={t("black_repertoires")} key="black-repertoires">
-								{renderRepertoires(data, "black", props, t)}
+								{renderRepertoires(data, "black", t)}
 							</Menu.SubMenu>
 						</Menu>
 					)
@@ -57,7 +58,7 @@ function Repertoires(props: RepertoiresProps) {
 	);
 }
 
-function renderRepertoires(data: any, color: string, props: RepertoiresProps, t: any) {
+function renderRepertoires(data: any, color: string, t: TFunction) {
 	if (!data) {
 		return null;
 	}

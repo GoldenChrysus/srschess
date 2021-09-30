@@ -2,10 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { Collapse, Button, Progress } from "antd";
+import { TFunction } from "i18next";
 
 interface RepertoireProps {
 	name?: string,
-	id?: string,
+	id?: number,
 	lesson_count?: number
 	review_count?: number
 	mode: string
@@ -46,7 +47,7 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 		)
 	}
 
-	getTitle(t: any) {
+	getTitle(t: TFunction) {
 		let t_key = "repertoire_builder";
 
 		switch (this.props.mode) {
@@ -59,7 +60,7 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 		return this.props.name + ": " + t(t_key);
 	}
 
-	renderContent(t: any) {
+	renderContent(t: TFunction) {
 		const lesson_count = this.props.lesson_count ?? 0;
 		const review_count = this.props.review_count ?? 0;
 

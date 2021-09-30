@@ -7,6 +7,7 @@ import Tree from "../Tree";
 import Repertoires from "./left-menu/Repertoires";
 
 import "../../styles/chess/repertoires.css";
+import { TFunction } from "i18next";
 
 interface LeftMenuProps {
 	client: ChessControllerProps["client"],
@@ -38,7 +39,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 		);
 	}
 
-	renderTree(t: any) {
+	renderTree(t: TFunction) {
 		if (this.props.mode !== "repertoire") {
 			return null;
 		}

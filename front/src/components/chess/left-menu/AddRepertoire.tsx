@@ -4,7 +4,7 @@ import { Modal, Form, Input, Button, Select } from "antd";
 
 interface AddRepertoireProps {
 	visible : boolean,
-	toggleVisible: any,
+	toggleVisible: Function,
 	onSubmit: Function
 }
 

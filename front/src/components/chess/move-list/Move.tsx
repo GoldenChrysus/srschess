@@ -1,12 +1,13 @@
 import { move } from "chessground/draw";
-import React from "react";
+import React, { EventHandler, MouseEventHandler } from "react";
+import { ChessControllerHistoryItem } from "../../../lib/types/ChessControllerTypes";
 
 interface MoveProps {
 	index: number,
-	white?: any,
-	black?: any,
+	white?: ChessControllerHistoryItem,
+	black?: ChessControllerHistoryItem,
 	active_color: string | null,
-	onClick: any
+	onClick: Function
 }
 
 class Move extends React.PureComponent<MoveProps> {
@@ -33,8 +34,8 @@ class Move extends React.PureComponent<MoveProps> {
 			const move         = (color === "white") ? this.props.white : this.props.black;
 
 			moves.push(
-				<div key={"movelist-item-" + color + "-" + this.props.index} className={"col-span-5 p-1 py-1 px-3.5 hover:bg-green-700 cursor-pointer " + active_class} onClick={() => this.props.onClick(move.id)}>
-					{move.move}
+				<div key={"movelist-item-" + color + "-" + this.props.index} className={"col-span-5 p-1 py-1 px-3.5 hover:bg-green-700 cursor-pointer " + active_class} onClick={() => this.props.onClick(move!.id)}>
+					{move!.move}
 				</div>
 			);
 		}

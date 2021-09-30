@@ -11,10 +11,10 @@ interface LeafSpanProps {
 	children_active: boolean,
 	active?: boolean,
 	onArrowClick?: any,
-	onClick: any,
+	onClick: Function,
 };
 
-class LeafSpan extends React.Component<LeafSpanProps, any> {
+class LeafSpan extends React.Component<LeafSpanProps> {
 	shouldComponentUpdate(next_props: LeafSpanProps) {
 		return (
 			this.props.move.id !== next_props.move.id ||

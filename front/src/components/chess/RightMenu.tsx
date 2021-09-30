@@ -5,14 +5,15 @@ import { ChessControllerProps, ChessControllerState } from "../../lib/types/Ches
 
 import MoveList from "./MoveList";
 import Repertoire from "./right-menu/Repertoire";
+import { ApolloClient } from "@apollo/client";
 
 interface RightMenuProps {
-	client: any,
+	client: ApolloClient<object>,
 	active_num?: ChessControllerState["last_num"],
 	fen: string,
-	moves: Array<string>,
+	moves: ChessControllerState["history"],
 	mode: ChessControllerProps["mode"],
-	repertoire_id?: string,
+	repertoire_id?: number,
 	repertoire_name?: string,
 	lesson_count?: number
 	review_count?: number
