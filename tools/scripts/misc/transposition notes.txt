@@ -1,0 +1,55 @@
+1. e4 e5 2. Nf3 Bc5 3. Bc4 Nf6
+	2 rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2
+	2.5 rnbqk1nr/pppp1ppp/8/2b1p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3
+	3 rnbqk1nr/pppp1ppp/8/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3
+	3.5 rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4
+
+1. e4 e5 2. Bc4 Bc5 3. Nf3 Nf6
+	2 rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2
+	2.5 rnbqk1nr/pppp1ppp/8/2b1p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3
+	3 rnbqk1nr/pppp1ppp/8/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3
+	3.5 rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4
+
+These two lines become the same on move 3 (white's move). Chess Tempo displays the second line as:
+2. Bc4 Bc5 (Nf3 ->)
+However, "Bc5 (Nf3 ->)" is a single clickable label, and playing Nf3 takes you into the first line with 3. Bc4 highlighted even though you played 3. Nf3.
+
+It may be better to display the second line like:
+2. Bc4 Bc5 3. Nf3 (... ->)
+where (... ->) is its own clickable label that takes you to the first line of the same corresponding move.
+
+Therefore, even though move 3 in both sequences are the same move, they will not merge until move 3.5.
+Can assign move 3 of the second line a "transposition_child_id" that references move 3.5 of the first line.
+
+Reordering the lines requires recalculating the child ID.
+
+
+---
+
+Or store the top-most FEN and corresponding move ID per move number and dynamically calculate parent/child relationships at runtime.
+
+---
+ID calc:
+
+Ruby:
+	require "digest"
+
+	hash = Digest::MD5.hexdigest "10:10:d4"
+	uuid = ([hash[0, 8], hash[8, 4], hash[12, 4], hash[16, 4], hash[20..-1]]).join("-")
+
+	# 00b076e56b7f63b7ff5705d115d622e9
+	# 00b076e5-6b7f-63b7-ff57-05d115d622e9
+
+TypeScript:
+	import * as crypto from "crypto";
+
+	let hash = crypto.createHash("md5").update("10:10:d4").digest("hex");
+	let uuid = [
+		hash.substr(0, 8),
+		hash.substr(8, 4),
+		hash.substr(12, 4),
+		hash.substr(16, 4),
+		hash.substr(20, 12)
+	].join("-");
+
+	// 00b076e5-6b7f-63b7-ff57-05d115d622e9
