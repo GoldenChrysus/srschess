@@ -1,0 +1,6 @@
+/* 47px is the height of each Ant accordion header */
+/* 2.75rem is the height of the site header */
+#chess-right-menu .ant-collapse-content {
+	max-height: calc(100vh - 47px - 47px - 2.75rem - 500px);
+	overflow-y: auto;
+}

@@ -6,6 +6,7 @@ import { useQuery, useMutation } from "@apollo/client";
 
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
+import "../../../styles/components/chess/left-menu/repertoires.css";
 
 import AddRepertoire from "./AddRepertoire";
 import { TFunction } from "i18next";

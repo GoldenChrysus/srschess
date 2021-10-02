@@ -29,6 +29,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	componentDidUpdate(prev_props: ChessControllerProps) {
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
+			this.chess.reset();
 			this.setState(initial_state);
 
 			this.chunk_limit = 5;

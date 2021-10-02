@@ -1,13 +1,13 @@
 import React from "react";
 import { Translation } from "react-i18next";
+import { TFunction } from "i18next";
 import { Collapse } from "antd";
 
 import { ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 import Tree from "../Tree";
 import Repertoires from "./left-menu/Repertoires";
 
-import "../../styles/chess/repertoires.css";
-import { TFunction } from "i18next";
+import "../../styles/components/chess/left-menu.css";
 
 interface LeftMenuProps {
 	client: ChessControllerProps["client"],

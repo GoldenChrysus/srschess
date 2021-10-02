@@ -7,6 +7,8 @@ import MoveList from "./MoveList";
 import Repertoire from "./right-menu/Repertoire";
 import { ApolloClient } from "@apollo/client";
 
+import "../../styles/components/chess/right-menu.css";
+
 interface RightMenuProps {
 	client: ApolloClient<object>,
 	active_num?: ChessControllerState["last_num"],

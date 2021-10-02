@@ -5,6 +5,8 @@ import { GET_MOVE } from "../api/queries";
 import { ChessControllerProps, ChessControllerState } from "../lib/types/ChessControllerTypes";
 import Branch from "./tree/Branch";
 
+import "../styles/components/tree.css";
+
 interface TreeProps {
 	client       : ApolloClient<object>,
 	repertoire   : ChessControllerProps["repertoire"],

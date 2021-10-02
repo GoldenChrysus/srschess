@@ -2,6 +2,8 @@ import { move } from "chessground/draw";
 import React, { EventHandler, MouseEventHandler } from "react";
 import { ChessControllerHistoryItem } from "../../../lib/types/ChessControllerTypes";
 
+import "../../../styles/components/chess/move-list/move.css";
+
 interface MoveProps {
 	index: number,
 	white?: ChessControllerHistoryItem,

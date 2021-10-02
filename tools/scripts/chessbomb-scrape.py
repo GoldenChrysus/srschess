@@ -51,7 +51,7 @@ def getGame(room_slug, round, game_slug):
 	return res.json()
 
 after     = None
-last_run  = "2021-09-26T14:00:00.000Z";
+last_run  = "2021-09-30T18:00:00.000Z";
 last_run  = datetime.strptime(last_run, date_fmt)
 valid_res = [
 	"1/2-1/2",

@@ -2,8 +2,14 @@
 	// Use IntelliSense to learn about possible attributes.
 	// Hover to view descriptions of existing attributes.
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
+	"version": "2.0.0",
 	"configurations": [
+		{
+			"name": "Launch Rails",
+			"type": "node-terminal",
+			"request": "launch",
+			"command": "cd api && rails s",
+		},
 		{
 			"name": "Launch React",
 			"type": "node-terminal",
@@ -25,6 +31,7 @@
 		{
 			"name": "SRS Chess Front Debug",
 			"configurations": [
+				"Launch Rails",
 				"Launch React",
 				"Launch Chrome"
 			]

@@ -3,6 +3,7 @@ import { Translation } from "react-i18next";
 import { Switch } from "antd";
 
 import ChessState from "../../../stores/ChessState";
+import "../../../styles/components/chess/move-list/stockfish.css";
 
 declare global {
 	interface Window {

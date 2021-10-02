@@ -2,6 +2,7 @@ import React from "react";
 import { ChessControllerHistoryItem, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
 import { GET_MOVE } from "../../api/queries";
+import "../../styles/components/chess/move-list.css";
 
 import Move from "./move-list/Move";
 import Stockfish from "./move-list/Stockfish";

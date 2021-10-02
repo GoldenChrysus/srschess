@@ -7,7 +7,7 @@ import ChessgroundBoard from "./chess/ChessgroundBoard";
 import Piece from "./chess/Piece";
 
 import "react-chessground/dist/styles/chessground.css";
-import "../styles/chess/chessboard.css";
+import "../styles/components/chessboard.css";
 
 type ChessType = (fen?: string) => ChessInstance;
 
