@@ -24,6 +24,10 @@ class TestChannel < ApplicationCable::Channel
 		end
 	end
 
+	def unsubscribed
+		puts "unsub"
+	end
+
 	def receive(message)
 		puts message
 		puts @@subber
