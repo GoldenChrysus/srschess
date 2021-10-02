@@ -7,7 +7,7 @@ import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import "firebaseui/dist/firebaseui.css";
 
 import AuthState from "../stores/AuthState";
-import { CREATE_USER, GET_REPERTOIRE, GET_REPERTOIRES } from "../api/queries";
+import { CREATE_USER, GET_REPERTOIRE, GET_REPERTOIRES, GET_REPERTOIRE_LESSONS } from "../api/queries";
 
 function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 	const app = initializeApp({
@@ -34,10 +34,7 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 		client
 			.mutate({
 				mutation       : CREATE_USER,
-				refetchQueries : [
-					GET_REPERTOIRE,
-					GET_REPERTOIRES
-				],
+				refetchQueries : "active",
 				variables : {
 					email : user.email,
 					uid   : user.uid

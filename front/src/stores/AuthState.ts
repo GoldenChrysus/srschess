@@ -23,7 +23,7 @@ class AuthState {
 	}
 
 	logout() {
-		this.uid   = "";
+		this.uid = "";
 		this.token = "";
 
 		this.updateLinkConnection();
