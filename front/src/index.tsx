@@ -27,6 +27,7 @@ const client         = new ApolloClient({
 	cache : new InMemoryCache()
 });
 
+AuthState.provideClient(client);
 AuthState.provideLink(cable_link);
 FirebaseAuth(client);
 i18n.setDefaultNamespace("common");

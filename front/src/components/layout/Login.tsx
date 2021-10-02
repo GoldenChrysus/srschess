@@ -39,6 +39,12 @@ class Login extends React.Component<LoginProps, LoginState> {
 	}
 
 	login() {
+		const name_input = document.querySelector("[for=ui-sign-in-name-input]");
+
+		if (name_input) {
+			name_input.innerHTML = "Display name";
+		}
+
 		this.setState({
 			modal_visible : !this.state.modal_visible
 		});

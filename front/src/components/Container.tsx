@@ -1,8 +1,10 @@
 import React from "react";
+import { observer } from "mobx-react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import AuthState from "../stores/AuthState";
+
 import MainLayout from "./MainLayout";
-import Chessboard from "./Chessboard";
 import RepertoireRoute from "../routes/RepertoireRoute";
 
 class Container extends React.Component {
@@ -32,4 +34,4 @@ class Container extends React.Component {
 	}
 }
 
-export default Container;
+export default observer(Container);

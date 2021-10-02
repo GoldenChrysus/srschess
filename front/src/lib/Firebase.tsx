@@ -1,13 +1,13 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, EmailAuthProvider } from "firebase/auth";
+import { getAuth, EmailAuthProvider, setPersistence, browserLocalPersistence, User } from "firebase/auth";
 import { auth as FirebaseUIAuth } from "firebaseui";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 import "firebaseui/dist/firebaseui.css";
 
 import AuthState from "../stores/AuthState";
-import { CREATE_USER, GET_REPERTOIRES } from "../api/queries";
+import { CREATE_USER, GET_REPERTOIRE, GET_REPERTOIRES } from "../api/queries";
 
 function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 	const app = initializeApp({
@@ -19,43 +19,57 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 		appId             : process.env.REACT_APP_FIREBASE_APP,
 		measurementId     : process.env.REACT_APP_FIREBASE_MEASUREMENT
 	});
-	const ui = new FirebaseUIAuth.AuthUI(getAuth(app));
+	const auth = getAuth(app);
 
-	ui.start(
-		"#firebase-auth",
-		{
-			signInOptions : [
-				EmailAuthProvider.PROVIDER_ID
-			],
-			callbacks: {
-				signInSuccessWithAuthResult: (result) => {
-					AuthState.setData(result.user.uid, result.user.accessToken);
+	const handleAuth = (res: User | any | null, from_ui?: boolean) => {
+		const user = (from_ui) ? res.user : res;
 
-					client
-						.mutate({
-							mutation       : CREATE_USER,
-							refetchQueries : [
-								GET_REPERTOIRES
-							],
-							variables : {
-								email : result.user.email,
-								uid   : result.user.uid
-							}
-						})
-						.then(() => {
-							// All good
-						})
-						.catch((err) => {
-							// TODO: Revoke the session
-							console.error(err);
-						});
-
-					return false;
-				},
-				uiShown: () => {}
-			}
+		if (!user) {
+			AuthState.logout();
+			return false;
 		}
-	);
+
+		AuthState.login(user.uid, user.accessToken);
+
+		client
+			.mutate({
+				mutation       : CREATE_USER,
+				refetchQueries : [
+					GET_REPERTOIRE,
+					GET_REPERTOIRES
+				],
+				variables : {
+					email : user.email,
+					uid   : user.uid
+				}
+			})
+			.then(() => {
+				// All good
+			})
+			.catch((err) => {
+				// TODO: Revoke the session
+				console.error(err);
+			});
+	};
+
+	auth.onAuthStateChanged(handleAuth);
+
+	setPersistence(auth, browserLocalPersistence)
+		.then(() => {
+			const ui = new FirebaseUIAuth.AuthUI(getAuth(app));
+
+			ui.start(
+				"#firebase-auth",
+				{
+					signInOptions : [
+						EmailAuthProvider.PROVIDER_ID
+					]
+				}
+			);
+		})
+		.catch((err) => {
+			console.error(err);
+		});
 }
 
 export default FirebaseAuth;

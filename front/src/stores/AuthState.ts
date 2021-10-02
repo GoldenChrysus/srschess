@@ -1,28 +1,31 @@
 import { makeAutoObservable } from "mobx";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
+import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 class AuthState {
 	authenticated: boolean = false;
 	uid: string = "";
 	token: string = "";
 	link?: ActionCableLink = undefined;
+	client?: ApolloClient<NormalizedCacheObject> = undefined;
 
 	constructor() {
 		makeAutoObservable(this);
+		this.updateLinkConnection();
+	}
 
-		this.token = localStorage.getItem("firebase-token") || "";
-		this.uid   = localStorage.getItem("firebase-uid") || "";
+	login(uid: string, token: string) {
+		this.uid   = uid;
+		this.token = token;
 
 		this.updateLinkConnection();
 		this.updateAuthenticated();
 	}
 
-	setData(uid: string, token: string) {
-		this.uid   = uid;
-		this.token = token;
+	logout() {
+		this.uid   = "";
+		this.token = "";
 
-		localStorage.setItem("firebase-token", this.token);
-		localStorage.setItem("firebase-uid", this.uid);
 		this.updateLinkConnection();
 		this.updateAuthenticated();
 	}
@@ -39,6 +42,10 @@ class AuthState {
 		this.link.connectionParams = {
 			token : this.token
 		};
+	}
+
+	provideClient(client: ApolloClient<NormalizedCacheObject>) {
+		this.client = client;
 	}
 
 	provideLink(link: ActionCableLink) {
