@@ -40,7 +40,8 @@ export interface ChessControllerState {
 	moves        : Array<string>,
 	history      : Array<ChessControllerHistoryItem>,
 	queue_index  : number,
-	preloading   : boolean
+	preloading   : boolean,
+	quizzing     : boolean
 }
 
 export const initial_state: ChessControllerState = {
@@ -51,5 +52,6 @@ export const initial_state: ChessControllerState = {
 	moves       : [],
 	history     : [],
 	queue_index : 0,
-	preloading  : true
+	preloading  : true,
+	quizzing    : false
 };

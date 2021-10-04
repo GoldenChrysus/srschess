@@ -22,7 +22,8 @@ interface ChessboardProps {
 	pgn?: string,
 	onMove: Function,
 	children: Array<any>
-	queue_item: { [key: string] : any } | undefined | null
+	queue_item: { [key: string] : any } | undefined | null,
+	quizzing: boolean
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
@@ -38,7 +39,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	shouldComponentUpdate(next_props: ChessboardProps) {
-		if (this.props.fen !== next_props.fen) {
+		if (this.props.fen !== next_props.fen || this.props.quizzing) {
 			this.fen = next_props.fen || START_FEN;
 			this.pgn = next_props.pgn || START_FEN;
 
@@ -58,7 +59,8 @@ class Chessboard extends React.Component<ChessboardProps> {
 			next_props.orientation !== this.props.orientation ||
 			next_props.repertoire_id !== this.props.repertoire_id ||
 			next_props.queue_item?.id !== this.props.queue_item?.id ||
-			next_props.mode !== this.props.mode
+			next_props.mode !== this.props.mode ||
+			this.props.quizzing
 		);
 	}
 
@@ -95,7 +97,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 				break;
 
 			case "lesson":
-				if (!this.props.queue_item) {
+				if (!this.props.queue_item || this.props.quizzing) {
 					break;
 				}
 
@@ -157,8 +159,10 @@ class Chessboard extends React.Component<ChessboardProps> {
 		this.fen = this.chess.fen();
 		this.pgn = this.chess.pgn();
 
+		const mode = (this.props.mode === "lesson" && this.props.quizzing) ? "review" : this.props.mode;
+
 		this.props.onMove({
-			type  : "move-" + this.props.mode,
+			type  : "move-" + mode,
 			uci   : orig + dest,
 			data  : {
 				fen   : this.fen,
@@ -183,22 +187,15 @@ class Chessboard extends React.Component<ChessboardProps> {
 		
 		switch (this.props.mode) {
 			case "repertoire":
-				if (this.props.orientation) {
-					this.chess.SQUARES.forEach(s => {
-						const ms = this.chess.moves({
-							square  : s,
-							verbose : true
-						});
-
-						if (ms.length) {
-							dests.set(s, ms.map(m => m.to));
-						}
-					});
-				}
-
+				this.buildRealDests(dests);
 				break;
 
 			case "lesson":
+				if (this.props.quizzing) {
+					this.buildRealDests(dests);
+					break;
+				}
+
 				if (!this.props.queue_item) {
 					break;
 				}
@@ -211,9 +208,24 @@ class Chessboard extends React.Component<ChessboardProps> {
 		}
 
 		return {
-			free: false,
-			dests: dests
+			free  : false,
+			dests : dests
 		};
+	}
+
+	buildRealDests(dests: any) {
+		if (this.props.orientation) {
+			this.chess.SQUARES.forEach(s => {
+				const ms = this.chess.moves({
+					square  : s,
+					verbose : true
+				});
+
+				if (ms.length) {
+					dests.set(s, ms.map(m => m.to));
+				}
+			});
+		}
 	}
 
 	onDraw(shapes: any) {

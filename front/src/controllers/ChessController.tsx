@@ -57,6 +57,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						onMove={this.reducer}
 						children={children}
 						queue_item={(this.state.preloading) ? null : queue_item}
+						quizzing={this.state.quizzing}
 					/>
 				</div>
 				<LeftMenu
@@ -91,7 +92,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			return;
 		}
 
-		const move = (this.chunk.length) ? this.chunk[0] : this.props.repertoire?.lessonQueue![this.state.queue_index];
+		const move = (this.state.quizzing) ? this.chunk[0] : this.props.repertoire?.lessonQueue![this.state.queue_index];
 
 		if (!move) {
 			return;
@@ -243,17 +244,24 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 					this.preloaded_moves = [];
 
-					this.setState({
-						fen        : initial_state.fen,
-						pgn        : initial_state.pgn,
-						history    : initial_state.history,
-						moves      : initial_state.moves,
-						last_num   : initial_state.last_num,
-						preloading : true
-					});
+					setTimeout(
+						() => {
+							this.setState({
+								fen        : initial_state.fen,
+								pgn        : initial_state.pgn,
+								history    : initial_state.history,
+								moves      : initial_state.moves,
+								last_num   : initial_state.last_num,
+								preloading : true,
+								quizzing   : true
+							});
+							this.progressQueue();
+						},
+						500
+					);
 				} else {
 					this.chess.move(last_move);
-					this.preloaded_moves.push(new_state.moves.at(-1));
+					this.preloaded_moves.push(last_move);
 					this.setState({
 						queue_index : this.state.queue_index + 1,
 						fen         : new_state.fen,
@@ -263,12 +271,36 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						last_num    : move_num,
 						preloading  : true
 					});
+					this.progressQueue();
 				}
-
-				this.progressQueue();
 				break;
 
-			case "move-quiz":
+			case "move-review":
+				const review_move = this.chunk[0];
+
+				if (review_move.move !== last_move) {
+					// shake board
+					// log attempt for real reviews
+					this.setState(this.state);
+					break;
+				}
+
+				// send review to server
+
+				this.chunk = this.chunk.slice(1);
+
+				this.chess.move(last_move);
+				this.preloaded_moves.push(new_state.moves.at(-1));
+				this.setState({
+					fen        : new_state.fen,
+					pgn        : new_state.pgn,
+					history    : this.buildQueueHistory(new_state),
+					moves      : new_state.moves,
+					last_num   : move_num,
+					preloading : true,
+					quizzing   : (this.chunk.length > 0 && this.props.mode === "lesson")
+				});
+				this.progressQueue();
 				break;
 
 			case "move-repertoire":
