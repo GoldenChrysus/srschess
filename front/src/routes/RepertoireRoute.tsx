@@ -5,6 +5,7 @@ import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
+import { RepertoireMoveModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 
 interface RepertoireRouteProps {
 	mode: ChessControllerProps["mode"]
@@ -88,13 +89,17 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		});
 	}
 
-	const setTransposition = function(current_uuid: string, prev_uuid: string) {
+	const setTransposition = function(current_uuid: RepertoireMoveModel["id"], prev_uuid: RepertoireMoveModel["id"]) {
 		transposeMove({
 			variables : {
 				id              : prev_uuid,
 				transpositionId : current_uuid
 			}
 		});
+	}
+
+	const createReview = function(review: RepertoireReviewModel) {
+
 	}
 
 	return (

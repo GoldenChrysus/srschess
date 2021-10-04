@@ -1,3 +1,11 @@
+export interface RepertoireReviewModel {
+	move_id?: string,
+	incorrectAttempts: number,
+	attempts: number,
+	averageIncorrectAttemptTime: number,
+	averageAttemptTime: number
+}
+
 export interface RepertoireMoveModel {
 	id: string,
 	fen: string,
