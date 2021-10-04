@@ -3,6 +3,7 @@ import Chess, { ChessInstance } from "chess.js";
 
 import { GET_MOVE } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
+import { RepertoireLessonItemModel } from "../lib/types/models/Repertoire";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
@@ -14,9 +15,10 @@ const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
-	private chess                          = Chess2();
-	private chunk_limit                    = 5;
-	private preloaded_moves: Array<string> = [];
+	private chess                                   = Chess2();
+	private chunk_limit                             = 5;
+	private chunk: Array<RepertoireLessonItemModel> = [];
+	private preloaded_moves: Array<string>          = [];
 
 	constructor(props: ChessControllerProps) {
 		super(props);
@@ -89,7 +91,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			return;
 		}
 
-		const move = this.props.repertoire?.lessonQueue![this.state.queue_index];
+		const move = (this.chunk.length) ? this.chunk[0] : this.props.repertoire?.lessonQueue![this.state.queue_index];
 
 		if (!move) {
 			return;
@@ -232,18 +234,41 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				break;
 
 			case "move-lesson":
-				this.setState({
-					queue_index : this.state.queue_index + 1,
-					fen         : new_state.fen,
-					pgn         : new_state.pgn,
-					history     : this.buildQueueHistory(new_state),
-					moves       : new_state.moves,
-					last_num    : move_num,
-					preloading  : true
-				});
-				this.chess.move(last_move);
-				this.preloaded_moves.push(new_state.moves.at(-1));
+				let queue = this.props.repertoire?.lessonQueue!;
+
+				this.chunk.push(queue[this.state.queue_index]);
+
+				if (this.chunk.length === this.chunk_limit || this.state.queue_index === (queue.length - 1)) {
+					this.chess.reset();
+
+					this.preloaded_moves = [];
+
+					this.setState({
+						fen        : initial_state.fen,
+						pgn        : initial_state.pgn,
+						history    : initial_state.history,
+						moves      : initial_state.moves,
+						last_num   : initial_state.last_num,
+						preloading : true
+					});
+				} else {
+					this.chess.move(last_move);
+					this.preloaded_moves.push(new_state.moves.at(-1));
+					this.setState({
+						queue_index : this.state.queue_index + 1,
+						fen         : new_state.fen,
+						pgn         : new_state.pgn,
+						history     : this.buildQueueHistory(new_state),
+						moves       : new_state.moves,
+						last_num    : move_num,
+						preloading  : true
+					});
+				}
+
 				this.progressQueue();
+				break;
+
+			case "move-quiz":
 				break;
 
 			case "move-repertoire":

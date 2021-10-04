@@ -1,4 +1,4 @@
-export interface RepertoireRouteMove {
+export interface RepertoireMoveModel {
 	id: string,
 	fen: string,
 	uci: string,
@@ -9,7 +9,7 @@ export interface RepertoireRouteMove {
 	transpositionId?: string | null,
 }
 
-export interface RepertoireRouteLessonItem {
+export interface RepertoireLessonItemModel {
 	id: string,
 	parentId: string | null,
 	move: string,
@@ -17,11 +17,11 @@ export interface RepertoireRouteLessonItem {
 	movelist: string
 }
 
-export interface RepertoireRouteRepertoire {
+export interface RepertoireModel {
 	id: number,
 	name: string,
 	side: string,
-	moves?: Array<RepertoireRouteMove> | null,
+	moves?: Array<RepertoireMoveModel> | null,
 	lessonQueueLength?: number,
-	lessonQueue?: Array<RepertoireRouteLessonItem>
+	lessonQueue?: Array<RepertoireLessonItemModel>
 }

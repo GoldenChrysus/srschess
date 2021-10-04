@@ -1,7 +1,7 @@
 import { ApolloClient } from "@apollo/client";
 import Chess, { ChessInstance } from "chess.js";
 import { START_FEN } from "../constants/chess";
-import { RepertoireRouteRepertoire } from "./RepertoireRouteTypes";
+import { RepertoireModel } from "./models/Repertoire";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -23,8 +23,8 @@ export enum ChessControllerModes {
 
 export interface ChessControllerProps {
 	mode            : keyof typeof ChessControllerModes,
-	repertoire?     : RepertoireRouteRepertoire,
-	repertoires?    : Array<RepertoireRouteRepertoire>,
+	repertoire?     : RepertoireModel,
+	repertoires?    : Array<RepertoireModel>,
 	client          : ApolloClient<object>,
 	onMove          : Function,
 	onTransposition : Function,

@@ -1,8 +1,8 @@
 import { makeAutoObservable } from "mobx";
-import { RepertoireRouteRepertoire } from "../lib/types/RepertoireRouteTypes";
+import { RepertoireModel } from "../lib/types/models/Repertoire";
 
 interface ChessStateTypes {
-	repertoire: RepertoireRouteRepertoire
+	repertoire: RepertoireModel
 }
 
 class ChessState {
