@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_05_020253) do
+ActiveRecord::Schema.define(version: 2021_10_05_044359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -49,6 +49,17 @@ ActiveRecord::Schema.define(version: 2021_10_05_020253) do
 # Could not dump table "repertoires" because of following StandardError
 #   Unknown type 'side' for column 'side'
 
+  create_table "reviews", force: :cascade do |t|
+    t.bigint "learned_item_id", null: false
+    t.integer "incorrect_attempts"
+    t.integer "attempts"
+    t.float "average_correct_time"
+    t.float "average_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["learned_item_id"], name: "index_reviews_on_learned_item_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -61,4 +72,5 @@ ActiveRecord::Schema.define(version: 2021_10_05_020253) do
   add_foreign_key "moves", "moves", column: "transposition_id"
   add_foreign_key "moves", "repertoires"
   add_foreign_key "repertoires", "users"
+  add_foreign_key "reviews", "learned_items"
 end

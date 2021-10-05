@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  learned_item: one
+  incorrect_attempts: 1
+  attempts: 1
+  average_correct_time: 1.5
+  average_total_time: 1.5
+
+two:
+  learned_item: two
+  incorrect_attempts: 1
+  attempts: 1
+  average_correct_time: 1.5
+  average_total_time: 1.5

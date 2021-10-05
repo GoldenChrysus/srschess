@@ -17,13 +17,14 @@ class LearnedItem < ApplicationRecord
 	validates :move, presence: true, uniqueness: true
 
 	# Relationships
-	belongs_to :move
+	belongs_to :move, required: true
+	has_many :reviews
 
 	# Callbacks
 	before_validation :set_initial_data, on: :create
 
 	def complete_review(data)
-		incorrect_attempts = data["incorrectAttempts"]
+		incorrect_attempts = data[:incorrect_attempts]
 		current_level      = self.level
 		new_level          = 1
 
@@ -47,9 +48,9 @@ class LearnedItem < ApplicationRecord
 		review_data = {
 			:learned_item         => self,
 			:incorrect_attempts   => incorrect_attempts,
-			:attempts             => data["attempts"],
-			:average_correct_time => data["averageCorrectAttemptTime"].to_f.round,
-			:average_total_time   => data["averageAttemptTime"].to_f.round
+			:attempts             => data[:attempts:],
+			:average_correct_time => data[:average_correct_time].to_f.round,
+			:average_time         => data[:average_time].to_f.round
 		}
 
 		Review.create(review_data)
