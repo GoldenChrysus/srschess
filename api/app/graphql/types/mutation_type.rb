@@ -11,5 +11,8 @@ module Types
 
 		# /transpose_move
 		field :transpose_move, mutation: Types::Mutations::TransposeMove
+
+		# /create_review
+		field :create_review, mutation: Types::Mutations::CreateReview
 	end
 end

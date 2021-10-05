@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
-import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
@@ -42,6 +42,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	const [ transposeMove ] = useMutation(TRANSPOSE_MOVE, {
 		refetchQueries : [ main_query ]
 	});
+	const [ createReview ] = useMutation(CREATE_REVIEW);
 	const { loading, error, data } = useQuery(
 		main_query,
 		{
@@ -99,8 +100,10 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		});
 	}
 
-	const createReview = function(review: RepertoireReviewModel) {
-
+	const doReview = function(review: RepertoireReviewModel) {
+		createReview({
+			variables : review
+		});
 	}
 
 	return (
@@ -113,6 +116,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 					client={client}
 					onMove={addMove}
 					onTransposition={setTransposition}
+					onReview={doReview}
 					arrows={arrows}
 				/>
 			}

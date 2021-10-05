@@ -123,3 +123,20 @@ export const TRANSPOSE_MOVE = gql`
 		}
 	}
 `;
+
+export const CREATE_REVIEW = gql`
+	mutation CreateReview($moveId: String!, $incorrectAttempts: Int!, $attempts: Int!, $averageCorrectTime: Float!, $averageTime: Float!) {
+		createReview(input: {
+			moveId: $moveId,
+			incorrectAttempts: $incorrectAttempts,
+			attempts: $attempts,
+			averageCorrectTime: $averageCorrectTime,
+			averageTime: $averageTime,
+		}) {
+			learnedItem {
+				id
+			}
+			errors
+		}
+	}
+`;

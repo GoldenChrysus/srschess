@@ -1,5 +1,5 @@
 export interface RepertoireReviewModel {
-	move_id?: string,
+	moveId?: string,
 	incorrectAttempts: number,
 	attempts: number,
 	averageCorrectTime: number,

@@ -3,7 +3,7 @@ import Chess, { ChessInstance } from "chess.js";
 
 import { GET_MOVE } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
-import { RepertoireLessonItemModel } from "../lib/types/models/Repertoire";
+import { RepertoireLessonItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
@@ -15,10 +15,11 @@ const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
-	private chess                                   = Chess2();
-	private chunk_limit                             = 5;
-	private chunk: Array<RepertoireLessonItemModel> = [];
-	private preloaded_moves: Array<string>          = [];
+	private chess                                         = Chess2();
+	private chunk_limit                                   = 5;
+	private chunk: Array<RepertoireLessonItemModel>       = [];
+	private preloaded_moves: Array<string>                = [];
+	private reviews: { [id: string]: RepertoireReviewModel } = {};
 
 	constructor(props: ChessControllerProps) {
 		super(props);
@@ -277,15 +278,46 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 			case "move-review":
 				const review_move = this.chunk[0];
+				const correct     = (review_move.move === last_move);
 
-				if (review_move.move !== last_move) {
+				if (!this.reviews[review_move.id]) {
+					this.reviews[review_move.id] = {
+						moveId             : review_move.id,
+						incorrectAttempts  : 0,
+						attempts           : 0,
+						averageCorrectTime : 0.0,
+						averageTime        : 0.0
+					};
+				}
+
+				this.reviews[review_move.id].attempts += 1;
+
+				if (!correct) {
 					// shake board
-					// log attempt for real reviews
+
+					this.reviews[review_move.id].incorrectAttempts += 1;
+
+					this.reviews[review_move.id].averageTime = (
+						(
+							(this.reviews[review_move.id].averageTime * (this.reviews[review_move.id].attempts - 1)) +
+							action.time
+						) /
+						this.reviews[review_move.id].attempts
+					);
+
 					this.setState(this.state);
 					break;
 				}
 
-				// send review to server
+				const correct_attempts = this.reviews[review_move.id].attempts - this.reviews[review_move.id].incorrectAttempts;
+
+				this.reviews[review_move.id].averageCorrectTime = (
+					(
+						(this.reviews[review_move.id].averageCorrectTime * (correct_attempts- 1)) +
+						action.time
+					) /
+					correct_attempts
+				);
 
 				this.chunk = this.chunk.slice(1);
 
@@ -301,6 +333,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					quizzing   : (this.chunk.length > 0 && this.props.mode === "lesson")
 				});
 				this.progressQueue();
+				this.props.onReview(this.reviews[review_move.id]);
 				break;
 
 			case "move-repertoire":

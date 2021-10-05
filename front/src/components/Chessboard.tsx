@@ -30,6 +30,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 	private chess        = Chess2();
 	private fen?: string = START_FEN;
 	private pgn?: string = "";
+	private time: number = 0.0;
 
 	constructor(props: ChessboardProps) {
 		super(props);
@@ -110,6 +111,10 @@ class Chessboard extends React.Component<ChessboardProps> {
 				break;
 		}
 
+		if (this.props.mode === "review" || this.props.quizzing) {
+			this.time = new Date().getTime();
+		}
+
 		return (
 			<>
 				<div className="piece-store w-full" style={{ height: "25px" }}>
@@ -156,6 +161,8 @@ class Chessboard extends React.Component<ChessboardProps> {
 			return false;
 		}
 
+		const time = (new Date()).getTime() - this.time;
+
 		this.fen = this.chess.fen();
 		this.pgn = this.chess.pgn();
 
@@ -164,6 +171,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 		this.props.onMove({
 			type  : "move-" + mode,
 			uci   : orig + dest,
+			time  : time,
 			data  : {
 				fen   : this.fen,
 				pgn   : this.pgn,

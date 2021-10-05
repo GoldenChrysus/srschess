@@ -48,7 +48,7 @@ class LearnedItem < ApplicationRecord
 		review_data = {
 			:learned_item         => self,
 			:incorrect_attempts   => incorrect_attempts,
-			:attempts             => data[:attempts:],
+			:attempts             => data[:attempts],
 			:average_correct_time => data[:average_correct_time].to_f.round,
 			:average_time         => data[:average_time].to_f.round
 		}

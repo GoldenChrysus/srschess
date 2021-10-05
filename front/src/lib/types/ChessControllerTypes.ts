@@ -28,6 +28,7 @@ export interface ChessControllerProps {
 	client          : ApolloClient<object>,
 	onMove          : Function,
 	onTransposition : Function,
+	onReview        : Function,
 	arrows          : { [key: string]: Array<any> }
 }
 

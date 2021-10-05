@@ -1,7 +1,7 @@
 module Types
 	module Mutations
 		class CreateReview < BaseMutation
-			argument :move_id, ID, required: true
+			argument :move_id, String, required: true
 			argument :incorrect_attempts, Integer, required: true
 			argument :attempts, Integer, required: true
 			argument :average_correct_time, Float, required: true
