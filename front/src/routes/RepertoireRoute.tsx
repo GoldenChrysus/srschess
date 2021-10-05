@@ -11,7 +11,7 @@ interface RepertoireRouteProps {
 	mode: ChessControllerProps["mode"]
 }
 interface RepertoireRouteParams {
-	id?: string
+	slug?: string
 }
 
 // TODO:
@@ -35,7 +35,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			break;
 	}
 
-	const { id } = useParams<RepertoireRouteParams>();
+	const { slug } = useParams<RepertoireRouteParams>();
 	const [ createMove ] = useMutation(CREATE_MOVE, {
 		refetchQueries : [ main_query ]
 	});
@@ -46,9 +46,10 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		main_query,
 		{
 			variables : {
-				id : id
+				slug : slug
 			},
-			skip : !id
+			skip        : !slug,
+			fetchPolicy : (props.mode === "lesson") ? "network-only" : "cache-first"
 		}
 	);
 

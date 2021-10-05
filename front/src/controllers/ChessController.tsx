@@ -77,7 +77,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					moves={this.state.history}
 					fen={this.state.fen}
 					mode={this.props.mode}
-					repertoire_id={this.props.repertoire?.id}
+					repertoire_slug={this.props.repertoire?.slug}
 					repertoire_name={this.props.repertoire?.name}
 					lesson_count={this.props.repertoire?.lessonQueueLength ?? this.props.repertoire?.lessonQueue?.length}
 					review_count={0}

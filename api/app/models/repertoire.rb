@@ -14,6 +14,9 @@ class Repertoire < ApplicationRecord
 	belongs_to :user, required: true
 	has_many :moves, -> { order("move_number ASC, sort ASC") }
 
+	# Callbacks
+	after_validation :set_slug, on: :create
+
 	def lesson_queue
 		params = {
 			:repertoire_id => self.id
@@ -93,4 +96,26 @@ class Repertoire < ApplicationRecord
 	def lesson_queue_length
 		return self.lesson_queue.length
 	end
+
+	def self.slug_exists?(slug)
+		record = self.where({ slug: slug }).first
+
+		return (record != nil)
+	end
+
+	private
+		def generate_slug
+			nonce_len = 4
+			nonce     = Digest::SHA256.hexdigest(SecureRandom.uuid)[0..(nonce_len - 1)]
+			
+			return (self.name.gsub(/[^A-Za-z\d ]/, "")[0..(255 - nonce_len - 2)] + " " + nonce).gsub(" ", "-").downcase
+		end
+
+		def set_slug
+			loop do
+				self.slug = self.generate_slug()
+
+				break if (!self.class.slug_exists?(self.id))
+			end
+		end
 end

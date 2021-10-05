@@ -3,10 +3,10 @@ module Types
 		class Repertoire < Types::BaseQuery
 			# /repertoire
 			type Types::Models::RepertoireType, null: false
-			argument :id, ID, required: true
+			argument :slug, String, required: true
 			
-			def resolve(id:)
-				repertoire = ::Repertoire.find(id)
+			def resolve(slug:)
+				repertoire = ::Repertoire.where({ slug: slug }).first
 
 				authorize repertoire, :show?
 				repertoire

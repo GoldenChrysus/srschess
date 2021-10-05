@@ -18,13 +18,13 @@ class Container extends React.Component {
 								Hello<br/>
 							</div>
 						</Route>
-						<Route exact path="/repertoires/:id?">
+						<Route exact path="/repertoires/:slug?">
 							<RepertoireRoute mode="repertoire"/>
 						</Route>
-						<Route exact path="/lessons/:id?">
+						<Route exact path="/lessons/:slug?">
 							<RepertoireRoute mode="lesson"/>
 						</Route>
-						<Route exact path="/reviews/:id?">
+						<Route exact path="/reviews/:slug?">
 							<RepertoireRoute mode="review"/>
 						</Route>
 					</Switch>

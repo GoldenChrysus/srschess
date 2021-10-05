@@ -22,6 +22,7 @@ export const CREATE_REPERTOIRE = gql`
 		}) {
 			repertoire {
 				id
+				slug
 			}
 			errors
 		}
@@ -29,9 +30,10 @@ export const CREATE_REPERTOIRE = gql`
 `;
 
 export const GET_REPERTOIRE = gql`
-	query Repertoire($id: ID!) {
-		repertoire(id: $id) {
+	query Repertoire($slug: String!) {
+		repertoire(slug: $slug) {
 			id
+			slug
 			name
 			side
 			lessonQueueLength
@@ -50,8 +52,8 @@ export const GET_REPERTOIRE = gql`
 `;
 
 export const GET_REPERTOIRE_LESSONS = gql`
-	query Repertoire($id: ID!) {
-		repertoire(id: $id) {
+	query Repertoire($slug: String!) {
+		repertoire(slug: $slug) {
 			id
 			name
 			side
@@ -70,6 +72,7 @@ export const GET_REPERTOIRES = gql`
 	query Repertoires {
 		repertoires {
 			id
+			slug
 			name
 			side
 		}

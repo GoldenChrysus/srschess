@@ -73,7 +73,7 @@ function renderRepertoires(data: any, color: string, t: TFunction) {
 
 		items.push(
 			<Menu.Item key={"repertoire-" + repertoire.id}>
-				<Link to={{ pathname: "/repertoires/" + repertoire.id }}>
+				<Link to={{ pathname: "/repertoires/" + repertoire.slug }}>
 					{repertoire.name}
 				</Link>
 			</Menu.Item>

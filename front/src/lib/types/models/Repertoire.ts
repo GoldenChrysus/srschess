@@ -2,7 +2,7 @@ export interface RepertoireReviewModel {
 	move_id?: string,
 	incorrectAttempts: number,
 	attempts: number,
-	averageIncorrectAttemptTime: number,
+	averageCorrectAttemptTime: number,
 	averageAttemptTime: number
 }
 
@@ -27,6 +27,7 @@ export interface RepertoireLessonItemModel {
 
 export interface RepertoireModel {
 	id: number,
+	slug?: string,
 	name: string,
 	side: string,
 	moves?: Array<RepertoireMoveModel> | null,

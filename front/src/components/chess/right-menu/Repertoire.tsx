@@ -6,7 +6,7 @@ import { TFunction } from "i18next";
 
 interface RepertoireProps {
 	name?: string,
-	id?: number,
+	slug?: string,
 	lesson_count?: number
 	review_count?: number
 	mode: string
@@ -22,7 +22,7 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 	}
 
 	componentDidUpdate(prev_props: RepertoireProps) {
-		if (prev_props.id !== this.props.id) {
+		if (prev_props.slug !== this.props.slug) {
 			this.updateLessonCount();
 		}
 	}
@@ -68,10 +68,10 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 			case "repertoire":
 				return (
 					<>
-						<Link to={{pathname: "/lessons/" + this.props.id}}>
+						<Link to={{pathname: "/lessons/" + this.props.slug}}>
 							<Button className="mr-2" type="primary">{t("train")} ({lesson_count})</Button>
 						</Link>
-						<Link to={{pathname: "/reviews/" + this.props.id}}>
+						<Link to={{pathname: "/reviews/" + this.props.slug}}>
 							<Button className="mr-2" type="default">{t("review")} ({review_count})</Button>
 						</Link>
 						<Button type="ghost">{t("common:edit")}</Button>
