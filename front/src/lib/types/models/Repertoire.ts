@@ -23,7 +23,7 @@ export interface RepertoireQueueItemModel {
 	move: string,
 	uci: string,
 	movelist: string,
-	similarMovelist?: string | null
+	similarMoves?: string | null
 }
 
 export interface RepertoireModel {

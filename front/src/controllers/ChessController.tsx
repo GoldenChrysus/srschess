@@ -364,8 +364,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				if (!correct) {
 					let pseudo_correct = false;
 
-					if (this.props.mode === "review" && review_move.similarMovelist) {
-						pseudo_correct = review_move.similarMovelist.split(",").includes(last_move);
+					if (this.props.mode === "review" && review_move.similarMoves) {
+						pseudo_correct = review_move.similarMoves.split(",").includes(last_move);
 					}
 
 					// shake board
@@ -380,6 +380,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 							) /
 							this.reviews[review_move.id].attempts
 						);
+					} else {
+						this.reviews[review_move.id].attempts -= 1;
 					}
 
 					this.setState(this.state);

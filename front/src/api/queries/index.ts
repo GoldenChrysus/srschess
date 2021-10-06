@@ -83,6 +83,7 @@ export const GET_REPERTOIRE_REVIEWS = gql`
 				move
 				uci
 				movelist
+				similarMoves
 			}
 		}
 	}
