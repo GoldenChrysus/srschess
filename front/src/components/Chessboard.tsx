@@ -27,19 +27,24 @@ interface ChessboardProps {
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
-	private chess        = Chess2();
-	private fen?: string = START_FEN;
-	private pgn?: string = "";
-	private time: number = 0.0;
+	private chess            = Chess2();
+	private last_orientation = "white";
+	private fen?: string     = START_FEN;
+	private pgn?: string     = "";
+	private time: number     = 0.0;
 
 	constructor(props: ChessboardProps) {
 		super(props);
 
 		this.onMove = this.onMove.bind(this);
 		this.onDraw = this.onDraw.bind(this);
+
+		this.last_orientation = props.orientation ?? this.last_orientation;
 	}
 
 	shouldComponentUpdate(next_props: ChessboardProps) {
+		this.last_orientation = next_props.orientation ?? this.last_orientation;
+
 		if (this.props.fen !== next_props.fen || this.props.quizzing || (this.props.queue_item !== next_props.queue_item) || this.props.mode === "review") {
 			this.fen = next_props.fen || START_FEN;
 			this.pgn = next_props.pgn || START_FEN;
@@ -121,7 +126,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 				</div>
 				<ChessgroundBoard
 					check={this.checkColor()}
-					orientation={this.props.orientation || "white"}
+					orientation={this.props.orientation || this.last_orientation}
 					turn_color={this.toColor()}
 					movable={this.toDests()}
 					fen={this.props.fen}
