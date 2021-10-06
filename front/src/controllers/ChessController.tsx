@@ -40,7 +40,9 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
-			this.chunk_limit = 5;
+			this.chunk_limit     = 5;
+			this.progressing     = false;
+			this.preloaded_moves = [""];
 
 			this.chess.reset();
 			this.setOriginalQueue();
