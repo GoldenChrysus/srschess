@@ -40,7 +40,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	shouldComponentUpdate(next_props: ChessboardProps) {
-		if (this.props.fen !== next_props.fen || this.props.quizzing) {
+		if (this.props.fen !== next_props.fen || this.props.quizzing || (this.props.queue_item !== next_props.queue_item) || this.props.mode === "review") {
 			this.fen = next_props.fen || START_FEN;
 			this.pgn = next_props.pgn || START_FEN;
 
@@ -60,8 +60,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 			next_props.orientation !== this.props.orientation ||
 			next_props.repertoire_id !== this.props.repertoire_id ||
 			next_props.queue_item?.id !== this.props.queue_item?.id ||
-			next_props.mode !== this.props.mode ||
-			this.props.quizzing
+			next_props.mode !== this.props.mode
 		);
 	}
 
@@ -195,6 +194,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 		
 		switch (this.props.mode) {
 			case "repertoire":
+			case "review":
 				this.buildRealDests(dests);
 				break;
 

@@ -3,7 +3,7 @@ import Chess, { ChessInstance } from "chess.js";
 
 import { GET_MOVE } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
-import { RepertoireLessonItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
+import { RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
@@ -15,11 +15,18 @@ const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
-	private chess                                         = Chess2();
-	private chunk_limit                                   = 5;
-	private chunk: Array<RepertoireLessonItemModel>       = [];
-	private preloaded_moves: Array<string>                = [];
+	private chess = Chess2();
+
+	private original_queue: Array<RepertoireQueueItemModel> = [];
+	private chunk: Array<RepertoireQueueItemModel>          = [];
+	private chunk_limit                                     = 5;
+
 	private reviews: { [id: string]: RepertoireReviewModel } = {};
+	private correct_answers                                  = 0;
+
+	private needs_reset: boolean           = false;
+	private progressing: boolean           = false;
+	private preloaded_moves: Array<string> = [""];
 
 	constructor(props: ChessControllerProps) {
 		super(props);
@@ -30,20 +37,68 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		this.onMoveClick = this.onMoveClick.bind(this);
 	}
 
-	componentDidUpdate(prev_props: ChessControllerProps) {
+	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
+			this.chunk_limit     = 5;
+			this.correct_answers = 0;
+
 			this.chess.reset();
+			this.setOriginalQueue();
 			this.setState(initial_state);
-
-			this.chunk_limit = 5;
-
 			this.progressQueue();
+			return;
+		}
+
+		if (["review", "lesson"].includes(this.props.mode)) {
+			if (this.needs_reset) {
+				this.needs_reset = false;
+
+				this.chess.reset();
+
+				this.preloaded_moves = [""];
+
+				setTimeout(
+					() => {
+						this.setState({
+							fen        : initial_state.fen,
+							pgn        : initial_state.pgn,
+							history    : initial_state.history,
+							moves      : initial_state.moves,
+							last_num   : initial_state.last_num,
+							preloading : true,
+							quizzing   : true
+						});
+					},
+					500
+				);
+				return;
+			}
+
+			const queue = this.props.repertoire?.lessonQueue ?? this.props.repertoire?.reviewQueue;
+
+			if (this.original_queue === undefined || (queue && this.original_queue.length < queue.length)) {
+				this.setOriginalQueue();
+				this.progressQueue();
+				return;
+			}
+
+			if (
+				this.state.preloading !== prev_state.preloading ||
+				this.state.fen !== prev_state.fen ||
+				this.state.queue_index !== prev_state.queue_index ||
+				this.state.quizzing !== prev_state.quizzing ||
+				this.state.quizzing
+			) {
+				if (!this.progressing && !this.state.awaiting_user) {
+					this.progressQueue();
+				}
+			}
 		}
 	}
 
 	render() {
 		const children   = (this.state.last_uuid) ? this.props.arrows[this.state.last_uuid] || [] : this.props.arrows["root"] || [];
-		const queue_item = (this.props.mode === "lesson") ? this.props.repertoire?.lessonQueue![this.state.queue_index] : null;
+		const queue_item = (this.props.mode === "lesson" && this.original_queue) ? this.original_queue[this.state.queue_index] : null;
 
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">
@@ -57,7 +112,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						repertoire_id={this.props.repertoire?.id}
 						onMove={this.reducer}
 						children={children}
-						queue_item={(this.state.preloading) ? null : queue_item}
+						queue_item={(this.state.awaiting_user) ? queue_item : null}
 						quizzing={this.state.quizzing}
 					/>
 				</div>
@@ -80,29 +135,47 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					mode={this.props.mode}
 					repertoire_slug={this.props.repertoire?.slug}
 					repertoire_name={this.props.repertoire?.name}
-					lesson_count={this.props.repertoire?.lessonQueueLength ?? this.props.repertoire?.lessonQueue?.length}
-					review_count={0}
+					lesson_count={this.props.repertoire?.lessonQueueLength ?? (this.original_queue?.length ?? 0) - this.correct_answers}
+					review_count={this.props.repertoire?.reviewQueueLength ?? (this.original_queue?.length ?? 0) - this.correct_answers}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>
 		);
 	}
 
+	setOriginalQueue() {
+		if (this.props.mode === "review") {
+			this.original_queue = this.props.repertoire?.reviewQueue!;
+			this.chunk          = this.props.repertoire?.reviewQueue!;
+		} else if (this.props.mode === "lesson") {
+			this.original_queue = this.props.repertoire?.lessonQueue!;
+			this.chunk          = [];
+		}
+	}
+
 	progressQueue() {
-		if (this.props.mode !== "lesson") {
+		if (this.progressing || !["review", "lesson"].includes(this.props.mode)) {
 			return;
 		}
 
-		const move = (this.state.quizzing) ? this.chunk[0] : this.props.repertoire?.lessonQueue![this.state.queue_index];
+		this.progressing = true;
+
+		const move = (this.state.quizzing || this.props.mode === "review")
+			? ((this.chunk && this.chunk.length) ? this.chunk[0] : null)
+			: ((this.original_queue) ? this.original_queue[this.state.queue_index] : null);
 
 		if (!move) {
+			this.progressing = false;
+
 			return;
 		}
 
 		let pre_moves      = JSON.parse(move.movelist).slice(0, -1);
 		let pre_move_index = -1;
 
-		if (pre_moves.slice(0, -1).join(":") === this.preloaded_moves.join(":")) {
+		if (pre_moves.join(":") === this.preloaded_moves.join(":")) {
+			pre_moves = [];
+		} else if (pre_moves.slice(0, -1).join(":") === this.preloaded_moves.join(":")) {
 			pre_moves = pre_moves.slice(-1);
 		} else {
 			this.preloaded_moves = [];
@@ -127,10 +200,12 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 					const history = this.chess.history();
 
+					this.progressing = (pre_move_index !== (pre_moves.length - 1));
+
 					this.reducer({
 						type  : "queue-premove",
 						data  : {
-							preloading : (pre_move_index !== (pre_moves.length - 1)),
+							preloading : this.progressing,
 							pgn        : this.chess.pgn(),
 							fen        : this.chess.fen(),
 							moves      : history,
@@ -141,8 +216,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				500
 			);
 		} else {
+			this.progressing = false;
+
 			this.setState({
-				preloading : false
+				preloading    : false,
+				awaiting_user : true
 			});
 		}
 	}
@@ -236,43 +314,34 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				break;
 
 			case "move-lesson":
-				let queue = this.props.repertoire?.lessonQueue!;
+				this.chunk.push(this.original_queue[this.state.queue_index]);
+				this.chess.move(last_move);
+				this.preloaded_moves.push(last_move);
 
-				this.chunk.push(queue[this.state.queue_index]);
+				this.progressing = false;
 
-				if (this.chunk.length === this.chunk_limit || this.state.queue_index === (queue.length - 1)) {
-					this.chess.reset();
+				if (this.chunk.length === this.chunk_limit || this.state.queue_index >= (this.original_queue.length - 1)) {
+					this.needs_reset = true;
 
-					this.preloaded_moves = [];
-
-					setTimeout(
-						() => {
-							this.setState({
-								fen        : initial_state.fen,
-								pgn        : initial_state.pgn,
-								history    : initial_state.history,
-								moves      : initial_state.moves,
-								last_num   : initial_state.last_num,
-								preloading : true,
-								quizzing   : true
-							});
-							this.progressQueue();
-						},
-						500
-					);
-				} else {
-					this.chess.move(last_move);
-					this.preloaded_moves.push(last_move);
 					this.setState({
-						queue_index : this.state.queue_index + 1,
-						fen         : new_state.fen,
-						pgn         : new_state.pgn,
-						history     : this.buildQueueHistory(new_state),
-						moves       : new_state.moves,
-						last_num    : move_num,
-						preloading  : true
+						awaiting_user : false,
+						fen           : new_state.fen,
+						pgn           : new_state.pgn,
+						history       : this.buildQueueHistory(new_state),
+						moves         : new_state.moves,
+						last_num      : move_num,
+						preloading    : false
 					});
-					this.progressQueue();
+				} else {
+					this.setState({
+						awaiting_user : false,
+						queue_index   : this.state.queue_index + 1,
+						fen           : new_state.fen,
+						pgn           : new_state.pgn,
+						history       : this.buildQueueHistory(new_state),
+						moves         : new_state.moves,
+						last_num      : move_num
+					});
 				}
 				break;
 
@@ -293,21 +362,31 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				this.reviews[review_move.id].attempts += 1;
 
 				if (!correct) {
+					let pseudo_correct = false;
+
+					if (this.props.mode === "review" && review_move.similarMovelist) {
+						pseudo_correct = review_move.similarMovelist.split(",").includes(last_move);
+					}
+
 					// shake board
 
-					this.reviews[review_move.id].incorrectAttempts += 1;
+					if (!pseudo_correct) {
+						this.reviews[review_move.id].incorrectAttempts += 1;
 
-					this.reviews[review_move.id].averageTime = (
-						(
-							(this.reviews[review_move.id].averageTime * (this.reviews[review_move.id].attempts - 1)) +
-							action.time
-						) /
-						this.reviews[review_move.id].attempts
-					);
+						this.reviews[review_move.id].averageTime = (
+							(
+								(this.reviews[review_move.id].averageTime * (this.reviews[review_move.id].attempts - 1)) +
+								action.time
+							) /
+							this.reviews[review_move.id].attempts
+						);
+					}
 
 					this.setState(this.state);
 					break;
 				}
+
+				this.correct_answers += 1;
 
 				const correct_attempts = this.reviews[review_move.id].attempts - this.reviews[review_move.id].incorrectAttempts;
 
@@ -321,18 +400,21 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 				this.chunk = this.chunk.slice(1);
 
+				const quizzing = (this.chunk.length > 0 && this.props.mode === "lesson");
+
 				this.chess.move(last_move);
 				this.preloaded_moves.push(new_state.moves.at(-1));
 				this.setState({
-					fen        : new_state.fen,
-					pgn        : new_state.pgn,
-					history    : this.buildQueueHistory(new_state),
-					moves      : new_state.moves,
-					last_num   : move_num,
-					preloading : true,
-					quizzing   : (this.chunk.length > 0 && this.props.mode === "lesson")
+					awaiting_user : false,
+					preloading    : false,
+					fen           : new_state.fen,
+					pgn           : new_state.pgn,
+					history       : this.buildQueueHistory(new_state),
+					moves         : new_state.moves,
+					last_num      : move_num,
+					quizzing      : quizzing,
+					queue_index   : (quizzing) ? this.state.queue_index : this.state.queue_index + 1
 				});
-				this.progressQueue();
 				this.props.onReview(this.reviews[review_move.id]);
 				break;
 

@@ -33,26 +33,28 @@ export interface ChessControllerProps {
 }
 
 export interface ChessControllerState {
-	fen          : string,
-	pgn          : string,
-	last_num     : number,
-	last_uuid    : string | null,
-	last_is_new? : boolean,
-	moves        : Array<string>,
-	history      : Array<ChessControllerHistoryItem>,
-	queue_index  : number,
-	preloading   : boolean,
-	quizzing     : boolean
+	fen           : string,
+	pgn           : string,
+	last_num      : number,
+	last_uuid     : string | null,
+	last_is_new?  : boolean,
+	moves         : Array<string>,
+	history       : Array<ChessControllerHistoryItem>,
+	queue_index   : number,
+	preloading    : boolean,
+	quizzing      : boolean,
+	awaiting_user : boolean
 }
 
 export const initial_state: ChessControllerState = {
-	fen         : START_FEN,
-	pgn         : "",
-	last_num    : 5,
-	last_uuid   : null,
-	moves       : [],
-	history     : [],
-	queue_index : 0,
-	preloading  : true,
-	quizzing    : false
+	fen           : START_FEN,
+	pgn           : "",
+	last_num      : 5,
+	last_uuid     : null,
+	moves         : [],
+	history       : [],
+	queue_index   : 0,
+	preloading    : false,
+	quizzing      : false,
+	awaiting_user : true
 };

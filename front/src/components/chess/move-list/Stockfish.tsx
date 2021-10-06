@@ -4,6 +4,7 @@ import { Switch } from "antd";
 
 import ChessState from "../../../stores/ChessState";
 import "../../../styles/components/chess/move-list/stockfish.css";
+import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 
 declare global {
 	interface Window {
@@ -12,6 +13,7 @@ declare global {
 }
 
 interface StockfishProps {
+	mode: ChessControllerProps["mode"],
 	fen: string,
 	num?: number
 }
@@ -44,6 +46,12 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		if (prev_props.fen !== this.props.fen) {
 			this.runEval();
 		}
+
+		if (prev_props.mode !== this.props.mode) {
+			if (["review", "lesson"].includes(this.props.mode)) {
+				this.toggle(false);
+			}
+		}
 	}
 
 	componentWillUnmount() {
@@ -69,7 +77,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 											<p>{(this.state.depth && this.state.enabled) ? t("depth") + ": " + this.state.depth + "/20" : t("waiting")}</p>
 										</div>
 										<div key="stockfish-switch-container" className="flex justify-end items-center col-span-3">
-											<Switch onChange={this.toggle}/>
+											<Switch checked={this.state.enabled} disabled={["review", "lesson"].includes(this.props.mode)} onChange={this.toggle}/>
 										</div>
 									</>
 								)
@@ -88,6 +96,8 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 
 		if (enabled) {
 			this.runEval(true);
+		} else {
+			ChessState.setBestMove("");
 		}
 	}
 

@@ -17,12 +17,13 @@ export interface RepertoireMoveModel {
 	transpositionId?: string | null,
 }
 
-export interface RepertoireLessonItemModel {
+export interface RepertoireQueueItemModel {
 	id: string,
 	parentId: string | null,
 	move: string,
 	uci: string,
-	movelist: string
+	movelist: string,
+	similarMovelist?: string | null
 }
 
 export interface RepertoireModel {
@@ -32,5 +33,7 @@ export interface RepertoireModel {
 	side: string,
 	moves?: Array<RepertoireMoveModel> | null,
 	lessonQueueLength?: number,
-	lessonQueue?: Array<RepertoireLessonItemModel>
+	lessonQueue?: Array<RepertoireQueueItemModel>,
+	reviewQueueLength?: number,
+	reviewQueue?: Array<RepertoireQueueItemModel>
 }

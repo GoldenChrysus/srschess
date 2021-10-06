@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
-import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW, GET_REPERTOIRE_REVIEWS } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
@@ -31,6 +31,11 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 
 		case "lesson":
 			main_query = GET_REPERTOIRE_LESSONS;
+
+			break;
+
+		case "review":
+			main_query = GET_REPERTOIRE_REVIEWS;
 
 			break;
 	}

@@ -7,6 +7,7 @@ module Types
 				field :move, String, null: false
 				field :uci, String, null: false
 				field :movelist, String, null: false
+				field :similar_moves, String, null: true
 			end
 
 			field :id, ID, null: false
@@ -17,6 +18,8 @@ module Types
 			field :side, String, null: false
 			field :lesson_queue, [QueueItem], null: true
 			field :lesson_queue_length, Int, null: true
+			field :review_queue, [QueueItem], null: true
+			field :review_queue_length, Int, null: true
 
 			# Relationships
 			field :user, Types::Models::UserType, null: true

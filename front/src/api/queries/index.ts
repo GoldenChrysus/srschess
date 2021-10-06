@@ -37,6 +37,7 @@ export const GET_REPERTOIRE = gql`
 			name
 			side
 			lessonQueueLength
+			reviewQueueLength
 			moves {
 				id
 				fen
@@ -55,9 +56,28 @@ export const GET_REPERTOIRE_LESSONS = gql`
 	query Repertoire($slug: String!) {
 		repertoire(slug: $slug) {
 			id
+			slug
 			name
 			side
 			lessonQueue {
+				id
+				parentId
+				move
+				uci
+				movelist
+			}
+		}
+	}
+`;
+
+export const GET_REPERTOIRE_REVIEWS = gql`
+	query Repertoire($slug: String!) {
+		repertoire(slug: $slug) {
+			id
+			slug
+			name
+			side
+			reviewQueue {
 				id
 				parentId
 				move

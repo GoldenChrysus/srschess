@@ -14,21 +14,26 @@ interface RepertoireProps {
 
 class Repertoire extends React.PureComponent<RepertoireProps> {
 	original_lesson_count = 0;
+	original_review_count = 0;
 
 	constructor(props: RepertoireProps) {
 		super(props);
 
-		this.updateLessonCount();
+		this.updateQueueCounts();
 	}
 
 	componentDidUpdate(prev_props: RepertoireProps) {
-		if (prev_props.slug !== this.props.slug) {
-			this.updateLessonCount();
+		if (prev_props.slug !== this.props.slug ||
+			(this.props.lesson_count ?? 0) > (prev_props.lesson_count ?? 0) ||
+			(this.props.review_count ?? 0) > (prev_props.lesson_count ?? 0)
+		) {
+			this.updateQueueCounts();
 		}
 	}
 
-	updateLessonCount() {
+	updateQueueCounts() {
 		this.original_lesson_count = this.props.lesson_count ?? 0;
+		this.original_review_count = this.props.review_count ?? 0;
 	}
 
 	render() {
@@ -52,7 +57,8 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 
 		switch (this.props.mode) {
 			case "lesson":
-				t_key = "lessons";
+			case "review":
+				t_key = this.props.mode + "s";
 
 				break;
 		}
@@ -80,8 +86,13 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 
 			case "lesson":
 				return (
-					<Progress percent={(this.original_lesson_count - lesson_count) / this.original_lesson_count * 100}/>
-				)
+					<Progress percent={Math.round((this.original_lesson_count - lesson_count) / this.original_lesson_count * 100)}/>
+				);
+
+			case "review":
+				return (
+					<Progress percent={Math.round((this.original_review_count - review_count) / this.original_review_count * 100)}/>
+				);
 		}
 	}
 }

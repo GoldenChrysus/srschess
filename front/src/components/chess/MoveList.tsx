@@ -1,5 +1,5 @@
 import React from "react";
-import { ChessControllerHistoryItem, ChessControllerState } from "../../lib/types/ChessControllerTypes";
+import { ChessControllerHistoryItem, ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
 import { GET_MOVE } from "../../api/queries";
 import "../../styles/components/chess/move-list.css";
@@ -10,6 +10,7 @@ import { ApolloClient } from "@apollo/client";
 
 interface MoveListProps {
 	client: ApolloClient<object>,
+	mode: ChessControllerProps["mode"],
 	active_num?: ChessControllerState["last_num"],
 	fen: string,
 	moves: ChessControllerState["history"],
@@ -21,6 +22,7 @@ class MoveList extends React.Component<MoveListProps> {
 		return (
 			next_props.fen !== this.props.fen ||
 			next_props.active_num !== this.props.active_num ||
+			next_props.mode !== this.props.mode ||
 			JSON.stringify(next_props.moves) !== JSON.stringify(this.props.moves)
 		);
 	}
@@ -28,7 +30,7 @@ class MoveList extends React.Component<MoveListProps> {
 	render() {
 		return (
 			<>
-				<Stockfish fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>
+				<Stockfish mode={this.props.mode} fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>
 				<div key="movelist" id="movelist" className="max-w-full md:max-w-sm">
 					{this.props.moves?.map((move, i, moves) => this.renderListMove(move, i, moves))}
 				</div>
