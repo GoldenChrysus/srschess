@@ -3,11 +3,13 @@ import Chess, { ChessInstance } from "chess.js";
 
 import { GET_MOVE } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
-import { RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
+import { RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
 import { generateUUID } from "../helpers";
+import RepertoireStore from "../stores/RepertoireStore";
+import { observer } from "mobx-react";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -22,7 +24,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	private chunk_limit                                     = 5;
 
 	private reviews: { [id: string]: RepertoireReviewModel } = {};
-	private correct_answers                                  = 0;
 
 	private needs_reset: boolean           = false;
 	private progressing: boolean           = false;
@@ -39,8 +40,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
-			this.chunk_limit     = 5;
-			this.correct_answers = 0;
+			this.chunk_limit = 5;
 
 			this.chess.reset();
 			this.setOriginalQueue();
@@ -133,10 +133,9 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					moves={this.state.history}
 					fen={this.state.fen}
 					mode={this.props.mode}
+					repertoire_id={this.props.repertoire?.id}
 					repertoire_slug={this.props.repertoire?.slug}
 					repertoire_name={this.props.repertoire?.name}
-					lesson_count={this.props.repertoire?.lessonQueueLength ?? (this.original_queue?.length ?? 0) - this.correct_answers}
-					review_count={this.props.repertoire?.reviewQueueLength ?? (this.original_queue?.length ?? 0) - this.correct_answers}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>
@@ -388,7 +387,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					break;
 				}
 
-				this.correct_answers += 1;
+				RepertoireStore.reduceQueue(this.props.repertoire?.id, this.props.mode);
 
 				const correct_attempts = this.reviews[review_move.id].attempts - this.reviews[review_move.id].incorrectAttempts;
 
@@ -491,4 +490,4 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 }
 
-export default ChessController;
+export default observer(ChessController);

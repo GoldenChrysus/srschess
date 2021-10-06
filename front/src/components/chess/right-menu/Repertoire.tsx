@@ -1,14 +1,16 @@
 import React from "react";
+import { Observer, observer } from "mobx-react";
 import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { Collapse, Button, Progress } from "antd";
 import { TFunction } from "i18next";
+import RepertoireStore from "../../../stores/RepertoireStore";
+import { RepertoireModel } from "../../../lib/types/models/Repertoire";
 
 interface RepertoireProps {
 	name?: string,
+	id?: number,
 	slug?: string,
-	lesson_count?: number
-	review_count?: number
 	mode: string
 }
 
@@ -23,17 +25,24 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 	}
 
 	componentDidUpdate(prev_props: RepertoireProps) {
+		const repertoire = RepertoireStore.get(this.props.id);
+
 		if (prev_props.slug !== this.props.slug ||
-			(this.props.lesson_count ?? 0) > (prev_props.lesson_count ?? 0) ||
-			(this.props.review_count ?? 0) > (prev_props.lesson_count ?? 0)
+			prev_props.id !== this.props.id ||
+			(repertoire?.lessonQueueLength ?? 0) > (this.original_lesson_count) ||
+			(repertoire?.reviewQueueLength ?? 0) > (this.original_review_count)
 		) {
-			this.updateQueueCounts();
+			this.updateQueueCounts(repertoire);
 		}
 	}
 
-	updateQueueCounts() {
-		this.original_lesson_count = this.props.lesson_count ?? 0;
-		this.original_review_count = this.props.review_count ?? 0;
+	updateQueueCounts(repertoire?: RepertoireModel) {
+		if (!repertoire) {
+			repertoire = RepertoireStore.get(this.props.id);
+		}
+
+		this.original_lesson_count = repertoire?.lessonQueueLength ?? 0;
+		this.original_review_count = repertoire?.reviewQueueLength ?? 0;
 	}
 
 	render() {
@@ -41,11 +50,15 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 			<Translation ns={["repertoires", "common"]}>
 				{
 					(t) => (
-						<Collapse bordered={false} activeKey="repertoire-panel">
-							<Collapse.Panel showArrow={false} id="repertoire-panel" header={this.getTitle(t)} key="repertoire-panel">
-								{this.renderContent(t)}
-							</Collapse.Panel>
-						</Collapse>
+						<Observer>
+							{() => (
+								<Collapse bordered={false} activeKey="repertoire-panel">
+									<Collapse.Panel showArrow={false} id="repertoire-panel" header={this.getTitle(t)} key="repertoire-panel">
+										{this.renderContent(t)}
+									</Collapse.Panel>
+								</Collapse>
+							)}
+						</Observer>
 					)
 				}
 			</Translation>
@@ -67,8 +80,9 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 	}
 
 	renderContent(t: TFunction) {
-		const lesson_count = this.props.lesson_count ?? 0;
-		const review_count = this.props.review_count ?? 0;
+		const repertoire   = RepertoireStore.get(this.props.id);
+		const lesson_count = repertoire?.lessonQueueLength ?? 0;
+		const review_count = repertoire?.reviewQueueLength ?? 0;;
 
 		switch (this.props.mode) {
 			case "repertoire":
@@ -97,4 +111,4 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 	}
 }
 
-export default Repertoire;
+export default observer(Repertoire);

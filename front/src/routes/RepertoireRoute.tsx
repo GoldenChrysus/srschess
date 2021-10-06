@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
 import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW, GET_REPERTOIRE_REVIEWS } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
-import { RepertoireMoveModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
+import { RepertoireModel, RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
+import RepertoireStore from "../stores/RepertoireStore";
 
 interface RepertoireRouteProps {
 	mode: ChessControllerProps["mode"]
@@ -22,6 +23,8 @@ interface RepertoireRouteParams {
 
 function RepertoireRoute(props: RepertoireRouteProps) {
 	let main_query = GET_REPERTOIRE;
+
+	const prev_data = useRef<RepertoireQueryData | undefined>();
 
 	switch (props.mode) {
 		case "repertoire":
@@ -48,7 +51,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		refetchQueries : [ main_query ]
 	});
 	const [ createReview ] = useMutation(CREATE_REVIEW);
-	const { loading, error, data } = useQuery(
+	const { loading, error, data } = useQuery<RepertoireQueryData>(
 		main_query,
 		{
 			variables : {
@@ -58,6 +61,14 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			fetchPolicy : (props.mode === "lesson") ? "network-only" : "cache-first"
 		}
 	);
+
+	useEffect(() => {
+		if (data?.repertoire && data.repertoire.id !== prev_data?.current?.repertoire?.id) {
+			RepertoireStore.add(data.repertoire);
+		}
+
+		prev_data.current = data;
+	});
 
 	const fens: { [key: string]: string } = {};
 	const arrows: { [key: string]: Array<any> } = {};
@@ -86,7 +97,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		createMove({
 			variables : {
 				id           : move_data.id,
-				repertoireId : data?.repertoire.id,
+				repertoireId : data?.repertoire?.id,
 				moveNumber   : move_data.move_num,
 				move         : move_data.move,
 				fen          : move_data.fen,

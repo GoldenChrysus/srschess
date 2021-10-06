@@ -37,3 +37,11 @@ export interface RepertoireModel {
 	reviewQueueLength?: number,
 	reviewQueue?: Array<RepertoireQueueItemModel>
 }
+
+export interface RepertoireQueryData {
+	repertoire: RepertoireModel | null
+}
+
+export interface RepertoiresQueryData {
+	repertoires: Array<RepertoireModel>
+}

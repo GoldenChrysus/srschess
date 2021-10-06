@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Observer } from "mobx-react";
 import { Translation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Menu, Spin, Button } from "antd";
@@ -10,6 +11,8 @@ import "../../../styles/components/chess/left-menu/repertoires.css";
 
 import AddRepertoire from "./AddRepertoire";
 import { TFunction } from "i18next";
+import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
+import RepertoireStore from "../../../stores/RepertoireStore";
 
 interface RepertoiresProps {
 	active_id?: number,
@@ -21,7 +24,7 @@ function Repertoires(props: RepertoiresProps) {
 	const [ createRepertoire ] = useMutation(CREATE_REPERTOIRE, {
 		refetchQueries : [ GET_REPERTOIRES ]
 	});
-	const { loading, error, data } = useQuery(
+	const { loading, error, data } = useQuery<RepertoiresQueryData>(
 		GET_REPERTOIRES
 	);
 
@@ -37,20 +40,24 @@ function Repertoires(props: RepertoiresProps) {
 			<Translation ns="repertoires">
 				{
 					(t) => (
-						<Menu
-							id="repertoire-menu"
-							mode="inline"
-							defaultOpenKeys={["white-repertoires", "black-repertoires"]}
-							selectedKeys={[ "repertoire-" + props.active_id, "repertoire-" + props.mode + "s-" + props.active_id ]}
-						>
-							<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
-							<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
-								{renderRepertoires(data, "white", t)}
-							</Menu.SubMenu>
-							<Menu.SubMenu title={t("black_repertoires")} key="black-repertoires">
-								{renderRepertoires(data, "black", t)}
-							</Menu.SubMenu>
-						</Menu>
+						<Observer>
+							{() => (
+								<Menu
+									id="repertoire-menu"
+									mode="inline"
+									defaultOpenKeys={["white-repertoires", "black-repertoires"]}
+									selectedKeys={[ "repertoire-" + props.active_id, "repertoire-" + props.mode + "s-" + props.active_id ]}
+								>
+									<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
+									<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
+										{renderRepertoires(data, "white", t)}
+									</Menu.SubMenu>
+									<Menu.SubMenu title={t("black_repertoires")} key="black-repertoires">
+										{renderRepertoires(data, "black", t)}
+									</Menu.SubMenu>
+								</Menu>
+							)}
+						</Observer>
 					)
 				}
 			</Translation>
@@ -59,7 +66,7 @@ function Repertoires(props: RepertoiresProps) {
 	);
 }
 
-function renderRepertoires(data: any, color: string, t: TFunction) {
+function renderRepertoires(data: RepertoiresQueryData | undefined, color: string, t: TFunction) {
 	if (!data) {
 		return null;
 	}
@@ -71,10 +78,15 @@ function renderRepertoires(data: any, color: string, t: TFunction) {
 			continue;
 		}
 
+		RepertoireStore.add(repertoire);
+
+		const store_repertoire = RepertoireStore.get(repertoire.id);
+
 		items.push(
 			<Menu.Item key={"repertoire-" + repertoire.id}>
 				<Link to={{ pathname: "/repertoires/" + repertoire.slug }}>
 					{repertoire.name}
+					{store_repertoire?.lessonQueueLength ?? 0}
 				</Link>
 			</Menu.Item>
 		);

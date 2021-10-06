@@ -23,7 +23,7 @@ export enum ChessControllerModes {
 
 export interface ChessControllerProps {
 	mode            : keyof typeof ChessControllerModes,
-	repertoire?     : RepertoireModel,
+	repertoire?     : RepertoireModel | null,
 	repertoires?    : Array<RepertoireModel>,
 	client          : ApolloClient<object>,
 	onMove          : Function,
@@ -56,5 +56,5 @@ export const initial_state: ChessControllerState = {
 	queue_index   : 0,
 	preloading    : false,
 	quizzing      : false,
-	awaiting_user : true
+	awaiting_user : false
 };

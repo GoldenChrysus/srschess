@@ -96,6 +96,8 @@ export const GET_REPERTOIRES = gql`
 			slug
 			name
 			side
+			lessonQueueLength
+			reviewQueueLength
 		}
 	}
 `;
