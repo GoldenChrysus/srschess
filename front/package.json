@@ -41,7 +41,8 @@
 		"start": "npm run build:css && env-cmd -e default react-scripts start",
 		"build": "NODE_ENV=production npm run build:css && env-cmd -e default react-scripts build",
 		"test": "env-cmd -e default react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"cy": "npx cypress run-ct --browser chrome"
 	},
 	"eslintConfig": {
 		"extends": [
@@ -68,6 +69,9 @@
 		]
 	},
 	"devDependencies": {
+		"@cypress/react": "^5.10.1",
+		"@cypress/snapshot": "^2.1.7",
+		"@cypress/webpack-dev-server": "^1.6.0",
 		"@types/chess.js": "^0.11.2",
 		"@types/jest": "^27.0.1",
 		"@types/node": "^16.9.0",
@@ -75,10 +79,14 @@
 		"@types/react-dom": "^17.0.9",
 		"@types/react-router-dom": "^5.1.8",
 		"autoprefixer": "^10.3.4",
+		"cypress": "^8.5.0",
+		"html-webpack-plugin": "^4.5.0",
 		"postcss": "^8.3.6",
 		"postcss-cli": "^8.3.1",
 		"postcss-import": "^14.0.2",
+		"react-test-renderer": "^17.0.2",
 		"tailwind-scrollbar": "^1.3.1",
-		"tailwindcss": "^2.2.15"
+		"tailwindcss": "^2.2.15",
+		"webpack": "^4.41.2"
 	}
 }

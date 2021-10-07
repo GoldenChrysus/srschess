@@ -1,5 +1,5 @@
 import React from "react";
-import Chess, { ChessInstance } from "chess.js";
+import ChessMaker from "../lib/ChessMaker";
 
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { START_FEN } from "../lib/constants/chess";
@@ -8,11 +8,6 @@ import Piece from "./chess/Piece";
 
 import "react-chessground/dist/styles/chessground.css";
 import "../styles/components/chessboard.css";
-
-type ChessType = (fen?: string) => ChessInstance;
-
-const ChessImport = Chess as unknown;
-const Chess2      = ChessImport as ChessType;
 
 interface ChessboardProps {
 	mode: ChessControllerProps["mode"],
@@ -27,7 +22,7 @@ interface ChessboardProps {
 }
 
 class Chessboard extends React.Component<ChessboardProps> {
-	private chess            = Chess2();
+	private chess            = ChessMaker.create();
 	private last_orientation = "white";
 	private fen?: string     = START_FEN;
 	private pgn?: string     = "";
@@ -40,6 +35,11 @@ class Chessboard extends React.Component<ChessboardProps> {
 		this.onDraw = this.onDraw.bind(this);
 
 		this.last_orientation = props.orientation ?? this.last_orientation;
+		this.fen              = props.fen || START_FEN;
+		this.pgn              = props.pgn || START_FEN;
+
+		this.chess.load(this.fen);
+		this.chess.load_pgn(this.pgn);
 	}
 
 	shouldComponentUpdate(next_props: ChessboardProps) {
@@ -51,6 +51,8 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 			this.chess.load(this.fen);
 			this.chess.load_pgn(this.pgn);
+
+			console.log(this.chess.pgn);
 			return true;
 		}
 
