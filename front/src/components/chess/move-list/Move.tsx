@@ -1,5 +1,6 @@
 import { move } from "chessground/draw";
 import React, { EventHandler, MouseEventHandler } from "react";
+import { getClientMoveNumFromIndex } from "../../../helpers";
 import { ChessControllerHistoryItem } from "../../../lib/types/ChessControllerTypes";
 
 import "../../../styles/components/chess/move-list/move.css";
@@ -17,7 +18,7 @@ class Move extends React.PureComponent<MoveProps> {
 		return (
 			<div key={"moveitem-item-" + this.props.index} className="grid grid-cols-12">
 				<div key={"movelist-item-num-" + this.props.index} className="text-center col-span-2 move-number py-1">
-					{Math.floor(this.props.index / 2) + 1}
+					{getClientMoveNumFromIndex(this.props.index)}
 				</div>
 				{this.getMoves()}
 			</div>

@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
 
-import { getMoveNumFromDB } from "../../helpers";
+import { getClientMoveNumFromDBMoveNum } from "../../helpers";
 
 interface LeafSpanProps {
 	move: any,
@@ -27,7 +27,7 @@ class LeafSpan extends React.Component<LeafSpanProps> {
 	render() {
 		const classes      = ["select-none transition cursor-pointer px-0.5 rounded-sm"];
 		const icon_classes = ["-ml-8 cursor-pointer mr-3 transform transition"];
-		const move_num     = getMoveNumFromDB(this.props.move.moveNumber, "... ", ". ", (this.props.start) ? undefined : "");
+		const move_num     = getClientMoveNumFromDBMoveNum(this.props.move.moveNumber, "... ", ". ", (this.props.start) ? undefined : "");
 
 		classes.push((this.props.active) ? "bg-green-600" : "hover:bg-blue-800");
 		classes.push((move_num.indexOf("...") !== -1 || move_num.indexOf(".") === -1) ? "mr-1.5" : "mr-0.5");

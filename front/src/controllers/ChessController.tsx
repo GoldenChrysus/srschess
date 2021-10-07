@@ -16,6 +16,30 @@ type ChessType = (fen?: string) => ChessInstance;
 const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
+interface ChessControllerLocalState {
+	original_queue: Array<RepertoireQueueItemModel>,
+	chunk: Array<RepertoireQueueItemModel>,
+	chunk_limit: number,
+
+	reviews: { [id: string]: RepertoireReviewModel },
+
+	needs_reset: boolean,
+	progressing: boolean,
+	preloaded_moves: Array<string>
+}
+
+const ChessControllerInitialLocalState: ChessControllerLocalState = {
+	original_queue : [],
+	chunk          : [],
+	chunk_limit    : 5,
+
+	reviews : {},
+
+	needs_reset     : false,
+	progressing     : false,
+	preloaded_moves : [""]
+}
+
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
 	private chess = Chess2();
 
