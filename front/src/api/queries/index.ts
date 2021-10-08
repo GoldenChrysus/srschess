@@ -135,16 +135,6 @@ export const GET_REPERTOIRE_FRAG = gql`
 		nextReview
 		lessonQueueLength
 		reviewQueueLength
-		moves {
-			id
-			fen
-			uci
-			moveNumber
-			move
-			sort
-			parentId
-			transpositionId
-		}
 	}
 `;
 

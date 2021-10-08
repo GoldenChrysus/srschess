@@ -18,31 +18,13 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 	original_lesson_count = 0;
 	original_review_count = 0;
 
-	constructor(props: RepertoireProps) {
-		super(props);
-
-		this.updateQueueCounts();
-	}
-
 	componentDidUpdate(prev_props: RepertoireProps) {
-		const repertoire = RepertoireStore.get(this.props.id);
-
 		if (prev_props.slug !== this.props.slug ||
-			prev_props.id !== this.props.id ||
-			(repertoire?.lessonQueueLength ?? 0) > (this.original_lesson_count) ||
-			(repertoire?.reviewQueueLength ?? 0) > (this.original_review_count)
+			prev_props.id !== this.props.id
 		) {
-			this.updateQueueCounts(repertoire);
+			this.original_review_count = 0;
+			this.original_review_count = 0;
 		}
-	}
-
-	updateQueueCounts(repertoire?: RepertoireModel) {
-		if (!repertoire) {
-			repertoire = RepertoireStore.get(this.props.id);
-		}
-
-		this.original_lesson_count = repertoire?.lessonQueueLength ?? 0;
-		this.original_review_count = repertoire?.reviewQueueLength ?? 0;
 	}
 
 	render() {
