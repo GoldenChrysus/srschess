@@ -19,7 +19,7 @@ base_data = {
 	"_csrf" : "ulI0kEd3-X2DeNpJEEadbaMXCM-krVdc-xhQ"
 }
 
-def getPage(after):
+def getPage(after, attempt = 0):
 	data = base_data
 
 	if (after != None):
@@ -28,9 +28,15 @@ def getPage(after):
 	url = api_path + "index/main"
 	res = requests.post(url = url, data = json.dumps(data), headers = headers)
 
-	return res.json()
+	try:
+		return res.json()
+	except e:
+		if attempt == 3:
+			raise e
+		else:
+			return getPage(after, attempt + 1)
 
-def getRoom(slug):
+def getRoom(slug, attempt = 0):
 	data = base_data
 	url  = api_path + "room/" + slug
 	res  = requests.post(url = url, data = json.dumps(data), headers = headers)
@@ -38,9 +44,15 @@ def getRoom(slug):
 	if (res.status_code == requests.codes.not_found or res.status_code == requests.codes.no_content):
 		return False
 
-	return res.json()
+	try:
+		return res.json()
+	except e:
+		if attempt == 3:
+			raise e
+		else:
+			return getRoom(slug, attempt + 1)
 
-def getGame(room_slug, round, game_slug):
+def getGame(room_slug, round, game_slug, attempt = 0):
 	data = base_data
 	url  = api_path + "game/" + room_slug + "/" + round + "-" + game_slug
 	res  = requests.post(url = url, data = json.dumps(data), headers = headers)
@@ -48,10 +60,16 @@ def getGame(room_slug, round, game_slug):
 	if (res.status_code == requests.codes.not_found or res.status_code == requests.codes.no_content):
 		return False
 
-	return res.json()
+	try:
+		return res.json()
+	except e:
+		if attempt == 3:
+			raise e
+		else:
+			return getGame(room_slug, round, game_slug, attempt + 1)
 
 after     = None
-last_run  = "2021-09-30T18:00:00.000Z";
+last_run  = "2021-10-08T03:00:00.000Z";
 last_run  = datetime.strptime(last_run, date_fmt)
 valid_res = [
 	"1/2-1/2",

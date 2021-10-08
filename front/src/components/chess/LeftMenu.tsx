@@ -21,12 +21,18 @@ interface LeftMenuProps {
 
 class LeftMenu extends React.Component<LeftMenuProps> {
 	render() {
+		const default_active = ["personal-repertoires-panel"];
+
+		if (this.props.mode === "repertoire") {
+			default_active.push("tree-panel");
+		}
+
 		return (
-			<div key="chess-left-menu-inner" id="chess-left-menu" className="flex-1 order-2 md:order-1" style={{ maxHeight: "calc(100vh - 2.75rem)" }}>
+			<div key="chess-left-menu-inner" id="chess-left-menu" className="flex-1 order-2 md:order-1">
 				<Translation ns={["repertoires"]}>
 					{
 						(t) => (
-							<Collapse accordion bordered={false} defaultActiveKey={(this.props.repertoire) ? "tree-panel" : "personal-repertoires-panel"}>
+							<Collapse bordered={false} defaultActiveKey={default_active}>
 								{this.renderTree(t)}
 								<Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
 									<Repertoires active_id={this.props.repertoire?.id} mode={this.props.mode}/>

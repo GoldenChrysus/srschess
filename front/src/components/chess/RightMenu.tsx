@@ -24,7 +24,7 @@ interface RightMenuProps {
 class RightMenu extends React.PureComponent<RightMenuProps> {
 	render() {
 		return (
-			<div key="chess-right-menu-inner" id="chess-right-menu" className="flex-1 order-3 md:order-3" style={{ maxHeight: "calc(100vh - 2.75rem)" }}>
+			<div key="chess-right-menu-inner" id="chess-right-menu" className="flex-1 order-3 md:order-3">
 				{this.renderRepertoire()}
 				<MoveList client={this.props.client} mode={this.props.mode} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
 				<Translation ns="chess">

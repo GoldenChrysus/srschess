@@ -126,7 +126,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		const queue_item = (this.props.mode === "lesson" && this.original_queue) ? this.original_queue[this.state.queue_index] : null;
 
 		return (
-			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full max-h-full overflow-hidden">
+			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full">
 				<div key="chessboard-outer" id="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
 					<Chessboard
 						mode={this.props.mode}

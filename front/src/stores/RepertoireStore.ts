@@ -23,9 +23,9 @@ class Repertoire implements RepertoireModel {
 		this.side = model.side;
 
 		this._lessonQueue       = model.lessonQueue;
-		this._lessonQueueLength = this._lessonQueue?.length ?? model.lessonQueueLength;
+		this._lessonQueueLength = model.lessonQueueLength;
 		this._reviewQueue       = model.reviewQueue;
-		this._reviewQueueLength = this._reviewQueue?.length ?? model.reviewQueueLength;
+		this._reviewQueueLength = model.reviewQueueLength;
 		this._nextReview        = model.nextReview;
 	}
 
