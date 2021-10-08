@@ -10,13 +10,13 @@ import Repertoires from "./left-menu/Repertoires";
 import "../../styles/components/chess/left-menu.css";
 
 interface LeftMenuProps {
-	client: ChessControllerProps["client"],
-	repertoire?: ChessControllerProps["repertoire"],
-	moves: ChessControllerState["moves"],
-	active_uuid: ChessControllerState["last_uuid"],
-	new_move: ChessControllerState["last_is_new"],
-	mode: ChessControllerProps["mode"],
-	onMoveClick: Function
+	client      : ChessControllerProps["client"],
+	repertoire? : ChessControllerProps["repertoire"],
+	moves       : ChessControllerState["moves"],
+	active_uuid : ChessControllerState["last_uuid"],
+	new_move    : ChessControllerState["last_is_new"],
+	mode        : ChessControllerProps["mode"],
+	onMoveClick : Function
 }
 
 class LeftMenu extends React.Component<LeftMenuProps> {
@@ -52,7 +52,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 		return (
 			<Collapse.Panel id="tree-panel" header={t("move_tree")} key="tree-panel" forceRender={true}>
-				<Tree key="tree" client={this.props.client} repertoire={this.props.repertoire} moves={this.props.moves} active_uuid={this.props.active_uuid} new_move={this.props.new_move} onMoveClick={this.props.onMoveClick}></Tree>
+				<Tree key="tree" client={this.props.client} repertoire_slug={this.props.repertoire?.slug} moves={this.props.moves} active_uuid={this.props.active_uuid} new_move={this.props.new_move} onMoveClick={this.props.onMoveClick}></Tree>
 			</Collapse.Panel>
 		);
 	}

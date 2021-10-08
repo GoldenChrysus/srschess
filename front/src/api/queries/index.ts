@@ -82,6 +82,23 @@ export const GET_REPERTOIRE_QUEUES = gql`
 	}
 `;
 
+export const GET_REPERTOIRE_MOVES = gql`
+	query Repertoire($slug: String!) {
+		repertoire(slug: $slug) {
+			moves {
+				id
+				fen
+				uci
+				moveNumber
+				move
+				sort
+				parentId
+				transpositionId
+			}
+		}
+	}
+`;
+
 export const GET_REPERTOIRES = gql`
 	query Repertoires {
 		repertoires {

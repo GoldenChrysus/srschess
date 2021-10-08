@@ -9,7 +9,7 @@ interface BranchProps {
 	root?: boolean,
 	active?: boolean,
 	moves: any,
-	active_uuid?: string,
+	active_uuid?: string | null,
 	parent_uuid?: string,
 	onMoveClick: Function
 };
