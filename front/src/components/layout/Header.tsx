@@ -21,7 +21,7 @@ interface Map {
 const LANGUAGE_MAP: Map = {
 	en : {
 		lang : "English",
-		flag : "US",
+		flag : "GB",
 	},
 	ja : {
 		lang : "日本語",
