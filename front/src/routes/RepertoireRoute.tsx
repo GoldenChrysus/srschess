@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
-import { GET_REPERTOIRE, GET_REPERTOIRE_LESSONS, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW, GET_REPERTOIRE_REVIEWS } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireModel, RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
@@ -33,12 +33,8 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			break;
 
 		case "lesson":
-			main_query = GET_REPERTOIRE_LESSONS;
-
-			break;
-
 		case "review":
-			main_query = GET_REPERTOIRE_REVIEWS;
+			main_query = GET_REPERTOIRE_QUEUES;
 
 			break;
 	}
@@ -50,7 +46,9 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	const [ transposeMove ] = useMutation(TRANSPOSE_MOVE, {
 		refetchQueries : [ main_query ]
 	});
-	const [ createReview ] = useMutation(CREATE_REVIEW);
+	const [ createReview ] = useMutation(CREATE_REVIEW, {
+		refetchQueries : [ main_query ]
+	});
 	const { loading, error, data } = useQuery<RepertoireQueryData>(
 		main_query,
 		{
@@ -63,8 +61,8 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	);
 
 	useEffect(() => {
-		if (data?.repertoire && data.repertoire.id !== prev_data?.current?.repertoire?.id) {
-			RepertoireStore.add(data.repertoire);
+		if (data?.repertoire) {
+			RepertoireStore.add(data.repertoire, "route");
 		}
 
 		prev_data.current = data;

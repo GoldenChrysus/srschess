@@ -18,14 +18,14 @@ class Repertoire implements RepertoireModel {
 	constructor(model: RepertoireModel) {
 		makeAutoObservable(this);
 
-		this.id = model.id;
+		this.id   = model.id;
 		this.name = model.name;
 		this.side = model.side;
 
-		this._lessonQueueLength = model.lessonQueueLength;
 		this._lessonQueue       = model.lessonQueue;
-		this._reviewQueueLength = model.reviewQueueLength;
+		this._lessonQueueLength = this._lessonQueue?.length ?? model.lessonQueueLength;
 		this._reviewQueue       = model.reviewQueue;
+		this._reviewQueueLength = this._reviewQueue?.length ?? model.reviewQueueLength;
 		this._nextReview        = model.nextReview;
 	}
 
@@ -89,10 +89,10 @@ class RepertoireStore {
 		makeAutoObservable(this);
 	}
 
-	add(repertoire: RepertoireModel) {
+	add(repertoire: RepertoireModel, source: string) {
 		const id = repertoire.id;
 
-		if (this.repertoires.has(id)) {
+		if (this.repertoires.has(id) && source === "component") {
 			return;
 		}
 
@@ -134,12 +134,12 @@ class RepertoireStore {
 
 		switch (type) {
 			case "review":
-				repertoire.reviewQueueLength = (repertoire.reviewQueueLength) ? repertoire.reviewQueueLength - 1 : 0;
+				// repertoire.reviewQueueLength = (repertoire.reviewQueueLength) ? repertoire.reviewQueueLength - 1 : 0;
 
 				break;
 
 			case "lesson":
-				repertoire.lessonQueueLength = (repertoire.lessonQueueLength) ? repertoire.lessonQueueLength - 1 : 0;
+				// repertoire.lessonQueueLength = (repertoire.lessonQueueLength) ? repertoire.lessonQueueLength - 1 : 0;
 
 				break;
 

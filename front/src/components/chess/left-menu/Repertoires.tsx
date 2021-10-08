@@ -80,7 +80,7 @@ function renderRepertoires(data: RepertoiresQueryData | undefined, color: string
 			continue;
 		}
 
-		RepertoireStore.add(repertoire);
+		RepertoireStore.add(repertoire, "component");
 
 		const store_repertoire = RepertoireStore.get(repertoire.id);
 		const review           = store_repertoire?.nextReviewString;
@@ -93,8 +93,7 @@ function renderRepertoires(data: RepertoiresQueryData | undefined, color: string
 					</div>
 					<div className="flex flex-initial items-center">
 						<FontAwesomeIcon icon={faClock} size="xs" className="mr-1"/>
-						{review?.t_key ? t(review.t_key) : null}
-						{review?.val}
+						{review?.val} {review?.t_key ? t(review.t_key) : null}
 
 						<FontAwesomeIcon icon={faPlus} size="xs" className="ml-2 mr-1"/>
 						{store_repertoire?.lessonQueueLength ?? 0}

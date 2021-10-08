@@ -82,7 +82,15 @@ class Repertoire extends React.PureComponent<RepertoireProps> {
 	renderContent(t: TFunction) {
 		const repertoire   = RepertoireStore.get(this.props.id);
 		const lesson_count = repertoire?.lessonQueueLength ?? 0;
-		const review_count = repertoire?.reviewQueueLength ?? 0;;
+		const review_count = repertoire?.reviewQueueLength ?? 0;
+
+		if (lesson_count !== undefined && (this.original_lesson_count === undefined || lesson_count > this.original_lesson_count)) {
+			this.original_lesson_count = lesson_count;
+		}
+
+		if (review_count !== undefined && (this.original_review_count === undefined || review_count > this.original_review_count)) {
+			this.original_review_count = review_count;
+		}
 
 		switch (this.props.mode) {
 			case "repertoire":
