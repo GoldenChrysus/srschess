@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
+import { useQuery, useMutation, ApolloConsumer, useApolloClient } from "@apollo/client";
 
-import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, GET_REPERTOIRE_FRAG, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireModel, RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
@@ -39,6 +39,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			break;
 	}
 
+	const client = useApolloClient();
 	const { slug } = useParams<RepertoireRouteParams>();
 	const [ createMove ] = useMutation(CREATE_MOVE, {
 		refetchQueries : [ main_query ]
@@ -62,7 +63,12 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 
 	useEffect(() => {
 		if (data?.repertoire) {
-			RepertoireStore.add(data.repertoire, "route");
+			const frag   = client.readFragment({
+				id       : "Repertoire:" + data.repertoire.id,
+				fragment : GET_REPERTOIRE_FRAG
+			});
+
+			RepertoireStore.add(frag, "route");
 		}
 
 		prev_data.current = data;

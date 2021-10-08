@@ -126,6 +126,28 @@ export const GET_MOVE = gql`
 	}
 `;
 
+export const GET_REPERTOIRE_FRAG = gql`
+	fragment MyRepertoire on Repertoire {
+		id
+		slug
+		name
+		side
+		nextReview
+		lessonQueueLength
+		reviewQueueLength
+		moves {
+			id
+			fen
+			uci
+			moveNumber
+			move
+			sort
+			parentId
+			transpositionId
+		}
+	}
+`;
+
 export const TRANSPOSE_MOVE = gql`
 	mutation TransposeMove($id: String!, $transpositionId: String!) {
 		transposeMove(input: {
