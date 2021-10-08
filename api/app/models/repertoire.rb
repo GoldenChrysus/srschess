@@ -2,6 +2,7 @@ class Repertoire < ApplicationRecord
 	# Attributes
 	attr_accessor :lesson_queue_length
 	attr_accessor :review_queue_length
+	attr_accessor :next_review
 
 	# Validation
 	validates :user, presence: true
@@ -17,6 +18,28 @@ class Repertoire < ApplicationRecord
 
 	# Callbacks
 	after_validation :set_slug, on: :create
+
+	def next_review
+		params = {
+			:id => self.id
+		}
+
+		sql =
+			"SELECT
+				MIN(l.next_review) AS next_review
+			FROM
+				learned_items l
+			JOIN
+				moves m
+			ON
+				m.id = l.move_id
+			WHERE
+				m.repertoire_id = :id"
+		sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
+		res = ActiveRecord::Base.connection.exec_query(sql)
+
+		return (res.length) ? res[0]["next_review"] : null
+	end
 
 	def lesson_queue_length
 		return self.lesson_queue.length

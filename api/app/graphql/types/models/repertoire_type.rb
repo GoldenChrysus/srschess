@@ -20,6 +20,7 @@ module Types
 			field :lesson_queue_length, Int, null: true
 			field :review_queue, [QueueItem], null: true
 			field :review_queue_length, Int, null: true
+			field :next_review, GraphQL::Types::ISO8601DateTime, null: true
 
 			# Relationships
 			field :user, Types::Models::UserType, null: true
