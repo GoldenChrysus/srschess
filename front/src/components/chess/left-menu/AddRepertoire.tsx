@@ -23,6 +23,7 @@ class AddRepertoire extends React.PureComponent<AddRepertoireProps> {
 						<Modal
 							title={t("repertoires:create_repertoire")}
 							visible={this.props.visible}
+							onCancel={() => this.props.toggleVisible(false)}
 							footer={[
 								<Button onClick={() => this.props.toggleVisible(false)}>{t("cancel")}</Button>,
 								<Button type="default" form="create-repertoire" htmlType="submit">{t("create")}</Button>

@@ -5,6 +5,10 @@
 	--white-5o: rgba(255, 255, 255, 0.05);
 	--white-7o: rgba(255, 255, 255, 0.07);
 	--gray-600: theme("colors.gray.600");
+	--gray-700: theme("colors.gray.700");
+	--gray-800: theme("colors.gray.800");
+	--gray-900: theme("colors.gray.900");
+	--red-500: theme("colors.red.500");
 	--green-300: theme("colors.green.300");
 	--green-400: theme("colors.green.400");
 	--green-500: theme("colors.green.500");
