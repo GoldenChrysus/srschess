@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 
 import Login from "./layout/Login";
+import Header from "./layout/Header";
 
 class MainLayout extends React.Component<any> {
 	render() {
@@ -42,7 +43,7 @@ class MainLayout extends React.Component<any> {
 		return (
 			<div className={layout_classes.join(" ")}>
 				<div className={header_classes.join(" ")}>
-					<Login/>
+					<Header/>
 				</div>
 				<div id="content" className={content_classes.join(" ")}>
 					{this.props.children}

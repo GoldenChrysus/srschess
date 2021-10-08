@@ -1,8 +1,6 @@
 import React from "react";
-import { observer } from "mobx-react";
+import { Translation } from "react-i18next";
 import { Modal } from "antd";
-
-import AuthState from "../../stores/AuthState";
 
 interface LoginProps {
 }
@@ -22,19 +20,25 @@ class Login extends React.Component<LoginProps, LoginState> {
 
 	render() {
 		return (
-			<>
-				<a href="#" onClick={this.login}>Login</a>
-				<Modal
-					className="firebase-login"
-					visible={this.state.modal_visible && !AuthState.authenticated}
-					footer=""
-					forceRender={true}
-					width={360}
-					onCancel={this.login}
-				>
-					<div id="firebase-auth"></div>
-				</Modal>
-			</>
+			<Translation ns="common">
+				{
+					(t) => (
+						<>
+							<a href="#" onClick={this.login}>{t("login")}</a>
+							<Modal
+								className="firebase-login"
+								visible={this.state.modal_visible}
+								footer=""
+								forceRender={true}
+								width={360}
+								onCancel={this.login}
+							>
+								<div id="firebase-auth"></div>
+							</Modal>
+						</>
+					)
+				}
+			</Translation>
 		);
 	}
 
@@ -51,4 +55,4 @@ class Login extends React.Component<LoginProps, LoginState> {
 	}
 }
 
-export default observer(Login);
+export default Login;

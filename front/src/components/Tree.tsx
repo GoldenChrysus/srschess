@@ -38,7 +38,10 @@ class Tree extends React.Component<any, TreeState> {
 	}
 	
 	componentDidUpdate(prev_props: any) {
-		if (this.props.repertoire && this.props.repertoire.moves.length !== prev_props.repertoire?.moves.length) {
+		if (
+			(!this.props.repertoire && prev_props.repertoire) ||
+			(this.props.repertoire && this.props.repertoire.moves.length !== prev_props.repertoire?.moves.length)
+		) {
 			this.setState({ base_tree : this.buildBaseTree() });
 		}
 	}
@@ -78,7 +81,7 @@ class Tree extends React.Component<any, TreeState> {
 	buildBaseTree() {
 		const tree: TreeState["base_tree"] = {};
 
-		for (const move of this.props.repertoire.moves) {
+		for (const move of this.props.repertoire?.moves ?? []) {
 			const tmp_move = {...move};
 
 			if (!tree[tmp_move.moveNumber]) {

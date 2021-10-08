@@ -13,6 +13,7 @@
 	--green-400: theme("colors.green.400");
 	--green-500: theme("colors.green.500");
 	--green-600: theme("colors.green.600");
+	--blue-200: theme("colors.blue.200");
 	--tree-line: #777;
 }
 
@@ -39,6 +40,18 @@ body .firebase-login .ant-modal-body {
 
 body .firebase-login .ant-modal-close-x {
 	color: #000;
+}
+
+body a {
+	color: var(--blue-200);
+}
+
+body a:hover {
+	color: var(--green-500);
+}
+
+body a:active {
+	color: var(--green-400);
 }
 
 ::-webkit-scrollbar {
