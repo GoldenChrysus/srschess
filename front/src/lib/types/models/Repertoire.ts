@@ -35,7 +35,8 @@ export interface RepertoireModel {
 	lessonQueueLength?: number,
 	lessonQueue?: Array<RepertoireQueueItemModel>,
 	reviewQueueLength?: number,
-	reviewQueue?: Array<RepertoireQueueItemModel>
+	reviewQueue?: Array<RepertoireQueueItemModel>,
+	nextReview?: string | null
 }
 
 export interface RepertoireQueryData {

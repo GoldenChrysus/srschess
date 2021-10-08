@@ -4,6 +4,8 @@ import { Translation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Menu, Spin, Button } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faRedoAlt, faClock } from "@fortawesome/free-solid-svg-icons";
 
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
@@ -37,7 +39,7 @@ function Repertoires(props: RepertoiresProps) {
 
 	return (
 		<Spin spinning={loading}>
-			<Translation ns="repertoires">
+			<Translation ns={["repertoires", "common"]}>
 				{
 					(t) => (
 						<Observer>
@@ -81,12 +83,25 @@ function renderRepertoires(data: RepertoiresQueryData | undefined, color: string
 		RepertoireStore.add(repertoire);
 
 		const store_repertoire = RepertoireStore.get(repertoire.id);
+		const review           = store_repertoire?.nextReviewString;
 
 		items.push(
 			<Menu.Item key={"repertoire-" + repertoire.id}>
-				<Link to={{ pathname: "/repertoires/" + repertoire.slug }}>
-					{repertoire.name}
-					{store_repertoire?.lessonQueueLength ?? 0}
+				<Link to={{ pathname: "/repertoires/" + repertoire.slug }} className="flex">
+					<div className="flex pr-2 flex-1 overflow-hidden">
+						<span className="overflow-hidden overflow-ellipsis">{repertoire.name}</span>
+					</div>
+					<div className="flex flex-initial items-center">
+						<FontAwesomeIcon icon={faClock} size="xs" className="mr-1"/>
+						{review?.t_key ? t(review.t_key) : null}
+						{review?.val}
+
+						<FontAwesomeIcon icon={faPlus} size="xs" className="ml-2 mr-1"/>
+						{store_repertoire?.lessonQueueLength ?? 0}
+
+						<FontAwesomeIcon icon={faRedoAlt} size="xs" className="ml-2 mr-1"/>
+						{store_repertoire?.reviewQueueLength ?? 0}
+					</div>
 				</Link>
 			</Menu.Item>
 		);

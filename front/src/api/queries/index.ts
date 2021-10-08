@@ -38,6 +38,7 @@ export const GET_REPERTOIRE = gql`
 			side
 			lessonQueueLength
 			reviewQueueLength
+			nextReview
 			moves {
 				id
 				fen
@@ -98,6 +99,7 @@ export const GET_REPERTOIRES = gql`
 			side
 			lessonQueueLength
 			reviewQueueLength
+			nextReview
 		}
 	}
 `;

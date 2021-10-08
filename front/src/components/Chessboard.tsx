@@ -51,8 +51,6 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 			this.chess.load(this.fen);
 			this.chess.load_pgn(this.pgn);
-
-			console.log(this.chess.pgn);
 			return true;
 		}
 

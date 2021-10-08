@@ -7,7 +7,7 @@ import { RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/mo
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
-import { generateUUID } from "../helpers";
+import { generateUUID, getColorFromMoveCount } from "../helpers";
 import RepertoireStore from "../stores/RepertoireStore";
 import { observer } from "mobx-react";
 
@@ -467,6 +467,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 						if (!cached_move) {
 							new_state.last_is_new = true;
+
+							if (getColorFromMoveCount(new_state.moves.length) === this.props.repertoire?.side) {
+								RepertoireStore.increaseQueue(this.props.repertoire?.id);
+							}
 
 							this.setState(new_state);
 							this.props.onMove(

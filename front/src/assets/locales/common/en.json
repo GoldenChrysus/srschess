@@ -1,7 +1,11 @@
 {
 	"cancel": "Cancel",
 	"create": "Create",
+	"day": "Day",
+	"days": "Days",
 	"edit": "Edit",
 	"input_name": "Please input a name.",
-	"name": "Name"
+	"na": "N/A",
+	"name": "Name",
+	"now": "Now"
 }

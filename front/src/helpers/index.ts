@@ -30,6 +30,10 @@ export function getClientMoveNumFromDBMoveNum(db_move_num: number, black_suffix?
 	return text;
 }
 
+export function getColorFromMoveCount(count: number) {
+	return ((count % 2) === 1) ? "white" : "black";
+}
+
 export function generateUUID(move_num: number, move: string, fen: string, repertoire_id?: number) {
 	const hash = SparkMD5.hash(repertoire_id + ":" + move_num + ":" + move + ":" + fen);
 
