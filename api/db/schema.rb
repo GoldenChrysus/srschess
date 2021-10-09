@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_09_104139) do
+ActiveRecord::Schema.define(version: 2021_10_09_120101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -28,12 +28,16 @@ ActiveRecord::Schema.define(version: 2021_10_09_104139) do
 
   create_table "master_game_moves", force: :cascade do |t|
     t.uuid "master_game_id", null: false
-    t.integer "ply"
-    t.string "move"
-    t.string "fen"
+    t.integer "ply", null: false
+    t.string "move", null: false
+    t.string "fen", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "uci"
+    t.index ["fen"], name: "index_master_game_moves_on_fen"
+    t.index ["master_game_id", "ply"], name: "index_master_game_moves_on_master_game_id_and_ply", unique: true
     t.index ["master_game_id"], name: "index_master_game_moves_on_master_game_id"
+    t.index ["ply"], name: "index_master_game_moves_on_ply"
   end
 
 # Could not dump table "master_games" because of following StandardError
