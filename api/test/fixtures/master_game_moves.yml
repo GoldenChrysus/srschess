@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  master_game: one
+  ply: 1
+  move: MyString
+  fen: MyString
+
+two:
+  master_game: two
+  ply: 1
+  move: MyString
+  fen: MyString

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_05_044359) do
+ActiveRecord::Schema.define(version: 2021_10_09_104139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -24,6 +24,16 @@ ActiveRecord::Schema.define(version: 2021_10_05_044359) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["move_id"], name: "index_learned_items_on_move_id", unique: true
+  end
+
+  create_table "master_game_moves", force: :cascade do |t|
+    t.uuid "master_game_id", null: false
+    t.integer "ply"
+    t.string "move"
+    t.string "fen"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["master_game_id"], name: "index_master_game_moves_on_master_game_id"
   end
 
 # Could not dump table "master_games" because of following StandardError
@@ -68,6 +78,7 @@ ActiveRecord::Schema.define(version: 2021_10_05_044359) do
   end
 
   add_foreign_key "learned_items", "moves"
+  add_foreign_key "master_game_moves", "master_games"
   add_foreign_key "moves", "moves", column: "parent_id"
   add_foreign_key "moves", "moves", column: "transposition_id"
   add_foreign_key "moves", "repertoires"
