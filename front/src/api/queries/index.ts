@@ -146,7 +146,7 @@ export const CREATE_MOVE = gql`
 	}
 `;
 
-export const GET_MOVE = gql`
+export const GET_MOVE_FRAG = gql`
 	fragment MyMove on Move {
 		id
 		parentId
@@ -197,6 +197,24 @@ export const CREATE_REVIEW = gql`
 				id
 			}
 			errors
+		}
+	}
+`;
+
+
+
+/**
+ * MASTER GAME DATA
+ */
+export const GET_MASTER_MOVE = gql`
+	query MasterMoves($move: String, $moveNumber: Int!) {
+		masterMoves(move: $move, moveNumber: $moveNumber) {
+			key
+			move
+			white
+			draw
+			black
+			elo
 		}
 	}
 `;

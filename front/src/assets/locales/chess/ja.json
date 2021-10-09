@@ -1,9 +1,13 @@
 {
+  "average_elo": "平均レイティング",
   "black": "ブラック",
   "choose_side": "サイドをお選びください。",
   "depth": "深さ",
+  "move": "指し手",
+  "outcome_percent": "結果％",
   "position_data": "局面データ",
   "side": "サイド",
+  "total_games": "総ゲーム数",
   "waiting": "待機中…",
   "white": "ホワイト"
 }

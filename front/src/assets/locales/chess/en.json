@@ -1,9 +1,13 @@
 {
+	"average_elo": "Average Elo",
 	"black": "Black",
 	"choose_side": "Please choose a side.",
 	"depth": "Depth",
+	"move": "Move",
+	"outcome_percent": "Outcome %",
 	"position_data": "Position Data",
 	"side": "Side",
+	"total_games": "Total Games",
 	"waiting": "Waiting...",
 	"white": "White"
 }

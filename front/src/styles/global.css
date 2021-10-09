@@ -14,6 +14,8 @@
 	--green-500: theme("colors.green.500");
 	--green-600: theme("colors.green.600");
 	--blue-200: theme("colors.blue.200");
+	--border: #434343;
+	--ant-bg: hsla(0, 0%, 100%, .04);
 	--tree-line: #777;
 }
 
@@ -23,11 +25,11 @@ body {
 
 body .ant-collapse > .ant-collapse-item,
 body .bottom-border {
-	border-bottom: 1px solid #434343;
+	border-bottom: 1px solid var(--border);
 }
 
 body .top-border {
-	border-top: 1px solid #434343;
+	border-top: 1px solid var(--border);
 }
 
 body .padded-section {

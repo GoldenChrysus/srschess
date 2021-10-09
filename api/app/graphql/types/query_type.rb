@@ -21,5 +21,8 @@ module Types
 
 		# /move
 		field :move, resolver: Types::Queries::Move
+
+		# /master_moves
+		field :master_moves, resolver: Types::Queries::MasterMoves
 	end
 end

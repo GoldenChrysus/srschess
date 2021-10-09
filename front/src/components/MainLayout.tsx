@@ -31,10 +31,6 @@ class MainLayout extends React.Component<any> {
 		);
 
 		if (["repertoires", "reviews", "lessons"].includes(this.props.location.pathname.split("/").at(-2))) {
-			layout_classes.push("md:h-screen");
-			layout_classes.push("md:max-h-screen");
-			layout_classes.push("md:overflow-y-hidden");
-
 			footer = null;
 		} else {
 			content_classes.push("mb-32");

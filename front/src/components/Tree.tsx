@@ -1,7 +1,7 @@
 import { ApolloClient, useQuery } from "@apollo/client";
 import React, { useEffect, useRef } from "react";
 
-import { GET_MOVE, GET_REPERTOIRE_MOVES } from "../api/queries";
+import { GET_MOVE_FRAG, GET_REPERTOIRE_MOVES } from "../api/queries";
 import { ChessControllerState } from "../lib/types/ChessControllerTypes";
 import Branch from "./tree/Branch";
 
@@ -166,7 +166,7 @@ function buildTree(move_num: number = 10, focus_sort?: number, transpose?: boole
 function getMove(props: TreeProps, id: string) {
 	return props.client.readFragment({
 		id       : "Move:" + id,
-		fragment : GET_MOVE
+		fragment : GET_MOVE_FRAG
 	});
 }
 

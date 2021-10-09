@@ -49,3 +49,42 @@ body .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
 body .ant-form-item-label>label.ant-form-item-required:not(.ant-form-item-required-mark-optional):before {
 	color: var(--red-500);
 }
+
+body .ant-table {
+	background: var(--ant-bg);
+}
+
+body .ant-table .ant-table-thead > tr > th {
+	background-color: var(--black-15o);
+}
+
+body .ant-table .ant-table-tbody > tr > td {
+	border-bottom-color: var(--border);
+}
+
+body .ant-table .ant-table-tbody > tr:hover,
+body .ant-table .ant-table-tbody > tr:hover > td {
+	background: var(--gray-700);
+}
+
+body .ant-pagination-item {
+	position: relative;
+	top: 3px;
+}
+
+body .ant-pagination-item-active {
+	border-color: var(--green-500);
+}
+
+body .ant-pagination-item-active > a {
+	color: var(--green-500);
+}
+
+body .ant-pagination-item-active:hover {
+	border-color: var(--green-400);
+}
+
+body .ant-pagination-item:hover > a,
+body .ant-pagination-item-link:not([disabled]):hover  {
+	color: var(--green-500);
+}

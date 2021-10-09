@@ -77,7 +77,7 @@ class Header extends React.Component {
 
 	renderLanguageFlag() {
 		const lang = i18n.language;
-		const flag = LANGUAGE_MAP[lang]?.flag ?? "US";
+		const flag = LANGUAGE_MAP[lang]?.flag ?? "GB";
 
 		const menu_items = [];
 
@@ -110,6 +110,7 @@ class Header extends React.Component {
 	}
 
 	changeLanguage(locale: string) {
+		localStorage.setItem("locale", locale);
 		i18n.changeLanguage(locale);
 	}
 }

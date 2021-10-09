@@ -1,7 +1,7 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
-import { GET_MOVE } from "../api/queries";
+import { GET_MOVE_FRAG } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import { RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 import Chessboard from "../components/Chessboard";
@@ -9,6 +9,7 @@ import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
 import { generateUUID } from "../helpers";
 import { observer } from "mobx-react";
+import MasterMoveList from "../components/chess/MasterMoveList";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -140,6 +141,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						queue_item={(this.state.awaiting_user) ? queue_item : null}
 						quizzing={this.state.quizzing}
 					/>
+					<MasterMoveList last_uuid={this.state.last_uuid} client={this.props.client}/>
 				</div>
 				<LeftMenu
 					key="chess-left-menu-component"
@@ -508,7 +510,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	getMove(id: string) {
 		return this.props.client.readFragment({
 			id       : "Move:" + id,
-			fragment : GET_MOVE
+			fragment : GET_MOVE_FRAG
 		});
 	}
 }

@@ -5,7 +5,7 @@ import { faAngleDoubleLeft, faAngleLeft, faAngleDoubleRight, faAngleRight } from
 
 import { ChessControllerHistoryItem, ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
-import { GET_MOVE } from "../../api/queries";
+import { GET_MOVE_FRAG } from "../../api/queries";
 import "../../styles/components/chess/move-list.css";
 
 import Move from "./move-list/Move";
@@ -127,7 +127,7 @@ class MoveList extends React.Component<MoveListProps> {
 
 		return this.props.client.readFragment({
 			id       : "Move:" + id,
-			fragment : GET_MOVE
+			fragment : GET_MOVE_FRAG
 		});
 	}
 }
