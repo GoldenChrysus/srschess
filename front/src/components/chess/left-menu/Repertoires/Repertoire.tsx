@@ -10,9 +10,9 @@ import { GET_REPERTOIRE_CACHED } from "../../../../api/queries";
 import { RepertoireModel, RepertoireQueryData } from "../../../../lib/types/models/Repertoire";
 
 interface RepertoireProps {
-	id: RepertoireModel["id"],
-	slug: RepertoireModel["slug"],
-	name: RepertoireModel["name"]
+	id   : RepertoireModel["id"],
+	slug : RepertoireModel["slug"],
+	name : RepertoireModel["name"]
 }
 
 function Repertoire(props: RepertoireProps) {

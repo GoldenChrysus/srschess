@@ -6,13 +6,13 @@ import { useTranslation } from "react-i18next";
 import { Collapse, Button, Progress } from "antd";
 import { TFunction } from "i18next";
 
-import { RepertoireQueryData } from "../../../lib/types/models/Repertoire";
+import { RepertoireModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
 import { GET_REPERTOIRE_CACHED } from "../../../api/queries";
 
 interface RepertoireProps {
-	name?: string,
-	slug?: string,
-	mode: string
+	name? : RepertoireModel["name"],
+	slug? : RepertoireModel["slug"],
+	mode  : string
 }
 
 var original_review_count = 0;

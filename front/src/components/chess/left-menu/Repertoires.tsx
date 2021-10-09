@@ -14,8 +14,8 @@ import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
 import Repertoire from "./Repertoires/Repertoire";
 
 interface RepertoiresProps {
-	active_id?: number,
-	mode: ChessControllerProps["mode"]
+	active_id? : number,
+	mode       : ChessControllerProps["mode"]
 }
 
 function Repertoires(props: RepertoiresProps) {
