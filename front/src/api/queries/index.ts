@@ -99,6 +99,20 @@ export const GET_REPERTOIRE_MOVES = gql`
 	}
 `;
 
+export const GET_REPERTOIRE_CACHED = gql`
+	query Repertoire($slug: String!) {
+		repertoire(slug: $slug) {
+			id
+			slug
+			name
+			side
+			lessonQueueLength
+			reviewQueueLength
+			nextReview
+		}
+	}
+`;
+
 export const GET_REPERTOIRES = gql`
 	query Repertoires {
 		repertoires {

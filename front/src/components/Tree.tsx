@@ -78,7 +78,7 @@ function Tree(props: TreeProps) {
 	}
 
 	return (
-		<Spin spinning={loading}>
+		<Spin spinning={error !== undefined || loading}>
 			{branches}
 		</Spin>
 	);

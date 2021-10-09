@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { Observer } from "mobx-react";
 import { Translation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { Menu, Spin, Button } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faRedoAlt, faClock } from "@fortawesome/free-solid-svg-icons";
 
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
@@ -14,7 +11,7 @@ import "../../../styles/components/chess/left-menu/repertoires.css";
 import AddRepertoire from "./AddRepertoire";
 import { TFunction } from "i18next";
 import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
-import RepertoireStore from "../../../stores/RepertoireStore";
+import Repertoire from "./Repertoires/Repertoire";
 
 interface RepertoiresProps {
 	active_id?: number,
@@ -80,28 +77,9 @@ function renderRepertoires(data: RepertoiresQueryData | undefined, color: string
 			continue;
 		}
 
-		RepertoireStore.add(repertoire, "component");
-
-		const store_repertoire = RepertoireStore.get(repertoire.id);
-		const review           = store_repertoire?.nextReviewString;
-
 		items.push(
 			<Menu.Item key={"repertoire-" + repertoire.id}>
-				<Link to={{ pathname: "/repertoires/" + repertoire.slug }} className="flex">
-					<div className="flex pr-2 flex-1 overflow-hidden">
-						<span className="overflow-hidden overflow-ellipsis">{repertoire.name}</span>
-					</div>
-					<div className="flex flex-initial items-center">
-						<FontAwesomeIcon icon={faClock} size="xs" className="mr-1"/>
-						{review?.val} {review?.t_key ? t(review.t_key) : null}
-
-						<FontAwesomeIcon icon={faPlus} size="xs" className="ml-2 mr-1"/>
-						{store_repertoire?.lessonQueueLength ?? 0}
-
-						<FontAwesomeIcon icon={faRedoAlt} size="xs" className="ml-2 mr-1"/>
-						{store_repertoire?.reviewQueueLength ?? 0}
-					</div>
-				</Link>
+				<Repertoire key={"repertoire-menu-item-" + repertoire.id} id={repertoire.id} slug={repertoire.slug} name={repertoire.name}/>
 			</Menu.Item>
 		);
 	}

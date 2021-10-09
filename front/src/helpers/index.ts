@@ -1,4 +1,7 @@
 import SparkMD5 from "spark-md5";
+import moment from "moment";
+
+import { RepertoireModel } from "../lib/types/models/Repertoire";
 
 export function getDBMoveNumFromIndex(index: number) {
 	return Math.floor(((index + 2) / 2) * 10);
@@ -44,4 +47,41 @@ export function generateUUID(move_num: number, move: string, fen: string, repert
 		hash.slice(16, 20) + "-" +
 		hash.slice(20, 32)
 	);
+}
+
+export function getRepertoireNextReview(next_review: RepertoireModel["nextReview"]) {
+	interface ReviewString { t_key: string | null, val: string | number | null };
+
+	const data: ReviewString = {
+		t_key : null,
+		val   : null
+	}
+
+	if (!next_review) {
+		data.t_key = "common:na";
+
+		return data;
+	}
+
+	const review = new Date(next_review);
+	const now    = new Date();
+
+	if (now > review) {
+		data.t_key = "common:now";
+
+		return data;
+	}
+
+	const day_diff = Math.floor((review.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+	if (day_diff !== 0) {
+		data.t_key = (day_diff !== 1) ? "common:days" : "common:day";
+		data.val   = day_diff;
+
+		return data;
+	}
+
+	data.val = moment(review).format("h:ss a");
+
+	return data;
 }

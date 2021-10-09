@@ -45,7 +45,7 @@ class RightMenu extends React.PureComponent<RightMenuProps> {
 	renderRepertoire() {
 		if (this.props.repertoire_slug) {
 			return (
-				<Repertoire mode={this.props.mode} id={this.props.repertoire_id} slug={this.props.repertoire_slug} name={this.props.repertoire_name}/>
+				<Repertoire mode={this.props.mode} slug={this.props.repertoire_slug} name={this.props.repertoire_name}/>
 			)
 		}
 	}

@@ -5,8 +5,7 @@ import { useQuery, useMutation, ApolloConsumer, useApolloClient } from "@apollo/
 import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, GET_REPERTOIRE_FRAG, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
-import { RepertoireModel, RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
-import RepertoireStore from "../stores/RepertoireStore";
+import { RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 
 interface RepertoireRouteProps {
 	mode: ChessControllerProps["mode"]
@@ -60,19 +59,6 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			fetchPolicy : (props.mode === "lesson") ? "network-only" : "cache-first"
 		}
 	);
-
-	useEffect(() => {
-		if (data?.repertoire) {
-			const frag   = client.readFragment({
-				id       : "Repertoire:" + data.repertoire.id,
-				fragment : GET_REPERTOIRE_FRAG
-			});
-
-			RepertoireStore.add(frag, "route");
-		}
-
-		prev_data.current = data;
-	});
 
 	const fens: { [key: string]: string } = {};
 	const arrows: { [key: string]: Array<any> } = {};

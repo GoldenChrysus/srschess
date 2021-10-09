@@ -88,10 +88,10 @@ class Header extends React.Component {
 
 			menu_items.push(
 				<Menu.Item key={"language-" + locale} onClick={() => this.changeLanguage(locale)}>
-					<a className="flex items-center">
-						<img id="language-flag" className="mr-2" src={"/assets/images/flags/" + LANGUAGE_MAP[locale].flag + ".png"}/>
+					<div className="flex items-center">
+						<img id="language-flag" alt={locale} className="mr-2" src={"/assets/images/flags/" + LANGUAGE_MAP[locale].flag + ".png"}/>
 						{LANGUAGE_MAP[locale].lang}
-					</a>
+					</div>
 				</Menu.Item>
 			);
 		}
@@ -104,7 +104,7 @@ class Header extends React.Component {
 
 		return (
 			<Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
-				<img id="language-flag" className="ml-4 cursor-pointer" src={"/assets/images/flags/" + flag + ".png"}/>
+				<img id="language-flag" alt={lang} className="ml-4 cursor-pointer" src={"/assets/images/flags/" + flag + ".png"}/>
 			</Dropdown>
 		);
 	}
