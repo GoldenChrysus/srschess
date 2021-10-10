@@ -1,8 +1,11 @@
 import chess.pgn
 import io
 import psycopg2
+import math
 import yaml
 import sys
+import multiprocessing
+from time import sleep
 from getopt import getopt
 
 enviro = False
@@ -58,37 +61,66 @@ sql  = """
 
 cur.execute(sql)
 
-while True:
-	row = cur.fetchone()
+all_data = cur.fetchall()
 
-	if (row == None):
-		break
+cur.close()
+conn.close()
 
-	id   = row[0]
-	pgn  = io.StringIO(row[1])
-	game = chess.pgn.read_game(pgn)
+def make_process(num, chunk_size):
+	offset = chunk_size * num
+	conn   = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
+	cur    = conn.cursor()
 
-	for move in game.mainline():
-		record = {
-			"master_game_id" : id,
-			"ply"            : move.ply(),
-			"move"           : move.san(),
-			"uci"            : move.uci(),
-			"fen"            : " ".join(move.board().fen().split(" ")[0:4])
-		}
+	for row in all_data[offset:(offset + chunk_size)]:
+		id     = row[0]
+		pgn    = io.StringIO(row[1])
+		game   = chess.pgn.read_game(pgn)
+		tuples = []
 
-		sql = """
+		for move in game.mainline():
+			record = {
+				"master_game_id" : id,
+				"ply"            : move.ply(),
+				"move"           : move.san(),
+				"uci"            : move.uci(),
+				"fen"            : " ".join(move.board().fen().split(" ")[0:4])
+			}
+
+			tuples.append(record)
+
+		if (len(tuples) == 0):
+			continue
+
+		values = ", ".join(cur.mogrify("(%(master_game_id)s, %(ply)s, %(move)s, %(uci)s, %(fen)s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", x).decode("utf-8") for x in tuples)
+		sql    = """
 			INSERT INTO
 				master_game_moves
 					(master_game_id, ply, move, uci, fen, created_at, updated_at)
 			VALUES
-				(%(master_game_id)s, %(ply)s, %(move)s, %(uci)s, %(fen)s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-		"""
+		""" + values
 
-		tmp_cur = conn.cursor()
-
-		tmp_cur.execute(sql, record)
-		tmp_cur.close()
+		cur.execute(sql)
+		conn.commit()
+		print("P" + str(num) + ": " + id)
+		sleep(0.01)
 	
-	conn.commit()
-	print(id)
+	cur.close()
+	conn.close()
+
+if __name__ == "__main__":
+	count = len(all_data)
+
+	print("Count: " + str(count))
+
+	processes  = []
+	proc_count = multiprocessing.cpu_count() - 1
+	chunk_size = math.ceil(count / proc_count)
+
+	for i in range(proc_count):
+		process = multiprocessing.Process(target=make_process, args=(i, chunk_size))
+
+		processes.append(process)
+		process.start()
+	
+	for process in processes:
+		process.join()
