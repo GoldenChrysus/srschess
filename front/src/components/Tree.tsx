@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { ApolloClient, useApolloClient, useQuery } from "@apollo/client";
-import { observer } from "mobx-react";
 
 import { GET_REPERTOIRE_MOVES } from "../api/queries";
 import { ChessControllerState } from "../lib/types/ChessControllerTypes";
@@ -13,6 +12,7 @@ import ChessState from "../stores/ChessState";
 import { getMove } from "../helpers";
 
 interface TreeProps {
+	repertoire? : RepertoireModel | null
 	active_uuid : ChessControllerState["last_uuid"],
 	onMoveClick : Function,
 	moves       : ChessControllerState["moves"]
@@ -38,20 +38,18 @@ function Tree(props: TreeProps) {
 		GET_REPERTOIRE_MOVES,
 		{
 			variables : {
-				slug : ChessState.repertoire?.slug
+				slug : props.repertoire?.slug
 			},
 			fetchPolicy : "cache-only"
 		}
 	);
 
-	useEffect(() => {
-		if (prev_slug_ref.current !== ChessState.repertoire?.slug || (data?.repertoire?.moves.length ?? 0) !== prev_move_count_ref.current) {
-			base_tree = buildBaseTree(client, data?.repertoire?.moves ?? []);
-		}
+	if (prev_slug_ref.current !== props.repertoire?.slug || (data?.repertoire?.moves.length ?? 0) !== prev_move_count_ref.current) {
+		base_tree = buildBaseTree(client, data?.repertoire?.moves ?? []);
+	}
 
-		prev_move_count_ref.current = data?.repertoire?.moves.length ?? 0;
-		prev_slug_ref.current       = ChessState.repertoire?.slug;
-	});
+	prev_move_count_ref.current = data?.repertoire?.moves.length ?? 0;
+	prev_slug_ref.current       = props.repertoire?.slug;
 
 	tree = (Object.keys(base_tree).length > 0) ? buildTree() : {};
 
@@ -165,4 +163,4 @@ function buildTree(move_num: number = 10, focus_sort?: number, transpose?: boole
 	return tree;
 }
 
-export default observer(Tree);
+export default Tree;

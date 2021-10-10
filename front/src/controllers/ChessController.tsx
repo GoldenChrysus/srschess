@@ -8,9 +8,7 @@ import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
 import { generateUUID } from "../helpers";
-import { observer } from "mobx-react";
 import MasterMoveList from "../components/chess/MasterMoveList";
-import ChessState from "../stores/ChessState";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -64,7 +62,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
-		if (prev_props.repertoire?.id !== ChessState.repertoire?.id || prev_props.mode !== this.props.mode) {
+		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
 			this.chunk_limit     = 5;
 			this.progressing     = false;
 			this.preloaded_moves = [""];
@@ -101,7 +99,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				return;
 			}
 
-			const queue = ChessState.repertoire?.lessonQueue ?? ChessState.repertoire?.reviewQueue;
+			const queue = this.props.repertoire?.lessonQueue ?? this.props.repertoire?.reviewQueue;
 
 			if (this.original_queue === undefined || (queue && this.original_queue.length < queue.length)) {
 				this.setOriginalQueue();
@@ -135,8 +133,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						key="chessboard"
 						fen={this.state.fen}
 						pgn={this.state.pgn}
-						orientation={ChessState.repertoire?.side}
-						repertoire_id={ChessState.repertoire?.id}
+						orientation={this.props.repertoire?.side}
+						repertoire_id={this.props.repertoire?.id}
 						onMove={this.reducer}
 						children={children}
 						queue_item={(this.state.awaiting_user) ? queue_item : null}
@@ -149,6 +147,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					moves={this.state.moves}
 					active_uuid={this.state.last_uuid}
 					mode={this.props.mode}
+					repertoire={this.props.repertoire}
 					onMoveClick={this.onMoveClick.bind(this, "tree")}
 				/>
 				<RightMenu
@@ -157,8 +156,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					moves={this.state.history}
 					fen={this.state.fen}
 					mode={this.props.mode}
-					repertoire_slug={ChessState.repertoire?.slug}
-					repertoire_name={ChessState.repertoire?.name}
+					repertoire_slug={this.props.repertoire?.slug}
+					repertoire_name={this.props.repertoire?.name}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>
@@ -166,15 +165,17 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	renderMasterMoveList() {
-		return (["review", "lesson"].includes(this.props.mode)) ? <></> : <MasterMoveList last_uuid={this.state.last_uuid}/>;
+		return (["review", "lesson"].includes(this.props.mode))
+			? <></>
+			: <MasterMoveList last_uuid={this.state.last_uuid} onMoveClick={this.onMoveClick.bind(this, "master-movelist")}/>;
 	}
 
 	setOriginalQueue() {
 		if (this.props.mode === "review") {
-			this.original_queue = ChessState.repertoire?.reviewQueue!;
-			this.chunk          = ChessState.repertoire?.reviewQueue!;
+			this.original_queue = this.props.repertoire?.reviewQueue!;
+			this.chunk          = this.props.repertoire?.reviewQueue!;
 		} else if (this.props.mode === "lesson") {
-			this.original_queue = ChessState.repertoire?.lessonQueue!;
+			this.original_queue = this.props.repertoire?.lessonQueue!;
 			this.chunk          = [];
 		}
 	}
@@ -280,9 +281,34 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		return data;
 	}
 
-	onMoveClick(source: string, uuid: string) {
+	onMoveClick(source: string, uuid?: string, san?: string) {
 		if (this.props.mode !== "repertoire") {
 			return false;
+		}
+
+		if (source === "master-movelist") {
+			if (!san) {
+				return;
+			}
+
+			const res = this.chess.move(san);
+
+			if (!res) {
+				this.chess.undo();
+				return false;
+			}
+
+			const last = this.chess.history({verbose: true}).at(-1);
+
+			return this.reducer({
+				type : "move-repertoire",
+				uci  : last!.from + last!.to,
+				data : {
+					fen   : this.chess.fen(),
+					pgn   : this.chess.pgn(),
+					moves : this.chess.history()
+				}
+			});
 		}
 
 		this.chess.reset();
@@ -449,7 +475,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	
 				switch (this.props.mode) {
 					case ChessControllerModes.repertoire:
-						const uuid = generateUUID(move_num, last_move!, new_state.fen, ChessState.repertoire?.id);
+						const uuid = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
 
 						new_state.last_uuid = uuid;
 
@@ -513,4 +539,4 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 }
 
-export default observer(ChessController);
+export default ChessController;

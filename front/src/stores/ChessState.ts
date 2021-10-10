@@ -17,6 +17,10 @@ class ChessState {
 	setBestMove(uci: string) {
 		this.best_move = uci;
 	}
+
+	setRepertoire(repertoire?: RepertoireModel | null) {
+		this.repertoire = repertoire;
+	}
 }
 
 export default new ChessState();

@@ -8,7 +8,8 @@ import { GET_MASTER_MOVE } from "../../api/queries";
 import { useTranslation } from "react-i18next";
 
 interface MasterMoveListProps {
-	last_uuid : ChessControllerState["last_uuid"],
+	last_uuid   : ChessControllerState["last_uuid"],
+	onMoveClick : Function
 }
 
 function MasterMoveList(props: MasterMoveListProps) {
@@ -29,7 +30,18 @@ function MasterMoveList(props: MasterMoveListProps) {
 	);
 
 	return (
-		<Table dataSource={data?.masterMoves} loading={loading} size="small" pagination={{ pageSize: 7 }}>
+		<Table
+			dataSource={data?.masterMoves}
+			loading={loading}
+			size="small"
+			pagination={{ pageSize: 7 }}
+			rowClassName="cursor-pointer"
+			onRow={(record, index) => {
+				return {
+					onClick : e => props.onMoveClick(undefined, record.move)
+				}
+			}}
+		>
 			<Table.Column title={t("move")} dataIndex="move" key="move"/>
 			<Table.Column
 				title={t("total_games")}
