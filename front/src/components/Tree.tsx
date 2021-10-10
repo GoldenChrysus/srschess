@@ -1,20 +1,21 @@
-import { ApolloClient, useQuery } from "@apollo/client";
 import React, { useEffect, useRef } from "react";
+import { ApolloClient, useApolloClient, useQuery } from "@apollo/client";
+import { observer } from "mobx-react";
 
-import { GET_MOVE_FRAG, GET_REPERTOIRE_MOVES } from "../api/queries";
+import { GET_REPERTOIRE_MOVES } from "../api/queries";
 import { ChessControllerState } from "../lib/types/ChessControllerTypes";
 import Branch from "./tree/Branch";
 
 import "../styles/components/tree.css";
 import { Spin } from "antd";
+import { RepertoireModel } from "../lib/types/models/Repertoire";
+import ChessState from "../stores/ChessState";
+import { getMove } from "../helpers";
 
 interface TreeProps {
-	client           : ApolloClient<object>,
-	repertoire_slug? : string,
-	active_uuid      : ChessControllerState["last_uuid"],
-	new_move?        : boolean,
-	onMoveClick      : Function,
-	moves            : ChessControllerState["moves"]
+	active_uuid : ChessControllerState["last_uuid"],
+	onMoveClick : Function,
+	moves       : ChessControllerState["moves"]
 }
 
 interface BaseTree {
@@ -29,26 +30,27 @@ var base_tree: BaseTree = {};
 var tree: any = {};
 
 function Tree(props: TreeProps) {
+	const client              = useApolloClient();
 	const prev_move_count_ref = useRef<number>();
-	const prev_slug_ref       = useRef<TreeProps["repertoire_slug"]>();
+	const prev_slug_ref       = useRef<RepertoireModel["slug"]>();
 
 	const { loading, error, data } = useQuery(
 		GET_REPERTOIRE_MOVES,
 		{
 			variables : {
-				slug : props.repertoire_slug
+				slug : ChessState.repertoire?.slug
 			},
 			fetchPolicy : "cache-only"
 		}
 	);
 
 	useEffect(() => {
-		if (prev_slug_ref.current !== props.repertoire_slug || (data?.repertoire?.moves.length ?? 0) !== prev_move_count_ref.current) {
-			base_tree = buildBaseTree(props, data?.repertoire?.moves ?? []);
+		if (prev_slug_ref.current !== ChessState.repertoire?.slug || (data?.repertoire?.moves.length ?? 0) !== prev_move_count_ref.current) {
+			base_tree = buildBaseTree(client, data?.repertoire?.moves ?? []);
 		}
 
 		prev_move_count_ref.current = data?.repertoire?.moves.length ?? 0;
-		prev_slug_ref.current       = props.repertoire_slug;
+		prev_slug_ref.current       = ChessState.repertoire?.slug;
 	});
 
 	tree = (Object.keys(base_tree).length > 0) ? buildTree() : {};
@@ -84,7 +86,7 @@ function Tree(props: TreeProps) {
 	);
 }
 
-function buildBaseTree(props: TreeProps, moves: any) {
+function buildBaseTree(client: ApolloClient<object>, moves: any) {
 	const tree: BaseTree = {};
 
 	for (const move of moves ?? []) {
@@ -97,7 +99,7 @@ function buildBaseTree(props: TreeProps, moves: any) {
 		tmp_move.moves = [];
 
 		if (tmp_move.transpositionId) {
-			const transposition = getMove(props, tmp_move.transpositionId);
+			const transposition = getMove(client, tmp_move.transpositionId);
 
 			if (transposition) {
 				tmp_move.moves.push({
@@ -111,7 +113,7 @@ function buildBaseTree(props: TreeProps, moves: any) {
 		tree[tmp_move.moveNumber][tmp_move.sort] = tmp_move;
 
 		if (tmp_move.parentId) {
-			let parent = getMove(props, tmp_move.parentId);
+			let parent = getMove(client, tmp_move.parentId);
 
 			tree[parent.moveNumber][parent.sort].moves.push({
 				sort       : tmp_move.sort,
@@ -122,9 +124,9 @@ function buildBaseTree(props: TreeProps, moves: any) {
 			let local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
 
 			while (parent.parentId) {
-				parent = getMove(props, parent.parentId);
+				parent = getMove(client, parent.parentId);
 
-				const parent_parent = (parent.parentId) ? getMove(props, parent.parentId) : false;
+				const parent_parent = (parent.parentId) ? getMove(client, parent.parentId) : false;
 
 				if ((local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
 					has_children = true;							
@@ -163,11 +165,4 @@ function buildTree(move_num: number = 10, focus_sort?: number, transpose?: boole
 	return tree;
 }
 
-function getMove(props: TreeProps, id: string) {
-	return props.client.readFragment({
-		id       : "Move:" + id,
-		fragment : GET_MOVE_FRAG
-	});
-}
-
-export default Tree;
+export default observer(Tree);

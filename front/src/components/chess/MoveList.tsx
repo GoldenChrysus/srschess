@@ -1,11 +1,9 @@
 import React from "react";
-import { ApolloClient } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDoubleLeft, faAngleLeft, faAngleDoubleRight, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 import { ChessControllerHistoryItem, ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
-import { GET_MOVE_FRAG } from "../../api/queries";
 import "../../styles/components/chess/move-list.css";
 
 import Move from "./move-list/Move";
@@ -13,7 +11,6 @@ import Stockfish from "./move-list/Stockfish";
 import { getDBMoveNumFromIndex, getIndexFromDBMoveNum } from "../../helpers";
 
 interface MoveListProps {
-	client: ApolloClient<object>,
 	mode: ChessControllerProps["mode"],
 	active_num?: ChessControllerState["last_num"],
 	fen: string,
@@ -118,17 +115,6 @@ class MoveList extends React.Component<MoveListProps> {
 			default:
 				break;
 		}
-	}
-
-	getMove(id?: ChessControllerState["last_uuid"]) {
-		if (!id) {
-			return false;
-		}
-
-		return this.props.client.readFragment({
-			id       : "Move:" + id,
-			fragment : GET_MOVE_FRAG
-		});
 	}
 }
 

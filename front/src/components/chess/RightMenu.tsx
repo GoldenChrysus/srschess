@@ -10,23 +10,32 @@ import { ApolloClient } from "@apollo/client";
 import "../../styles/components/chess/right-menu.css";
 
 interface RightMenuProps {
-	client: ApolloClient<object>,
 	active_num?: ChessControllerState["last_num"],
 	fen: string,
 	moves: ChessControllerState["history"],
 	mode: ChessControllerProps["mode"],
-	repertoire_id?: number,
 	repertoire_slug?: string,
 	repertoire_name?: string,
 	onMoveClick: Function
 }
 
-class RightMenu extends React.PureComponent<RightMenuProps> {
+class RightMenu extends React.Component<RightMenuProps> {
+	shouldComponentUpdate(prev_props: RightMenuProps) {
+		return (
+			prev_props.active_num !== this.props.active_num ||
+			prev_props.fen !== this.props.fen ||
+			prev_props.moves !== this.props.moves ||
+			prev_props.mode !== this.props.mode ||
+			prev_props.repertoire_slug !== this.props.repertoire_slug ||
+			prev_props.repertoire_name !== this.props.repertoire_name
+		);
+	}
+
 	render() {
 		return (
 			<div key="chess-right-menu-inner" id="chess-right-menu" className="flex-1 order-3 md:order-3">
 				{this.renderRepertoire()}
-				<MoveList client={this.props.client} mode={this.props.mode} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
+				<MoveList mode={this.props.mode} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
 				<Translation ns="chess">
 					{
 						(t) => (

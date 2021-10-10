@@ -10,6 +10,7 @@ import RightMenu from "../components/chess/RightMenu";
 import { generateUUID } from "../helpers";
 import { observer } from "mobx-react";
 import MasterMoveList from "../components/chess/MasterMoveList";
+import ChessState from "../stores/ChessState";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -63,7 +64,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
-		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
+		if (prev_props.repertoire?.id !== ChessState.repertoire?.id || prev_props.mode !== this.props.mode) {
 			this.chunk_limit     = 5;
 			this.progressing     = false;
 			this.preloaded_moves = [""];
@@ -100,7 +101,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				return;
 			}
 
-			const queue = this.props.repertoire?.lessonQueue ?? this.props.repertoire?.reviewQueue;
+			const queue = ChessState.repertoire?.lessonQueue ?? ChessState.repertoire?.reviewQueue;
 
 			if (this.original_queue === undefined || (queue && this.original_queue.length < queue.length)) {
 				this.setOriginalQueue();
@@ -134,47 +135,46 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						key="chessboard"
 						fen={this.state.fen}
 						pgn={this.state.pgn}
-						orientation={this.props.repertoire?.side}
-						repertoire_id={this.props.repertoire?.id}
+						orientation={ChessState.repertoire?.side}
+						repertoire_id={ChessState.repertoire?.id}
 						onMove={this.reducer}
 						children={children}
 						queue_item={(this.state.awaiting_user) ? queue_item : null}
 						quizzing={this.state.quizzing}
 					/>
-					<MasterMoveList last_uuid={this.state.last_uuid} client={this.props.client}/>
+					{this.renderMasterMoveList()}
 				</div>
 				<LeftMenu
 					key="chess-left-menu-component"
-					client={this.props.client}
-					repertoire={this.props.repertoire}
 					moves={this.state.moves}
 					active_uuid={this.state.last_uuid}
-					new_move={this.state.last_is_new}
 					mode={this.props.mode}
 					onMoveClick={this.onMoveClick.bind(this, "tree")}
 				/>
 				<RightMenu
 					key="chess-right-menu-component"
-					client={this.props.client}
 					active_num={this.state.last_num}
 					moves={this.state.history}
 					fen={this.state.fen}
 					mode={this.props.mode}
-					repertoire_id={this.props.repertoire?.id}
-					repertoire_slug={this.props.repertoire?.slug}
-					repertoire_name={this.props.repertoire?.name}
+					repertoire_slug={ChessState.repertoire?.slug}
+					repertoire_name={ChessState.repertoire?.name}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>
 		);
 	}
 
+	renderMasterMoveList() {
+		return (["review", "lesson"].includes(this.props.mode)) ? <></> : <MasterMoveList last_uuid={this.state.last_uuid}/>;
+	}
+
 	setOriginalQueue() {
 		if (this.props.mode === "review") {
-			this.original_queue = this.props.repertoire?.reviewQueue!;
-			this.chunk          = this.props.repertoire?.reviewQueue!;
+			this.original_queue = ChessState.repertoire?.reviewQueue!;
+			this.chunk          = ChessState.repertoire?.reviewQueue!;
 		} else if (this.props.mode === "lesson") {
-			this.original_queue = this.props.repertoire?.lessonQueue!;
+			this.original_queue = ChessState.repertoire?.lessonQueue!;
 			this.chunk          = [];
 		}
 	}
@@ -449,7 +449,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	
 				switch (this.props.mode) {
 					case ChessControllerModes.repertoire:
-						const uuid = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
+						const uuid = generateUUID(move_num, last_move!, new_state.fen, ChessState.repertoire?.id);
 
 						new_state.last_uuid = uuid;
 
@@ -465,8 +465,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						const cached_move = this.getMove(uuid);
 
 						if (!cached_move) {
-							new_state.last_is_new = true;
-
 							this.setState(new_state);
 							this.props.onMove(
 								{

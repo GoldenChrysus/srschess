@@ -37,7 +37,6 @@ export interface ChessControllerState {
 	pgn           : string,
 	last_num      : number,
 	last_uuid     : string | null,
-	last_is_new?  : boolean,
 	moves         : Array<string>,
 	history       : Array<ChessControllerHistoryItem>,
 	queue_index   : number,

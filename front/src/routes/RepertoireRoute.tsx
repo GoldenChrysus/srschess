@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer, useApolloClient } from "@apollo/client";
 
-import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, GET_REPERTOIRE_FRAG, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
+import ChessState from "../stores/ChessState";
 
 interface RepertoireRouteProps {
 	mode: ChessControllerProps["mode"]
@@ -38,7 +39,6 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			break;
 	}
 
-	const client = useApolloClient();
 	const { slug } = useParams<RepertoireRouteParams>();
 	const [ createMove ] = useMutation(CREATE_MOVE, {
 		refetchQueries : [ main_query ]
@@ -59,6 +59,8 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			fetchPolicy : (props.mode === "lesson") ? "network-only" : "cache-first"
 		}
 	);
+
+	ChessState.repertoire = data?.repertoire;
 
 	const fens: { [key: string]: string } = {};
 	const arrows: { [key: string]: Array<any> } = {};

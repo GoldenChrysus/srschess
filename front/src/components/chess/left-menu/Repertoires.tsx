@@ -12,10 +12,10 @@ import AddRepertoire from "./AddRepertoire";
 import { TFunction } from "i18next";
 import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
 import Repertoire from "./Repertoires/Repertoire";
+import ChessState from "../../../stores/ChessState";
 
 interface RepertoiresProps {
-	active_id? : number,
-	mode       : ChessControllerProps["mode"]
+	mode : ChessControllerProps["mode"]
 }
 
 function Repertoires(props: RepertoiresProps) {
@@ -34,6 +34,8 @@ function Repertoires(props: RepertoiresProps) {
 		});
 	};
 
+	const active_repertoire_id = ChessState.repertoire?.id;
+
 	return (
 		<Spin spinning={loading}>
 			<Translation ns={["repertoires", "common"]}>
@@ -45,7 +47,7 @@ function Repertoires(props: RepertoiresProps) {
 									id="repertoire-menu"
 									mode="inline"
 									defaultOpenKeys={["white-repertoires", "black-repertoires"]}
-									selectedKeys={[ "repertoire-" + props.active_id, "repertoire-" + props.mode + "s-" + props.active_id ]}
+									selectedKeys={[ "repertoire-" + active_repertoire_id, "repertoire-" + props.mode + "s-" + active_repertoire_id ]}
 								>
 									<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
 									<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">

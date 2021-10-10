@@ -1,8 +1,14 @@
 import { makeAutoObservable } from "mobx";
-import { RepertoireModel } from "../lib/types/models/Repertoire";
+import { RepertoireModel, RepertoireMoveModel } from "../lib/types/models/Repertoire";
 
 class ChessState {
 	best_move: string = "";
+
+	// Moves
+	move_id: RepertoireMoveModel["id"] | null = null;
+
+	// Repertoires
+	repertoire?: RepertoireModel | null = null;
 
 	constructor() {
 		makeAutoObservable(this);

@@ -1,21 +1,21 @@
 import React from "react";
-import { Spin, Table} from "antd";
-import { useQuery } from "@apollo/client";
+import { Table} from "antd";
+import { useApolloClient, useQuery } from "@apollo/client";
 
-import { ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
+import { ChessControllerState } from "../../lib/types/ChessControllerTypes";
 import { getMove, getIndexFromDBMoveNum } from "../../helpers/";
 import { GET_MASTER_MOVE } from "../../api/queries";
 import { useTranslation } from "react-i18next";
 
 interface MasterMoveListProps {
 	last_uuid : ChessControllerState["last_uuid"],
-	client    : ChessControllerProps["client"]
 }
 
 function MasterMoveList(props: MasterMoveListProps) {
-	const { t } = useTranslation("chess");
-	const move  = getMove(props.client, props.last_uuid);
-	const num   = (move) ? getIndexFromDBMoveNum(move.moveNumber) : -1;
+	const client = useApolloClient();
+	const { t }  = useTranslation("chess");
+	const move   = getMove(client, props.last_uuid);
+	const num    = (move) ? getIndexFromDBMoveNum(move.moveNumber) : -1;
 
 	const { loading, error, data } = useQuery(
 		GET_MASTER_MOVE,
