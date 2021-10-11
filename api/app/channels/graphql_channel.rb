@@ -18,6 +18,8 @@ class GraphqlChannel < ApplicationCable::Channel
 		transmit({ 
 			:result => result
 		})
+	rescue Pundit::NotAuthorizedError => e
+		handle_error_in_development(e)
 	rescue StandardError => e
 		raise e unless Rails.env.development?
 		handle_error_in_development(e)
@@ -50,7 +52,15 @@ class GraphqlChannel < ApplicationCable::Channel
 		logger.error e.backtrace.join("\n")
 
 		transmit({
-			:result => { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }
+			:result => {
+				errors: [
+					{
+						message: e.message,
+						backtrace: e.backtrace,
+						code: Current.internal_error_code
+					}
+				]
+			}
 		})
 	end
 end
