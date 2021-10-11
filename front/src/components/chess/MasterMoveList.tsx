@@ -31,7 +31,7 @@ function MasterMoveList(props: MasterMoveListProps) {
 		last_data_ref.current = data;
 	}
 
-	const premium  = hasPremiumLockoutError(error) ? <PremiumWarning message={t("premium:opening_depth_limit")}/> : null;
+	const premium = hasPremiumLockoutError(error) ? <PremiumWarning message={t("premium:opening_depth_limit")}/> : null;
 
 	return (
 		<div className="w-full relative">
