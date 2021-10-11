@@ -3,49 +3,54 @@ module Types
 		class MasterMoves < Types::BaseQuery
 			# /master_moves
 			type [Types::Models::MasterMoveType], null: true
-			argument :move, String, required: false
-			argument :move_number, Integer, required: true
+			argument :fen, String, required: false
 			
-			def resolve(move:, move_number:)
+			def resolve(fen:)
+				fen_parts = fen.split(" ")
+
+				# TODO: Validations (depth, position validity)
+
+				fen_1 = fen_parts[0..3].join(" ")
+
+				fen_parts[3] = "-"
+
+				fen_2 = fen_parts[0..3].join(" ")
+
 				params = {
-					:move          => move,
-					:move_num      => move_number,
-					:next_move_num => move_number + 1,
-					:total_moves   => move_number + 2
+					:fen_1 => fen_1,
+					:fen_2 => fen_2
 				}
-
-				sub_where = (move_number >= 0) ? "SUBPATH(movelist, :move_num, 1) = :move AND" : ""
 		
-				sql =
+				sql  =
 					"SELECT
-						ROW_NUMBER() OVER (PARTITION BY NULL) AS \"key\",
-						tmp.*
+						stats
 					FROM
-						(
-							SELECT
-								SUBPATH(movelist, :next_move_num, 1) AS move,
-								SUM(CASE WHEN result = 'W' THEN 1 ELSE 0 END) AS white,
-								SUM(CASE WHEN result = 'D' THEN 1 ELSE 0 END) AS draw,
-								SUM(CASE WHEN result = 'B' THEN 1 ELSE 0 END) AS black,
-								ROUND(AVG(white_elo + black_elo) / 2) AS elo
-							FROM
-								master_games g
-							WHERE
-							" + sub_where + "
-								NLEVEL(movelist) >= :total_moves AND
-								white_elo >= 2000 AND
-								black_elo >= 2000
-							GROUP BY
-								1
-							ORDER BY
-								COUNT(1) DESC
-							LIMIT
-								10
-						) tmp"
-				sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
-				res = ActiveRecord::Base.connection.exec_query(sql)
+						master_move_stats
+					WHERE
+						fen = :fen_1 OR
+						fen = :fen_2"
+				sql  = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
+				res  = ActiveRecord::Base.connection.exec_query(sql)
+				data = []
 
-				res
+				return nil unless res.count > 0
+
+				res = res[0]["stats"].split(";")
+
+				res.each_with_index do |record, index|
+					stats = record.split("|")
+
+					data.push({
+						key: index,
+						move: stats[0],
+						white: stats[1],
+						draw: stats[2],
+						black: stats[3],
+						elo: stats[4]
+					})
+				end
+
+				data
 			end
 		end
 	end

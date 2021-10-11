@@ -12,13 +12,20 @@ import { RepertoireModel } from "../../lib/types/models/Repertoire";
 
 interface LeftMenuProps {
 	repertoire? : RepertoireModel | null
-	moves       : ChessControllerState["moves"],
 	active_uuid : ChessControllerState["last_uuid"],
 	mode        : ChessControllerProps["mode"],
 	onMoveClick : Function
 }
 
 class LeftMenu extends React.Component<LeftMenuProps> {
+	shouldComponentUpdate(prev_props: LeftMenuProps) {
+		return (
+			prev_props.active_uuid !== this.props.active_uuid ||
+			prev_props.mode !== this.props.mode ||
+			JSON.stringify(prev_props.repertoire) !== JSON.stringify(this.props.repertoire)
+		);
+	}
+
 	render() {
 		const default_active = ["personal-repertoires-panel"];
 
@@ -51,7 +58,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 		return (
 			<Collapse.Panel id="tree-panel" header={t("move_tree")} key="tree-panel" forceRender={true}>
-				<Tree key="tree" repertoire={this.props.repertoire} moves={this.props.moves} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}></Tree>
+				<Tree key="tree" repertoire={this.props.repertoire} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}></Tree>
 			</Collapse.Panel>
 		);
 	}

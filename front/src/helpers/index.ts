@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { RepertoireModel } from "../lib/types/models/Repertoire";
 import { ApolloClient } from "@apollo/client";
-import { GET_MOVE_FRAG } from "../api/queries";
+import { MOVE_FRAG } from "../api/queries";
 
 export function getDBMoveNumFromIndex(index: number) {
 	return Math.floor(((index + 2) / 2) * 10);
@@ -91,6 +91,6 @@ export function getRepertoireNextReview(next_review: RepertoireModel["nextReview
 export function getMove(client: ApolloClient<object>, id: string | null) {
 	return client.readFragment({
 		id       : "Move:" + id,
-		fragment : GET_MOVE_FRAG
+		fragment : MOVE_FRAG
 	});
 }

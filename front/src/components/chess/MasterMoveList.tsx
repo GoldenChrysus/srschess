@@ -1,29 +1,24 @@
 import React from "react";
 import { Table} from "antd";
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { ChessControllerState } from "../../lib/types/ChessControllerTypes";
-import { getMove, getIndexFromDBMoveNum } from "../../helpers/";
 import { GET_MASTER_MOVE } from "../../api/queries";
 import { useTranslation } from "react-i18next";
 
 interface MasterMoveListProps {
-	last_uuid   : ChessControllerState["last_uuid"],
+	fen         : ChessControllerState["fen"],
 	onMoveClick : Function
 }
 
 function MasterMoveList(props: MasterMoveListProps) {
-	const client = useApolloClient();
-	const { t }  = useTranslation("chess");
-	const move   = getMove(client, props.last_uuid);
-	const num    = (move) ? getIndexFromDBMoveNum(move.moveNumber) : -1;
+	const { t } = useTranslation("chess");
 
 	const { loading, error, data } = useQuery(
 		GET_MASTER_MOVE,
 		{
 			variables : {
-				move       : move?.move ?? null,
-				moveNumber : num
+				fen : props.fen
 			},
 			nextFetchPolicy : "cache-only"
 		}
@@ -60,14 +55,14 @@ function MasterMoveList(props: MasterMoveListProps) {
 					const draw  = record.draw / total * 100;
 					return (
 						<div className="w-full h-full">
-							<div style={{ width: white + "%" }} className="inline-block bg-gray-300 text-gray-900 px-2 whitespace-nowrap">
-								{Math.round(white)}%
+							<div style={{ width: white + "%" }} className="inline-block bg-gray-300 text-gray-900 whitespace-nowrap overflow-hidden">
+								<span className="px-2">{Math.round(white)}%</span>
 							</div>
-							<div style={{ width: draw + "%" }} className="inline-block bg-gray-500 px-2 whitespace-nowrap">
-								{Math.round(draw)}%
+							<div style={{ width: draw + "%" }} className="inline-block bg-gray-500 whitespace-nowrap overflow-hidden">
+								<span className="px-2">{Math.round(draw)}%</span>
 							</div>
-							<div style={{ width: black + "%" }} className="inline-block bg-gray-900 px-2 whitespace-nowrap">
-								{Math.round(black)}%
+							<div style={{ width: black + "%" }} className="inline-block bg-gray-900 whitespace-nowrap overflow-hidden">
+								<span className="px-2">{Math.round(black)}%</span>
 							</div>
 						</div>
 					);

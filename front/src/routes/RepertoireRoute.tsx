@@ -1,7 +1,7 @@
-import React, { useRef } from "react";
+import React from "react";
 import { runInAction } from "mobx";
 import { useParams } from "react-router-dom";
-import { useQuery, useMutation, ApolloConsumer, useApolloClient } from "@apollo/client";
+import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
 import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
@@ -25,8 +25,6 @@ interface RepertoireRouteParams {
 function RepertoireRoute(props: RepertoireRouteProps) {
 	let main_query = GET_REPERTOIRE;
 
-	const prev_data = useRef<RepertoireQueryData | undefined>();
-
 	switch (props.mode) {
 		case "repertoire":
 			main_query = GET_REPERTOIRE;
@@ -41,12 +39,8 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	}
 
 	const { slug } = useParams<RepertoireRouteParams>();
-	const [ createMove ] = useMutation(CREATE_MOVE, {
-		refetchQueries : [ main_query ]
-	});
-	const [ transposeMove ] = useMutation(TRANSPOSE_MOVE, {
-		refetchQueries : [ main_query ]
-	});
+	const [ createMove ] = useMutation(CREATE_MOVE);
+	const [ transposeMove ] = useMutation(TRANSPOSE_MOVE);
 	const [ createReview ] = useMutation(CREATE_REVIEW, {
 		refetchQueries : [ main_query ]
 	});

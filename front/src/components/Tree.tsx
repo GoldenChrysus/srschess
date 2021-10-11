@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { ApolloClient, useApolloClient, useQuery } from "@apollo/client";
 
 import { GET_REPERTOIRE_MOVES } from "../api/queries";
@@ -8,14 +8,12 @@ import Branch from "./tree/Branch";
 import "../styles/components/tree.css";
 import { Spin } from "antd";
 import { RepertoireModel } from "../lib/types/models/Repertoire";
-import ChessState from "../stores/ChessState";
 import { getMove } from "../helpers";
 
 interface TreeProps {
 	repertoire? : RepertoireModel | null
 	active_uuid : ChessControllerState["last_uuid"],
-	onMoveClick : Function,
-	moves       : ChessControllerState["moves"]
+	onMoveClick : Function
 }
 
 interface BaseTree {
@@ -31,8 +29,7 @@ var tree: any = {};
 
 function Tree(props: TreeProps) {
 	const client              = useApolloClient();
-	const prev_move_count_ref = useRef<number>();
-	const prev_slug_ref       = useRef<RepertoireModel["slug"]>();
+	const prev_rep_ref = useRef<string>();
 
 	const { loading, error, data } = useQuery(
 		GET_REPERTOIRE_MOVES,
@@ -44,23 +41,22 @@ function Tree(props: TreeProps) {
 		}
 	);
 
-	if (prev_slug_ref.current !== props.repertoire?.slug || (data?.repertoire?.moves.length ?? 0) !== prev_move_count_ref.current) {
+	const data_string = JSON.stringify(data);
+
+	if (prev_rep_ref.current !== data_string) {
 		base_tree = buildBaseTree(client, data?.repertoire?.moves ?? []);
 	}
 
-	prev_move_count_ref.current = data?.repertoire?.moves.length ?? 0;
-	prev_slug_ref.current       = props.repertoire?.slug;
+	prev_rep_ref.current = data_string;
 
 	tree = (Object.keys(base_tree).length > 0) ? buildTree() : {};
 
 	const branches = [];
 	
 	for (let sort in tree) {
-		const move_idx = Math.round(tree[sort].moveNumber / 5) - 2;
-
 		let active_uuid = props.active_uuid;
 
-		if (props.moves[move_idx] !== tree[sort].move) {
+		if (!tree[sort].uuids.includes(active_uuid)) {
 			active_uuid = "";
 		}
 
@@ -70,7 +66,6 @@ function Tree(props: TreeProps) {
 				root={true}
 				active={true}
 				tree={tree[sort]}
-				moves={(active_uuid) ? props.moves : false}
 				active_uuid={active_uuid}
 				onMoveClick={props.onMoveClick}
 			/>
@@ -95,6 +90,7 @@ function buildBaseTree(client: ApolloClient<object>, moves: any) {
 		}
 
 		tmp_move.moves = [];
+		tmp_move.uuids = [tmp_move.id];
 
 		if (tmp_move.transpositionId) {
 			const transposition = getMove(client, tmp_move.transpositionId);
@@ -109,29 +105,39 @@ function buildBaseTree(client: ApolloClient<object>, moves: any) {
 		}
 
 		tree[tmp_move.moveNumber][tmp_move.sort] = tmp_move;
+	}
 
-		if (tmp_move.parentId) {
-			let parent = getMove(client, tmp_move.parentId);
+	for (const move of moves ?? []) {
+		const tmp_move = {...move};
 
-			tree[parent.moveNumber][parent.sort].moves.push({
-				sort       : tmp_move.sort,
-				moveNumber : tmp_move.moveNumber
-			});
+		if (!tmp_move.parentId) {
+			continue;
+		}
 
-			let has_children       = false;
-			let local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
+		let parent = getMove(client, tmp_move.parentId);
 
-			while (parent.parentId) {
-				parent = getMove(client, parent.parentId);
+		tree[parent.moveNumber][parent.sort].uuids.push(move.id);
 
-				const parent_parent = (parent.parentId) ? getMove(client, parent.parentId) : false;
+		tree[parent.moveNumber][parent.sort].moves.push({
+			sort       : tmp_move.sort,
+			moveNumber : tmp_move.moveNumber
+		});
 
-				if ((local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
-					has_children = true;							
-				}
-				
-				tree[parent.moveNumber][parent.sort].has_children = has_children;
+		let has_children       = false;
+		let local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
+
+		while (parent.parentId) {
+			parent = getMove(client, parent.parentId);
+
+			const parent_parent = (parent.parentId) ? getMove(client, parent.parentId) : false;
+
+			if ((local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
+				has_children = true;							
 			}
+
+			tree[parent.moveNumber][parent.sort].uuids.push(move.id);
+			
+			tree[parent.moveNumber][parent.sort].has_children = has_children;
 		}
 	}
 
@@ -152,7 +158,8 @@ function buildTree(move_num: number = 10, focus_sort?: number, transpose?: boole
 			moveNumber   : item.moveNumber,
 			has_children : (item.has_children || item.moves.length > 1),
 			children     : {},
-			transpose    : transpose || false
+			transpose    : transpose || false,
+			uuids        : item.uuids
 		};
 
 		for (let index in item.moves) {

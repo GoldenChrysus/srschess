@@ -8,7 +8,6 @@ interface BranchProps {
 	tree: any,
 	root?: boolean,
 	active?: boolean,
-	moves: any,
 	active_uuid?: string | null,
 	parent_uuid?: string,
 	onMoveClick: Function
@@ -62,13 +61,12 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 
 		for (let sort in segment) {
 			const move        = segment[sort];
-			const child_count = Object.keys(move.children).length;
+			const children    = (move.transpose) ? [] : move.children;
+			const child_count = Object.keys(children).length;
 			let active_uuid   = this.props.active_uuid;
 
 			if (child_count > 1) {
-				const move_idx = Math.round(move.moveNumber / 5) - 2;
-
-				if (this.props.moves && this.props.moves[move_idx] !== move.move) {
+				if (!move.uuids.includes(active_uuid)) {
 					active_uuid = "";
 				}
 			}
@@ -78,9 +76,9 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 				: (
 					(child_count > 1)
 						? (
-							<Branch key={"branch-" + move.id} parent_uuid={move.id} active={this.state.child_active} tree={move.children} moves={(active_uuid) ? this.props.moves : false} active_uuid={active_uuid} onMoveClick={this.props.onMoveClick}/>
+							<Branch key={"branch-" + move.id} parent_uuid={move.id} active={this.state.child_active} tree={children} active_uuid={active_uuid} onMoveClick={this.props.onMoveClick}/>
 						) :
-						this.buildHtml(Object.values(move.children)[0], true)
+						this.buildHtml(Object.values(children)[0], true)
 				);
 
 			const active = (!move.transpose && this.props.active_uuid === move.id);

@@ -1,0 +1,1 @@
+SELECT DISTINCT g.id, g.year, g.month, g.day, g.event, g.result, g.white, g.white_title, g.white_elo, g.black, g.black_title, g.black_elo FROM master_games g JOIN master_game_moves m ON m.master_game_id = g.id WHERE m.fen = 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -' OFFSET 10 LIMIT 5;

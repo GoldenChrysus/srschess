@@ -1,7 +1,7 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
-import { GET_MOVE_FRAG } from "../api/queries";
+import { MOVE_FRAG } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import { RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 import Chessboard from "../components/Chessboard";
@@ -9,6 +9,7 @@ import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
 import { generateUUID } from "../helpers";
 import MasterMoveList from "../components/chess/MasterMoveList";
+import ChessState from "../stores/ChessState";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -144,7 +145,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				</div>
 				<LeftMenu
 					key="chess-left-menu-component"
-					moves={this.state.moves}
 					active_uuid={this.state.last_uuid}
 					mode={this.props.mode}
 					repertoire={this.props.repertoire}
@@ -167,7 +167,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	renderMasterMoveList() {
 		return (["review", "lesson"].includes(this.props.mode))
 			? <></>
-			: <MasterMoveList last_uuid={this.state.last_uuid} onMoveClick={this.onMoveClick.bind(this, "master-movelist")}/>;
+			: <MasterMoveList fen={this.state.fen} onMoveClick={this.onMoveClick.bind(this, "master-movelist")}/>;
 	}
 
 	setOriginalQueue() {
@@ -480,7 +480,9 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						new_state.last_uuid = uuid;
 
 						if (!this.historyContainsUUID(uuid)) {
-							new_state.history = this.generateHistory(prev_uuid).history;
+							if (!new_state.history) {
+								new_state.history = [...this.state.history];
+							}
 
 							new_state.history.push({
 								id   : uuid,
@@ -534,7 +536,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	getMove(id: string) {
 		return this.props.client.readFragment({
 			id       : "Move:" + id,
-			fragment : GET_MOVE_FRAG
+			fragment : MOVE_FRAG
 		});
 	}
 }

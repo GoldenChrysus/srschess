@@ -3,6 +3,7 @@ import { RepertoireModel, RepertoireMoveModel } from "../lib/types/models/Repert
 
 class ChessState {
 	best_move: string = "";
+	transposing: boolean = false;
 
 	// Moves
 	move_id: RepertoireMoveModel["id"] | null = null;
