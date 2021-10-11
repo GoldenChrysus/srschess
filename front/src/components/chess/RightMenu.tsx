@@ -5,7 +5,6 @@ import { ChessControllerProps, ChessControllerState } from "../../lib/types/Ches
 
 import MoveList from "./MoveList";
 import Repertoire from "./right-menu/Repertoire";
-import { ApolloClient } from "@apollo/client";
 
 import "../../styles/components/chess/right-menu.css";
 

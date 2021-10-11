@@ -75,7 +75,23 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 		}
 
 		if (movelist) {
-			movelist.style.maxHeight = width;
+			let move_height = width;
+
+			const stockfish  = document.getElementById("stockfish")?.offsetHeight ?? 0;
+			const controller = document.getElementById("controller")?.offsetHeight ?? 0;
+			let adjust_px    = stockfish + controller;
+
+			if (movelist.classList.contains("repertoire")) {
+				const collapse: any   = document.getElementById("chess-right-menu")?.getElementsByClassName("ant-collapse")[0];
+				const collapse_height = collapse?.offsetHeight ?? 0;
+
+				adjust_px += collapse_height;
+			}
+
+			adjust_px  += 7;
+			move_height = "calc(" + move_height + " - " + adjust_px + "px)";
+
+			movelist.style.maxHeight = move_height;
 		}
 	}
 }
