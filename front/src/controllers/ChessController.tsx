@@ -1,15 +1,13 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
-import { MOVE_FRAG } from "../api/queries";
 import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import { RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
-import { generateUUID } from "../helpers";
+import { generateUUID, getMove } from "../helpers";
 import MasterMoveList from "../components/chess/MasterMoveList";
-import ChessState from "../stores/ChessState";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -263,7 +261,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		}
 
 		do {
-			const move = this.getMove(uuid);
+			const move = getMove(this.props.client, uuid);
 
 			data.history.push({
 				id   : uuid,
@@ -490,7 +488,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 							});
 						}
 
-						const cached_move = this.getMove(uuid);
+						const cached_move = getMove(this.props.client, uuid);
 
 						if (!cached_move) {
 							this.setState(new_state);
@@ -505,7 +503,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 								}
 							);
 						} else if (prev_uuid && cached_move.parentId !== prev_uuid) {
-							const prev_move = this.getMove(prev_uuid);
+							const prev_move = getMove(this.props.client, prev_uuid);
 
 							if (prev_move && prev_move.transpositionId !== uuid) {
 								this.props.onTransposition(uuid, prev_uuid);
@@ -531,13 +529,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	historyContainsUUID(uuid: string) {
 		return (this.state.history.filter(x => x.id === uuid).length > 0);
-	}
-
-	getMove(id: string) {
-		return this.props.client.readFragment({
-			id       : "Move:" + id,
-			fragment : MOVE_FRAG
-		});
 	}
 }
 
