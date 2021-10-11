@@ -3,7 +3,7 @@ import React from "react";
 
 class ErrorBoundary extends React.Component {
 	componentDidCatch(error: any, info: any) {
-		message.error("An unexpected error occurred.", 60000);
+		message.error("An unexpected error occurred.");
 	}
 
 	render() {
