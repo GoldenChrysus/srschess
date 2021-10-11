@@ -6,6 +6,7 @@ import PremiumWarning from "../PremiumWarning";
 import { ChessControllerState } from "../../lib/types/ChessControllerTypes";
 import { GET_MASTER_MOVE } from "../../api/queries";
 import { useTranslation } from "react-i18next";
+import { hasPremiumLockoutError } from "../../helpers";
 
 interface MasterMoveListProps {
 	fen         : ChessControllerState["fen"],
@@ -30,8 +31,7 @@ function MasterMoveList(props: MasterMoveListProps) {
 		last_data_ref.current = data;
 	}
 
-	const first_err: any = error?.graphQLErrors[0];
-	const premium        = (first_err?.code === 200001) ? <PremiumWarning message={t("premium:opening_depth_limit")}/> : null;
+	const premium  = hasPremiumLockoutError(error) ? <PremiumWarning message={t("premium:opening_depth_limit")}/> : null;
 
 	return (
 		<div className="w-full relative">
