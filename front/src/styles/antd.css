@@ -54,6 +54,18 @@ body .ant-table {
 	background: var(--ant-bg);
 }
 
+body .ant-message-notice-content {
+	background: var(--red-800);
+}
+
+body .ant-message-error .anticon {
+	color: var(--gray-200);
+}
+
+body .ant-message-notice-content .anticon {
+	top: -3px;
+}
+
 body .ant-table .ant-table-thead > tr > th {
 	background-color: var(--black-15o);
 }
