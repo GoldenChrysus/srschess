@@ -8,5 +8,6 @@
 	"login": "Login",
 	"na": "N/A",
 	"name": "Name",
-	"now": "Now"
+	"now": "Now",
+	"unexpected_error": "An unexpected error occurred."
 }
