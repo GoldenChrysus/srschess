@@ -10,6 +10,8 @@ module Types
 
 				# TODO: Validations (depth, position validity)
 
+				authorize fen_parts, :explore?, policy_class: PremiumPolicy
+
 				fen_1 = fen_parts[0..3].join(" ")
 
 				fen_parts[3] = "-"
