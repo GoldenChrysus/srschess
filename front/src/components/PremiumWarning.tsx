@@ -18,7 +18,9 @@ class PremiumWarning extends React.Component<PremiumWarningProps> {
 						<Translation ns="premium">
 							{
 								(t) => (
-									<Button type="default" style={{ color: "#fff", textShadow: "0 0 4px #000" }}>{t("upgrade_now")}</Button>
+									<Button className="premium" type="default" style={{ color: "#fff", textShadow: "0 0 4px #000" }}>
+										{t("upgrade_now")}
+									</Button>
 								)
 							}
 						</Translation>

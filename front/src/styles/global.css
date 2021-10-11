@@ -9,6 +9,8 @@
 	--gray-800: theme("colors.gray.800");
 	--gray-900: theme("colors.gray.900");
 	--red-500: theme("colors.red.500");
+	--yellow-500: theme("colors.yellow.500");
+	--yellow-600: theme("colors.yellow.600");
 	--green-300: theme("colors.green.300");
 	--green-400: theme("colors.green.400");
 	--green-500: theme("colors.green.500");
@@ -54,6 +56,18 @@ body a:hover {
 
 body a:active {
 	color: var(--green-400);
+}
+
+body button.ant-btn-default.premium {
+	background-color: var(--yellow-600);
+	border-color: var(--yellow-600);
+}
+
+body .ant-btn-default.premium:hover,
+body .ant-btn-default.premium:focus,
+body .ant-btn-default.premium:active {
+	background-color: var(--yellow-500);
+	border-color: var(--yellow-500);
 }
 
 ::-webkit-scrollbar {
