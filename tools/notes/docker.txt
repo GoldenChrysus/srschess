@@ -1,0 +1,14 @@
+API/Front:
+	Ruby:
+		ruby 3.0.0p0
+	Node:
+		node 14.18.0
+		npm 6.14.15
+	Python:
+		python 3.8.10
+		pip 20.0.2
+		pip install chess==1.7.0
+
+Database:
+	Postgres:
+		postgres 13

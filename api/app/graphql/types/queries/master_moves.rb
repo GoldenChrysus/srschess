@@ -10,6 +10,10 @@ module Types
 
 				# TODO: Validations (depth, position validity)
 
+				valid = ValidateFen.call(fen: fen).result
+
+				# handle invalid
+
 				authorize fen_parts, :explore?, policy_class: PremiumPolicy
 
 				fen_1 = fen_parts[0..3].join(" ")
