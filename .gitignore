@@ -1,2 +1,6 @@
 tools/scripts/data/**/*.*
 api/data/**/*.*
+
+# Environments
+**/*.env*
+!**/*.env*.gpg

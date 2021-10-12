@@ -1,10 +1,24 @@
 class PremiumPolicy < ApplicationPolicy
-	def explore?
-		Current.internal_error_code = 200001
+	def explore_openings?
+		valid = true
 
-		move_num  = record[5].to_i
-		move_play = record[1]
+		if (!record)
+			valid = false
+		end
 
-		return (move_num < 6 || (move_num == 6 and move_play == "w"))
+		if (valid)
+			fen_parts = record.split(" ")
+
+			move_num  = fen_parts[5].to_i
+			move_play = fen_parts[1]
+
+			valid = (move_num < 6 || (move_num == 6 and move_play == "w"))
+		end
+
+		if (!valid)
+			Current.internal_error_code = 200001
+		end
+
+		return valid
 	end
 end

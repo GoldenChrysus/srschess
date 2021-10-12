@@ -6,25 +6,17 @@ module Types
 			argument :fen, String, required: false
 			
 			def resolve(fen:)
-				fen_parts = fen.split(" ")
+				valid = ValidateFen.call(fen: fen)
 
-				# TODO: Validations (depth, position validity)
+				if (!valid.result)
+					raise ApiErrors::ChessError::InvalidFen.new
+				end
 
-				valid = ValidateFen.call(fen: fen).result
-
-				# handle invalid
-
-				authorize fen_parts, :explore?, policy_class: PremiumPolicy
-
-				fen_1 = fen_parts[0..3].join(" ")
-
-				fen_parts[3] = "-"
-
-				fen_2 = fen_parts[0..3].join(" ")
+				authorize valid.fen_1, :explore_openings?, policy_class: PremiumPolicy
 
 				params = {
-					:fen_1 => fen_1,
-					:fen_2 => fen_2
+					:fen_1 => valid.fen_1.split(" ")[0..3].join(" "),
+					:fen_2 => valid.fen_2.split(" ")[0..3].join(" ")
 				}
 		
 				sql  =

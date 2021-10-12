@@ -59,9 +59,13 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+# Use ltree Postgres type
 gem "pg_ltree"
 
+# GraphQL
 gem "graphql"
+
+# Decode JWT
 gem "jwt"
 
 # JSON API base
@@ -79,4 +83,8 @@ gem "interactor"
 # Security policies
 gem "pundit"
 
+# Caching
 gem "redis"
+
+# Chess logic
+gem "pgn"

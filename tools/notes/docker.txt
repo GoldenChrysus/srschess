@@ -1,6 +1,9 @@
 API/Front:
+	OS:
+		debian 11
 	Ruby:
 		ruby 3.0.0p0
+		rails 6.1.4.1
 	Node:
 		node 14.18.0
 		npm 6.14.15
