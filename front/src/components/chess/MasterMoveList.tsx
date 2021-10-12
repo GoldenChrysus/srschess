@@ -34,7 +34,7 @@ function MasterMoveList(props: MasterMoveListProps) {
 	const premium = hasPremiumLockoutError(error) ? <PremiumWarning message={t("premium:opening_depth_limit")}/> : null;
 
 	return (
-		<div className="w-full relative">
+		<div className="w-full relative mb-4 md:mb-0">
 			<Table
 				dataSource={last_data_ref.current?.masterMoves}
 				loading={loading}

@@ -126,7 +126,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 		return (
 			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full">
-				<div key="chessboard-outer" id="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess">
+				<div key="chessboard-outer" id="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess min-w-chess-small md:min-w-chess">
 					<Chessboard
 						mode={this.props.mode}
 						key="chessboard"

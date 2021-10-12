@@ -27,6 +27,10 @@ module.exports = {
 			},
 			maxWidth : {
 				chess : "calc(100vw * 0.4)"
+			},
+			minWidth : {
+				"chess-small" : "100%",
+				chess         : "430px"
 			}
 		}
 	},

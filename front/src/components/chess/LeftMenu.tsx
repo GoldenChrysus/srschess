@@ -34,7 +34,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 		}
 
 		return (
-			<div key="chess-left-menu-inner" id="chess-left-menu" className="flex-1 order-2 md:order-1">
+			<div key="chess-left-menu-inner" id="chess-left-menu" className="flex-1 order-3 md:order-1">
 				<Translation ns={["repertoires"]}>
 					{
 						(t) => (

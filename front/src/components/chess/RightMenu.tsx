@@ -32,7 +32,7 @@ class RightMenu extends React.Component<RightMenuProps> {
 
 	render() {
 		return (
-			<div key="chess-right-menu-inner" id="chess-right-menu" className="flex-1 order-3 md:order-3">
+			<div key="chess-right-menu-inner" id="chess-right-menu" className="flex-1 order-2 mb-6 md:order-3 md:mb-0">
 				{this.renderRepertoire()}
 				<MoveList mode={this.props.mode} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
 				<Translation ns="chess">
