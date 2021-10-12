@@ -75,7 +75,7 @@ gem "jsonapi-resources"
 gem "rack-cors"
 
 # Environment variables
-gem "figaro"
+gem "dotenv-rails"
 
 # Interactors
 gem "interactor"

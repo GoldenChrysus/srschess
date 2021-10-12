@@ -18,9 +18,9 @@ module Secured
 				nil,
 				false,
 				algorithms: "RS256",
-				iss: "https://securetoken.google.com/" + ENV["firebase_project_id"],
+				iss: "https://securetoken.google.com/" + ENV["FIREBASE_PROJECT_ID"],
 				verify_iss: true,
-				aud: ENV["firebase_project_id"],
+				aud: ENV["FIREBASE_PROJECT_ID"],
 				verify_aud: true
 			)
 
