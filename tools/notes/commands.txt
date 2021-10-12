@@ -1,0 +1,3 @@
+Rails:
+	rake db:migrate
+	rake db:structure:dump
