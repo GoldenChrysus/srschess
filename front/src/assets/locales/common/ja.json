@@ -3,11 +3,17 @@
   "create": "作成",
   "day": "日",
   "days": "日",
+  "delete": "削除",
+  "delete_confirm": "これを削除してもよろしいですか？",
   "edit": "修正",
   "input_name": "お名前をご入力ください。",
   "login": "ログイン",
   "na": "無し",
   "name": "名前",
+  "no": "いいえ",
   "now": "今",
-  "unexpected_error": "予想されなかったエラーが出ました。"
+  "public": "公開",
+  "save": "保存",
+  "unexpected_error": "予想されなかったエラーが出ました。",
+  "yes": "はい"
 }
