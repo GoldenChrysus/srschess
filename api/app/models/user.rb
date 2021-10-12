@@ -4,7 +4,7 @@ class User < ApplicationRecord
 	validates :uid, presence: true, uniqueness: true
 
 	# Relationships
-	has_many :repertoires
+	has_many :repertoires, dependent: :destroy
 
 	# Callbacks
 	after_validation :normalize_email, on: :create

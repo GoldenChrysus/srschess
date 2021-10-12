@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from "react";
-import { useQuery } from "@apollo/client";
+import React, { useEffect, useRef, useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
 import { Spin } from "antd";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Collapse, Button, Progress } from "antd";
+import { Collapse, Button, Progress, Popconfirm } from "antd";
 import { TFunction } from "i18next";
 
 import { RepertoireModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
-import { GET_REPERTOIRE_CACHED } from "../../../api/queries";
+import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
+
+import AddRepertoire from "../../modals/AddRepertoire";
 
 interface RepertoireProps {
 	name? : RepertoireModel["name"],
@@ -19,7 +21,15 @@ var original_review_count = 0;
 var original_lesson_count = 0;
 
 function Repertoire(props: RepertoireProps) {
-	const { t } = useTranslation(["repertoires", "common"]);
+	const [ modal_active, setModalActive ] = useState(false);
+	const [ deleting, setDeleting ]        = useState(false);
+
+	const [ editRepertoire, edit_res ]   = useMutation(EDIT_REPERTOIRE);
+	const [ deleteRepertoire, delete_res ] = useMutation(DELETE_REPERTOIRE, {
+		refetchQueries : [ GET_REPERTOIRES ]
+	});
+
+	const { t }         = useTranslation(["repertoires", "common"]);
 	const prev_slug_ref = useRef<RepertoireProps["slug"]>(props.slug);
 
 	const { loading, error, data } = useQuery<RepertoireQueryData>(
@@ -31,6 +41,25 @@ function Repertoire(props: RepertoireProps) {
 			fetchPolicy : "cache-only"
 		}
 	);
+
+	const onSubmit = (values: any) => {
+		setModalActive(false);
+		editRepertoire({
+			variables : {
+				...values,
+				id : data?.repertoire?.id
+			}
+		});
+	};
+
+	const onDelete = () => {
+		deleteRepertoire({
+			variables : {
+				id : data?.repertoire?.id
+			}
+		});
+		setDeleting(true);
+	}
 
 	useEffect(() => {
 		if (props.slug !== prev_slug_ref.current) {
@@ -52,18 +81,27 @@ function Repertoire(props: RepertoireProps) {
 		original_review_count = review_count;
 	}
 
+	if (deleting && !delete_res.loading) {
+		return (
+			<Redirect to="/repertoires/"/>
+		);
+	}
+
 	return (
 		<Collapse bordered={false} activeKey="repertoire-panel">
 			<Collapse.Panel showArrow={false} id="repertoire-panel" header={getTitle(props, t)} key="repertoire-panel">
-				<Spin spinning={error !== undefined || loading}>
-					{renderContent(props, t, lesson_count, review_count)}
+				<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
+					{renderContent(props, t, lesson_count, review_count, setModalActive, onDelete)}
+					{props.mode === "repertoire" && (
+						<AddRepertoire type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} repertoire={data?.repertoire}/>
+					)}
 				</Spin>
 			</Collapse.Panel>
 		</Collapse>
 	);
 }
 
-function renderContent(props: RepertoireProps, t: TFunction, lesson_count: number, review_count: number) {
+function renderContent(props: RepertoireProps, t: TFunction, lesson_count: number, review_count: number, setModalActive: Function, onDelete: Function) {
 	switch (props.mode) {
 		case "repertoire":
 			return (
@@ -74,7 +112,15 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 					<Link to={{pathname: "/reviews/" + props.slug}}>
 						<Button className="mr-2" type="default">{t("review")} ({review_count})</Button>
 					</Link>
-					<Button type="ghost">{t("common:edit")}</Button>
+					<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
+					<Popconfirm
+						title={t("common:delete_confirm")}
+						okText={t("common:yes")}
+						cancelText={t("common:cancel")}
+						onConfirm={() => onDelete()}
+					>
+						<Button type="ghost">{t("common:delete")}</Button>
+					</Popconfirm>
 				</>
 			);
 

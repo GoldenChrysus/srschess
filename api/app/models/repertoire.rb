@@ -8,13 +8,15 @@ class Repertoire < ApplicationRecord
 	validates :user, presence: true
 	validates :name, presence: true
 	validates :side, presence: true
+	validates :side, inclusion: { in: ->(i) { [ i.side_was ] }}, on: :update
+	validates :user_id, inclusion: { in: ->(i) { [ i.user_id_was ] }}, on: :update
 
 	# Types
 	enum side: {white: "W", black: "B"}
 
 	# Relationships
 	belongs_to :user, required: true
-	has_many :moves, -> { order("move_number ASC, sort ASC") }
+	has_many :moves, -> { order("move_number ASC, sort ASC") }, dependent: :destroy
 
 	# Callbacks
 	after_validation :set_slug, on: :create

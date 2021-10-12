@@ -25,11 +25,12 @@ interface BaseTree {
 }
 
 var base_tree: BaseTree = {};
-var tree: any = {};
+var tree: any           = {};
 
 function Tree(props: TreeProps) {
-	const client              = useApolloClient();
+	const client       = useApolloClient();
 	const prev_rep_ref = useRef<string>();
+	const branches     = [];
 
 	const { loading, error, data } = useQuery(
 		GET_REPERTOIRE_MOVES,
@@ -37,39 +38,40 @@ function Tree(props: TreeProps) {
 			variables : {
 				slug : props.repertoire?.slug
 			},
-			fetchPolicy : "cache-only"
+			fetchPolicy : "cache-only",
+			skip        : (props.repertoire?.slug === undefined)
 		}
 	);
 
-	const data_string = JSON.stringify(data);
+	if (props.repertoire) {
+		const data_string = JSON.stringify(data);
 
-	if (prev_rep_ref.current !== data_string) {
-		base_tree = buildBaseTree(client, data?.repertoire?.moves ?? []);
-	}
-
-	prev_rep_ref.current = data_string;
-
-	tree = (Object.keys(base_tree).length > 0) ? buildTree() : {};
-
-	const branches = [];
-	
-	for (let sort in tree) {
-		let active_uuid = props.active_uuid;
-
-		if (!tree[sort].uuids.includes(active_uuid)) {
-			active_uuid = "";
+		if (prev_rep_ref.current !== data_string) {
+			base_tree = buildBaseTree(client, data?.repertoire?.moves ?? []);
 		}
 
-		branches.push(
-			<Branch
-				key={"root-branch-" + sort}
-				root={true}
-				active={true}
-				tree={tree[sort]}
-				active_uuid={active_uuid}
-				onMoveClick={props.onMoveClick}
-			/>
-		);
+		prev_rep_ref.current = data_string;
+
+		tree = (Object.keys(base_tree).length > 0) ? buildTree() : {};
+	
+		for (let sort in tree) {
+			let active_uuid = props.active_uuid;
+
+			if (!tree[sort].uuids.includes(active_uuid)) {
+				active_uuid = "";
+			}
+
+			branches.push(
+				<Branch
+					key={"root-branch-" + sort}
+					root={true}
+					active={true}
+					tree={tree[sort]}
+					active_uuid={active_uuid}
+					onMoveClick={props.onMoveClick}
+				/>
+			);
+		}
 	}
 
 	return (

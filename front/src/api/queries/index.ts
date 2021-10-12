@@ -6,6 +6,7 @@ const REPERTOIRE_FRAG = gql`
 		slug
 		name
 		side
+		public
 		nextReview
 		lessonQueueLength
 		reviewQueueLength
@@ -40,15 +41,44 @@ export const CREATE_USER = gql`
 `;
 
 export const CREATE_REPERTOIRE = gql`
-	mutation CreateRepertoire($name: String!, $side: String!) {
+	mutation CreateRepertoire($name: String!, $side: String!, $public: Boolean!) {
 		createRepertoire(input: {
 			name: $name,
-			side: $side
+			side: $side,
+			public: $public
 		}) {
 			repertoire {
 				id
 				slug
 			}
+			errors
+		}
+	}
+`;
+
+export const EDIT_REPERTOIRE = gql`
+	mutation EditRepertoire($id: ID!, $name: String!, $public: Boolean!) {
+		editRepertoire(input: {
+			id: $id,
+			name: $name,
+			public: $public
+		}) {
+			repertoire {
+				id
+				slug
+				name
+				public
+			}
+			errors
+		}
+	}
+`;
+
+export const DELETE_REPERTOIRE = gql`
+	mutation DeleteRepertoire($id: ID!) {
+		deleteRepertoire(input: {
+			id: $id
+		}) {
 			errors
 		}
 	}

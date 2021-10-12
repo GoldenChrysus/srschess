@@ -38,7 +38,9 @@ body .ant-btn-ghost:focus {
 body .ant-modal-content,
 body .ant-modal-header,
 body .ant-select-dropdown,
-body .ant-dropdown-menu {
+body .ant-dropdown-menu,
+body .ant-popover-inner,
+body .ant-popover-arrow-content {
 	background: var(--gray-800);
 }
 

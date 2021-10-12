@@ -8,7 +8,7 @@ import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
 import "../../../styles/components/chess/left-menu/repertoires.css";
 
-import AddRepertoire from "./AddRepertoire";
+import AddRepertoire from "../../modals/AddRepertoire";
 import { TFunction } from "i18next";
 import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
 import Repertoire from "./Repertoires/Repertoire";
@@ -62,7 +62,7 @@ function Repertoires(props: RepertoiresProps) {
 					)
 				}
 			</Translation>
-			<AddRepertoire visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit}/>
+			<AddRepertoire type="add" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit}/>
 		</Spin>
 	);
 }

@@ -16,6 +16,7 @@ module Types
 			field :created_at, GraphQL::Types::ISO8601DateTime, null: false
 			field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 			field :side, String, null: false
+			field :public, Boolean, null: false
 			field :lesson_queue, [QueueItem], null: true
 			field :lesson_queue_length, Int, null: true
 			field :review_queue, [QueueItem], null: true

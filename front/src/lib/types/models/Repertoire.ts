@@ -31,6 +31,7 @@ export interface RepertoireModel {
 	slug?: string,
 	name: string,
 	side: string,
+	public: boolean,
 	moves?: Array<RepertoireMoveModel> | null,
 	lessonQueueLength?: number,
 	lessonQueue?: Array<RepertoireQueueItemModel>,

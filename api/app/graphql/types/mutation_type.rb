@@ -6,6 +6,12 @@ module Types
 		# /create_repertoire
 		field :create_repertoire, mutation: Types::Mutations::CreateRepertoire
 
+		# /edit_repertoire
+		field :edit_repertoire, mutation: Types::Mutations::EditRepertoire
+
+		# /delete_repertoire
+		field :delete_repertoire, mutation: Types::Mutations::DeleteRepertoire
+
 		# /create_move
 		field :create_move, mutation: Types::Mutations::CreateMove
 

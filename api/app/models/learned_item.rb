@@ -18,7 +18,7 @@ class LearnedItem < ApplicationRecord
 
 	# Relationships
 	belongs_to :move, required: true
-	has_many :reviews
+	has_many :reviews, dependent: :destroy
 
 	# Callbacks
 	before_validation :set_initial_data, on: :create

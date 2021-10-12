@@ -3,11 +3,17 @@
 	"create": "Create",
 	"day": "Day",
 	"days": "Days",
+	"delete": "Delete",
+	"delete_confirm": "Are you sure you want to delete this?",
 	"edit": "Edit",
 	"input_name": "Please input a name.",
 	"login": "Login",
 	"na": "N/A",
 	"name": "Name",
+	"no": "No",
 	"now": "Now",
-	"unexpected_error": "An unexpected error occurred."
+	"public": "Public",
+	"save": "Save",
+	"unexpected_error": "An unexpected error occurred.",
+	"yes": "Yes"
 }
