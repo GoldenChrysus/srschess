@@ -299,9 +299,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			const last = this.chess.history({verbose: true}).at(-1);
 
 			return this.reducer({
-				type : "move-repertoire",
-				uci  : last!.from + last!.to,
-				data : {
+				type  : "move-repertoire",
+				uci   : last!.from + last!.to,
+				moved : true,
+				data  : {
 					fen   : this.chess.fen(),
 					pgn   : this.chess.pgn(),
 					moves : this.chess.history()
@@ -470,54 +471,49 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 			case "move-repertoire":
 				const prev_uuid = this.state.last_uuid;
-	
-				switch (this.props.mode) {
-					case ChessControllerModes.repertoire:
-						const uuid = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
+				const uuid      = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
+				
+				if (!action.moved) {
+					this.chess.move(last_move);
+				}
 
-						new_state.last_uuid = uuid;
+				new_state.last_uuid = uuid;
 
-						if (!this.historyContainsUUID(uuid)) {
-							if (!new_state.history) {
-								new_state.history = [...this.state.history];
-							}
+				if (!this.historyContainsUUID(uuid)) {
+					if (!new_state.history) {
+						new_state.history = [...this.state.history];
+					}
 
-							new_state.history.push({
-								id   : uuid,
-								move : last_move
-							});
+					new_state.history.push({
+						id   : uuid,
+						move : last_move
+					});
+				}
+
+				const cached_move = getMove(this.props.client, uuid);
+
+				if (!cached_move) {
+					this.setState(new_state);
+					this.props.onMove(
+						{
+							id        : uuid,
+							parent_id : prev_uuid,
+							move_num  : move_num,
+							move      : last_move,
+							uci       : action.uci,
+							fen       : new_state.fen
 						}
+					);
+				} else if (prev_uuid && cached_move.parentId !== prev_uuid) {
+					const prev_move = getMove(this.props.client, prev_uuid);
 
-						const cached_move = getMove(this.props.client, uuid);
+					if (prev_move && prev_move.transpositionId !== uuid) {
+						this.props.onTransposition(uuid, prev_uuid);
+					}
 
-						if (!cached_move) {
-							this.setState(new_state);
-							this.props.onMove(
-								{
-									id        : uuid,
-									parent_id : prev_uuid,
-									move_num  : move_num,
-									move      : last_move,
-									uci       : action.uci,
-									fen       : new_state.fen
-								}
-							);
-						} else if (prev_uuid && cached_move.parentId !== prev_uuid) {
-							const prev_move = getMove(this.props.client, prev_uuid);
-
-							if (prev_move && prev_move.transpositionId !== uuid) {
-								this.props.onTransposition(uuid, prev_uuid);
-							}
-
-							this.setState(new_state);
-						} else {
-							this.setState(new_state);
-						}
-
-						break;
-
-					default:
-						break;
+					this.setState(new_state);
+				} else {
+					this.setState(new_state);
 				}
 	
 				break;
