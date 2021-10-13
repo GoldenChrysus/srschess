@@ -6,5 +6,12 @@ Chessbomb:
 	python3 chessbomb-scrape.py
 	python3 pgn-process.py -e development -s chessbomb
 
+Caissabase:
+	Export latest Caissabase download to PGN via Scid vs PC
+	python3 pgn-process.py -e development -s caissabase
+
 All:
 	python3 create-master-moves.py -e development
+
+SQL:
+	REFRESH MATERIALIZED VIEW master_move_stats;

@@ -2,11 +2,11 @@ import chess.pgn
 import io
 import psycopg2
 import math
-import yaml
 import sys
 import multiprocessing
 from time import sleep
 from getopt import getopt
+from dotenv import dotenv_values
 
 enviro = False
 valid  = {
@@ -34,14 +34,16 @@ if enviro not in valid["enviro"]:
 	print("Invalid environment.")
 	sys.exit(2)
 
-with open("../../api/config/application.yml", "r") as stream:
-	yaml_data = yaml.safe_load(stream);
+config = {
+	**dotenv_values("../../config/.env." + enviro),
+	**dotenv_values("../../config/.env")
+}
 
-db_host     = yaml_data["db_host"] if ("db_host" not in yaml_data[enviro]) else yaml_data[enviro]["db_host"]
-db_port     = yaml_data["db_port"] if ("db_port" not in yaml_data[enviro]) else yaml_data[enviro]["db_port"]
-db_username = yaml_data["db_username"] if ("db_username" not in yaml_data[enviro]) else yaml_data[enviro]["db_username"]
-db_password = yaml_data["db_password"] if ("db_password" not in yaml_data[enviro]) else yaml_data[enviro]["db_password"]
-db_database = yaml_data[enviro]["db_database"]
+db_host     = config["MASTERGAMES_DB_HOST"]
+db_port     = config["MASTERGAMES_DB_PORT"]
+db_username = config["MASTERGAMES_DB_USERNAME"]
+db_password = config["MASTERGAMES_DB_PASSWORD"]
+db_database = config["MASTERGAMES_DB_DATABASE"]
 
 conn = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
 cur  = conn.cursor()

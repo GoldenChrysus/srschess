@@ -1,7 +1,2 @@
 Rails:
 	rake db:migrate
-	rake db:structure:dump
-
-Master Games DB:
-	materialized view SQL
-	set materialized view owner to Rails DB user

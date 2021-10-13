@@ -7,9 +7,12 @@ API/Front:
 	Node:
 		node 14.18.0
 		npm 6.14.15
+	Nginx:
+		?
 	Python:
 		python 3.8.10
 		pip 20.0.2
+		pip install psycopg2-binary
 		pip install chess==1.7.0
 		pip install python-dotenv
 
