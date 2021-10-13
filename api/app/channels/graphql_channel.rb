@@ -7,14 +7,16 @@ class GraphqlChannel < ApplicationCable::Channel
 	# protect_from_forgery with: :null_session
 
 	def execute(data)
-		variables = prepare_variables(data["variables"])
-		query = data["query"]
+		variables      = prepare_variables(data["variables"])
+		query          = data["query"]
 		operation_name = data["operationName"]
-		context = {
+		context        = {
 			channel: self,
 			user: @current_user
 		}
+
 		result = SrschessSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+
 		transmit({ 
 			:result => result
 		})

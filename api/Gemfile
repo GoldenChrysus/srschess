@@ -95,3 +95,6 @@ gem "redis"
 
 # Chess logic
 gem "pgn"
+
+# Support for views in DB
+gem "scenic"

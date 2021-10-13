@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_12_085511) do
+ActiveRecord::Schema.define(version: 2021_10_13_090921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -56,4 +56,73 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
   end
 
   add_foreign_key "master_game_moves", "master_games"
+
+  create_view "master_move_stats", materialized: true, sql_definition: <<-SQL
+      SELECT tmp.fen,
+      string_agg((((((((((tmp.move)::text || '|'::text) || tmp.white) || '|'::text) || tmp.draw) || '|'::text) || tmp.black) || '|'::text) || tmp.elo), ';'::text ORDER BY ((tmp.white + tmp.draw) + tmp.black) DESC) AS stats
+     FROM ( WITH games AS (
+                   SELECT m1.fen,
+                      g.result,
+                      g.white_elo,
+                      g.black_elo,
+                      m2.move
+                     FROM ((master_games g
+                       JOIN master_game_moves m1 ON ((m1.master_game_id = g.id)))
+                       JOIN master_game_moves m2 ON (((m2.master_game_id = m1.master_game_id) AND (m2.ply = (m1.ply + 1)))))
+                    WHERE (((m1.fen)::text <> 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -'::text) AND (g.white_elo >= 2000) AND (g.black_elo >= 2000))
+                  ), first_move AS (
+                   SELECT 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -'::text AS fen,
+                      g.result,
+                      g.white_elo,
+                      g.black_elo,
+                      m.move
+                     FROM (master_games g
+                       JOIN master_game_moves m ON ((m.master_game_id = g.id)))
+                    WHERE ((m.ply = 1) AND (g.white_elo >= 2000) AND (g.black_elo >= 2000))
+                  )
+           SELECT g.fen,
+              g.move,
+              sum(
+                  CASE
+                      WHEN (g.result = 1) THEN 1
+                      ELSE 0
+                  END) AS white,
+              sum(
+                  CASE
+                      WHEN (g.result = 2) THEN 1
+                      ELSE 0
+                  END) AS draw,
+              sum(
+                  CASE
+                      WHEN (g.result = 0) THEN 1
+                      ELSE 0
+                  END) AS black,
+              round((avg((g.white_elo + g.black_elo)) / (2)::numeric)) AS elo
+             FROM games g
+            GROUP BY g.fen, g.move
+          UNION ALL
+           SELECT g.fen,
+              g.move,
+              sum(
+                  CASE
+                      WHEN (g.result = 1) THEN 1
+                      ELSE 0
+                  END) AS white,
+              sum(
+                  CASE
+                      WHEN (g.result = 2) THEN 1
+                      ELSE 0
+                  END) AS draw,
+              sum(
+                  CASE
+                      WHEN (g.result = 0) THEN 1
+                      ELSE 0
+                  END) AS black,
+              round((avg((g.white_elo + g.black_elo)) / (2)::numeric)) AS elo
+             FROM first_move g
+            GROUP BY g.fen, g.move) tmp
+    GROUP BY tmp.fen;
+  SQL
+  add_index "master_move_stats", ["fen"], name: "master_move_stats_fen_idx", unique: true
+
 end
