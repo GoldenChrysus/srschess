@@ -2,13 +2,13 @@ import chess.pgn
 import re
 import psycopg2
 import hashlib
-import yaml
 import sys
 from os import listdir
 from os import rename
 from os.path import isfile, join
 from getopt import getopt
 from datetime import datetime
+from dotenv import dotenv_values
 
 enviro = False
 source = False
@@ -20,7 +20,8 @@ valid  = {
 	],
 	"source" : [
 		"pgnmentor",
-		"chessbomb"
+		"chessbomb",
+		"caissabase"
 	],
 	"result" : [
 		"1/2-1/2",
@@ -52,14 +53,16 @@ if source not in valid["source"]:
 	print("Invalid source.")
 	sys.exit(2)
 
-with open("../../api/config/application.yml", "r") as stream:
-	yaml_data = yaml.safe_load(stream);
+config = {
+	**dotenv_values("../../config/.env." + enviro),
+	**dotenv_values("../../config/.env")
+}
 
-db_host     = yaml_data["db_host"] if ("db_host" not in yaml_data[enviro]) else yaml_data[enviro]["db_host"]
-db_port     = yaml_data["db_port"] if ("db_port" not in yaml_data[enviro]) else yaml_data[enviro]["db_port"]
-db_username = yaml_data["db_username"] if ("db_username" not in yaml_data[enviro]) else yaml_data[enviro]["db_username"]
-db_password = yaml_data["db_password"] if ("db_password" not in yaml_data[enviro]) else yaml_data[enviro]["db_password"]
-db_database = yaml_data[enviro]["db_database"]
+db_host     = config["MASTERGAMES_DB_HOST"]
+db_port     = config["MASTERGAMES_DB_PORT"]
+db_username = config["MASTERGAMES_DB_USERNAME"]
+db_password = config["MASTERGAMES_DB_PASSWORD"]
+db_database = config["MASTERGAMES_DB_DATABASE"]
 
 conn = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
 cur  = conn.cursor()
@@ -80,13 +83,15 @@ def getGame(data):
 	return game
 
 source_enum = {
-	"pgnmentor" : 1,
-	"chessbomb" : 2,
-	"local"     : 3
+	"local"      : 0,
+	"pgnmentor"  : 1,
+	"chessbomb"  : 2,
+	"caissabase" : 3
 }
 
 for file in files:
 	print(file)
+
 	if (len(re.findall("pgn$", file)) == 0):
 		continue
 
@@ -106,21 +111,20 @@ for file in files:
 		for move in game.mainline():
 			moves.append(move.san())
 
-		record["event"]         = game.headers["Event"]
-		record["round"]         = None if ("Round" not in game.headers) else game.headers["Round"]
-		record["movelist"]      = re.sub("[^A-Za-z\d\.]", "", ".".join(moves).replace("=", "_"))
-		record["eco"]           = None if ("ECO" not in game.headers) else game.headers["ECO"]
-		record["white"]         = game.headers["White"].replace(", ", ",").replace(",", ", ")
-		record["black"]         = game.headers["Black"].replace(", ", ",").replace(",", ", ")
-		record["white_elo"]     = 0 if ("WhiteElo" not in game.headers) else 0 if (game.headers["WhiteElo"] in ["", "?"]) else int(game.headers["WhiteElo"])
-		record["black_elo"]     = 0 if ("BlackElo" not in game.headers) else 0 if (game.headers["BlackElo"] in ["", "?"]) else int(game.headers["BlackElo"])
-		record["white_title"]   = None if ("WhiteTitle" not in game.headers) else game.headers["WhiteTitle"]
-		record["black_title"]   = None if ("BlackTitle" not in game.headers) else game.headers["BlackTitle"]
-		record["white_fide_id"] = None if ("WhiteFIDE" not in game.headers) else game.headers["WhiteFIDE"]
-		record["black_fide_id"] = None if ("BlackFIDE" not in game.headers) else game.headers["BlackFIDE"]
-		record["source"]        = source_enum[source]
+		record["event"]       = game.headers["Event"]
+		record["round"]       = None if ("Round" not in game.headers) else game.headers["Round"]
+		record["movelist"]    = re.sub("[^A-Za-z\d\.]", "", ".".join(moves).replace("=", "_"))
+		record["eco"]         = None if ("ECO" not in game.headers) else game.headers["ECO"]
+		record["white"]       = game.headers["White"].replace(", ", ",").replace(",", ", ")
+		record["black"]       = game.headers["Black"].replace(", ", ",").replace(",", ", ")
+		record["white_elo"]   = 0 if ("WhiteElo" not in game.headers) else 0 if (game.headers["WhiteElo"] in ["", "?"]) else int(game.headers["WhiteElo"])
+		record["black_elo"]   = 0 if ("BlackElo" not in game.headers) else 0 if (game.headers["BlackElo"] in ["", "?"]) else int(game.headers["BlackElo"])
+		record["white_title"] = None if ("WhiteTitle" not in game.headers) else game.headers["WhiteTitle"]
+		record["black_title"] = None if ("BlackTitle" not in game.headers) else game.headers["BlackTitle"]
+		record["source"]      = source_enum[source]
 
-		result = ((2, 0)[result == "0-1"], 1)[result == "1-0"]
+		str_result = (("D", "B")[result == "0-1"], "W")[result == "1-0"]
+		result     = ((2, 0)[result == "0-1"], 1)[result == "1-0"]
 
 		record["result"]   = result
 		record["location"] = game.headers["Site"]
@@ -128,7 +132,14 @@ for file in files:
 		date     = game.headers["Date"].split(".")
 		exporter = chess.pgn.StringExporter(headers=True, variations=True, comments=True)
 
-		if (source == "pgnmentor"):
+		if (source == "caissabase"):
+			record["white_fide_id"] = None if ("WhiteFideId" not in game.headers) else game.headers["WhiteFideId"]
+			record["black_fide_id"] = None if ("BlackFideId" not in game.headers) else game.headers["BlackFideId"]
+		else:
+			record["white_fide_id"] = None if ("WhiteFIDE" not in game.headers) else game.headers["WhiteFIDE"]
+			record["black_fide_id"] = None if ("BlackFIDE" not in game.headers) else game.headers["BlackFIDE"]
+
+		if (source == "pgnmentor" or source == "caissabase"):
 			record["year"]  = None if (date[0] == "????") else int(date[0])
 			record["month"] = None if (date[1] == "??") else int(date[1])
 			record["day"]   = None if (date[2] == "??" or len(date[2]) == 0) else int(date[2])
@@ -151,7 +162,7 @@ for file in files:
 			(
 				re.sub("[^A-Za-z]", "", record["white"].split(",")[0]) + ":" +
 				re.sub("[^A-Za-z]", "", record["black"].split(",")[0]) + ":" +
-				record["result"] + ":" +
+				str_result + ":" +
 				str(record["year"]) + ":" +
 				str(record["month"]) + ":" +
 				str(record["day"]) + ":" +
@@ -160,23 +171,27 @@ for file in files:
 		).hexdigest()
 		record["id"]  = record["id"][0:8] + "-" + record["id"][8:12] + "-" + record["id"][12:16] + "-" + record["id"][16:20] + "-" + record["id"][20:32]
 
+		if (source == "caissabase"):
+			print(record["id"])
+
 		# print(record["white"], record["black"])
 		conflict = "NOTHING" if enviro == "pgnmentor" else """
 			UPDATE SET
-				event = EXCLUDED.event,
-				round = EXCLUDED.round,
-				year = EXCLUDED.year,
-				month = EXCLUDED.month,
-				day = EXCLUDED.day,
-				white_elo = EXCLUDED.white_elo,
-				black_elo = EXCLUDED.black_elo,
-				white_title = EXCLUDED.white_title,
-				black_title = EXCLUDED.black_title,
-				white_fide_id = EXCLUDED.white_fide_id,
-				black_fide_id = EXCLUDED.black_fide_id,
-				white = EXCLUDED.white,
-				black = EXCLUDED.black,
-				pgn = EXCLUDED.pgn
+				event = CASE WHEN master_games.source = 1 THEN EXCLUDED.event ELSE master_games.event END,
+				round = CASE WHEN master_games.source = 1 THEN EXCLUDED.round ELSE master_games.round END,
+				year = CASE WHEN master_games.source = 1 THEN EXCLUDED.year ELSE master_games.year END,
+				month = CASE WHEN master_games.source = 1 THEN EXCLUDED.month ELSE master_games.month END,
+				day = CASE WHEN master_games.source = 1 THEN EXCLUDED.day ELSE master_games.day END,
+				white_elo = CASE WHEN master_games.source = 1 THEN EXCLUDED.white_elo ELSE master_games.white_elo END,
+				black_elo = CASE WHEN master_games.source = 1 THEN EXCLUDED.black_elo ELSE master_games.black_elo END,
+				white_title = CASE WHEN master_games.source = 1 THEN EXCLUDED.white_title ELSE master_games.white_title END,
+				black_title = CASE WHEN master_games.source = 1 THEN EXCLUDED.black_title ELSE master_games.black_title END,
+				white_fide_id = CASE WHEN master_games.source = 1 THEN EXCLUDED.white_fide_id ELSE master_games.white_fide_id END,
+				black_fide_id = CASE WHEN master_games.source = 1 THEN EXCLUDED.black_fide_id ELSE master_games.black_fide_id END,
+				white = CASE WHEN master_games.source = 1 THEN EXCLUDED.white ELSE master_games.white END,
+				black = CASE WHEN master_games.source = 1 THEN EXCLUDED.black ELSE master_games.black END,
+				pgn = CASE WHEN master_games.source = 1 THEN EXCLUDED.pgn ELSE master_games.pgn END,
+				source = CASE WHEN master_games.source = 1 THEN EXCLUDED.source ELSE master_games.source END
 		"""
 
 		cur.execute("""

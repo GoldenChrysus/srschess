@@ -11,6 +11,7 @@ API/Front:
 		python 3.8.10
 		pip 20.0.2
 		pip install chess==1.7.0
+		pip install python-dotenv
 
 Database:
 	Postgres:

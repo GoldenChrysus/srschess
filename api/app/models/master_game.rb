@@ -14,5 +14,5 @@ class MasterGame < MasterDbRecord
 
 	# Types
 	enum result: {white: 1, black: 0, draw: 2}
-	enum source: {pgnmentor: 1, chessbomb: 2, local: 3}
+	enum source: {local: 0, pgnmentor: 1, chessbomb: 2, caissabase: 3}
 end
