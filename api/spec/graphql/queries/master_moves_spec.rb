@@ -7,13 +7,7 @@ RSpec.describe "MasterMoves query" do
 	})
 	query = "query MasterMoves($fen: String) {
 		masterMoves(fen: $fen) {
-			key
 			move
-			white
-			draw
-			black
-			elo
-			__typename
 		}
 	}"
 	context = {
