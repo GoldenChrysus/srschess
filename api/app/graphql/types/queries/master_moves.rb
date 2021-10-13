@@ -8,8 +8,6 @@ module Types
 			def resolve(fen:)
 				valid = ValidateFen.call(fen: fen)
 
-				puts "GOT HERE 1"
-
 				if (!valid.result)
 					raise ApiErrors::ChessError::InvalidFen.new
 				end

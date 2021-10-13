@@ -17,7 +17,7 @@ module Types
 
 				authorize repertoire, :update?
 
-				parent = if parent_id != nil then RepertoireMove.find(parent_id) else nil end
+				parent = if parent_id != nil and parent_id.length > 0 then RepertoireMove.find(parent_id) else nil end
 
 				authorize parent, :update? unless parent == nil
 
