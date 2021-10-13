@@ -1,4 +1,4 @@
-class MasterGame < ApplicationRecord
+class MasterGame < MasterDbRecord
 	# Validation
 	validates :movelist, presence: true
 	validates :white, presence: true
@@ -13,6 +13,6 @@ class MasterGame < ApplicationRecord
 	has_many :master_game_moves
 
 	# Types
-	enum result: {white: "W", black: "B", draw: "D"}
-	enum source: {pgnmentor: "pgnmentor", chessbomb: "chessbomb", local: "local"}
+	enum result: {white: 1, black: 0, draw: 2}
+	enum source: {pgnmentor: 1, chessbomb: 2, local: 3}
 end

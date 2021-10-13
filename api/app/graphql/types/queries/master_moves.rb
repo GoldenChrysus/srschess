@@ -8,6 +8,8 @@ module Types
 			def resolve(fen:)
 				valid = ValidateFen.call(fen: fen)
 
+				puts "GOT HERE 1"
+
 				if (!valid.result)
 					raise ApiErrors::ChessError::InvalidFen.new
 				end
@@ -28,7 +30,7 @@ module Types
 						fen = :fen_1 OR
 						fen = :fen_2"
 				sql  = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
-				res  = ActiveRecord::Base.connection.exec_query(sql)
+				res  = MasterGame.connection.exec_query(sql)
 				data = []
 
 				return nil unless res.count > 0

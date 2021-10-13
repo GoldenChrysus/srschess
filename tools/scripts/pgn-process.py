@@ -79,6 +79,12 @@ def getGame(data):
 
 	return game
 
+source_enum = {
+	"pgnmentor" : 1,
+	"chessbomb" : 2,
+	"local"     : 3
+}
+
 for file in files:
 	print(file)
 	if (len(re.findall("pgn$", file)) == 0):
@@ -112,9 +118,9 @@ for file in files:
 		record["black_title"]   = None if ("BlackTitle" not in game.headers) else game.headers["BlackTitle"]
 		record["white_fide_id"] = None if ("WhiteFIDE" not in game.headers) else game.headers["WhiteFIDE"]
 		record["black_fide_id"] = None if ("BlackFIDE" not in game.headers) else game.headers["BlackFIDE"]
-		record["source"]        = source
+		record["source"]        = source_enum[source]
 
-		result = (("D", "B")[result == "0-1"], "W")[result == "1-0"]
+		result = ((2, 0)[result == "0-1"], 1)[result == "1-0"]
 
 		record["result"]   = result
 		record["location"] = game.headers["Site"]

@@ -1,4 +1,4 @@
-class MasterGameMove < ApplicationRecord
+class MasterGameMove < MasterDbRecord
 	# Validations
 	validates :master_game, presence: true
 	validates :ply, presence: true

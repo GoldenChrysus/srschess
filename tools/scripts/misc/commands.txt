@@ -1,0 +1,10 @@
+PGNMentor:
+	python3 pgnmentor-scrape.py
+	python3 pgn-process.py -e development -s pgnmentor
+
+Chessbomb:
+	python3 chessbomb-scrape.py
+	python3 pgn-process.py -e development -s chessbomb
+
+All:
+	python3 create-master-moves.py -e development

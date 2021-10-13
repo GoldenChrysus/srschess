@@ -10,7 +10,7 @@ from os import remove
 from os.path import isfile, join
 from zipfile import ZipFile
 
-path  = "data/pgnmentor/"
+path  = "data/pgnmentor/games/"
 rails = "../../api/data/pgnmentor/"
 url   = "https://www.pgnmentor.com/"
 page  = requests.get(url + "files.html")
@@ -43,4 +43,4 @@ for file in files:
 	if (len(re.findall("pgn$", file)) == 0):
 		continue
 	
-	rename(path + file, rails + file)
+	# rename(path + file, rails + file)

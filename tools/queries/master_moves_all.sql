@@ -53,9 +53,9 @@ FROM
 		SELECT
 			g.fen,
 			g.move,
-			SUM(CASE WHEN g.result = 'W' THEN 1 ELSE 0 END) AS white,
-			SUM(CASE WHEN g.result = 'D' THEN 1 ELSE 0 END) AS draw,
-			SUM(CASE WHEN g.result = 'B' THEN 1 ELSE 0 END) AS black,
+			SUM(CASE WHEN g.result = 1 THEN 1 ELSE 0 END) AS white,
+			SUM(CASE WHEN g.result = 2 THEN 1 ELSE 0 END) AS draw,
+			SUM(CASE WHEN g.result = 0 THEN 1 ELSE 0 END) AS black,
 			ROUND(AVG(g.white_elo + g.black_elo) / 2) AS elo
 		FROM
 			games g
@@ -68,9 +68,9 @@ FROM
 		SELECT
 			g.fen,
 			g.move,
-			SUM(CASE WHEN g.result = 'W' THEN 1 ELSE 0 END) AS white,
-			SUM(CASE WHEN g.result = 'D' THEN 1 ELSE 0 END) AS draw,
-			SUM(CASE WHEN g.result = 'B' THEN 1 ELSE 0 END) AS black,
+			SUM(CASE WHEN g.result = 1 THEN 1 ELSE 0 END) AS white,
+			SUM(CASE WHEN g.result = 2 THEN 1 ELSE 0 END) AS draw,
+			SUM(CASE WHEN g.result = 0 THEN 1 ELSE 0 END) AS black,
 			ROUND(AVG(g.white_elo + g.black_elo) / 2) AS elo
 		FROM
 			first_move g
@@ -143,9 +143,9 @@ AS
 				SELECT
 					g.fen,
 					g.move,
-					SUM(CASE WHEN g.result = 'W' THEN 1 ELSE 0 END) AS white,
-					SUM(CASE WHEN g.result = 'D' THEN 1 ELSE 0 END) AS draw,
-					SUM(CASE WHEN g.result = 'B' THEN 1 ELSE 0 END) AS black,
+					SUM(CASE WHEN g.result = 1 THEN 1 ELSE 0 END) AS white,
+					SUM(CASE WHEN g.result = 2 THEN 1 ELSE 0 END) AS draw,
+					SUM(CASE WHEN g.result = 0 THEN 1 ELSE 0 END) AS black,
 					ROUND(AVG(g.white_elo + g.black_elo) / 2) AS elo
 				FROM
 					games g
@@ -158,9 +158,9 @@ AS
 				SELECT
 					g.fen,
 					g.move,
-					SUM(CASE WHEN g.result = 'W' THEN 1 ELSE 0 END) AS white,
-					SUM(CASE WHEN g.result = 'D' THEN 1 ELSE 0 END) AS draw,
-					SUM(CASE WHEN g.result = 'B' THEN 1 ELSE 0 END) AS black,
+					SUM(CASE WHEN g.result = 1 THEN 1 ELSE 0 END) AS white,
+					SUM(CASE WHEN g.result = 2 THEN 1 ELSE 0 END) AS draw,
+					SUM(CASE WHEN g.result = 0 THEN 1 ELSE 0 END) AS black,
 					ROUND(AVG(g.white_elo + g.black_elo) / 2) AS elo
 				FROM
 					first_move g

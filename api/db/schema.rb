@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2021_10_12_085511) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "ltree"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -25,23 +24,6 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["move_id"], name: "index_learned_items_on_move_id", unique: true
   end
-
-  create_table "master_game_moves", force: :cascade do |t|
-    t.uuid "master_game_id", null: false
-    t.integer "ply", null: false
-    t.string "move", null: false
-    t.string "fen", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "uci"
-    t.index ["fen"], name: "index_master_game_moves_on_fen"
-    t.index ["master_game_id", "ply"], name: "index_master_game_moves_on_master_game_id_and_ply", unique: true
-    t.index ["master_game_id"], name: "index_master_game_moves_on_master_game_id"
-    t.index ["ply"], name: "index_master_game_moves_on_ply"
-  end
-
-# Could not dump table "master_games" because of following StandardError
-#   Unknown type 'game_source' for column 'source'
 
   create_table "moves", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "move_number", null: false
@@ -60,8 +42,17 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
     t.index ["transposition_id"], name: "index_moves_on_transposition_id"
   end
 
-# Could not dump table "repertoires" because of following StandardError
-#   Unknown type 'side' for column 'side'
+  create_table "repertoires", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "side", limit: 2, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "slug"
+    t.boolean "public", default: false, null: false
+    t.index ["side"], name: "index_repertoires_on_side"
+    t.index ["user_id"], name: "index_repertoires_on_user_id"
+  end
 
   create_table "reviews", force: :cascade do |t|
     t.bigint "learned_item_id", null: false
@@ -82,7 +73,6 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
   end
 
   add_foreign_key "learned_items", "moves"
-  add_foreign_key "master_game_moves", "master_games"
   add_foreign_key "moves", "moves", column: "parent_id"
   add_foreign_key "moves", "moves", column: "transposition_id"
   add_foreign_key "moves", "repertoires"

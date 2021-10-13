@@ -65,8 +65,8 @@ class AddRepertoire extends React.PureComponent<AddRepertoireProps> {
 										rules={[ { required: true, message: t("chess:choose_side")} ]}
 									>
 										<Select>
-											<Select.Option value="W">{t("chess:white")}</Select.Option>
-											<Select.Option value="B">{t("chess:black")}</Select.Option>
+											<Select.Option value="white">{t("chess:white")}</Select.Option>
+											<Select.Option value="black">{t("chess:black")}</Select.Option>
 										</Select>
 									</Form.Item>
 								)}

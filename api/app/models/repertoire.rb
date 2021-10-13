@@ -12,7 +12,7 @@ class Repertoire < ApplicationRecord
 	validates :user_id, inclusion: { in: ->(i) { [ i.user_id_was ] }}, on: :update
 
 	# Types
-	enum side: {white: "W", black: "B"}
+	enum side: {white: 1, black: 0}, _prefix: true
 
 	# Relationships
 	belongs_to :user, required: true
@@ -112,7 +112,7 @@ class Repertoire < ApplicationRecord
 				li.id IS NULL AND
 				CASE
 					WHEN
-						r.side = 'W'
+						r.side = 1
 					THEN
 						mt.level % 2 = 1
 					ELSE
@@ -212,7 +212,7 @@ class Repertoire < ApplicationRecord
 				li.level <= 8 AND
 				CASE
 					WHEN
-						r.side = 'W'
+						r.side = 1
 					THEN
 						mt.level % 2 = 1
 					ELSE
