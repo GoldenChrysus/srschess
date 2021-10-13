@@ -37,11 +37,11 @@ class AddRepertoire extends React.PureComponent<AddRepertoireProps> {
 							onCancel={() => this.props.toggleVisible(false)}
 							footer={[
 								<Button onClick={() => this.props.toggleVisible(false)}>{t("cancel")}</Button>,
-								<Button type="default" form="create-repertoire" htmlType="submit">{t(save_text)}</Button>
+								<Button type="default" form={this.props.type + "-repertoire"} htmlType="submit">{t(save_text)}</Button>
 							]}
 						>
 							<Form
-								id="create-repertoire"
+								id={this.props.type + "-repertoire"}
 								labelCol={{ span: 3 }}
 								onFinish={this.onSubmit}
 								autoComplete="off"
