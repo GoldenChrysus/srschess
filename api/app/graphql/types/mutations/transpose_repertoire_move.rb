@@ -1,18 +1,18 @@
 module Types
 	module Mutations
-		class TransposeMove < BaseMutation
+		class TransposeRepertoireMove < BaseMutation
 			argument :id, String, required: true
 			argument :transposition_id, String, required: true
 
-			field :move, Types::Models::MoveType, null: true
+			field :move, Types::Models::RepertoireMoveType, null: true
 			field :errors, [String], null: false
 
 			def resolve(id:, transposition_id:)
-				move = Move.find(id)
+				move = RepertoireMove.find(id)
 
 				authorize move, :update?
 
-				transposition = Move.find(transposition_id)
+				transposition = RepertoireMove.find(transposition_id)
 
 				authorize transposition, :update?
 

@@ -1,8 +1,8 @@
 module Types
 	module Queries
-		class Moves < Types::BaseQuery
-			# /moves
-			type [Types::Models::MoveType], null: false
+		class RepertoireMoves < Types::BaseQuery
+			# /repertoire_moves
+			type [Types::Models::RepertoireMoveType], null: false
 			argument :repertoire_id, ID, required: true
 	
 			def resolve(repertoire_id:)

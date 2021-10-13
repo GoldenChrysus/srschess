@@ -9,7 +9,7 @@ module Types
 			field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
 			# Relationships
-			field :move, Types::Models::MoveType, null: false
+			field :move, Types::Models::RepertoireMoveType, null: false
 		end
 	end
 end

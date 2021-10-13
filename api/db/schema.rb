@@ -17,15 +17,15 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
   enable_extension "plpgsql"
 
   create_table "learned_items", force: :cascade do |t|
-    t.uuid "move_id", null: false
+    t.uuid "repertoire_move_id", null: false
     t.integer "level"
     t.datetime "next_review"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["move_id"], name: "index_learned_items_on_move_id", unique: true
+    t.index ["repertoire_move_id"], name: "index_learned_items_on_repertoire_move_id"
   end
 
-  create_table "moves", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "repertoire_moves", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "move_number", null: false
     t.string "move", null: false
     t.text "fen", null: false
@@ -36,10 +36,10 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "uci", null: false
     t.uuid "transposition_id"
-    t.index ["parent_id"], name: "index_moves_on_parent_id"
-    t.index ["repertoire_id", "move_number", "move", "fen"], name: "index_moves_on_repertoire_id_and_move_number_and_move_and_fen", unique: true
-    t.index ["repertoire_id"], name: "index_moves_on_repertoire_id"
-    t.index ["transposition_id"], name: "index_moves_on_transposition_id"
+    t.index ["parent_id"], name: "index_repertoire_moves_on_parent_id"
+    t.index ["repertoire_id", "move_number", "move", "fen"], name: "repertoire_moves_uniqueness_index", unique: true
+    t.index ["repertoire_id"], name: "index_repertoire_moves_on_repertoire_id"
+    t.index ["transposition_id"], name: "index_repertoire_moves_on_transposition_id"
   end
 
   create_table "repertoires", force: :cascade do |t|
@@ -72,10 +72,10 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
     t.text "uid", null: false
   end
 
-  add_foreign_key "learned_items", "moves"
-  add_foreign_key "moves", "moves", column: "parent_id"
-  add_foreign_key "moves", "moves", column: "transposition_id"
-  add_foreign_key "moves", "repertoires"
+  add_foreign_key "learned_items", "repertoire_moves"
+  add_foreign_key "repertoire_moves", "repertoire_moves", column: "parent_id"
+  add_foreign_key "repertoire_moves", "repertoire_moves", column: "transposition_id"
+  add_foreign_key "repertoire_moves", "repertoires"
   add_foreign_key "repertoires", "users"
   add_foreign_key "reviews", "learned_items"
 end

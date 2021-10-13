@@ -11,7 +11,7 @@ module Types
 			field :errors, [String], null: false
 
 			def resolve(move_id:, incorrect_attempts:, attempts:, average_correct_time:, average_time:)
-				move = Move.find(move_id)
+				move = RepertoireMove.find(move_id)
 
 				authorize move, :update?
 

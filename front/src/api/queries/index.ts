@@ -13,8 +13,8 @@ const REPERTOIRE_FRAG = gql`
 	}
 `;
 
-export const MOVE_FRAG = gql`
-	fragment CoreMoveFields on Move {
+export const REPERTOIRE_MOVE_FRAG = gql`
+	fragment CoreMoveFields on RepertoireMove {
 		id
 		fen
 		uci
@@ -86,7 +86,7 @@ export const DELETE_REPERTOIRE = gql`
 
 export const GET_REPERTOIRE = gql`
 	${REPERTOIRE_FRAG}
-	${MOVE_FRAG}
+	${REPERTOIRE_MOVE_FRAG}
 	query Repertoire($slug: String!) {
 		repertoire(slug: $slug) {
 			...CoreRepertoireFields
@@ -122,7 +122,7 @@ export const GET_REPERTOIRE_QUEUES = gql`
 `;
 
 export const GET_REPERTOIRE_MOVES = gql`
-	${MOVE_FRAG}
+	${REPERTOIRE_MOVE_FRAG}
 	query Repertoire($slug: String!) {
 		repertoire(slug: $slug) {
 			moves {
@@ -150,11 +150,11 @@ export const GET_REPERTOIRES = gql`
 	}
 `;
 
-export const CREATE_MOVE = gql`
+export const CREATE_REPERTOIRE_MOVE = gql`
 	${REPERTOIRE_FRAG}
-	${MOVE_FRAG}
-	mutation CreateMove($id: String!, $repertoireId: ID!, $fen: String!, $uci: String!, $moveNumber: Int!, $move: String!, $parentId: ID) {
-		createMove(input: {
+	${REPERTOIRE_MOVE_FRAG}
+	mutation CreateRepertoireMove($id: String!, $repertoireId: ID!, $fen: String!, $uci: String!, $moveNumber: Int!, $move: String!, $parentId: ID) {
+		createRepertoireMove(input: {
 			id: $id,
 			repertoireId: $repertoireId,
 			fen: $fen,
@@ -177,11 +177,11 @@ export const CREATE_MOVE = gql`
 	}
 `;
 
-export const TRANSPOSE_MOVE = gql`
+export const TRANSPOSE_REPERTOIRE_MOVE = gql`
 	${REPERTOIRE_FRAG}
-	${MOVE_FRAG}
-	mutation TransposeMove($id: String!, $transpositionId: String!) {
-		transposeMove(input: {
+	${REPERTOIRE_MOVE_FRAG}
+	mutation TransposeRepertoireMove($id: String!, $transpositionId: String!) {
+		transposeRepertoireMove(input: {
 			id: $id,
 			transpositionId: $transpositionId
 		}) {

@@ -3,7 +3,7 @@ import { runInAction } from "mobx";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 
-import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_MOVE, TRANSPOSE_MOVE, CREATE_REVIEW } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_REPERTOIRE_MOVE, TRANSPOSE_REPERTOIRE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
@@ -39,8 +39,8 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	}
 
 	const { slug } = useParams<RepertoireRouteParams>();
-	const [ createMove ] = useMutation(CREATE_MOVE);
-	const [ transposeMove ] = useMutation(TRANSPOSE_MOVE);
+	const [ createMove ] = useMutation(CREATE_REPERTOIRE_MOVE);
+	const [ transposeMove ] = useMutation(TRANSPOSE_REPERTOIRE_MOVE);
 	const [ createReview ] = useMutation(CREATE_REVIEW, {
 		refetchQueries : [ main_query ]
 	});

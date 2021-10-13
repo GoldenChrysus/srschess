@@ -1,6 +1,6 @@
 module Types
 	module Models
-		class MoveType < Types::BaseObject
+		class RepertoireMoveType < Types::BaseObject
 			field :id, String, null: false
 			field :move_number, Integer, null: false
 			field :move, String, null: false
@@ -14,10 +14,10 @@ module Types
 
 			# Relationships
 			field :repertoire, Types::Models::RepertoireType, null: false
-			field :parent, Types::Models::MoveType, null: true
-			field :moves, [Types::Models::MoveType], null: true
-			field :transposition, Types::Models::MoveType, null: true
-			field :transpositions, [Types::Models::MoveType], null: true
+			field :parent, Types::Models::RepertoireMoveType, null: true
+			field :moves, [Types::Models::RepertoireMoveType], null: true
+			field :transposition, Types::Models::RepertoireMoveType, null: true
+			field :transpositions, [Types::Models::RepertoireMoveType], null: true
 		end
 	end
 end

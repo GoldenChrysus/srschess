@@ -16,11 +16,11 @@ module Types
 		# /repertoire
 		field :repertoire, resolver: Types::Queries::Repertoire
 
-		# /moves
-		field :moves, resolver: Types::Queries::Moves
+		# /repertoire_moves
+		field :repertoire_moves, resolver: Types::Queries::RepertoireMoves
 
-		# /move
-		field :move, resolver: Types::Queries::Move
+		# /repertoire_move
+		field :repertoire_move, resolver: Types::Queries::RepertoireMove
 
 		# /master_moves
 		field :master_moves, resolver: Types::Queries::MasterMoves

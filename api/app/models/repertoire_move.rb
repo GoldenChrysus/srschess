@@ -1,4 +1,4 @@
-class Move < ApplicationRecord
+class RepertoireMove < ApplicationRecord
 	# Validation
 	validates :repertoire, presence: true
 	validates :move_number, presence: true
@@ -9,10 +9,10 @@ class Move < ApplicationRecord
 
 	# Relationships
 	belongs_to :repertoire, required: true
-	belongs_to :parent, class_name: "Move", required: false
-	belongs_to :transposition, class_name: "Move", required: false
-	has_many :moves, inverse_of: "parent", foreign_key: :parent_id, dependent: :destroy
-	has_many :transpositions, class_name: "Move", inverse_of: "transposition", foreign_key: :transposition_id
+	belongs_to :parent, class_name: "RepertoireMove", required: false
+	belongs_to :transposition, class_name: "RepertoireMove", required: false
+	has_many :moves, class_name: "RepertoireMove", inverse_of: "parent", foreign_key: :parent_id, dependent: :destroy
+	has_many :transpositions, class_name: "RepertoireMove", inverse_of: "transposition", foreign_key: :transposition_id
 	has_one :learned_item, required: false, dependent: :destroy
 
 	# Callbacks

@@ -12,11 +12,11 @@ module Types
 		# /delete_repertoire
 		field :delete_repertoire, mutation: Types::Mutations::DeleteRepertoire
 
-		# /create_move
-		field :create_move, mutation: Types::Mutations::CreateMove
+		# /create_repertoire_move
+		field :create_repertoire_move, mutation: Types::Mutations::CreateRepertoireMove
 
-		# /transpose_move
-		field :transpose_move, mutation: Types::Mutations::TransposeMove
+		# /transpose_repertoire_move
+		field :transpose_repertoire_move, mutation: Types::Mutations::TransposeRepertoireMove
 
 		# /create_review
 		field :create_review, mutation: Types::Mutations::CreateReview

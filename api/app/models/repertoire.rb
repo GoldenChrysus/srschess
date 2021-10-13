@@ -16,7 +16,7 @@ class Repertoire < ApplicationRecord
 
 	# Relationships
 	belongs_to :user, required: true
-	has_many :moves, -> { order("move_number ASC, sort ASC") }, dependent: :destroy
+	has_many :moves, -> { order("move_number ASC, sort ASC") }, dependent: :destroy, class_name: "RepertoireMove"
 
 	# Callbacks
 	after_validation :set_slug, on: :create
@@ -32,9 +32,9 @@ class Repertoire < ApplicationRecord
 			FROM
 				learned_items l
 			JOIN
-				moves m
+				repertoire_moves m
 			ON
-				m.id = l.move_id
+				m.id = l.repertoire_move_id
 			WHERE
 				m.repertoire_id = :id"
 		sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
@@ -69,7 +69,7 @@ class Repertoire < ApplicationRecord
 						ARRAY['', m.move],
 						ARRAY[ROW(m.move_number, m.sort)]
 					FROM
-						moves m
+						repertoire_moves m
 					WHERE
 						m.repertoire_id = :repertoire_id AND
 						m.parent_id IS NULL
@@ -87,7 +87,7 @@ class Repertoire < ApplicationRecord
 						movelist || m.move,
 						path || ROW(m.move_number, m.sort)
 					FROM
-						moves m,
+						repertoire_moves m,
 						movetree mt
 					WHERE
 						m.parent_id = mt.id
@@ -107,7 +107,7 @@ class Repertoire < ApplicationRecord
 			LEFT JOIN
 				learned_items li
 			ON
-				li.move_id = mt.id
+				li.repertoire_move_id = mt.id
 			WHERE
 				li.id IS NULL AND
 				CASE
@@ -145,7 +145,7 @@ class Repertoire < ApplicationRecord
 						ARRAY['', m.move],
 						ARRAY[ROW(m.move_number, m.sort)]
 					FROM
-						moves m
+						repertoire_moves m
 					WHERE
 						m.repertoire_id = :repertoire_id AND
 						m.parent_id IS NULL
@@ -163,7 +163,7 @@ class Repertoire < ApplicationRecord
 						movelist || m.move,
 						path || ROW(m.move_number, m.sort)
 					FROM
-						moves m,
+						repertoire_moves m,
 						movetree mt
 					WHERE
 						m.parent_id = mt.id
@@ -184,17 +184,17 @@ class Repertoire < ApplicationRecord
 			JOIN
 				learned_items li
 			ON
-				li.move_id = mt.id
+				li.repertoire_move_id = mt.id
 			LEFT JOIN
-				moves parent_move
+				repertoire_moves parent_move
 			ON
 				parent_move.id = mt.parent_id
 			LEFT JOIN
-				moves fen_parents
+				repertoire_moves fen_parents
 			ON
 				fen_parents.fen = parent_move.fen
 			LEFT JOIN
-				moves similar_moves
+				repertoire_moves similar_moves
 			ON
 				CASE
 					WHEN

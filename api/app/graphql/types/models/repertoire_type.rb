@@ -25,7 +25,7 @@ module Types
 
 			# Relationships
 			field :user, Types::Models::UserType, null: true
-			field :moves, [Types::Models::MoveType], null: true
+			field :moves, [Types::Models::RepertoireMoveType], null: true
 		end
 	end
 end

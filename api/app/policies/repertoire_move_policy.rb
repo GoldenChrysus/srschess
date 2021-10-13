@@ -1,4 +1,4 @@
-class MovePolicy < ApplicationPolicy
+class RepertoireMovePolicy < ApplicationPolicy
 	def show?
 		Current.internal_error_code = 100001
 
