@@ -8,19 +8,19 @@
 			"name": "Launch Rails",
 			"type": "node-terminal",
 			"request": "launch",
-			"command": "cd api && rails s",
+			"command": "cd api && rails s -b 0.0.0.0 -p 3000",
 		},
 		{
 			"name": "Launch React",
 			"type": "node-terminal",
 			"request": "launch",
-			"command": "cd front && npm start",
+			"command": "cd front && PORT=5000 npm start",
 		},
 		{
 			"name": "Launch Chrome",
 			"type": "pwa-chrome",
 			"request": "launch",
-			"url": "http://localhost:3000",
+			"url": "http://localhost:5000",
 			"webRoot": "${workspaceFolder}",
 			"runtimeArgs": [
 				"--enable-features=SharedArrayBuffer"
