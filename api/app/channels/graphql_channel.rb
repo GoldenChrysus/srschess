@@ -15,7 +15,7 @@ class GraphqlChannel < ApplicationCable::Channel
 			user: @current_user
 		}
 
-		result = SrschessSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+		result = ChessHqSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
 
 		transmit({ 
 			:result => result

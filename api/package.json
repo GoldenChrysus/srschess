@@ -1,5 +1,5 @@
 {
-  "name": "srschess",
+  "name": "chesshq",
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.14.5",

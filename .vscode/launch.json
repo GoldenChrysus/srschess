@@ -29,7 +29,7 @@
 	],
 	"compounds": [
 		{
-			"name": "SRS Chess Front Debug",
+			"name": "Chess HQ Debug",
 			"configurations": [
 				"Launch Rails",
 				"Launch React",

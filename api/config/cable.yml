@@ -1,7 +1,7 @@
 development:
   adapter: redis
   url: "redis://localhost:6379/1"
-  channel_prefix: srschess_development
+  channel_prefix: chesshq_development
 
 
 test:
@@ -10,4 +10,4 @@ test:
 production:
   adapter: redis
   url: "redis://localhost:6379/1"
-  channel_prefix: srschess_production
+  channel_prefix: chesshq_production

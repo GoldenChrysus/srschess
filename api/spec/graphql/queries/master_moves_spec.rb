@@ -21,7 +21,7 @@ RSpec.describe "MasterMoves query" do
 		}
 
 		expect {
-			SrschessSchema.execute(query, variables: variables, context: context, operation_name: op_name)
+			ChessHqSchema.execute(query, variables: variables, context: context, operation_name: op_name)
 		}.to raise_error(Pundit::NotAuthorizedError)
 	end
 
@@ -31,7 +31,7 @@ RSpec.describe "MasterMoves query" do
 		}
 
 		expect {
-			SrschessSchema.execute(query, variables: variables, context: context, operation_name: op_name)
+			ChessHqSchema.execute(query, variables: variables, context: context, operation_name: op_name)
 		}.to raise_error(ApiErrors::ChessError::InvalidFen)
 	end
 end
