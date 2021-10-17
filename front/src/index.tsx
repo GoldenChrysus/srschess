@@ -11,8 +11,8 @@ import ActionCable from "actioncable";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
 import { ApolloProvider, ApolloLink, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 
-const cable          = ActionCable.createConsumer("ws://api.localhost/cable")
-const http_link      = createHttpLink({ uri: "http://api.localhost/graphql" });
+const cable          = ActionCable.createConsumer("ws://" + process.env.REACT_APP_API_ADDRESS + "/cable")
+const http_link      = createHttpLink({ uri: "http://" + process.env.REACT_APP_API_ADDRESS + "/graphql" });
 const shouldUseCable = () => {
 	return true;
 };
