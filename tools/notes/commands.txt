@@ -1,2 +1,6 @@
 Rails:
 	rake db:migrate
+
+AWS:
+	health check:
+		CMD-SHELL, (curl -f localhost/health && curl -f localhost:3000/health) || exit 1
