@@ -18,6 +18,9 @@ module Types
 		# /transpose_repertoire_move
 		field :transpose_repertoire_move, mutation: Types::Mutations::TransposeRepertoireMove
 
+		# /create_repertoire_move_note
+		field :create_repertoire_move_note, mutation: Types::Mutations::CreateRepertoireMoveNote
+
 		# /create_review
 		field :create_review, mutation: Types::Mutations::CreateReview
 	end

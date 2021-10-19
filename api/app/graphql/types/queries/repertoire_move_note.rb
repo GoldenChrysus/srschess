@@ -9,10 +9,7 @@ module Types
 				move = ::RepertoireMove.find(move_id)
 
 				authorize move, :show?
-
-				note = move.note
-
-				return (note == nil) ? nil : note.value
+				move.note
 			end
 		end
 	end
