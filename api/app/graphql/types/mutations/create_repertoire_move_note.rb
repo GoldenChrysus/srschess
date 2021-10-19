@@ -15,9 +15,7 @@ module Types
 				note = move.note
 
 				if (note == nil)
-					note = ::RepertoireMoveNote.new
-
-					note.move = move
+					note = ::RepertoireMoveNote.new(move: move)
 				end
 
 				note.value = value

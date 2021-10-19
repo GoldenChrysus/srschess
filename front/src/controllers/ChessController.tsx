@@ -151,6 +151,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				<RightMenu
 					key="chess-right-menu-component"
 					active_num={this.state.last_num}
+					active_uuid={this.state.last_uuid}
 					moves={this.state.history}
 					fen={this.state.fen}
 					mode={this.props.mode}

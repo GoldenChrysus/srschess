@@ -221,21 +221,21 @@ export const GET_REPERTOIRE_MOVE_NOTE = gql`
 	query RepertoireMoveNote($moveId: ID!) {
 		repertoireMoveNote(moveId: $moveId) {
 			id
-			moveId
+			repertoireMoveId
 			value
 		}
 	}
 `;
 
 export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
-	mutation CreateRepertoireMoveNote($moveId: String!, value: String) {
+	mutation CreateRepertoireMoveNote($moveId: ID!, $value: String) {
 		createRepertoireMoveNote(input: {
 			moveId: $moveId,
 			value: $value,
 		}) {
 			note {
 				id
-				moveId
+				repertoireMoveId
 				value
 			}
 			errors
