@@ -217,6 +217,31 @@ export const CREATE_REVIEW = gql`
 	}
 `;
 
+export const GET_REPERTOIRE_MOVE_NOTE = gql`
+	query RepertoireMoveNote($moveId: ID!) {
+		repertoireMoveNote(moveId: $moveId) {
+			id
+			moveId
+			value
+		}
+	}
+`;
+
+export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
+	mutation CreateRepertoireMoveNote($moveId: String!, value: String) {
+		createRepertoireMoveNote(input: {
+			moveId: $moveId,
+			value: $value,
+		}) {
+			note {
+				id
+				moveId
+				value
+			}
+			errors
+		}
+	}
+`;
 
 
 /**

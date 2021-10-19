@@ -1,3 +1,8 @@
+export interface RepertoireMoveNoteModel {
+	id: string,
+	value: string | null
+}
+
 export interface RepertoireReviewModel {
 	moveId?: string,
 	incorrectAttempts: number,
