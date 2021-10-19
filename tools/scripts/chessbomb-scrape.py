@@ -69,7 +69,7 @@ def getGame(room_slug, round, game_slug, attempt = 0):
 			return getGame(room_slug, round, game_slug, attempt + 1)
 
 after     = None
-last_run  = "2021-10-08T03:00:00.000Z";
+last_run  = "2021-10-18T19:00:00.000Z";
 last_run  = datetime.strptime(last_run, date_fmt)
 valid_res = [
 	"1/2-1/2",

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_12_085511) do
+ActiveRecord::Schema.define(version: 2021_10_19_082002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["repertoire_move_id"], name: "index_learned_items_on_repertoire_move_id"
+  end
+
+  create_table "repertoire_move_notes", force: :cascade do |t|
+    t.uuid "repertoire_move_id", null: false
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["repertoire_move_id"], name: "index_repertoire_move_notes_on_repertoire_move_id"
   end
 
   create_table "repertoire_moves", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -73,6 +81,7 @@ ActiveRecord::Schema.define(version: 2021_10_12_085511) do
   end
 
   add_foreign_key "learned_items", "repertoire_moves"
+  add_foreign_key "repertoire_move_notes", "repertoire_moves"
   add_foreign_key "repertoire_moves", "repertoire_moves", column: "parent_id"
   add_foreign_key "repertoire_moves", "repertoire_moves", column: "transposition_id"
   add_foreign_key "repertoire_moves", "repertoires"

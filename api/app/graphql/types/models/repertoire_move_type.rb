@@ -18,6 +18,7 @@ module Types
 			field :moves, [Types::Models::RepertoireMoveType], null: true
 			field :transposition, Types::Models::RepertoireMoveType, null: true
 			field :transpositions, [Types::Models::RepertoireMoveType], null: true
+			field :note, Types::Models::RepertoireMoveNoteType, null: true
 		end
 	end
 end

@@ -53,12 +53,19 @@ sql  = """
 		g.pgn
 	FROM
 		master_games g
-	LEFT JOIN
-		master_game_moves mg
-	ON
-		mg.master_game_id = g.id
 	WHERE
-		mg.id IS NULL
+		NLEVEL(g.movelist) > 0 AND
+		NOT EXISTS
+			(
+				SELECT
+					1
+				FROM
+					master_game_moves mg
+				WHERE
+					mg.master_game_id = g.id
+				LIMIT
+					1
+			)
 """
 
 cur.execute(sql)

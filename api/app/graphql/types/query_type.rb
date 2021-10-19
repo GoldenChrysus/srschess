@@ -22,6 +22,9 @@ module Types
 		# /repertoire_move
 		field :repertoire_move, resolver: Types::Queries::RepertoireMove
 
+		# /repertoire_move_note
+		field :repertoire_move_note, resolver: Types::Queries::RepertoireMoveNote
+
 		# /master_moves
 		field :master_moves, resolver: Types::Queries::MasterMoves
 	end
