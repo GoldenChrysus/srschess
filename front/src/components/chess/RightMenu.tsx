@@ -43,7 +43,7 @@ class RightMenu extends React.Component<RightMenuProps> {
 							<Collapse accordion bordered={false} defaultActiveKey="position-panel" className="top-border">
 								<Collapse.Panel id="position-panel" header={t("position_data")} key="position-panel">
 									<Input addonBefore="FEN" value={this.props.fen}/>
-									<RepertoireMoveNote active_uuid={this.props.active_uuid}/>
+									{!["review", "lesson"].includes(this.props.mode) && <RepertoireMoveNote active_uuid={this.props.active_uuid}/>}
 								</Collapse.Panel>
 							</Collapse>
 						)
