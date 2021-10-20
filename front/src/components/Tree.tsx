@@ -118,6 +118,10 @@ function buildBaseTree(client: ApolloClient<object>, moves: any) {
 
 		let parent = getMove(client, tmp_move.parentId);
 
+		if (!parent) {
+			continue;
+		}
+
 		tree[parent.moveNumber][parent.sort].uuids.push(move.id);
 
 		tree[parent.moveNumber][parent.sort].moves.push({
@@ -130,6 +134,10 @@ function buildBaseTree(client: ApolloClient<object>, moves: any) {
 
 		while (parent.parentId) {
 			parent = getMove(client, parent.parentId);
+
+			if (!parent) {
+				break;
+			}
 
 			const parent_parent = (parent.parentId) ? getMove(client, parent.parentId) : false;
 

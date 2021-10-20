@@ -264,6 +264,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		do {
 			const move = getMove(this.props.client, uuid);
 
+			if (!move) {
+				// TODO: Throw error, undo action
+			}
+
 			data.history.push({
 				id   : uuid,
 				move : move.move
