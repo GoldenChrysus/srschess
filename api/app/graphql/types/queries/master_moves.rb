@@ -12,11 +12,10 @@ module Types
 					raise ApiErrors::ChessError::InvalidFen.new
 				end
 
-				authorize valid.fen_1, :explore_openings?, policy_class: PremiumPolicy
+				authorize fen, :explore_openings?, policy_class: PremiumPolicy
 
 				params = {
-					:fen_1 => valid.fen_1.split(" ")[0..3].join(" "),
-					:fen_2 => valid.fen_2.split(" ")[0..3].join(" ")
+					:fen => fen.split(" ")[0..3].join(" ")
 				}
 		
 				sql  =
@@ -25,8 +24,7 @@ module Types
 					FROM
 						master_move_stats
 					WHERE
-						fen = :fen_1 OR
-						fen = :fen_2"
+						fen = :fen"
 				sql  = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 				res  = MasterGame.connection.exec_query(sql)
 				data = []
