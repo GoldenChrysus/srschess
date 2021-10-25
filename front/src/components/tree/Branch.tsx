@@ -10,6 +10,8 @@ interface BranchProps {
 	active?: boolean,
 	active_uuid?: string | null,
 	parent_uuid?: string,
+	first_child?: boolean,
+	last_child?: boolean,
 	onMoveClick: Function
 };
 
@@ -57,9 +59,13 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 			segment = [segment];
 		}
 
-		const html = [];
+		const html  = [];
+		const limit = Object.keys(segment).length;
+		let count   = 0;
 
 		for (let sort in segment) {
+			count++;
+
 			const move        = segment[sort];
 			const children    = (move.transpose) ? [] : move.children;
 			const child_count = Object.keys(children).length;
@@ -71,7 +77,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 				}
 			}
 
-			const ul             = (child_count === 0)
+			const ul = (child_count === 0)
 				? ""
 				: (
 					(child_count > 1)
@@ -91,9 +97,12 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 					</>
 				);
 			} else {
+				const first_child = ((count === 1 && count !== limit) || (this.props.root === true && this.props.first_child === true && count === 1));
+				const last_child  = ((count === limit && count !== 1) || (this.props.root === true && this.props.last_child === true && count === 1));
+
 				html.push(
 					<Leaf key={"leaf-" + move.id} move={move}>
-						<LeafSpan key={"span-" + move.id} active={active} start={true} has_children={move.has_children} children_active={this.state.child_active} move={move} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
+						<LeafSpan key={"span-" + move.id} active={active} start={true} has_children={move.has_children} children_active={this.state.child_active} move={move} first_child={first_child} last_child={last_child} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
 						{ul}
 					</Leaf>
 				);

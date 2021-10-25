@@ -53,8 +53,13 @@ function Tree(props: TreeProps) {
 		prev_rep_ref.current = data_string;
 
 		tree = (Object.keys(base_tree).length > 0) ? buildTree() : {};
+
+		const limit = Object.keys(tree).length;
+		let count   = 0;
 	
 		for (let sort in tree) {
+			count++;
+
 			let active_uuid = props.active_uuid;
 
 			if (!tree[sort].uuids.includes(active_uuid)) {
@@ -68,6 +73,8 @@ function Tree(props: TreeProps) {
 					active={true}
 					tree={tree[sort]}
 					active_uuid={active_uuid}
+					first_child={count === 1}
+					last_child={count === limit}
 					onMoveClick={props.onMoveClick}
 				/>
 			);

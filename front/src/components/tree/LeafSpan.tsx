@@ -1,4 +1,6 @@
 import React from "react";
+import { Translation } from "react-i18next";
+import { Menu, Dropdown } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -10,6 +12,8 @@ interface LeafSpanProps {
 	has_children: boolean,
 	children_active: boolean,
 	active?: boolean,
+	first_child?: boolean,
+	last_child?: boolean,
 	onArrowClick?: any,
 	onClick: Function,
 };
@@ -43,10 +47,28 @@ class LeafSpan extends React.Component<LeafSpanProps> {
 		const move_prefix = (this.props.move.transpose) ? "(\u2192 " : null;
 		const move_suffix = (move_prefix) ? ")" : null;
 
+		const menu = (
+			<Menu>
+				<Translation ns="common">
+					{
+						(t) => (
+							<>
+								<Menu.Item key="delete-move">{t("delete")}</Menu.Item>
+								{this.props.first_child === false && <Menu.Item key="move-up">{t("move_up")}</Menu.Item>}
+								{this.props.last_child === false && <Menu.Item key="move-down">{t("move_down")}</Menu.Item>}
+							</>
+						)
+					}
+				</Translation>
+			</Menu>
+		)
+
 		return (
 			<>
 				{icon}
-				<span key={"leafspan-span-" + this.props.move.id} onClick={() => this.props.onClick(this.props.move.id)} className={classes.join(" ")}>{move_num}{move_prefix}{this.props.move.move}{move_suffix}</span>
+				<Dropdown overlay={menu} trigger={["contextMenu"]}>
+					<span key={"leafspan-span-" + this.props.move.id} onClick={() => this.props.onClick(this.props.move.id)} className={classes.join(" ")}>{move_num}{move_prefix}{this.props.move.move}{move_suffix}</span>
+				</Dropdown>
 			</>
 		)
 	}
