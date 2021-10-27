@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 import { getClientMoveNumFromDBMoveNum } from "../../helpers";
+import ContextMenu from "./LeafSpan/ContextMenu";
 
 interface LeafSpanProps {
 	move: any,
@@ -46,22 +47,11 @@ class LeafSpan extends React.Component<LeafSpanProps> {
 
 		const move_prefix = (this.props.move.transpose) ? "(\u2192 " : null;
 		const move_suffix = (move_prefix) ? ")" : null;
-
-		const menu = (
+		const menu        = (
 			<Menu>
-				<Translation ns="common">
-					{
-						(t) => (
-							<>
-								<Menu.Item key="delete-move">{t("delete")}</Menu.Item>
-								{this.props.first_child === false && <Menu.Item key="move-up">{t("move_up")}</Menu.Item>}
-								{this.props.last_child === false && <Menu.Item key="move-down">{t("move_down")}</Menu.Item>}
-							</>
-						)
-					}
-				</Translation>
+				<ContextMenu move_id={this.props.move.id} first_child={this.props.first_child} last_child={this.props.last_child}/>
 			</Menu>
-		)
+		);
 
 		return (
 			<>

@@ -48,7 +48,7 @@ body .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
 	background: var(--black-15o);
 }
 
-body .ant-form-item-label>label.ant-form-item-required:not(.ant-form-item-required-mark-optional):before {
+body .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional):before {
 	color: var(--red-500);
 }
 
