@@ -37,7 +37,7 @@ class Header extends React.Component {
 					(t) => (
 						<div className="w-full py-1 px-4 flex">
 							<div id="logo" className="w-20">
-								logo
+								Chess HQ
 							</div>
 							<nav className="flex flex-1 items-center h-full">
 								<NavLink to="/repertoires/">
