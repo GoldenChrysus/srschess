@@ -26,7 +26,9 @@ ActiveRecord::Schema.define(version: 2021_10_28_090224) do
     t.datetime "updated_at", precision: 6, null: false
     t.ltree "movelist", null: false
     t.index ["code", "fen"], name: "index_eco_positions_on_code_and_fen", unique: true
+    t.index ["fen"], name: "index_eco_positions_on_fen", unique: true
     t.index ["movelist"], name: "index_eco_positions_on_movelist", using: :gist
+    t.index ["pgn"], name: "index_eco_positions_on_pgn", unique: true
   end
 
   create_table "learned_items", force: :cascade do |t|

@@ -5,10 +5,13 @@ class CreateEcoPositions < ActiveRecord::Migration[6.1]
 		create_table :eco_positions do |t|
 			t.string :code, null: false
 			t.string :name, null: false
-			t.string :fen, null: false, unique: true
-			t.text :pgn, null: false, unique: true
+			t.string :fen, null: false
+			t.text :pgn, null: false
 
 			t.timestamps
+
+			t.index :fen, unique: true
+			t.index :pgn, unique: true
 		end
 
 		add_column :eco_positions, :movelist, :ltree, null: false, unique: true
