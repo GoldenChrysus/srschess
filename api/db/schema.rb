@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_082002) do
+ActiveRecord::Schema.define(version: 2021_10_28_090224) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "ltree"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "eco_positions", id: :string, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "fen", null: false
+    t.text "pgn", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.ltree "movelist", null: false
+    t.index ["movelist"], name: "index_eco_positions_on_movelist", using: :gist
+  end
 
   create_table "learned_items", force: :cascade do |t|
     t.uuid "repertoire_move_id", null: false
