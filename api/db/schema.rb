@@ -17,13 +17,15 @@ ActiveRecord::Schema.define(version: 2021_10_28_090224) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "eco_positions", id: :string, force: :cascade do |t|
+  create_table "eco_positions", force: :cascade do |t|
+    t.string "code", null: false
     t.string "name", null: false
     t.string "fen", null: false
     t.text "pgn", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.ltree "movelist", null: false
+    t.index ["code", "fen"], name: "index_eco_positions_on_code_and_fen", unique: true
     t.index ["movelist"], name: "index_eco_positions_on_movelist", using: :gist
   end
 
