@@ -1,8 +1,7 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
-import { ChessControllerModes, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
-import { RepertoireQueueItemModel, RepertoireReviewModel } from "../lib/types/models/Repertoire";
+import { ChessControllerLocalState, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
@@ -14,42 +13,20 @@ type ChessType = (fen?: string) => ChessInstance;
 const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
-interface ChessControllerLocalState {
-	original_queue: Array<RepertoireQueueItemModel>,
-	chunk: Array<RepertoireQueueItemModel>,
-	chunk_limit: number,
-
-	reviews: { [id: string]: RepertoireReviewModel },
-
-	needs_reset: boolean,
-	progressing: boolean,
-	preloaded_moves: Array<string>
-}
-
-const ChessControllerInitialLocalState: ChessControllerLocalState = {
-	original_queue : [],
-	chunk          : [],
-	chunk_limit    : 5,
-
-	reviews : {},
-
-	needs_reset     : false,
-	progressing     : false,
-	preloaded_moves : [""]
-}
-
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
 	private chess = Chess2();
 
-	private original_queue: Array<RepertoireQueueItemModel> = [];
-	private chunk: Array<RepertoireQueueItemModel>          = [];
-	private chunk_limit                                     = 5;
+	private history: ChessControllerLocalState["history"] = [];
 
-	private reviews: { [id: string]: RepertoireReviewModel } = {};
+	private original_queue: ChessControllerLocalState["original_queue"] = [];
+	private chunk: ChessControllerLocalState["chunk"]                   = [];
+	private chunk_limit: ChessControllerLocalState["chunk_limit"]       = 5;
 
-	private needs_reset: boolean           = false;
-	private progressing: boolean           = false;
-	private preloaded_moves: Array<string> = [""];
+	private reviews: ChessControllerLocalState["reviews"] = {};
+
+	private needs_reset: ChessControllerLocalState["needs_reset"]         = false;
+	private progressing: ChessControllerLocalState["progressing"]         = false;
+	private preloaded_moves: ChessControllerLocalState["preloaded_moves"] = [""];
 
 	constructor(props: ChessControllerProps) {
 		super(props);
@@ -65,6 +42,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			this.chunk_limit     = 5;
 			this.progressing     = false;
 			this.preloaded_moves = [""];
+			this.history         = [];
 
 			this.chess.reset();
 			this.setOriginalQueue();
@@ -80,6 +58,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				this.chess.reset();
 
 				this.preloaded_moves = [""];
+				this.history         = [];
 
 				setTimeout(
 					() => {
@@ -205,6 +184,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			pre_moves = pre_moves.slice(-1);
 		} else {
 			this.preloaded_moves = [];
+			this.history         = [];
 
 			this.chess.reset();
 		}
@@ -315,12 +295,19 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			});
 		}
 
+		this.history = [];
+
 		this.chess.reset();
 
 		const data = this.generateHistory(uuid);
 
-		for (const move of data.moves) {
-			this.chess.move(move);
+		for (const item of data.history) {
+			this.chess.move(item.move);
+
+			this.history.push({
+				move_id : item.uuid,
+				fen     : this.chess.fen()
+			});
 		}
 
 		this.reducer({
@@ -477,6 +464,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			case "move-repertoire":
 				const prev_uuid = this.state.last_uuid;
 				const uuid      = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
+
+				this.history.push({
+					move_id : uuid,
+					fen     : new_state.fen
+				})
 				
 				if (!action.moved) {
 					this.chess.move(last_move);

@@ -113,7 +113,7 @@ for file in files:
 
 		record["event"]       = game.headers["Event"]
 		record["round"]       = None if ("Round" not in game.headers) else game.headers["Round"]
-		record["movelist"]    = re.sub("[^A-Za-z\d\.]", "", ".".join(moves).replace("=", "_"))
+		record["movelist"]    = re.sub("[^A-Za-z\d\._]", "", ".".join(moves).replace("=", "_"))
 		record["eco"]         = None if ("ECO" not in game.headers) else game.headers["ECO"]
 		record["white"]       = game.headers["White"].replace(", ", ",").replace(",", ", ")
 		record["black"]       = game.headers["Black"].replace(", ", ",").replace(",", ", ")

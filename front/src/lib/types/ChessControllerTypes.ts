@@ -1,7 +1,7 @@
 import { ApolloClient } from "@apollo/client";
 import Chess, { ChessInstance } from "chess.js";
 import { START_FEN } from "../constants/chess";
-import { RepertoireModel } from "./models/Repertoire";
+import { RepertoireModel, RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "./models/Repertoire";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -57,3 +57,20 @@ export const initial_state: ChessControllerState = {
 	quizzing      : false,
 	awaiting_user : false
 };
+
+export interface ChessControllerLocalState {
+	original_queue: Array<RepertoireQueueItemModel>,
+	chunk: Array<RepertoireQueueItemModel>,
+	chunk_limit: number,
+
+	reviews: { [id: string]: RepertoireReviewModel },
+
+	needs_reset: boolean,
+	progressing: boolean,
+	preloaded_moves: Array<string>
+
+	history: Array<{
+		move_id: RepertoireMoveModel["id"],
+		fen: RepertoireMoveModel["fen"]
+	}>
+}

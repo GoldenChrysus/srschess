@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM master_games WHERE movelist::VARCHAR LIKE '%8Q%' OR movelist::VARCHAR LIKE '%8B%' OR movelist::VARCHAR LIKE '%8R%' OR movelist::VARCHAR LIKE '%8N%' OR movelist::VARCHAR LIKE '%1Q%' OR movelist::VARCHAR LIKE '%1B%' OR movelist::VARCHAR LIKE '%1R%' OR movelist::VARCHAR LIKE '%1N%';
