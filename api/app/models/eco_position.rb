@@ -7,10 +7,10 @@ class EcoPosition < ApplicationRecord
 
 	def self.update_or_create(objects)
 		objects.each do |attributes|
-			poem = self.find_or_initialize_by(fen: attributes[:fen])
+			record = self.find_or_initialize_by(fen: attributes[:fen])
 
-			poem.assign_attributes(attributes)
-			poem.save
+			record.assign_attributes(attributes)
+			record.save
 		end
 	end
 end
