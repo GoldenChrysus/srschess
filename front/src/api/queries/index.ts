@@ -259,3 +259,15 @@ export const GET_MASTER_MOVE = gql`
 		}
 	}
 `;
+
+/**
+ * FEN ECO DATA
+ */
+ export const GET_FEN_ECO = gql`
+	query FenEco($fens: [String!]!) {
+		fenEco(fens: $fens) {
+			code
+			name
+		}
+	}
+`;

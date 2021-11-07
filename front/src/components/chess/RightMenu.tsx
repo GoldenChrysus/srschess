@@ -1,13 +1,14 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { Collapse, Input } from "antd";
-import { ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
+import { ChessControllerLocalState, ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
 import MoveList from "./MoveList";
 import Repertoire from "./right-menu/Repertoire";
 
 import "../../styles/components/chess/right-menu.css";
 import RepertoireMoveNote from "./right-menu/RepertoireMoveNote";
+import ECO from "./right-menu/ECO";
 
 interface RightMenuProps {
 	active_num?: ChessControllerState["last_num"],
@@ -15,6 +16,7 @@ interface RightMenuProps {
 	fen: string,
 	moves: ChessControllerState["history"],
 	mode: ChessControllerProps["mode"],
+	history: ChessControllerLocalState["history"],
 	repertoire_slug?: string,
 	repertoire_name?: string,
 	onMoveClick: Function
@@ -43,6 +45,7 @@ class RightMenu extends React.Component<RightMenuProps> {
 							<Collapse accordion bordered={false} defaultActiveKey="position-panel" className="top-border">
 								<Collapse.Panel id="position-panel" header={t("position_data")} key="position-panel">
 									<Input addonBefore="FEN" value={this.props.fen}/>
+									{this.props.repertoire_slug && <ECO history={this.props.history}/>}
 									{!["review", "lesson"].includes(this.props.mode) && <RepertoireMoveNote active_uuid={this.props.active_uuid}/>}
 								</Collapse.Panel>
 							</Collapse>

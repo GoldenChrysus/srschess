@@ -27,5 +27,8 @@ module Types
 
 		# /master_moves
 		field :master_moves, resolver: Types::Queries::MasterMoves
+
+		# /fen_eco
+		field :fen_eco, resolver: Types::Queries::FenEco
 	end
 end
