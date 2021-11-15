@@ -9,6 +9,7 @@ import Repertoires from "./left-menu/Repertoires";
 
 import "../../styles/components/chess/left-menu.css";
 import { RepertoireModel } from "../../lib/types/models/Repertoire";
+import PublicRepertoires from "./left-menu/PublicRepertoires";
 
 interface LeftMenuProps {
 	repertoire? : RepertoireModel | null
@@ -42,6 +43,9 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 								{this.renderTree(t)}
 								<Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
 									<Repertoires mode={this.props.mode}/>
+								</Collapse.Panel>
+								<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
+									<PublicRepertoires/>
 								</Collapse.Panel>
 							</Collapse>
 						)
