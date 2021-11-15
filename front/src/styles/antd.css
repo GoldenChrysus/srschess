@@ -90,8 +90,9 @@ body .ant-pagination-item-active {
 	border-color: var(--green-500);
 }
 
-body .ant-pagination-item-active > a {
-	color: var(--green-500);
+body .ant-pagination-item-active > a,
+body .ant-tabs-tab-active > div {
+	color: var(--green-500) !important;
 }
 
 body .ant-pagination-item-active:hover {
@@ -99,6 +100,11 @@ body .ant-pagination-item-active:hover {
 }
 
 body .ant-pagination-item:hover > a,
-body .ant-pagination-item-link:not([disabled]):hover  {
+body .ant-pagination-item-link:not([disabled]):hover,
+body .ant-tabs-tab:not(.ant-tabs-tab-active) > div:hover  {
 	color: var(--green-500);
+}
+
+body .ant-tabs-ink-bar {
+	background-color: var(--green-500);
 }
