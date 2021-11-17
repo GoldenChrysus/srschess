@@ -10,7 +10,7 @@ class Search extends React.Component<SearchProps, SearchState> {
 		super(props);
 
 		this.state = {
-			criteria : null
+			criteria : undefined
 		};
 	}
 
