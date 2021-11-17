@@ -1,9 +1,9 @@
 import React from "react";
-import Search from "./PublicRepertoires/Search";
+import Search from "../Search";
 
 function PublicRepertoires() {
 	return (
-		<Search/>
+		<Search mode="repertoires"/>
 	);
 }
 
