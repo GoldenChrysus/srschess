@@ -271,3 +271,14 @@ export const GET_MASTER_MOVE = gql`
 		}
 	}
 `;
+
+/**
+ * REPERTOIRE/GAME SEARCH
+ */
+ export const GET_CHESS_SEARCH = gql`
+	query ChessSearch($criteria: Criteria!) {
+		chessSearch(criteria: $criteria) {
+			slug
+		}
+	}
+`;

@@ -30,5 +30,8 @@ module Types
 
 		# /fen_eco
 		field :fen_eco, resolver: Types::Queries::FenEco
+
+		# /chess_search
+		field :chess_search, resolver: Types::Queries::ChessSearch
 	end
 end

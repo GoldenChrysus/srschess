@@ -6,6 +6,7 @@ import FirebaseAuth from "./lib/Firebase";
 import AuthState from "./stores/AuthState";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
+import { TYPES as GRAPHQL_TYPES } from "./api/types";
 
 import ActionCable from "actioncable";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
@@ -23,8 +24,9 @@ const link           = ApolloLink.split(
 	http_link,
 );
 const client         = new ApolloClient({
-	link  : link,
-	cache : new InMemoryCache()
+	link     : link,
+	cache    : new InMemoryCache(),
+	typeDefs : GRAPHQL_TYPES
 });
 
 AuthState.provideClient(client);

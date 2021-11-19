@@ -1,7 +1,7 @@
 import React from "react";
-import { Form, Input, Tabs, Select } from "antd";
+import { Form, Input, Tabs, Select, Button } from "antd";
 import { Translation } from "react-i18next";
-import { SearchProps, SearchState } from "../../lib/types/SearchTypes";
+import { SearchCriteria, SearchProps, SearchState } from "../../lib/types/SearchTypes";
 
 import Results from "./search/Results";
 
@@ -12,6 +12,8 @@ class Search extends React.Component<SearchProps, SearchState> {
 		this.state = {
 			criteria : undefined
 		};
+
+		this.onSubmit = this.onSubmit.bind(this);
 	}
 
 	render() {
@@ -21,7 +23,7 @@ class Search extends React.Component<SearchProps, SearchState> {
 					{(t) => (
 						<Tabs defaultActiveKey="form">
 							<Tabs.TabPane tab={t("by_criteria")} key="form">
-								<Form>
+								<Form onFinish={this.onSubmit}>
 									<Form.Item label="FEN" name="fen">
 										<Input/>
 									</Form.Item>
@@ -36,6 +38,9 @@ class Search extends React.Component<SearchProps, SearchState> {
 											<Select.Option value="black">{t("chess:black")}</Select.Option>
 										</Select>
 									</Form.Item>
+									<Form.Item>
+										<Button type="ghost" htmlType="submit">{t("search")}</Button>
+									</Form.Item>
 								</Form>
 							</Tabs.TabPane>
 							<Tabs.TabPane tab={t("by_move_input")} key="moves">
@@ -47,6 +52,15 @@ class Search extends React.Component<SearchProps, SearchState> {
 				<Results criteria={this.state.criteria} mode={this.props.mode}/>
 			</>
 		);
+	}
+
+	onSubmit(data: SearchCriteria["data"]) {
+		this.setState({
+			criteria: {
+				mode : this.props.mode,
+				data : data
+			}
+		});
 	}
 }
 
