@@ -13,10 +13,10 @@ date_fmt  = "%Y-%m-%dT%H:%M:%S.%fZ"
 headers   = {
 	"Content-Type" : "application/json",
 	"Accept"       : "application/json",
-	"cookie"       : "_ga=GA1.2.1044528119.1630747170; cookieconsent_dismissed=yes; _gid=GA1.2.217649908.1632188507; cbs=eyJzZWNyZXQiOiJaUjk0YXBuZ1ZFOU05SW91RTU4ZTkyWV8iLCJwYXNzcG9ydCI6eyJ1c2VyIjo1OTAwNH0sIl9leHBpcmUiOjE2MzQ3ODA2OTQ2MDgsIl9tYXhBZ2UiOjI1OTIwMDAwMDB9; cbs.sig=NjpoGyxBifwfSLzTmxD5h82K2-U; _gat=1"
+	"cookie"       : "cbs=eyJzZWNyZXQiOiJ4Yjg5ZVNZSnRDX2JJc1F2QTIySlc1RlAiLCJfZXhwaXJlIjoxNjM3OTI5NjY0NTUzLCJfbWF4QWdlIjoyNTkyMDAwMDAwfQ==; cbs.sig=Uwjg-NY4kGtJTg3GtSfIAf7kVeM; _ga=GA1.2.1000128209.1637314987; _gid=GA1.2.2131843939.1637314987; _gat=1"
 }
 base_data = {
-	"_csrf" : "ulI0kEd3-X2DeNpJEEadbaMXCM-krVdc-xhQ"
+	"_csrf" : "3h1yTPV7-bHV4q-enEx9uxUmCH9hYEUz6hvk"
 }
 
 def getPage(after, attempt = 0):
@@ -30,7 +30,7 @@ def getPage(after, attempt = 0):
 
 	try:
 		return res.json()
-	except e:
+	except BaseException as e:
 		if attempt == 3:
 			raise e
 		else:
@@ -46,7 +46,7 @@ def getRoom(slug, attempt = 0):
 
 	try:
 		return res.json()
-	except e:
+	except BaseException as e:
 		if attempt == 3:
 			raise e
 		else:
@@ -62,14 +62,14 @@ def getGame(room_slug, round, game_slug, attempt = 0):
 
 	try:
 		return res.json()
-	except e:
+	except BaseException as e:
 		if attempt == 3:
 			raise e
 		else:
 			return getGame(room_slug, round, game_slug, attempt + 1)
 
 after     = None
-last_run  = "2021-10-18T19:00:00.000Z";
+last_run  = "2021-11-19T01:00:00.000Z";
 last_run  = datetime.strptime(last_run, date_fmt)
 valid_res = [
 	"1/2-1/2",
