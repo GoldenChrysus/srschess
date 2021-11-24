@@ -47,7 +47,7 @@ function MasterMoveList(props: MasterMoveListProps) {
 					}
 				}}
 			>
-				<Table.Column title={t("move")} dataIndex="move" key="move"/>
+				<Table.Column title={t("move_one")} dataIndex="move" key="move"/>
 				<Table.Column
 					title={t("total_games")}
 					key="total_games"

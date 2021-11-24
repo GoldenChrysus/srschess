@@ -81,9 +81,9 @@ body .ant-table .ant-table-tbody > tr:hover > td {
 	background: var(--gray-700);
 }
 
-body .ant-pagination-item {
+body .ant-pagination-item-link > span.anticon {
 	position: relative;
-	top: 3px;
+	top: -3px;
 }
 
 body .ant-pagination-item-active {

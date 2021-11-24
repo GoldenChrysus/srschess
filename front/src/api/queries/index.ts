@@ -279,6 +279,9 @@ export const GET_MASTER_MOVE = gql`
 	query ChessSearch($criteria: Criteria!) {
 		chessSearch(criteria: $criteria) {
 			slug
+			name
+			createdAt
+			moveCount
 		}
 	}
 `;
