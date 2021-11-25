@@ -29,8 +29,10 @@ function Search(props: SearchProps) {
 
 	if (data?.ecoPositions) {
 		for (const eco of data.ecoPositions) {
+			const title = eco.code + ": " + eco.name;
+
 			eco_options.push(
-				<Select.Option value={eco.id} key={"eco-" + eco.id}>{eco.code}: {eco.name}</Select.Option>
+				<Select.Option value={eco.id} key={"eco-" + eco.id} title={title}>{title}</Select.Option>
 			);
 		}
 	}
@@ -47,7 +49,7 @@ function Search(props: SearchProps) {
 							<Select
 								showSearch
 								allowClear={true}
-								filterOption={(input, option) => option?.children.join("").toLowerCase().indexOf(input.toLowerCase()) !== -1}
+								filterOption={(input, option) => option?.title.toLowerCase().indexOf(input.toLowerCase()) !== -1}
 							>
 								{eco_options}
 							</Select>
