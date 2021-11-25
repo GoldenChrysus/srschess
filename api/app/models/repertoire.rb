@@ -3,6 +3,7 @@ class Repertoire < ApplicationRecord
 	attr_accessor :lesson_queue_length
 	attr_accessor :review_queue_length
 	attr_accessor :next_review
+	attr_accessor :user_owned
 
 	# Validation
 	validates :user, presence: true

@@ -9,6 +9,9 @@ module Types
 				repertoire = ::Repertoire.where({ slug: slug }).first
 
 				authorize repertoire, :show?
+
+				repertoire.user_owned = (repertoire.user.uid == context[:user].uid)
+
 				repertoire
 			end
 		end

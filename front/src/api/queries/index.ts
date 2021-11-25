@@ -93,9 +93,7 @@ export const GET_REPERTOIRE = gql`
 			moves {
 				...CoreMoveFields
 			}
-			user {
-				uid
-			}
+			userOwned
 		}
 	}
 `;

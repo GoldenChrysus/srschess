@@ -41,6 +41,7 @@ export interface RepertoireModel {
 	public: boolean,
 	moves?: Array<RepertoireMoveModel> | null,
 	user?: UserModel,
+	userOwned: boolean,
 	lessonQueueLength?: number,
 	lessonQueue?: Array<RepertoireQueueItemModel>,
 	reviewQueueLength?: number,

@@ -112,7 +112,7 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 			return (
 				<>
 					{
-						props.repertoire?.user?.uid === AuthState.uid &&
+						props.repertoire?.userOwned &&
 						<>
 							<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
 								<Button className="mr-2" type="primary">{t("train")} ({lesson_count})</Button>
@@ -133,7 +133,7 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 					}
 					{
 						props.repertoire?.public &&
-						props.repertoire?.user?.uid !== AuthState.uid &&
+						!props.repertoire?.userOwned &&
 						<Popconfirm
 							className="ml-2"
 							title={t("common:copy_confirm")}
