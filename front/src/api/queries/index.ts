@@ -263,9 +263,19 @@ export const GET_MASTER_MOVE = gql`
 /**
  * FEN ECO DATA
  */
- export const GET_FEN_ECO = gql`
+export const GET_FEN_ECO = gql`
 	query FenEco($fens: [String!]!) {
 		fenEco(fens: $fens) {
+			code
+			name
+		}
+	}
+`;
+
+export const GET_ECO = gql`
+	query EcoPositions {
+		ecoPositions {
+			id
 			code
 			name
 		}
@@ -275,7 +285,7 @@ export const GET_MASTER_MOVE = gql`
 /**
  * REPERTOIRE/GAME SEARCH
  */
- export const GET_CHESS_SEARCH = gql`
+export const GET_CHESS_SEARCH = gql`
 	query ChessSearch($criteria: Criteria!) {
 		chessSearch(criteria: $criteria) {
 			slug

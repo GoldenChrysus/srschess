@@ -54,9 +54,7 @@ function Results(props: ResultsProps) {
 				/>
 			</Table>
 		</div>
-	)
-
-	return <></>;
+	);
 }
 
 export default Results;

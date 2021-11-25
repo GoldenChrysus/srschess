@@ -58,6 +58,25 @@ module Types
 						end
 
 						if (criteria[:data][:eco].to_s != "")
+							where.push(
+								"EXISTS
+									(
+										SELECT
+											1
+										FROM
+											repertoire_moves m3
+										JOIN
+											eco_positions p
+										ON
+											p.fen = TRIM(SUBSTRING(m3.fen FROM '^(([^ ]* ){4})'))
+										WHERE
+											p.id = :eco_id
+										LIMIT
+											1
+									)"
+							)
+
+							params[:eco_id] = criteria[:data][:eco]
 						end
 
 						if (criteria[:data][:side].to_s != "")

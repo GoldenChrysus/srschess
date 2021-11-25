@@ -31,6 +31,9 @@ module Types
 		# /fen_eco
 		field :fen_eco, resolver: Types::Queries::FenEco
 
+		# /eco_positions
+		field :eco_positions, resolver: Types::Queries::EcoPositions
+
 		# /chess_search
 		field :chess_search, resolver: Types::Queries::ChessSearch
 	end
