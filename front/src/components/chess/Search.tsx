@@ -47,7 +47,7 @@ function Search(props: SearchProps) {
 							<Select
 								showSearch
 								allowClear={true}
-								filterOption={(input, option) => option?.children.join(" ").toLowerCase().indexOf(input.toLowerCase()) !== -1}
+								filterOption={(input, option) => option?.children.join("").toLowerCase().indexOf(input.toLowerCase()) !== -1}
 							>
 								{eco_options}
 							</Select>
