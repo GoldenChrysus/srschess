@@ -135,8 +135,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					fen={this.state.fen}
 					mode={this.props.mode}
 					history={this.history}
-					repertoire_slug={this.props.repertoire?.slug}
-					repertoire_name={this.props.repertoire?.name}
+					repertoire={this.props.repertoire}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>

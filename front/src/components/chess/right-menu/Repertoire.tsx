@@ -6,15 +6,15 @@ import { useTranslation } from "react-i18next";
 import { Collapse, Button, Progress, Popconfirm } from "antd";
 import { TFunction } from "i18next";
 
+import AuthState from "../../../stores/AuthState";
 import { RepertoireModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
 import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
 
 import AddRepertoire from "../../modals/AddRepertoire";
 
 interface RepertoireProps {
-	name? : RepertoireModel["name"],
-	slug? : RepertoireModel["slug"],
-	mode  : string
+	repertoire?: RepertoireModel
+	mode: string
 }
 
 var original_review_count = 0;
@@ -29,15 +29,16 @@ function Repertoire(props: RepertoireProps) {
 		refetchQueries : [ GET_REPERTOIRES ]
 	});
 
-	const { t }         = useTranslation(["repertoires", "common"]);
-	const prev_slug_ref = useRef<RepertoireProps["slug"]>(props.slug);
+	const { t }       = useTranslation(["repertoires", "common"]);
+	const prev_id_ref = useRef<RepertoireModel["id"] | undefined>(props.repertoire?.id);
 
 	const { loading, error, data } = useQuery<RepertoireQueryData>(
 		GET_REPERTOIRE_CACHED,
 		{
 			variables : {
-				slug : props.slug
+				slug : props.repertoire?.slug
 			},
+			skip        : (props.repertoire === undefined),
 			fetchPolicy : "cache-only"
 		}
 	);
@@ -61,13 +62,17 @@ function Repertoire(props: RepertoireProps) {
 		setDeleting(true);
 	}
 
+	const onCopy = () => {
+
+	}
+
 	useEffect(() => {
-		if (props.slug !== prev_slug_ref.current) {
+		if (props.repertoire?.id !== prev_id_ref.current) {
 			original_lesson_count = 0;
 			original_review_count = 0;
 		}
 
-		prev_slug_ref.current = props.slug;
+		prev_id_ref.current = props.repertoire?.id;
 	});
 
 	const lesson_count = data?.repertoire?.lessonQueueLength ?? 0;
@@ -91,7 +96,7 @@ function Repertoire(props: RepertoireProps) {
 		<Collapse bordered={false} activeKey="repertoire-panel">
 			<Collapse.Panel showArrow={false} id="repertoire-panel" header={getTitle(props, t)} key="repertoire-panel">
 				<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
-					{renderContent(props, t, lesson_count, review_count, setModalActive, onDelete)}
+					{renderContent(props, t, lesson_count, review_count, setModalActive, onDelete, onCopy)}
 					{props.mode === "repertoire" && (
 						<AddRepertoire type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} repertoire={data?.repertoire}/>
 					)}
@@ -101,26 +106,44 @@ function Repertoire(props: RepertoireProps) {
 	);
 }
 
-function renderContent(props: RepertoireProps, t: TFunction, lesson_count: number, review_count: number, setModalActive: Function, onDelete: Function) {
+function renderContent(props: RepertoireProps, t: TFunction, lesson_count: number, review_count: number, setModalActive: Function, onDelete: Function, onCopy: Function) {
 	switch (props.mode) {
 		case "repertoire":
 			return (
 				<>
-					<Link to={{pathname: "/lessons/" + props.slug}}>
-						<Button className="mr-2" type="primary">{t("train")} ({lesson_count})</Button>
-					</Link>
-					<Link to={{pathname: "/reviews/" + props.slug}}>
-						<Button className="mr-2" type="default">{t("review")} ({review_count})</Button>
-					</Link>
-					<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
-					<Popconfirm
-						title={t("common:delete_confirm")}
-						okText={t("common:yes")}
-						cancelText={t("common:cancel")}
-						onConfirm={() => onDelete()}
-					>
-						<Button type="ghost">{t("common:delete")}</Button>
-					</Popconfirm>
+					{
+						props.repertoire?.user?.uid === AuthState.uid &&
+						<>
+							<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
+								<Button className="mr-2" type="primary">{t("train")} ({lesson_count})</Button>
+							</Link>
+							<Link to={{pathname: "/reviews/" + props.repertoire?.slug}}>
+								<Button className="mr-2" type="default">{t("review")} ({review_count})</Button>
+							</Link>
+							<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
+							<Popconfirm
+								title={t("common:delete_confirm")}
+								okText={t("common:yes")}
+								cancelText={t("common:cancel")}
+								onConfirm={() => onDelete()}
+							>
+								<Button type="ghost">{t("common:delete")}</Button>
+							</Popconfirm>
+						</>
+					}
+					{
+						props.repertoire?.public &&
+						props.repertoire?.user?.uid !== AuthState.uid &&
+						<Popconfirm
+							className="ml-2"
+							title={t("common:copy_confirm")}
+							okText={t("common:yes")}
+							cancelText={t("common:cancel")}
+							onConfirm={() => onCopy()}
+						>
+							<Button type="ghost">{t("common:copy")}</Button>
+						</Popconfirm>
+					}
 				</>
 			);
 
@@ -150,7 +173,7 @@ function getTitle(props: RepertoireProps, t: TFunction) {
 			break;
 	}
 
-	return props.name + ": " + t(t_key);
+	return props.repertoire?.name + ": " + t(t_key);
 }
 
 export default Repertoire;

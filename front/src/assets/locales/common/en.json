@@ -1,5 +1,7 @@
 {
 	"cancel": "Cancel",
+	"copy": "Copy",
+	"copy_confirm": "Are you sure you want to copy this?",
 	"create": "Create",
 	"date": "Date",
 	"day": "Day",

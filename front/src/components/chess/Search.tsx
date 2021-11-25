@@ -43,7 +43,7 @@ function Search(props: SearchProps) {
 				<Tabs.TabPane tab={t("by_criteria")} key="form">
 					<Form onFinish={onSubmit}>
 						<Form.Item label="FEN" name="fen">
-							<Input/>
+							<Input autoComplete="off"/>
 						</Form.Item>
 						<Form.Item label="ECO" name="eco">
 							<Select
@@ -66,7 +66,7 @@ function Search(props: SearchProps) {
 					</Form>
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={t("by_move_input")} key="moves">
-					{t("move_input_prompt")}
+					<p>{t("move_input_prompt")}</p>
 				</Tabs.TabPane>
 			</Tabs>
 			<Results criteria={state.criteria} mode={props.mode}/>

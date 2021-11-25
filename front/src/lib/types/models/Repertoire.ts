@@ -1,3 +1,5 @@
+import { UserModel } from "./User";
+
 export interface RepertoireMoveNoteModel {
 	id: string,
 	value: string | null
@@ -38,6 +40,7 @@ export interface RepertoireModel {
 	side: string,
 	public: boolean,
 	moves?: Array<RepertoireMoveModel> | null,
+	user?: UserModel,
 	lessonQueueLength?: number,
 	lessonQueue?: Array<RepertoireQueueItemModel>,
 	reviewQueueLength?: number,
