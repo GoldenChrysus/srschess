@@ -10,6 +10,8 @@ import Repertoires from "./left-menu/Repertoires";
 import "../../styles/components/chess/left-menu.css";
 import { RepertoireModel } from "../../lib/types/models/Repertoire";
 import PublicRepertoires from "./left-menu/PublicRepertoires";
+import AuthState from "../../stores/AuthState";
+import { Observer } from "mobx-react-lite";
 
 interface LeftMenuProps {
 	repertoire?        : RepertoireModel | null
@@ -42,15 +44,25 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 				<Translation ns={["repertoires"]}>
 					{
 						(t) => (
-							<Collapse bordered={false} defaultActiveKey={default_active}>
-								{this.renderTree(t)}
-								<Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
-									<Repertoires mode={this.props.mode}/>
-								</Collapse.Panel>
-								<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
-									<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
-								</Collapse.Panel>
-							</Collapse>
+							<Observer>
+								{
+									() => {
+										const unauthenticated_hidden = (!AuthState.authenticated) ? "hidden" : "";
+
+										return (
+											<Collapse bordered={false} defaultActiveKey={default_active}>
+												{this.renderTree(t)}
+												<Collapse.Panel className={unauthenticated_hidden} id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
+													<Repertoires mode={this.props.mode}/>
+												</Collapse.Panel>
+												<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
+													<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
+												</Collapse.Panel>
+											</Collapse>
+										)
+									}
+								}
+							</Observer>
 						)
 					}
 				</Translation>

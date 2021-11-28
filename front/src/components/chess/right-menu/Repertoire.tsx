@@ -13,6 +13,7 @@ import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOI
 import AddRepertoire from "../../modals/AddRepertoire";
 import { hasPremiumLockoutError } from "../../../helpers";
 import PremiumWarning from "../../PremiumWarning";
+import { Observer } from "mobx-react-lite";
 
 interface RepertoireProps {
 	repertoire?: RepertoireModel
@@ -124,41 +125,48 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 	switch (props.mode) {
 		case "repertoire":
 			return (
-				<>
+				<Observer>
 					{
-						props.repertoire?.userOwned &&
-						<>
-							<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
-								<Button className="mr-2" type="primary">{t("train")} ({lesson_count})</Button>
-							</Link>
-							<Link to={{pathname: "/reviews/" + props.repertoire?.slug}}>
-								<Button className="mr-2" type="default">{t("review")} ({review_count})</Button>
-							</Link>
-							<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
-							<Popconfirm
-								title={t("common:delete_confirm")}
-								okText={t("common:yes")}
-								cancelText={t("common:cancel")}
-								onConfirm={() => onDelete()}
-							>
-								<Button type="ghost">{t("common:delete")}</Button>
-							</Popconfirm>
-						</>
+						() =>
+							<>
+								{
+									props.repertoire?.userOwned &&
+									AuthState.authenticated &&
+									<>
+										<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
+											<Button className="mr-2" type="primary">{t("train")} ({lesson_count})</Button>
+										</Link>
+										<Link to={{pathname: "/reviews/" + props.repertoire?.slug}}>
+											<Button className="mr-2" type="default">{t("review")} ({review_count})</Button>
+										</Link>
+										<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
+										<Popconfirm
+											title={t("common:delete_confirm")}
+											okText={t("common:yes")}
+											cancelText={t("common:cancel")}
+											onConfirm={() => onDelete()}
+										>
+											<Button type="ghost">{t("common:delete")}</Button>
+										</Popconfirm>
+									</>
+								}
+								{
+									props.repertoire?.public &&
+									!props.repertoire?.userOwned &&
+									AuthState.authenticated &&
+									<Popconfirm
+										title={t("common:copy_confirm")}
+										okText={t("common:yes")}
+										cancelText={t("common:cancel")}
+										onConfirm={() => onCopy()}
+									>
+										<Button type="ghost">{t("common:copy")}</Button>
+									</Popconfirm>
+								}
+							</>
 					}
-					{
-						props.repertoire?.public &&
-						!props.repertoire?.userOwned &&
-						<Popconfirm
-							className="ml-2"
-							title={t("common:copy_confirm")}
-							okText={t("common:yes")}
-							cancelText={t("common:cancel")}
-							onConfirm={() => onCopy()}
-						>
-							<Button type="ghost">{t("common:copy")}</Button>
-						</Popconfirm>
-					}
-				</>
+				
+				</Observer>
 			);
 
 		case "lesson":
