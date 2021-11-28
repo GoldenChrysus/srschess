@@ -334,8 +334,6 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						return false;
 					}
 
-					const last = this.chess.history({verbose: true}).at(-1);
-
 					return this.reducer({
 						type  : "move-search",
 						data  : {
