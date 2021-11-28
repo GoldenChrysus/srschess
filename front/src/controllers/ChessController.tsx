@@ -322,8 +322,32 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				});
 
 			case "search":
+				if (source === "master-movelist") {
+					if (!san) {
+						return;
+					}
+
+					const res = this.chess.move(san);
+
+					if (!res) {
+						this.chess.undo();
+						return false;
+					}
+
+					const last = this.chess.history({verbose: true}).at(-1);
+
+					return this.reducer({
+						type  : "move-search",
+						data  : {
+							fen   : this.chess.fen(),
+							pgn   : this.chess.pgn(),
+							moves : this.chess.history()
+						}
+					});
+				}
+
 				if (!uuid) {
-					return;
+					uuid = "-1";
 				}
 
 				this.chess.reset();
@@ -343,16 +367,12 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					})
 				}
 
-				const last = this.chess.history({verbose: true}).at(-1);
-
 				return this.reducer({
 					type  : "click-search",
-					uci   : last!.from + last!.to,
-					moved : true,
 					data  : {
-						fen   : this.chess.fen(),
-						pgn   : this.chess.pgn(),
-						moves : this.chess.history(),
+						fen     : this.chess.fen(),
+						pgn     : this.chess.pgn(),
+						moves   : this.chess.history(),
 						history : this.state.history
 					}
 				});
