@@ -7,12 +7,16 @@ import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
 import { generateUUID, getMove } from "../helpers";
 import MasterMoveList from "../components/chess/MasterMoveList";
+import { inject } from "mobx-react";
 
 type ChessType = (fen?: string) => ChessInstance;
 
 const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
+@inject(stores => ({
+	authenticated: (stores as any).AuthState.authenticated
+}))
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
 	private chess = Chess2();
 
@@ -111,7 +115,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						key="chessboard"
 						fen={this.state.fen}
 						pgn={this.state.pgn}
-						orientation={this.props.repertoire?.side}
+						orientation={(this.props.authenticated && this.props.repertoire?.userOwned) ? this.props.repertoire?.side : undefined}
 						repertoire_id={this.props.repertoire?.id}
 						onMove={this.reducer}
 						children={children}

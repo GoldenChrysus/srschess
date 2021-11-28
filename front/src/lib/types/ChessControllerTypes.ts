@@ -1,5 +1,6 @@
 import { ApolloClient } from "@apollo/client";
 import Chess, { ChessInstance } from "chess.js";
+import AuthState from "../../stores/AuthState";
 import { START_FEN } from "../constants/chess";
 import { RepertoireModel, RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "./models/Repertoire";
 
@@ -31,7 +32,8 @@ export interface ChessControllerProps {
 	onTransposition    : Function,
 	onReview           : Function,
 	onMoveSearchChange : Function,
-	arrows             : { [key: string]: Array<any> }
+	arrows             : { [key: string]: Array<any> },
+	authenticated?     : boolean
 }
 
 export interface ChessControllerState {

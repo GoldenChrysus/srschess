@@ -11,6 +11,7 @@ import { TYPES as GRAPHQL_TYPES } from "./api/types";
 import ActionCable from "actioncable";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
 import { ApolloProvider, ApolloLink, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { Provider } from "mobx-react";
 
 const cable          = ActionCable.createConsumer("ws://" + process.env.REACT_APP_API_ADDRESS + "/cable")
 const http_link      = createHttpLink({ uri: "http://" + process.env.REACT_APP_API_ADDRESS + "/graphql" });
@@ -38,7 +39,9 @@ i18n.setDefaultNamespace("common");
 	ReactDOM.render(
 		<React.StrictMode>
 			<ApolloProvider client={client}>
-				<App />
+				<Provider AuthState={AuthState}>
+					<App />
+				</Provider>
 			</ApolloProvider>
 		</React.StrictMode>,
 		document.getElementById("root")
