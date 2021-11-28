@@ -1,6 +1,5 @@
 import { ApolloClient } from "@apollo/client";
 import Chess, { ChessInstance } from "chess.js";
-import AuthState from "../../stores/AuthState";
 import { START_FEN } from "../constants/chess";
 import { RepertoireModel, RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "./models/Repertoire";
 

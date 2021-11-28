@@ -10,24 +10,28 @@ import Repertoires from "./left-menu/Repertoires";
 import "../../styles/components/chess/left-menu.css";
 import { RepertoireModel } from "../../lib/types/models/Repertoire";
 import PublicRepertoires from "./left-menu/PublicRepertoires";
-import AuthState from "../../stores/AuthState";
-import { Observer } from "mobx-react-lite";
+import { inject } from "mobx-react";
 
 interface LeftMenuProps {
 	repertoire?        : RepertoireModel | null
 	active_uuid        : ChessControllerState["last_uuid"],
 	mode               : ChessControllerProps["mode"],
 	movelist           : string,
+	authenticated?     : boolean,
 	onMoveClick        : Function
 	onMoveSearchChange : Function
 }
 
+@inject(stores => ({
+	authenticated: (stores as any).AuthState.authenticated
+}))
 class LeftMenu extends React.Component<LeftMenuProps> {
 	shouldComponentUpdate(prev_props: LeftMenuProps) {
 		return (
 			prev_props.active_uuid !== this.props.active_uuid ||
 			prev_props.mode !== this.props.mode ||
 			prev_props.movelist !== this.props.movelist ||
+			prev_props.authenticated !== this.props.authenticated ||
 			JSON.stringify(prev_props.repertoire) !== JSON.stringify(this.props.repertoire)
 		);
 	}
@@ -44,25 +48,15 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 				<Translation ns={["repertoires"]}>
 					{
 						(t) => (
-							<Observer>
-								{
-									() => {
-										const unauthenticated_hidden = (!AuthState.authenticated) ? "hidden" : "";
-
-										return (
-											<Collapse bordered={false} defaultActiveKey={default_active}>
-												{this.renderTree(t)}
-												<Collapse.Panel className={unauthenticated_hidden} id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
-													<Repertoires mode={this.props.mode}/>
-												</Collapse.Panel>
-												<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
-													<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
-												</Collapse.Panel>
-											</Collapse>
-										)
-									}
-								}
-							</Observer>
+							<Collapse bordered={false} defaultActiveKey={default_active}>
+								{this.renderTree(t)}
+								{this.props.authenticated && <Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
+									<Repertoires mode={this.props.mode}/>
+								</Collapse.Panel>}
+								<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
+									<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
+								</Collapse.Panel>
+							</Collapse>
 						)
 					}
 				</Translation>

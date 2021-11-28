@@ -2,8 +2,6 @@ import React from "react";
 import { observer } from "mobx-react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import AuthState from "../stores/AuthState";
-
 import MainLayout from "./MainLayout";
 import RepertoireRoute from "../routes/RepertoireRoute";
 
