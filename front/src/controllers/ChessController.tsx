@@ -411,6 +411,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			case "move-search":
 			case "click-search":
 				if (action.type === "move-search") {
+					this.chess.move(last_move);
+
 					this.history.push({
 						move_id : "",
 						fen     : new_state.fen
