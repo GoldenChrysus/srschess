@@ -201,6 +201,16 @@ export const TRANSPOSE_REPERTOIRE_MOVE = gql`
 	}
 `;
 
+export const DELETE_REPERTOIRE_MOVE = gql`
+	mutation DeleteRepertoireMove($id: String!) {
+		deleteRepertoireMove(input: {
+			id: $id
+		}) {
+			errors
+		}
+	}
+`;
+
 export const CREATE_REVIEW = gql`
 	mutation CreateReview($moveId: String!, $incorrectAttempts: Int!, $attempts: Int!, $averageCorrectTime: Float!, $averageTime: Float!) {
 		createReview(input: {

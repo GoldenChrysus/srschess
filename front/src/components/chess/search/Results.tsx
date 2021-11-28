@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { Table } from "antd";
 import { useQuery } from "@apollo/client";
 import { GET_CHESS_SEARCH } from "../../../api/queries";

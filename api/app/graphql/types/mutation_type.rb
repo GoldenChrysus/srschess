@@ -15,6 +15,9 @@ module Types
 		# /create_repertoire_move
 		field :create_repertoire_move, mutation: Types::Mutations::CreateRepertoireMove
 
+		# /delete_repertoire_move
+		field :delete_repertoire_move, mutation: Types::Mutations::DeleteRepertoireMove
+
 		# /transpose_repertoire_move
 		field :transpose_repertoire_move, mutation: Types::Mutations::TransposeRepertoireMove
 
