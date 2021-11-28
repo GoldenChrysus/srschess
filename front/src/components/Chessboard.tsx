@@ -151,7 +151,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	onMove(orig: any, dest: any) {
-		if (!this.props.orientation) {
+		if (!this.props.orientation && this.props.mode !== "search") {
 			return false;
 		}
 
@@ -228,7 +228,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	buildRealDests(dests: any) {
-		if (this.props.orientation) {
+		if (this.props.orientation || this.props.mode === "search") {
 			this.chess.SQUARES.forEach(s => {
 				const ms = this.chess.moves({
 					square  : s,
