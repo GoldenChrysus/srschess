@@ -20,11 +20,34 @@ class RepertoireMove < ApplicationRecord
 	before_validation :set_sort, on: :create
 	after_validation :set_id, on: :create
 	before_destroy :update_dependents
-	before_save :resort_tier, if: :sort_changed?
 
 	def self.attributes_protected_by_default
 		# default is ["id", "type"]
 		["type"]
+	end
+
+	def setSort(new_sort)
+		sort = 0
+
+		self.sort = new_sort
+
+		self
+			.repertoire
+			.moves
+			.where("move_number = :move_number AND id != :id", move_number: self.move_number, id: self.id)
+			.each do |move|
+				move.sort = sort
+
+				if (move.sort == self.sort)
+					sort += 1
+
+					move.sort = sort
+				end
+
+				sort += 1
+
+				move.save
+		end
 	end
 
 	private
@@ -68,26 +91,6 @@ class RepertoireMove < ApplicationRecord
 			# Destroy children
 			self.moves.each do |move|
 				move.destroy
-			end
-		end
-
-		def resort_tier
-			sort = 0
-
-			self
-				.repertoire
-				.moves
-				.where("move_number = :move_number AND id != :id", move_number: self.move_number, id: self.id)
-				.each do |move|
-					if (move.sort == self.sort)
-						sort += 1
-					end
-
-					move.sort = sort
-
-					sort += 1
-
-					move.save
 			end
 		end
 end

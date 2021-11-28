@@ -215,6 +215,29 @@ export const TRANSPOSE_REPERTOIRE_MOVE = gql`
 	}
 `;
 
+export const REORDER_REPERTOIRE_MOVE = gql`
+	${REPERTOIRE_FRAG}
+	${REPERTOIRE_MOVE_FRAG}
+	mutation ReorderRepertoireMove($id: String!, $direction: String!) {
+		reorderRepertoireMove(input: {
+			id: $id,
+			direction: $direction
+		}) {
+			move {
+				id
+				sort
+				repertoire {
+					...CoreRepertoireFields
+					moves {
+						...CoreMoveFields
+					}
+				}
+			}
+			errors
+		}
+	}
+`;
+
 export const DELETE_REPERTOIRE_MOVE = gql`
 	mutation DeleteRepertoireMove($id: String!) {
 		deleteRepertoireMove(input: {

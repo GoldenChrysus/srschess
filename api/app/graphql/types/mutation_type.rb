@@ -24,6 +24,9 @@ module Types
 		# /transpose_repertoire_move
 		field :transpose_repertoire_move, mutation: Types::Mutations::TransposeRepertoireMove
 
+		# /reorder_repertoire_move
+		field :reorder_repertoire_move, mutation: Types::Mutations::ReorderRepertoireMove
+
 		# /create_repertoire_move_note
 		field :create_repertoire_move_note, mutation: Types::Mutations::CreateRepertoireMoveNote
 
