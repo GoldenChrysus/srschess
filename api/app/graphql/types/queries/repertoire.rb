@@ -10,7 +10,7 @@ module Types
 
 				authorize repertoire, :show?
 
-				repertoire.user_owned = (context[:user] && repertoire.user.id == context[:user].id)
+				repertoire.user_owned = (context[:user] != nil && repertoire.user.id == context[:user].id)
 
 				repertoire
 			end
