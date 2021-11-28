@@ -31,6 +31,60 @@ module Types
 					when "repertoires"
 						where  = ["r.public = true"]
 						params = {}
+						skip   = false
+
+						if (criteria[:data][:movelist] != nil)
+							skip = true
+
+							params[:movelist] = criteria[:data][:movelist]
+							params[:length]   = params[:movelist].split(".").length
+
+							where.push(
+								"r.id IN
+									(
+										WITH
+											RECURSIVE movetree(id, level, movelist) AS (
+												SELECT
+													m.id,
+													1,
+													ARRAY[m.move]
+												FROM
+													repertoire_moves m
+												WHERE
+													m.move = ANY(STRING_TO_ARRAY(:movelist, '.')) AND
+													m.parent_id IS NULL
+												
+												UNION ALL
+												
+												SELECT
+													m.id,
+													level + 1,
+													movelist || m.move
+												FROM
+													repertoire_moves m,
+													movetree mt
+												WHERE
+													m.parent_id = mt.id AND
+													m.move = ANY(STRING_TO_ARRAY(:movelist, '.'))
+											)
+										SELECT
+											r.id
+										FROM
+											movetree mt
+										JOIN
+											repertoire_moves m
+										ON
+											mt.id = m.id
+										JOIN
+											repertoires r
+										ON
+											r.id = m.repertoire_id
+										WHERE
+											mt.level = :length AND
+											ARRAY_TO_STRING(mt.movelist, '.') = :movelist
+									)"
+							)
+						end
 
 						if (criteria[:data][:fen].to_s != "")
 							valid = ValidateFen.call(fen: criteria[:data][:fen])

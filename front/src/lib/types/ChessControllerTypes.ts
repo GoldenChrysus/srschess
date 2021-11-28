@@ -22,14 +22,15 @@ export enum ChessControllerModes {
 }
 
 export interface ChessControllerProps {
-	mode            : keyof typeof ChessControllerModes,
-	repertoire?     : RepertoireModel | null,
-	repertoires?    : Array<RepertoireModel>,
-	client          : ApolloClient<object>,
-	onMove          : Function,
-	onTransposition : Function,
-	onReview        : Function,
-	arrows          : { [key: string]: Array<any> }
+	mode               : keyof typeof ChessControllerModes,
+	repertoire?        : RepertoireModel | null,
+	repertoires?       : Array<RepertoireModel>,
+	client             : ApolloClient<object>,
+	onMove             : Function,
+	onTransposition    : Function,
+	onReview           : Function,
+	onMoveSearchChange : Function,
+	arrows             : { [key: string]: Array<any> }
 }
 
 export interface ChessControllerState {

@@ -1,9 +1,14 @@
 import React from "react";
 import Search from "../Search";
 
-function PublicRepertoires() {
+interface PublicRepertoiresProps {
+	movelist           : string,
+	onMoveSearchChange : Function
+}
+
+function PublicRepertoires(props: PublicRepertoiresProps) {
 	return (
-		<Search mode="repertoires"/>
+		<Search mode="repertoires" onMoveSearchChange={props.onMoveSearchChange} movelist={props.movelist}/>
 	);
 }
 

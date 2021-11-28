@@ -10,7 +10,7 @@ WITH
 			ARRAY[m.move],
 			ARRAY[ROW(m.move_number, m.sort)]
 		FROM
-			moves m
+			repertoire_moves m
 		WHERE
 			m.repertoire_id = 1 AND
 			m.parent_id IS NULL
@@ -26,7 +26,7 @@ WITH
 			movelist || m.move,
 			path || ROW(m.move_number, m.sort)
 		FROM
-			moves m,
+			repertoire_moves m,
 			movetree mt
 		WHERE
 			m.parent_id = mt.id
@@ -38,7 +38,7 @@ FROM
 LEFT JOIN
 	learned_items li
 ON
-	li.move_id = mt.id
+	li.repertoire_move_id = mt.id
 WHERE
 	li.id IS NULL
 ORDER BY

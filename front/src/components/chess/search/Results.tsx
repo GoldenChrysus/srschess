@@ -12,7 +12,8 @@ import { useHistory } from "react-router";
 
 interface ResultsProps {
 	criteria: SearchState["criteria"],
-	mode: SearchProps["mode"]
+	mode: SearchProps["mode"],
+	onRepertoireClick: Function
 }
 
 function Results(props: ResultsProps) {
@@ -41,7 +42,10 @@ function Results(props: ResultsProps) {
 				showHeader={false}
 				onRow={(record, index) => {
 					return {
-						onClick : e => history.push("/" + props.mode + "/" + record.slug)
+						onClick : e => {
+							props.onRepertoireClick();
+							history.push("/" + props.mode + "/" + record.slug)
+						}
 					}
 				}}
 			>

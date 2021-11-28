@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form, Input, Tabs, Select, Button } from "antd";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
@@ -13,8 +13,25 @@ function Search(props: SearchProps) {
 	const [ state, setState ] = useState<SearchState>({
 		criteria : undefined
 	});
+	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 	const { t } = useTranslation(["search", "chess"]);
 	const { loading, error, data } = useQuery<EcoPositionQueryData>(GET_ECO);
+	const prev_movelist = useRef<string>();
+
+	useEffect(() => {
+		if (move_searching && prev_movelist.current !== props.movelist) {
+			prev_movelist.current = props.movelist;
+
+			setState({
+				criteria : {
+					mode : props.mode,
+					data : {
+						movelist : props.movelist
+					}
+				}
+			});
+		}
+	});
 
 	function onSubmit(data: SearchCriteria["data"]) {
 		setState({
@@ -23,6 +40,25 @@ function Search(props: SearchProps) {
 				data : data
 			}
 		});
+	}
+
+	function onMoveSearchClick() {
+		const new_state = !move_searching;
+
+		setMoveSearching(new_state);
+		props.onMoveSearchChange(new_state);
+	}
+
+	function onTabChange(active: string) {
+		if (active !== "moves" && move_searching) {
+			onMoveSearchClick();
+		}
+	}
+
+	function onRepertoireClick() {
+		if (move_searching) {
+			onMoveSearchClick();
+		}
 	}
 
 	const eco_options = [];
@@ -39,7 +75,7 @@ function Search(props: SearchProps) {
 
 	return (
 		<>
-			<Tabs defaultActiveKey="form">
+			<Tabs defaultActiveKey="form" onChange={onTabChange}>
 				<Tabs.TabPane tab={t("by_criteria")} key="form">
 					<Form onFinish={onSubmit}>
 						<Form.Item label="FEN" name="fen">
@@ -67,9 +103,10 @@ function Search(props: SearchProps) {
 				</Tabs.TabPane>
 				<Tabs.TabPane tab={t("by_move_input")} key="moves">
 					<p>{t("move_input_prompt")}</p>
+					<p><Button type="ghost" onClick={onMoveSearchClick}>{move_searching ? t("stop_searching") : t("start_searching")}</Button></p>
 				</Tabs.TabPane>
 			</Tabs>
-			<Results criteria={state.criteria} mode={props.mode}/>
+			<Results criteria={state.criteria} mode={props.mode} onRepertoireClick={onRepertoireClick}/>
 		</>
 	);
 }

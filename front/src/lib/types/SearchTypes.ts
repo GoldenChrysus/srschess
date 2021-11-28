@@ -4,7 +4,9 @@ export enum SearchModes {
 }
 
 export interface SearchProps {
-	mode: keyof typeof SearchModes
+	mode: keyof typeof SearchModes,
+	movelist: string,
+	onMoveSearchChange: Function
 }
 
 export interface SearchCriteria {

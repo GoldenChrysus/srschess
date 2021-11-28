@@ -1,6 +1,8 @@
 {
 	"by_criteria": "By Criteria",
 	"by_move_input": "By Move Input",
-	"move_input_prompt": "To begin searching, please make moves on the board.",
-	"search": "Search"
+	"move_input_prompt": "To begin searching, please click the \"$t(start_searching)\" button below, then make moves on the board.",
+	"search": "Search",
+	"start_searching": "Start Searching",
+	"stop_searching": "Stop Searching"
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { runInAction } from "mobx";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
@@ -54,6 +54,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			fetchPolicy : (props.mode === "lesson") ? "network-only" : "cache-first"
 		}
 	);
+	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
 	runInAction(() => ChessState.setRepertoire(data?.repertoire));
 
@@ -109,18 +110,23 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		});
 	}
 
+	const onMoveSearchChange = function(new_state: boolean) {
+		setMoveSearching(new_state);
+	}
+
 	return (
 		<ApolloConsumer>
 			{client => 
 				<ChessController
 					key="chess-controller"
-					mode={props.mode}
+					mode={(move_searching) ? "database" : props.mode}
 					repertoire={data?.repertoire}
 					client={client}
 					onMove={addMove}
 					onTransposition={setTransposition}
 					onReview={doReview}
 					arrows={arrows}
+					onMoveSearchChange={onMoveSearchChange}
 				/>
 			}
 		</ApolloConsumer>

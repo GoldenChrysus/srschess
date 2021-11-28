@@ -123,9 +123,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				<LeftMenu
 					key="chess-left-menu-component"
 					active_uuid={this.state.last_uuid}
+					movelist={this.state.moves.join(".")}
 					mode={this.props.mode}
 					repertoire={this.props.repertoire}
 					onMoveClick={this.onMoveClick.bind(this, "tree")}
+					onMoveSearchChange={this.props.onMoveSearchChange}
 				/>
 				<RightMenu
 					key="chess-right-menu-component"
@@ -265,61 +267,99 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	onMoveClick(source: string, uuid?: string, san?: string) {
-		if (this.props.mode !== "repertoire") {
-			return false;
-		}
+		switch (this.props.mode) {
+			case "repertoire":
+				if (source === "master-movelist") {
+					if (!san) {
+						return;
+					}
 
-		if (source === "master-movelist") {
-			if (!san) {
-				return;
-			}
+					const res = this.chess.move(san);
 
-			const res = this.chess.move(san);
+					if (!res) {
+						this.chess.undo();
+						return false;
+					}
 
-			if (!res) {
-				this.chess.undo();
-				return false;
-			}
+					const last = this.chess.history({verbose: true}).at(-1);
 
-			const last = this.chess.history({verbose: true}).at(-1);
-
-			return this.reducer({
-				type  : "move-repertoire",
-				uci   : last!.from + last!.to,
-				moved : true,
-				data  : {
-					fen   : this.chess.fen(),
-					pgn   : this.chess.pgn(),
-					moves : this.chess.history()
+					return this.reducer({
+						type  : "move-repertoire",
+						uci   : last!.from + last!.to,
+						moved : true,
+						data  : {
+							fen   : this.chess.fen(),
+							pgn   : this.chess.pgn(),
+							moves : this.chess.history()
+						}
+					});
 				}
-			});
+
+				this.history = [];
+
+				this.chess.reset();
+
+				const data = this.generateHistory(uuid);
+
+				for (const item of data.history) {
+					this.chess.move(item.move);
+
+					this.history.push({
+						move_id : item.uuid,
+						fen     : this.chess.fen()
+					});
+				}
+
+				return this.reducer({
+					type  : "click-" + source,
+					data  : {
+						pgn       : this.chess.pgn(),
+						last_uuid : uuid,
+						fen       : this.chess.fen(),
+						moves     : data.moves,
+						history   : (source === "tree") ? data.history : this.state.history,
+					}
+				});
+
+			case "database":
+				if (!uuid) {
+					return;
+				}
+
+				this.chess.reset();
+
+				this.history = [];
+
+				for (const i in this.state.history) {
+					if (+i > +uuid) {
+						break;
+					}
+
+					this.chess.move(this.state.history[i].move);
+
+					this.history.push({
+						move_id : "",
+						fen     : this.chess.fen()
+					})
+				}
+
+				const last = this.chess.history({verbose: true}).at(-1);
+
+				return this.reducer({
+					type  : "click-database",
+					uci   : last!.from + last!.to,
+					moved : true,
+					data  : {
+						fen   : this.chess.fen(),
+						pgn   : this.chess.pgn(),
+						moves : this.chess.history(),
+						history : this.state.history
+					}
+				});
+
+			default:
+				break;
 		}
-
-		this.history = [];
-
-		this.chess.reset();
-
-		const data = this.generateHistory(uuid);
-
-		for (const item of data.history) {
-			this.chess.move(item.move);
-
-			this.history.push({
-				move_id : item.uuid,
-				fen     : this.chess.fen()
-			});
-		}
-
-		this.reducer({
-			type  : "click-" + source,
-			data  : {
-				pgn       : this.chess.pgn(),
-				last_uuid : uuid,
-				fen       : this.chess.fen(),
-				moves     : data.moves,
-				history   : (source === "tree") ? data.history : this.state.history,
-			}
-		});
 	}
 
 	buildQueueHistory(new_state: any) {
@@ -347,6 +387,27 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		switch (action.type) {
 			case "click-history":
 			case "click-tree":
+				this.setState(new_state);
+				break;
+
+			case "move-database":
+			case "click-database":
+				if (action.type === "move-database") {
+					this.history.push({
+						move_id : "",
+						fen     : new_state.fen
+					});
+
+					new_state.history = [];
+
+					for (let i in new_state.moves) {
+						new_state.history.push({
+							id   : i,
+							move : new_state.moves[i]
+						})
+					}
+				}
+
 				this.setState(new_state);
 				break;
 
@@ -468,7 +529,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				this.history.push({
 					move_id : uuid,
 					fen     : new_state.fen
-				})
+				});
 				
 				if (!action.moved) {
 					this.chess.move(last_move);

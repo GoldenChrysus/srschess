@@ -12,10 +12,12 @@ import { RepertoireModel } from "../../lib/types/models/Repertoire";
 import PublicRepertoires from "./left-menu/PublicRepertoires";
 
 interface LeftMenuProps {
-	repertoire? : RepertoireModel | null
-	active_uuid : ChessControllerState["last_uuid"],
-	mode        : ChessControllerProps["mode"],
-	onMoveClick : Function
+	repertoire?        : RepertoireModel | null
+	active_uuid        : ChessControllerState["last_uuid"],
+	mode               : ChessControllerProps["mode"],
+	movelist           : string,
+	onMoveClick        : Function
+	onMoveSearchChange : Function
 }
 
 class LeftMenu extends React.Component<LeftMenuProps> {
@@ -23,6 +25,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 		return (
 			prev_props.active_uuid !== this.props.active_uuid ||
 			prev_props.mode !== this.props.mode ||
+			prev_props.movelist !== this.props.movelist ||
 			JSON.stringify(prev_props.repertoire) !== JSON.stringify(this.props.repertoire)
 		);
 	}
@@ -45,7 +48,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 									<Repertoires mode={this.props.mode}/>
 								</Collapse.Panel>
 								<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
-									<PublicRepertoires/>
+									<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
 								</Collapse.Panel>
 							</Collapse>
 						)
