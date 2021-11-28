@@ -200,7 +200,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 		switch (this.props.mode) {
 			case "repertoire":
 			case "review":
-			case "database":
+			case "search":
 				this.buildRealDests(dests);
 				break;
 

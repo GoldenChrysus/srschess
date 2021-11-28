@@ -119,7 +119,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			{client => 
 				<ChessController
 					key="chess-controller"
-					mode={(move_searching) ? "database" : props.mode}
+					mode={(move_searching) ? "search" : props.mode}
 					repertoire={data?.repertoire}
 					client={client}
 					onMove={addMove}

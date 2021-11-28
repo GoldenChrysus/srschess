@@ -321,7 +321,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					}
 				});
 
-			case "database":
+			case "search":
 				if (!uuid) {
 					return;
 				}
@@ -346,7 +346,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				const last = this.chess.history({verbose: true}).at(-1);
 
 				return this.reducer({
-					type  : "click-database",
+					type  : "click-search",
 					uci   : last!.from + last!.to,
 					moved : true,
 					data  : {
@@ -390,9 +390,9 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				this.setState(new_state);
 				break;
 
-			case "move-database":
-			case "click-database":
-				if (action.type === "move-database") {
+			case "move-search":
+			case "click-search":
+				if (action.type === "move-search") {
 					this.history.push({
 						move_id : "",
 						fen     : new_state.fen

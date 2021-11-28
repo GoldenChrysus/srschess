@@ -19,6 +19,7 @@ export enum ChessControllerModes {
 	lesson     = "lesson",
 	openings   = "opening",
 	database   = "database",
+	search     = "search",
 }
 
 export interface ChessControllerProps {
