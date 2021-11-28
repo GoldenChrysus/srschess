@@ -56,6 +56,20 @@ export const CREATE_REPERTOIRE = gql`
 	}
 `;
 
+export const CLONE_REPERTOIRE = gql`
+	mutation CloneRepertoire($id: ID!) {
+		cloneRepertoire(input: {
+			id: $id
+		}) {
+			repertoire {
+				id
+				slug
+			}
+			errors
+		}
+	}
+`;
+
 export const EDIT_REPERTOIRE = gql`
 	mutation EditRepertoire($id: ID!, $name: String!, $public: Boolean!) {
 		editRepertoire(input: {

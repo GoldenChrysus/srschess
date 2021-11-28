@@ -21,4 +21,14 @@ class PremiumPolicy < ApplicationPolicy
 
 		return valid
 	end
+
+	def clone_repertoires?
+		valid = (user.repertoires.where(copied_from_public: true).length < 5)
+
+		if (!valid)
+			Current.internal_error_code = 200002
+		end
+
+		return valid
+	end
 end

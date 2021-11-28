@@ -15,4 +15,10 @@ class RepertoirePolicy < ApplicationPolicy
 		Current.internal_error_code = 100003
 		update?
 	end
+
+	def clone?
+		Current.internal_error_code = 100004
+
+		return (record.public and record.user != user)
+	end
 end

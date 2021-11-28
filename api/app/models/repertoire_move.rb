@@ -29,12 +29,15 @@ class RepertoireMove < ApplicationRecord
 
 	private
 		def set_id
-			hash = Digest::MD5.hexdigest (self.repertoire.id.to_s + ":" + self.move_number.to_s + ":" + self.move + ":" + self.fen)
+			id   = if self.repertoire != nil then self.repertoire.id.to_s else "" end
+			hash = Digest::MD5.hexdigest (id + ":" + self.move_number.to_s + ":" + self.move + ":" + self.fen)
 			
 			self.id = ([hash[0, 8], hash[8, 4], hash[12, 4], hash[16, 4], hash[20..-1]]).join("-")
 		end
 
 		def set_sort
+			return unless self.sort == nil
+
 			move = self
 				.class
 				.where({ move_number: self.move_number, repertoire: self.repertoire })

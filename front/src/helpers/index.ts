@@ -101,7 +101,7 @@ export function hasPremiumLockoutError(error?: ApolloError) {
 	}
 
 	for (const e of error.graphQLErrors) {
-		if (e.extensions?.code === 200001) {
+		if (e.extensions?.code >= 200000 && e.extensions?.code < 300000) {
 			return true;
 		}
 	}

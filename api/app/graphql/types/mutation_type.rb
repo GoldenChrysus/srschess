@@ -6,6 +6,9 @@ module Types
 		# /create_repertoire
 		field :create_repertoire, mutation: Types::Mutations::CreateRepertoire
 
+		# /clone_repertoire
+		field :clone_repertoire, mutation: Types::Mutations::CloneRepertoire
+
 		# /edit_repertoire
 		field :edit_repertoire, mutation: Types::Mutations::EditRepertoire
 

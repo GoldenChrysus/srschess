@@ -8,9 +8,11 @@ import { TFunction } from "i18next";
 
 import AuthState from "../../../stores/AuthState";
 import { RepertoireModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
-import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
+import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOIRES, CLONE_REPERTOIRE } from "../../../api/queries";
 
 import AddRepertoire from "../../modals/AddRepertoire";
+import { hasPremiumLockoutError } from "../../../helpers";
+import PremiumWarning from "../../PremiumWarning";
 
 interface RepertoireProps {
 	repertoire?: RepertoireModel
@@ -27,6 +29,9 @@ function Repertoire(props: RepertoireProps) {
 	const [ editRepertoire, edit_res ]   = useMutation(EDIT_REPERTOIRE);
 	const [ deleteRepertoire, delete_res ] = useMutation(DELETE_REPERTOIRE, {
 		refetchQueries : [ GET_REPERTOIRES ]
+	});
+	const [ cloneRepertoire, clone_res ] = useMutation(CLONE_REPERTOIRE, {
+		refetchQueries: [ GET_REPERTOIRES ]
 	});
 
 	const { t }       = useTranslation(["repertoires", "common"]);
@@ -63,7 +68,11 @@ function Repertoire(props: RepertoireProps) {
 	}
 
 	const onCopy = () => {
-
+		cloneRepertoire({
+			variables : {
+				id : props.repertoire?.id
+			}
+		});
 	}
 
 	useEffect(() => {
@@ -92,17 +101,22 @@ function Repertoire(props: RepertoireProps) {
 		);
 	}
 
+	const premium = hasPremiumLockoutError(clone_res.error) ? <PremiumWarning type="modal" message={t("premium:cloned_repertoire_limit")}/> : null;
+
 	return (
-		<Collapse bordered={false} activeKey="repertoire-panel">
-			<Collapse.Panel showArrow={false} id="repertoire-panel" header={getTitle(props, t)} key="repertoire-panel">
-				<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
-					{renderContent(props, t, lesson_count, review_count, setModalActive, onDelete, onCopy)}
-					{props.mode === "repertoire" && (
-						<AddRepertoire type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} repertoire={data?.repertoire}/>
-					)}
-				</Spin>
-			</Collapse.Panel>
-		</Collapse>
+		<>
+			<Collapse bordered={false} activeKey="repertoire-panel">
+				<Collapse.Panel showArrow={false} id="repertoire-panel" header={getTitle(props, t)} key="repertoire-panel">
+					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
+						{renderContent(props, t, lesson_count, review_count, setModalActive, onDelete, onCopy)}
+						{props.mode === "repertoire" && (
+							<AddRepertoire type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} repertoire={data?.repertoire}/>
+						)}
+					</Spin>
+				</Collapse.Panel>
+			</Collapse>
+			{premium}
+		</>
 	);
 }
 

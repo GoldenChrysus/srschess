@@ -235,10 +235,65 @@ class Repertoire < ApplicationRecord
 		return ActiveRecord::Base.connection.exec_query(sql)
 	end
 
-	def self.slug_exists?(slug)
-		record = self.where({ slug: slug }).first
+	def duplicate(user)
+		repertoire = self.dup
 
-		return (record != nil)
+		repertoire.slug               = nil
+		repertoire.user               = user
+		repertoire.public             = false
+		repertoire.copied_from_public = true
+
+		repertoire.save!
+
+		id_map            = {}
+		old_id_map        = {}
+		parent_map        = {}
+		transposition_map = {}
+
+		self.moves.each do |move|
+			old_id = move.id
+
+			parent_map[old_id]        = move.parent_id
+			transposition_map[old_id] = move.transposition_id
+
+			move = move.dup
+
+			move.repertoire    = repertoire
+			move.parent        = nil
+			move.transposition = nil
+
+			move.save!
+
+			id_map[move.id]    = old_id
+			old_id_map[old_id] = move.id
+		end
+
+		repertoire.moves.each do |move|
+			id     = move.id
+			old_id = id_map[id]
+
+			if parent_map.key?(old_id)
+				old_parent_id = parent_map[old_id]
+				new_parent_id = old_id_map[old_parent_id]
+
+				move.parent_id = new_parent_id
+			end
+
+			if transposition_map.key?(old_id)
+				old_transposition_id = transposition_map[old_id]
+				new_transposition_id = old_id_map[old_transposition_id]
+
+				move.transposition_id = new_transposition_id
+			end
+
+			move.save!
+		end
+
+		return repertoire
+	end
+
+	def self.slug_exists?(slug)
+		return (self.where(slug: slug).length != 0)
 	end
 
 	private
@@ -253,7 +308,7 @@ class Repertoire < ApplicationRecord
 			loop do
 				self.slug = self.generate_slug()
 
-				break if (!self.class.slug_exists?(self.id))
+				break if (!self.class.slug_exists?(self.slug))
 			end
 		end
 end
