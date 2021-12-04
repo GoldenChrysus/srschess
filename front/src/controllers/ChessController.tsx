@@ -106,7 +106,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		}
 
 		// Moves were deleted
-		if ((prev_props.repertoire?.moves?.length ?? 0) > (this.props.repertoire?.moves?.length ?? 0)) {
+		if (this.props.mode === "repertoire" && (prev_props.repertoire?.moves?.length ?? 0) > (this.props.repertoire?.moves?.length ?? 0)) {
 			if (!this.props.repertoire || !this.props.repertoire.moves) {
 				return;
 			}
