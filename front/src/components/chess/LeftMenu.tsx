@@ -65,7 +65,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 	}
 
 	renderTree(t: TFunction) {
-		if (this.props.mode !== "repertoire") {
+		if (this.props.mode !== "repertoire" || !this.props.repertoire) {
 			return null;
 		}
 

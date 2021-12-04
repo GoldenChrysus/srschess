@@ -41,18 +41,21 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		this.onMoveClick = this.onMoveClick.bind(this);
 	}
 
+	reset() {
+		this.chunk_limit     = 5;
+		this.progressing     = false;
+		this.preloaded_moves = [""];
+		this.history         = [];
+
+		this.chess.reset();
+		this.setOriginalQueue();
+		this.setState(initial_state);
+		this.progressQueue();
+	}
+
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
-			this.chunk_limit     = 5;
-			this.progressing     = false;
-			this.preloaded_moves = [""];
-			this.history         = [];
-
-			this.chess.reset();
-			this.setOriginalQueue();
-			this.setState(initial_state);
-			this.progressQueue();
-			return;
+			return this.reset();
 		}
 
 		if (["review", "lesson"].includes(this.props.mode)) {
@@ -98,6 +101,25 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			) {
 				if (!this.progressing && !this.state.awaiting_user) {
 					this.progressQueue();
+				}
+			}
+		}
+
+		// Moves were deleted
+		if ((prev_props.repertoire?.moves?.length ?? 0) > (this.props.repertoire?.moves?.length ?? 0)) {
+			if (!this.props.repertoire || !this.props.repertoire.moves) {
+				return;
+			}
+
+			const valid_moves = [];
+
+			for (const move of this.props.repertoire.moves) {
+				valid_moves.push(move.id);
+			}
+
+			for (const move of this.state.history) {
+				if (!valid_moves.includes(String(move.id))) {
+					return this.reset();
 				}
 			}
 		}
