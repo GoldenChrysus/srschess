@@ -16,7 +16,7 @@ interface LeafSpanProps {
 	first_child?: boolean,
 	last_child?: boolean,
 	onArrowClick?: any,
-	onClick: Function,
+	onClick?: Function,
 };
 
 class LeafSpan extends React.Component<LeafSpanProps> {
@@ -57,7 +57,7 @@ class LeafSpan extends React.Component<LeafSpanProps> {
 			<>
 				{icon}
 				<Dropdown overlay={menu} trigger={["contextMenu"]}>
-					<span key={"leafspan-span-" + this.props.move.id} onClick={() => this.props.onClick(this.props.move.id)} className={classes.join(" ")}>{move_num}{move_prefix}{this.props.move.move}{move_suffix}</span>
+					<span key={"leafspan-span-" + this.props.move.id} onClick={() => this.props.onClick?.(this.props.move.id)} className={classes.join(" ")}>{move_num}{move_prefix}{this.props.move.move}{move_suffix}</span>
 				</Dropdown>
 			</>
 		)

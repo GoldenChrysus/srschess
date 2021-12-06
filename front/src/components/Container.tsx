@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import MainLayout from "./MainLayout";
 import RepertoireRoute from "../routes/RepertoireRoute";
+import GameDatabaseRoute from "../routes/GameDatabaseRoute";
 
 class Container extends React.Component {
 	render() {
@@ -24,6 +25,10 @@ class Container extends React.Component {
 						</Route>
 						<Route exact path="/reviews/:slug?">
 							<RepertoireRoute mode="review"/>
+						</Route>
+
+						<Route exact path="/game-database/:slug?">
+							<GameDatabaseRoute/>
 						</Route>
 					</Switch>
 				</MainLayout>

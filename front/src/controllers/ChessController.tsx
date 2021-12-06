@@ -126,7 +126,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	render() {
-		const children   = (this.state.last_uuid) ? this.props.arrows[this.state.last_uuid] || [] : this.props.arrows["root"] || [];
+		const children   = (this.state.last_uuid) ? this.props.arrows?.[this.state.last_uuid] || [] : this.props.arrows?.["root"] || [];
 		const queue_item = (this.props.mode === "lesson" && this.original_queue) ? this.original_queue[this.state.queue_index] : null;
 
 		return (
@@ -565,7 +565,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					quizzing      : quizzing,
 					queue_index   : (quizzing) ? this.state.queue_index : this.state.queue_index + 1
 				});
-				this.props.onReview(this.reviews[review_move.id]);
+				this.props.onReview?.(this.reviews[review_move.id]);
 				break;
 
 			case "move-repertoire":
@@ -598,7 +598,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 				if (!cached_move) {
 					this.setState(new_state);
-					this.props.onMove(
+					this.props.onMove?.(
 						{
 							id        : uuid,
 							parent_id : prev_uuid,
@@ -612,7 +612,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					const prev_move = getMove(this.props.client, prev_uuid);
 
 					if (prev_move && prev_move.transpositionId !== uuid) {
-						this.props.onTransposition(uuid, prev_uuid);
+						this.props.onTransposition?.(uuid, prev_uuid);
 					}
 
 					this.setState(new_state);

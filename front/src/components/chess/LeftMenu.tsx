@@ -11,15 +11,16 @@ import "../../styles/components/chess/left-menu.css";
 import { RepertoireModel } from "../../lib/types/models/Repertoire";
 import PublicRepertoires from "./left-menu/PublicRepertoires";
 import { inject } from "mobx-react";
+import GameCollections from "./left-menu/GameCollections";
 
 interface LeftMenuProps {
-	repertoire?        : RepertoireModel | null
-	active_uuid        : ChessControllerState["last_uuid"],
-	mode               : ChessControllerProps["mode"],
-	movelist           : string,
-	authenticated?     : boolean,
-	onMoveClick        : Function
-	onMoveSearchChange : Function
+	repertoire?         : RepertoireModel | null
+	active_uuid         : ChessControllerState["last_uuid"],
+	mode                : ChessControllerProps["mode"],
+	movelist            : string,
+	authenticated?      : boolean,
+	onMoveClick?        : Function
+	onMoveSearchChange? : Function
 }
 
 @inject(stores => ({
@@ -37,25 +38,39 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 	}
 
 	render() {
-		const default_active = ["personal-repertoires-panel"];
+		const default_active = [""];
 
 		if (this.props.mode === "repertoire") {
+			default_active.push("personal-repertoires-panel");
 			default_active.push("tree-panel");
+		}
+
+		if (this.props.mode === "database") {
+			default_active.push("collections-panel");
 		}
 
 		return (
 			<div key="chess-left-menu-inner" id="chess-left-menu" className="flex-1 order-3 md:order-1">
-				<Translation ns={["repertoires"]}>
+				<Translation ns={["repertoires", "database"]}>
 					{
 						(t) => (
 							<Collapse bordered={false} defaultActiveKey={default_active}>
 								{this.renderTree(t)}
-								{this.props.authenticated && <Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
-									<Repertoires mode={this.props.mode}/>
-								</Collapse.Panel>}
-								<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
-									<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
-								</Collapse.Panel>
+								{this.props.mode === "repertoire" && this.props.authenticated &&
+									<Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
+										<Repertoires mode={this.props.mode}/>
+									</Collapse.Panel>
+								}
+								{this.props.mode === "repertoire" &&
+									<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
+										<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
+									</Collapse.Panel>
+								}
+								{this.props.mode === "database" && this.props.authenticated &&
+									<Collapse.Panel id="collections-panel" header={t("database:game_collections")} key="collections-panel">
+										<GameCollections/>
+									</Collapse.Panel>
+								}
 							</Collapse>
 						)
 					}

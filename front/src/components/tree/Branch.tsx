@@ -12,7 +12,7 @@ interface BranchProps {
 	parent_uuid?: string,
 	first_child?: boolean,
 	last_child?: boolean,
-	onMoveClick: Function
+	onMoveClick?: Function
 };
 
 interface BranchState {

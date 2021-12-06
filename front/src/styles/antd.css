@@ -108,3 +108,52 @@ body .ant-tabs-tab:not(.ant-tabs-tab-active) > div:hover  {
 body .ant-tabs-ink-bar {
 	background-color: var(--green-500);
 }
+
+body .ant-menu-sub.ant-menu-inline {
+	background: none;
+}
+
+body .ant-menu-sub > .ant-menu-item {
+	padding-left: 2em !important;
+}
+
+body .ant-menu-item-group-list > .ant-menu-item {
+	width: 100%;
+}
+
+body .ant-menu-item-selected,
+body .ant-menu-item-group-title {
+	background: var(--black-15o);
+	color: var(--green-500);
+	position: relative;
+}
+
+body .ant-menu-item-group-title {
+	line-height: 40px;
+	padding: 0 16px 0 2em;
+	margin: 4px 0;
+}
+
+body .ant-menu-item-group-title:after {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	border-right: 3px solid var(--green-500);
+	content: "";
+}
+
+body .ant-menu-submenu-selected .ant-menu-submenu-title,
+body .ant-menu-item-selected a,
+body .ant-menu-submenu-title:hover,
+body .ant-menu-item:hover a {
+	color: var(--green-500) !important;
+}
+
+body .ant-menu-item-selected:after {
+	border-right: 3px solid var(--green-500);
+}
+
+body .ant-menu-submenu-title {
+	background: var(--white-7o) !important;
+}

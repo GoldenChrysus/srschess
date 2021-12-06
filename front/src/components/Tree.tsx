@@ -11,9 +11,9 @@ import { RepertoireModel } from "../lib/types/models/Repertoire";
 import { getMove } from "../helpers";
 
 interface TreeProps {
-	repertoire? : RepertoireModel | null
-	active_uuid : ChessControllerState["last_uuid"],
-	onMoveClick : Function
+	repertoire?  : RepertoireModel | null
+	active_uuid  : ChessControllerState["last_uuid"],
+	onMoveClick? : Function
 }
 
 interface BaseTree {

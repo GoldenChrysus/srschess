@@ -13,10 +13,10 @@ date_fmt  = "%Y-%m-%dT%H:%M:%S.%fZ"
 headers   = {
 	"Content-Type" : "application/json",
 	"Accept"       : "application/json",
-	"cookie"       : "cbs=eyJzZWNyZXQiOiJ4Yjg5ZVNZSnRDX2JJc1F2QTIySlc1RlAiLCJfZXhwaXJlIjoxNjM3OTI5NjY0NTUzLCJfbWF4QWdlIjoyNTkyMDAwMDAwfQ==; cbs.sig=Uwjg-NY4kGtJTg3GtSfIAf7kVeM; _ga=GA1.2.1000128209.1637314987; _gid=GA1.2.2131843939.1637314987; _gat=1"
+	"cookie"       : "_ga=GA1.2.1000128209.1637314987; cbs=eyJzZWNyZXQiOiJHcXltM0JhUmFjUloyVm5vVXhuMXVrU0oiLCJfZXhwaXJlIjoxNjQwNTcyNTc5NDc5LCJfbWF4QWdlIjoyNTkyMDAwMDAwfQ==; cbs.sig=PxH8jMwap1gTPjXiUnmwRCJ5sR0; _gid=GA1.2.1246786706.1638623389; _gat=1"
 }
 base_data = {
-	"_csrf" : "3h1yTPV7-bHV4q-enEx9uxUmCH9hYEUz6hvk"
+	"_csrf" : "2J01Heky-GHvq4achgU_SZWRdPxsRdIkveFU"
 }
 
 def getPage(after, attempt = 0):
@@ -69,7 +69,7 @@ def getGame(room_slug, round, game_slug, attempt = 0):
 			return getGame(room_slug, round, game_slug, attempt + 1)
 
 after     = None
-last_run  = "2021-11-19T01:00:00.000Z";
+last_run  = "2021-12-04T05:00:00.000Z";
 last_run  = datetime.strptime(last_run, date_fmt)
 valid_res = [
 	"1/2-1/2",

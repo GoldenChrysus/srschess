@@ -46,7 +46,7 @@ function Search(props: SearchProps) {
 		const new_state = !move_searching;
 
 		setMoveSearching(new_state);
-		props.onMoveSearchChange(new_state);
+		props.onMoveSearchChange?.(new_state);
 	}
 
 	function onTabChange(active: string) {
