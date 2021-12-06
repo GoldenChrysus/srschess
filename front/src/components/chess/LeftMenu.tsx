@@ -39,8 +39,9 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 	render() {
 		const default_active = [""];
+		const is_repertoire  = ["repertoire", "review", "lesson"].includes(this.props.mode);
 
-		if (this.props.mode === "repertoire") {
+		if (is_repertoire) {
 			default_active.push("personal-repertoires-panel");
 			default_active.push("tree-panel");
 		}
@@ -56,12 +57,12 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 						(t) => (
 							<Collapse bordered={false} defaultActiveKey={default_active}>
 								{this.renderTree(t)}
-								{this.props.mode === "repertoire" && this.props.authenticated &&
+								{is_repertoire && this.props.authenticated &&
 									<Collapse.Panel id="personal-repertoires-panel" header={t("personal_repertoires")} key="personal-repertoires-panel">
 										<Repertoires mode={this.props.mode}/>
 									</Collapse.Panel>
 								}
-								{this.props.mode === "repertoire" &&
+								{is_repertoire &&
 									<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
 										<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
 									</Collapse.Panel>
