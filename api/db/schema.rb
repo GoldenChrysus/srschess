@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_24_102248) do
+ActiveRecord::Schema.define(version: 2021_12_07_133840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_11_24_102248) do
     t.datetime "next_review"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["repertoire_move_id"], name: "index_learned_items_on_repertoire_move_id"
+    t.index ["repertoire_move_id"], name: "index_learned_items_on_repertoire_move_id", unique: true
   end
 
   create_table "repertoire_move_notes", force: :cascade do |t|
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2021_11_24_102248) do
     t.string "value"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["repertoire_move_id"], name: "index_repertoire_move_notes_on_repertoire_move_id"
+    t.index ["repertoire_move_id"], name: "index_repertoire_move_notes_on_repertoire_move_id", unique: true
   end
 
   create_table "repertoire_moves", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2021_11_24_102248) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "uid", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "learned_items", "repertoire_moves"
