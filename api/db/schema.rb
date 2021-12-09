@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_07_133840) do
+ActiveRecord::Schema.define(version: 2021_12_09_060247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -29,6 +29,36 @@ ActiveRecord::Schema.define(version: 2021_12_07_133840) do
     t.index ["fen"], name: "index_eco_positions_on_fen", unique: true
     t.index ["movelist"], name: "index_eco_positions_on_movelist", using: :gist
     t.index ["pgn"], name: "index_eco_positions_on_pgn", unique: true
+  end
+
+  create_table "game_move_notes", force: :cascade do |t|
+    t.bigint "game_move_id", null: false
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_move_id"], name: "index_game_move_notes_on_game_move_id", unique: true
+  end
+
+  create_table "game_moves", force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.integer "ply", null: false
+    t.string "move", null: false
+    t.string "fen", null: false
+    t.string "uci"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_game_moves_on_game_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "date"
+    t.text "pgn", null: false
+    t.ltree "movelist", null: false
+    t.integer "source", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_games_on_user_id"
   end
 
   create_table "learned_items", force: :cascade do |t|
@@ -97,6 +127,9 @@ ActiveRecord::Schema.define(version: 2021_12_07_133840) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "game_move_notes", "game_moves"
+  add_foreign_key "game_moves", "games"
+  add_foreign_key "games", "users"
   add_foreign_key "learned_items", "repertoire_moves"
   add_foreign_key "repertoire_move_notes", "repertoire_moves"
   add_foreign_key "repertoire_moves", "repertoire_moves", column: "parent_id"
