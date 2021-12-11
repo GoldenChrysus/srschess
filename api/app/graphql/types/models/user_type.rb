@@ -10,6 +10,7 @@ module Types
 
 			# Relationships
 			field :repertoires, [Types::Models::RepertoireType], null: true
+			field :collections, [Types::Models::CollectionType], null: true
 		end
 	end
 end

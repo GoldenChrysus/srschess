@@ -10,6 +10,9 @@ module Types
 		# /user
 		field :user, resolver: Types::Queries::User
 
+		# /collections
+		field :collections, resolver: Types::Queries::Collections
+
 		# /repertoires
 		field :repertoires, resolver: Types::Queries::Repertoires
 

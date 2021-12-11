@@ -5,21 +5,21 @@ import { Menu, Spin, Button } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
 
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
-import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
+import { CREATE_REPERTOIRE, GET_COLLECTIONS } from "../../../api/queries";
 import "../../../styles/components/chess/left-menu/game-collections.css";
 
 import AddRepertoire from "../../modals/AddRepertoire";
-import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
 import Repertoire from "./Repertoires/Repertoire";
 import ChessState from "../../../stores/ChessState";
+import { CollectionsQueryData } from "../../../lib/types/models/Collection";
 
 function GameCollections() {
 	const [ modal_active, setModalActive ] = useState(false);
 	const [ createRepertoire ] = useMutation(CREATE_REPERTOIRE, {
-		refetchQueries : [ GET_REPERTOIRES ]
+		refetchQueries : [ GET_COLLECTIONS ]
 	});
-	const { loading, error, data } = useQuery<RepertoiresQueryData>(
-		GET_REPERTOIRES
+	const { loading, error, data } = useQuery<CollectionsQueryData>(
+		GET_COLLECTIONS
 	);
 
 	const onSubmit = (values: any) => {
@@ -56,15 +56,14 @@ function GameCollections() {
 	);
 }
 
-function renderCollections(data: RepertoiresQueryData | undefined) {
+function renderCollections(data: CollectionsQueryData | undefined) {
 	if (!data) {
 		return null;
 	}
 
 	const items = [];
 
-	for (const collection of data.repertoires) {
-
+	for (const collection of data.collections) {
 		items.push(
 			<Menu.Item key={"collection-" + collection.id}>
 				<Repertoire key={"collection-menu-item-" + collection.id} id={collection.id} slug={collection.slug} name={collection.name}/>

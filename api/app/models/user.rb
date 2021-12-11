@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
 	# Relationships
 	has_many :repertoires, dependent: :destroy
+	has_many :collections, dependent: :destroy
 
 	# Callbacks
 	after_validation :normalize_email, on: :create

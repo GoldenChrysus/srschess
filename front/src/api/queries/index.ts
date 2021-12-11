@@ -26,6 +26,13 @@ export const REPERTOIRE_MOVE_FRAG = gql`
 	}
 `;
 
+const COLLECTION_FRAG = gql`
+	fragment CoreCollectionFields on Collection {
+		id
+		name
+	}
+`;
+
 export const CREATE_USER = gql`
 	mutation CreateUser($email: String!, $uid: String!) {
 		createUser(input: {
@@ -291,6 +298,17 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 	}
 `;
 
+/**
+ * COLLECTION DATA
+ */
+ export const GET_COLLECTIONS = gql`
+	${COLLECTION_FRAG}
+	query Collections {
+		collections {
+			...CoreCollectionFields
+		}
+	}
+`;
 
 /**
  * MASTER GAME DATA

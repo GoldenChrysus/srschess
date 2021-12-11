@@ -5,5 +5,5 @@ class Collection < ApplicationRecord
 	# Relationships
 	belongs_to :user, required: true
 	has_many :games
-	has_many :master_games, through: :master_games_to_collections
+	# has_many :master_games, through: :master_games_to_collections
 end
