@@ -5,5 +5,6 @@ class Game < ApplicationRecord
 
 	# Relationships
 	belongs_to :user, required: true
+	belongs_to :collection
 	has_many :moves, -> { order("ply ASC") }, dependent: :destroy, class_name: "GameMove"
 end

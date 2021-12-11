@@ -10,12 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_09_060247) do
+ActiveRecord::Schema.define(version: 2021_12_11_032252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "collections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_collections_on_user_id"
+  end
 
   create_table "eco_positions", force: :cascade do |t|
     t.string "code", null: false
@@ -58,6 +66,8 @@ ActiveRecord::Schema.define(version: 2021_12_09_060247) do
     t.integer "source", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "collection_id"
+    t.index ["collection_id"], name: "index_games_on_collection_id"
     t.index ["user_id"], name: "index_games_on_user_id"
   end
 
@@ -68,6 +78,15 @@ ActiveRecord::Schema.define(version: 2021_12_09_060247) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["repertoire_move_id"], name: "index_learned_items_on_repertoire_move_id", unique: true
+  end
+
+  create_table "master_games_to_collections", force: :cascade do |t|
+    t.bigint "collection_id", null: false
+    t.bigint "master_game_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["collection_id"], name: "index_master_games_to_collections_on_collection_id"
+    t.index ["master_game_id"], name: "index_master_games_to_collections_on_master_game_id"
   end
 
   create_table "repertoire_move_notes", force: :cascade do |t|
@@ -127,10 +146,12 @@ ActiveRecord::Schema.define(version: 2021_12_09_060247) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "collections", "users"
   add_foreign_key "game_move_notes", "game_moves"
   add_foreign_key "game_moves", "games"
   add_foreign_key "games", "users"
   add_foreign_key "learned_items", "repertoire_moves"
+  add_foreign_key "master_games_to_collections", "collections"
   add_foreign_key "repertoire_move_notes", "repertoire_moves"
   add_foreign_key "repertoire_moves", "repertoire_moves", column: "parent_id"
   add_foreign_key "repertoire_moves", "repertoire_moves", column: "transposition_id"

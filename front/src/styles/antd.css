@@ -123,9 +123,9 @@ body .ant-menu-item-group-list > .ant-menu-item {
 
 body .ant-menu-item-selected,
 body .ant-menu-item-group-title {
-	background: var(--black-15o);
-	color: var(--green-500);
-	position: relative;
+	background: var(--black-15o) !important;
+	color: var(--green-500) !important;
+	position: relative !important;
 }
 
 body .ant-menu-item-group-title {
@@ -151,7 +151,7 @@ body .ant-menu-item:hover a {
 }
 
 body .ant-menu-item-selected:after {
-	border-right: 3px solid var(--green-500);
+	border-right: 3px solid var(--green-500) !important;
 }
 
 body .ant-menu-submenu-title {
