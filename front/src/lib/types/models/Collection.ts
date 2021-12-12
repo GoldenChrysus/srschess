@@ -29,7 +29,7 @@ export interface CollectionModel {
 	side: string,
 	public: boolean,
 	games?: Array<GameModel> | null,
-	user?: UserModel,
+	user?: UserModel
 }
 
 export interface CollectionQueryData {

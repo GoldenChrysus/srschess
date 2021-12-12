@@ -3,6 +3,8 @@
 	"black": "Black",
 	"choose_side": "Please choose a side.",
 	"depth": "Depth",
+	"game_one": "Game",
+	"game_other": "Games",
 	"move_note": "Move note",
 	"move_one": "Move",
 	"move_other": "Moves",

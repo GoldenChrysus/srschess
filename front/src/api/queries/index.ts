@@ -29,6 +29,7 @@ export const REPERTOIRE_MOVE_FRAG = gql`
 const COLLECTION_FRAG = gql`
 	fragment CoreCollectionFields on Collection {
 		id
+		slug
 		name
 	}
 `;
@@ -310,13 +311,23 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 	}
 `;
 
+export const GET_COLLECTION = gql`
+	${COLLECTION_FRAG}
+	query Collection($slug: String!) {
+		collection(slug: $slug) {
+			...CoreCollectionFields
+		}
+	}
+`;
+
 export const CREATE_COLLECTION = gql`
+	${COLLECTION_FRAG}
 	mutation CreateCollection($name: String!) {
 		createCollection(input: {
 			name: $name
 		}) {
 			collection {
-				id
+				...CoreCollectionFields
 			}
 			errors
 		}

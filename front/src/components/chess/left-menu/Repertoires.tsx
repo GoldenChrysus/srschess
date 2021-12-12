@@ -34,8 +34,6 @@ function Repertoires(props: RepertoiresProps) {
 		});
 	};
 
-	const active_repertoire_id = ChessState.repertoire?.id;
-
 	return (
 		<Spin spinning={loading}>
 			<Translation ns={["repertoires", "common"]}>
@@ -47,7 +45,7 @@ function Repertoires(props: RepertoiresProps) {
 									id="repertoire-menu"
 									mode="inline"
 									defaultOpenKeys={["white-repertoires", "black-repertoires"]}
-									selectedKeys={[ "repertoire-" + active_repertoire_id, "repertoire-" + props.mode + "s-" + active_repertoire_id ]}
+									selectedKeys={[ "repertoire-" + ChessState.repertoire?.id, "repertoire-" + props.mode + "s-" + ChessState.repertoire?.id ]}
 								>
 									<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
 									<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">

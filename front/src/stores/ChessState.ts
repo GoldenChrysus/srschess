@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { CollectionModel } from "../lib/types/models/Collection";
 import { RepertoireModel, RepertoireMoveModel } from "../lib/types/models/Repertoire";
 
 class ChessState {
@@ -11,6 +12,9 @@ class ChessState {
 	// Repertoires
 	repertoire?: RepertoireModel | null = null;
 
+	// Collections
+	collection?: CollectionModel | null = null;
+
 	constructor() {
 		makeAutoObservable(this);
 	}
@@ -21,6 +25,10 @@ class ChessState {
 
 	setRepertoire(repertoire?: RepertoireModel | null) {
 		this.repertoire = repertoire;
+	}
+
+	setCollection(collection?: CollectionModel | null) {
+		this.collection = collection;
 	}
 }
 

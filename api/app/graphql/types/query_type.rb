@@ -13,6 +13,9 @@ module Types
 		# /collections
 		field :collections, resolver: Types::Queries::Collections
 
+		# /collection
+		field :collection, resolver: Types::Queries::Collection
+
 		# /repertoires
 		field :repertoires, resolver: Types::Queries::Repertoires
 
