@@ -35,7 +35,7 @@ function Repertoire(props: RepertoireProps) {
 		refetchQueries: [ GET_REPERTOIRES ]
 	});
 
-	const { t }       = useTranslation(["repertoires", "common"]);
+	const { t }       = useTranslation(["repertoires", "common", "premium"]);
 	const prev_id_ref = useRef<RepertoireModel["id"] | undefined>(props.repertoire?.id);
 
 	const { loading, error, data } = useQuery<RepertoireQueryData>(

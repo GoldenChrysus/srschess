@@ -1,5 +1,7 @@
 {
-	"opening_depth_limit": "Max opening explorer depth reached.",
+	"cloned_repertoire_limit": "Maximum number of cloned repertoires reached.",
+	"created_collection_limit": "Maximum number of collections reached.",
+	"opening_depth_limit": "Maximum opening explorer depth reached.",
 	"premium_only": "Premium feature only.",
 	"upgrade_now": "Upgrade Now"
 }
