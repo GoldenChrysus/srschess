@@ -32,5 +32,8 @@ module Types
 
 		# /create_review
 		field :create_review, mutation: Types::Mutations::CreateReview
+
+		# /create_collection
+		field :create_collection, mutation: Types::Mutations::CreateCollection
 	end
 end

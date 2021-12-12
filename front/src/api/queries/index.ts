@@ -310,6 +310,19 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 	}
 `;
 
+export const CREATE_COLLECTION = gql`
+	mutation CreateCollection($name: String!) {
+		createCollection(input: {
+			name: $name
+		}) {
+			collection {
+				id
+			}
+			errors
+		}
+	}
+`;
+
 /**
  * MASTER GAME DATA
  */

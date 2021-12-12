@@ -31,4 +31,14 @@ class PremiumPolicy < ApplicationPolicy
 
 		return valid
 	end
+
+	def create_collections?
+		valid = (user.collections.length < 5)
+
+		if (!valid)
+			Current.internal_error_code = 200003
+		end
+
+		return valid
+	end
 end

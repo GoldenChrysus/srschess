@@ -5,17 +5,17 @@ import { Menu, Spin, Button } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
 
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
-import { CREATE_REPERTOIRE, GET_COLLECTIONS } from "../../../api/queries";
+import { CREATE_COLLECTION, GET_COLLECTIONS } from "../../../api/queries";
 import "../../../styles/components/chess/left-menu/game-collections.css";
 
-import AddRepertoire from "../../modals/AddRepertoire";
 import Repertoire from "./Repertoires/Repertoire";
 import ChessState from "../../../stores/ChessState";
 import { CollectionsQueryData } from "../../../lib/types/models/Collection";
+import AddCollection from "../../modals/AddCollection";
 
 function GameCollections() {
 	const [ modal_active, setModalActive ] = useState(false);
-	const [ createRepertoire ] = useMutation(CREATE_REPERTOIRE, {
+	const [ createCollection ] = useMutation(CREATE_COLLECTION, {
 		refetchQueries : [ GET_COLLECTIONS ]
 	});
 	const { loading, error, data } = useQuery<CollectionsQueryData>(
@@ -24,7 +24,7 @@ function GameCollections() {
 
 	const onSubmit = (values: any) => {
 		setModalActive(false);
-		createRepertoire({
+		createCollection({
 			variables : values
 		});
 	};
@@ -51,7 +51,7 @@ function GameCollections() {
 					)
 				}
 			</Translation>
-			<AddRepertoire type="add" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit}/>
+			<AddCollection type="add" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit}/>
 		</Spin>
 	);
 }
