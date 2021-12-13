@@ -9,20 +9,20 @@ import { runInAction } from "mobx";
 import ChessState from "../stores/ChessState";
 
 interface GameDatabaseRouteParams {
-	slug?: string
+	collection_slug?: string
 }
 
 function GameDatabaseRoute() {
-	const { slug } = useParams<GameDatabaseRouteParams>();
+	const { collection_slug } = useParams<GameDatabaseRouteParams>();
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
 	const { loading, error, data } = useQuery<CollectionQueryData>(
 		GET_COLLECTION,
 		{
 			variables : {
-				slug : slug
+				slug : collection_slug
 			},
-			skip : !slug
+			skip : !collection_slug
 		}
 	);
 

@@ -16,7 +16,7 @@ function GameCollection(props: GameCollectionProps) {
 	const { t } = useTranslation(["database", "chess"]);
 
 	return (
-		<Link to={{ pathname: "/game-database/" + props.slug }} className="flex">
+		<Link to={{ pathname: "/game-database/collection/" + props.slug }} className="flex">
 			<div className="flex pr-2 flex-1 overflow-hidden">
 				<span className="overflow-hidden overflow-ellipsis">{props.name}</span>
 			</div>

@@ -17,6 +17,7 @@ class Container extends React.Component {
 								Hello<br/>
 							</div>
 						</Route>
+
 						<Route exact path="/repertoires/:slug?">
 							<RepertoireRoute mode="repertoire"/>
 						</Route>
@@ -27,7 +28,13 @@ class Container extends React.Component {
 							<RepertoireRoute mode="review"/>
 						</Route>
 
-						<Route exact path="/game-database/:slug?">
+						<Route exact path="/game-database/">
+							<GameDatabaseRoute/>
+						</Route>
+						<Route exact path="/game-database/collection/:collection_slug">
+							<GameDatabaseRoute/>
+						</Route>
+						<Route exact path="/game-database/collection/:collection_slug/game/:game_slug">
 							<GameDatabaseRoute/>
 						</Route>
 					</Switch>
