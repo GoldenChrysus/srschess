@@ -8,7 +8,7 @@ import { TFunction } from "i18next";
 
 import AuthState from "../../../stores/AuthState";
 import { CollectionModel, CollectionQueryData } from "../../../lib/types/models/Collection";
-import { GET_COLLECTION, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_COLLECTIONS } from "../../../api/queries";
+import { GET_COLLECTION, EDIT_COLLECTION, DELETE_COLLECTION, GET_COLLECTIONS } from "../../../api/queries";
 
 import AddCollection from "../../modals/AddCollection";
 import { hasPremiumLockoutError } from "../../../helpers";
@@ -23,8 +23,10 @@ function GameCollection(props: GameCollectionProps) {
 	const [ modal_active, setModalActive ] = useState(false);
 	const [ deleting, setDeleting ]        = useState(false);
 
-	const [ editCollection, edit_res ]   = useMutation(EDIT_REPERTOIRE);
-	const [ deleteCollection, delete_res ] = useMutation(DELETE_REPERTOIRE, {
+	const [ editCollection, edit_res ]   = useMutation(EDIT_COLLECTION, {
+		refetchQueries : [ GET_COLLECTION ]
+	});
+	const [ deleteCollection, delete_res ] = useMutation(DELETE_COLLECTION, {
 		refetchQueries : [ GET_COLLECTIONS ]
 	});
 
@@ -69,7 +71,7 @@ function GameCollection(props: GameCollectionProps) {
 	return (
 		<>
 			<Collapse bordered={false} activeKey="repertoire-panel">
-				<Collapse.Panel showArrow={false} id="repertoire-panel" header={getTitle(props)} key="repertoire-panel">
+				<Collapse.Panel showArrow={false} id="repertoire-panel" header={data?.collection?.name} key="repertoire-panel">
 					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
 						{renderContent(props, t, setModalActive, onDelete)}
 						<AddCollection type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} collection={data?.collection}/>
@@ -105,10 +107,6 @@ function renderContent(props: GameCollectionProps, t: TFunction, setModalActive:
 		
 		</Observer>
 	);
-}
-
-function getTitle(props: GameCollectionProps) {
-	return props.collection?.name;
 }
 
 export default GameCollection;

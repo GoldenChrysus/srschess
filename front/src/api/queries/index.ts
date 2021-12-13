@@ -334,6 +334,32 @@ export const CREATE_COLLECTION = gql`
 	}
 `;
 
+export const EDIT_COLLECTION = gql`
+	mutation EditCollection($id: ID!, $name: String!) {
+		editCollection(input: {
+			id: $id,
+			name: $name,
+		}) {
+			collection {
+				id
+				slug
+				name
+			}
+			errors
+		}
+	}
+`;
+
+export const DELETE_COLLECTION = gql`
+	mutation DeleteCollection($id: ID!) {
+		deleteCollection(input: {
+			id: $id
+		}) {
+			errors
+		}
+	}
+`;
+
 /**
  * MASTER GAME DATA
  */

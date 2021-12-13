@@ -35,5 +35,11 @@ module Types
 
 		# /create_collection
 		field :create_collection, mutation: Types::Mutations::CreateCollection
+
+		# /edit_collection
+		field :edit_collection, mutation: Types::Mutations::EditCollection
+
+		# /delete_collection
+		field :delete_collection, mutation: Types::Mutations::DeleteCollection
 	end
 end
