@@ -1,6 +1,7 @@
 import { ApolloClient } from "@apollo/client";
 import Chess, { ChessInstance } from "chess.js";
 import { START_FEN } from "../constants/chess";
+import { CollectionModel } from "./models/Collection";
 import { RepertoireModel, RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "./models/Repertoire";
 
 type ChessType = (fen?: string) => ChessInstance;
@@ -26,6 +27,7 @@ export interface ChessControllerProps {
 	mode                : keyof typeof ChessControllerModes,
 	repertoire?         : RepertoireModel | null,
 	repertoires?        : Array<RepertoireModel>,
+	collection?         : CollectionModel | null,
 	client              : ApolloClient<object>,
 	onMove?             : Function,
 	onTransposition?    : Function,

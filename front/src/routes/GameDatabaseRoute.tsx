@@ -38,6 +38,7 @@ function GameDatabaseRoute() {
 				<ChessController
 					key="chess-controller"
 					mode={(move_searching) ? "search" : "database"}
+					collection={data?.collection}
 					client={client}
 					onMoveSearchChange={onMoveSearchChange}
 				/>
