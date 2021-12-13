@@ -2,6 +2,7 @@ import React from "react";
 import { Translation } from "react-i18next";
 import { TFunction } from "i18next";
 import { Collapse } from "antd";
+import { inject } from "mobx-react";
 
 import { ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 import Tree from "../Tree";
@@ -9,12 +10,13 @@ import Repertoires from "./left-menu/Repertoires";
 
 import "../../styles/components/chess/left-menu.css";
 import { RepertoireModel } from "../../lib/types/models/Repertoire";
+import { CollectionModel } from "../../lib/types/models/Collection";
 import PublicRepertoires from "./left-menu/PublicRepertoires";
-import { inject } from "mobx-react";
 import GameCollections from "./left-menu/GameCollections";
 
 interface LeftMenuProps {
 	repertoire?         : RepertoireModel | null
+	collection?         : CollectionModel | null,
 	active_uuid         : ChessControllerState["last_uuid"],
 	mode                : ChessControllerProps["mode"],
 	movelist            : string,
@@ -33,7 +35,8 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 			prev_props.mode !== this.props.mode ||
 			prev_props.movelist !== this.props.movelist ||
 			prev_props.authenticated !== this.props.authenticated ||
-			JSON.stringify(prev_props.repertoire) !== JSON.stringify(this.props.repertoire)
+			JSON.stringify(prev_props.repertoire) !== JSON.stringify(this.props.repertoire) ||
+			JSON.stringify(prev_props.collection) !== JSON.stringify(this.props.collection)
 		);
 	}
 
@@ -48,6 +51,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 		if (this.props.mode === "database") {
 			default_active.push("collections-panel");
+			default_active.push("game-list-panel");
 		}
 
 		return (
@@ -67,10 +71,14 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 										<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
 									</Collapse.Panel>
 								}
+
 								{this.props.mode === "database" && this.props.authenticated &&
-									<Collapse.Panel id="collections-panel" header={t("database:game_collections")} key="collections-panel">
-										<GameCollections/>
-									</Collapse.Panel>
+									<>
+									{this.renderGameList(t)}
+										<Collapse.Panel id="collections-panel" header={t("database:game_collections")} key="collections-panel">
+											<GameCollections/>
+										</Collapse.Panel>
+									</>
 								}
 							</Collapse>
 						)
@@ -88,6 +96,17 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 		return (
 			<Collapse.Panel id="tree-panel" header={t("move_tree")} key="tree-panel" forceRender={true}>
 				<Tree key="tree" repertoire={this.props.repertoire} active_uuid={this.props.active_uuid} onMoveClick={this.props.onMoveClick}></Tree>
+			</Collapse.Panel>
+		);
+	}
+
+	renderGameList(t: TFunction) {
+		if (this.props.mode !== "database" || !this.props.collection) {
+			return null;
+		}
+
+		return (
+			<Collapse.Panel id="game-list-panel" header={t("database:game_list")} key="game-list-panel" forceRender={true}>
 			</Collapse.Panel>
 		);
 	}

@@ -152,6 +152,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					movelist={this.state.moves.join(".")}
 					mode={this.props.mode}
 					repertoire={this.props.repertoire}
+					collection={this.props.collection}
 					onMoveClick={this.onMoveClick.bind(this, "tree")}
 					onMoveSearchChange={this.props.onMoveSearchChange}
 				/>
