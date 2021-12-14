@@ -4,3 +4,6 @@ Rails:
 AWS:
 	health check:
 		CMD-SHELL, (curl -f localhost/health && curl -f localhost:3000/health) || exit 1
+
+GPG:
+	gpg --symmetric --cipher-algo AES256 input.file

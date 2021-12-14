@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_12_094549) do
+ActiveRecord::Schema.define(version: 2021_12_14_092854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -84,9 +84,10 @@ ActiveRecord::Schema.define(version: 2021_12_12_094549) do
 
   create_table "master_games_to_collections", force: :cascade do |t|
     t.bigint "collection_id", null: false
-    t.bigint "master_game_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "master_game_id", null: false
+    t.index ["collection_id", "master_game_id"], name: "idx_master_games_to_collections_on_collection_and_master_game", unique: true
     t.index ["collection_id"], name: "index_master_games_to_collections_on_collection_id"
     t.index ["master_game_id"], name: "index_master_games_to_collections_on_master_game_id"
   end
