@@ -20,7 +20,7 @@ RUN apt-get install -y openssl curl nginx libpq-dev procps systemd python3 pytho
 COPY --from=build-front /front/build /usr/share/nginx/html
 
 # Setup nginx
-COPY ./config/nginx /etc/nginx/conf.d
+COPY ./config/nginx /etc/nginx
 RUN rm /etc/nginx/sites-enabled/default
 EXPOSE 80
 VOLUME /usr/share/nginx/html
