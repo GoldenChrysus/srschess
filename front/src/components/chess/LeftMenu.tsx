@@ -13,6 +13,7 @@ import { RepertoireModel } from "../../lib/types/models/Repertoire";
 import { CollectionModel } from "../../lib/types/models/Collection";
 import PublicRepertoires from "./left-menu/PublicRepertoires";
 import GameCollections from "./left-menu/GameCollections";
+import MasterGames from "./left-menu/MasterGames";
 
 interface LeftMenuProps {
 	repertoire?         : RepertoireModel | null
@@ -42,14 +43,16 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 	render() {
 		const default_active = [""];
-		const is_repertoire  = ["repertoire", "review", "lesson"].includes(this.props.mode);
+		const route          = window.location.pathname.split("/").at(-2);
+		const is_repertoire  = (["repertoire", "review", "lesson"].includes(this.props.mode) || (this.props.mode === "search" && route === "repertoires"));
+		const is_database    = (this.props.mode === "database" || (this.props.mode === "search" && route === "game-database"));
 
 		if (is_repertoire) {
 			default_active.push("personal-repertoires-panel");
 			default_active.push("tree-panel");
 		}
 
-		if (this.props.mode === "database") {
+		if (is_database) {
 			default_active.push("collections-panel");
 			default_active.push("game-list-panel");
 		}
@@ -66,19 +69,24 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 										<Repertoires mode={this.props.mode}/>
 									</Collapse.Panel>
 								}
-								{is_repertoire &&
+								{is_repertoire && !["review", "lesson"].includes(this.props.mode) &&
 									<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
 										<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
 									</Collapse.Panel>
 								}
 
-								{this.props.mode === "database" && this.props.authenticated &&
+								{is_database && this.props.authenticated &&
 									<>
 									{this.renderGameList(t)}
 										<Collapse.Panel id="collections-panel" header={t("database:game_collections")} key="collections-panel">
 											<GameCollections/>
 										</Collapse.Panel>
 									</>
+								}
+								{is_database &&
+									<Collapse.Panel id="master-games-panel" header={t("database:search_master_games")} key="master-games-panel">
+										<MasterGames onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
+									</Collapse.Panel>
 								}
 							</Collapse>
 						)

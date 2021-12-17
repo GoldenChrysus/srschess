@@ -21,6 +21,7 @@ module Types
 				field :name, String, null: false
 				field :created_at, GraphQL::Types::ISO8601DateTime, null: false
 				field :move_count, Int, null: true
+				field :result, Int, null: true
 			end
 
 			type [ResultItem], null: false
@@ -86,7 +87,7 @@ module Types
 							)
 						end
 
-						if (criteria[:data][:fen].to_s != "")
+						if (!skip and criteria[:data][:fen].to_s != "")
 							valid = ValidateFen.call(fen: criteria[:data][:fen])
 
 							if (!valid.result)
@@ -111,7 +112,7 @@ module Types
 							params[:fen] = criteria[:data][:fen]
 						end
 
-						if (criteria[:data][:eco].to_s != "")
+						if (!skip and criteria[:data][:eco].to_s != "")
 							where.push(
 								"EXISTS
 									(
@@ -133,7 +134,7 @@ module Types
 							params[:eco_id] = criteria[:data][:eco]
 						end
 
-						if (criteria[:data][:side].to_s != "")
+						if (!skip and criteria[:data][:side].to_s != "")
 							where.push("r.side = :side")
 
 							params[:side] = ::Repertoire.sides[criteria[:data][:side]]
@@ -160,6 +161,94 @@ module Types
 								r.created_at"
 						sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 						res = ::Repertoire.connection.exec_query(sql)
+
+						return [] unless res.count > 0
+						return res
+
+					when "master_games"
+						where  = [
+							"g.white != '?'",
+							"g.black != '?'",
+							"g.year IS NOT NULL"
+						]
+						params = {}
+						skip   = false
+
+						if (criteria[:data][:movelist] != nil)
+							skip  = true
+							moves = []
+
+							for move in criteria[:data][:movelist].split(".")
+								moves.push(SanitizeSan.call(san: move.to_s).result)
+							end
+
+							params[:movelist] = moves.join(".")
+
+							where.push("g.movelist ~ CONCAT(:movelist, '.*')::LQUERY")
+						end
+
+						if (!skip and criteria[:data][:fen].to_s != "")
+							valid = ValidateFen.call(fen: criteria[:data][:fen])
+
+							if (!valid.result)
+								raise ApiErrors::ChessError::InvalidFen.new
+							end
+
+							where.push(
+								"EXISTS
+									(
+										SELECT
+											1
+										FROM
+											master_game_moves m2
+										WHERE
+											m2.master_game_id = g.id AND
+											m2.fen = TRIM(SUBSTRING(:fen FROM '^(([^ ]* ){4})'))
+										LIMIT
+											1
+									)"
+							)
+
+							params[:fen] = criteria[:data][:fen]
+						end
+
+						if (!skip and criteria[:data][:eco].to_s != "")
+							where.push(
+								"EXISTS
+									(
+										SELECT
+											1
+										FROM
+											master_game_moves m3
+										JOIN
+											eco_positions p
+										ON
+											p.fen = m3.fen
+										WHERE
+											p.id = :eco_id
+										LIMIT
+											1
+									)"
+							)
+
+							params[:eco_id] = criteria[:data][:eco]
+						end
+
+						where = where.join(" AND ")
+						sql   =
+							"SELECT
+								g.id AS slug,
+								CONCAT(white, ' - ', black) AS name,
+								CONCAT(year, '-', COALESCE(month, '01'), '-', COALESCE(day, '01')) AS created_at,
+								g.result
+							FROM
+								master_games g
+							WHERE
+								#{where}
+							LIMIT
+								500"
+						sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
+						res = ::MasterGame.connection.exec_query(sql)
 
 						return [] unless res.count > 0
 						return res

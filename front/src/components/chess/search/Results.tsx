@@ -8,6 +8,7 @@ import { SearchProps, SearchState } from "../../../lib/types/SearchTypes";
 import GameItem from "./GameItem";
 import RepertoireItem from "./RepertoireItem";
 import { useHistory } from "react-router";
+import MasterGameItem from "./MasterGameItem";
 
 interface ResultsProps {
 	criteria: SearchState["criteria"],
@@ -52,7 +53,7 @@ function Results(props: ResultsProps) {
 					render={(text, record: any) => {
 						return (props.mode === "repertoires")
 							? <RepertoireItem record={record}/>
-							: <></>;
+							: <MasterGameItem record={record}/>;
 					}}
 				/>
 			</Table>

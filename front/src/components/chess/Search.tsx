@@ -90,12 +90,14 @@ function Search(props: SearchProps) {
 								{eco_options}
 							</Select>
 						</Form.Item>
-						<Form.Item label={t("chess:side")} name="side">
-							<Select allowClear={true}>
-								<Select.Option value="white">{t("chess:white")}</Select.Option>
-								<Select.Option value="black">{t("chess:black")}</Select.Option>
-							</Select>
-						</Form.Item>
+						{props.mode === "repertoires" &&
+							<Form.Item label={t("chess:side")} name="side">
+								<Select allowClear={true}>
+									<Select.Option value="white">{t("chess:white")}</Select.Option>
+									<Select.Option value="black">{t("chess:black")}</Select.Option>
+								</Select>
+							</Form.Item>
+						}
 						<Form.Item>
 							<Button type="ghost" htmlType="submit">{t("search")}</Button>
 						</Form.Item>

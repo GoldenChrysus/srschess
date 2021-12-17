@@ -9,5 +9,5 @@ GPG:
 	gpg --symmetric --cipher-algo AES256 input.file
 
 Docker:
-	docker build
+	docker build .
 	docker run -d -p 80:80 <image from previous command>

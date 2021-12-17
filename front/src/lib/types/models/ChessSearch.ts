@@ -3,6 +3,7 @@ export interface ChessSearchResultItemModel {
 	name: string
 	createdAt: string
 	moveCount?: number
+	result?: number
 }
 
 export interface ChessSearchQueryData {

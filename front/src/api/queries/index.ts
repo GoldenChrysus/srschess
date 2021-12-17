@@ -408,6 +408,7 @@ export const GET_CHESS_SEARCH = gql`
 			name
 			createdAt
 			moveCount
+			result
 		}
 	}
 `;
