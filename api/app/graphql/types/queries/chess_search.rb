@@ -187,6 +187,31 @@ module Types
 							where.push("g.movelist ~ CONCAT(:movelist, '.*')::LQUERY")
 						end
 
+						if (!skip and criteria[:data][:eco].to_s != "")
+							eco = ::EcoPosition.find(criteria[:data][:eco])
+
+							if (eco == nil)
+								raise ApiErrors::ChessError::InvalidEco.new
+							end
+
+							where.push(
+								"EXISTS
+									(
+										SELECT
+											1
+										FROM
+											master_game_moves m2
+										WHERE
+											m2.master_game_id = g.id AND
+											m2.fen = :eco_fen
+										LIMIT
+											1
+									)"
+							)
+
+							params[:eco_fen] = eco.fen
+						end
+
 						if (!skip and criteria[:data][:fen].to_s != "")
 							valid = ValidateFen.call(fen: criteria[:data][:fen])
 
@@ -210,28 +235,6 @@ module Types
 							)
 
 							params[:fen] = criteria[:data][:fen]
-						end
-
-						if (!skip and criteria[:data][:eco].to_s != "")
-							where.push(
-								"EXISTS
-									(
-										SELECT
-											1
-										FROM
-											master_game_moves m3
-										JOIN
-											eco_positions p
-										ON
-											p.fen = m3.fen
-										WHERE
-											p.id = :eco_id
-										LIMIT
-											1
-									)"
-							)
-
-							params[:eco_id] = criteria[:data][:eco]
 						end
 
 						where = where.join(" AND ")

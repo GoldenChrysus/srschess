@@ -43,8 +43,12 @@ function Results(props: ResultsProps) {
 				onRow={(record, index) => {
 					return {
 						onClick : e => {
-							props.onRepertoireClick();
-							history.push("/" + props.mode + "/" + record.slug)
+							if (props.mode === "repertoires") {
+								props.onRepertoireClick();
+								history.push("/repertoires/" + record.slug);
+							} else if (props.mode === "master_games") {
+								history.push("/game-database/master-game/" + record.slug);
+							}
 						}
 					}
 				}}
