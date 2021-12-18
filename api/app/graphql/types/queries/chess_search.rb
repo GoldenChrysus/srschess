@@ -242,7 +242,7 @@ module Types
 							"SELECT
 								g.id AS slug,
 								CONCAT(white, ' - ', black) AS name,
-								CONCAT(year, '-', COALESCE(month, '01'), '-', COALESCE(day, '01')) AS created_at,
+								CONCAT(year, '-', COALESCE(month, '01'), '-', COALESCE(day, '01'))::TIMESTAMP AS created_at,
 								g.result
 							FROM
 								master_games g

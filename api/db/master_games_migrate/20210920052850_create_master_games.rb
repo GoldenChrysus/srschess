@@ -19,6 +19,5 @@ class CreateMasterGames < ActiveRecord::Migration[6.1]
 		end
 
 		add_column :master_games, :movelist, :ltree, null: false
-		add_index :master_games, :movelist, using: :gist
 	end
 end

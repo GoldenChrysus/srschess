@@ -8,6 +8,7 @@ CREATE TABLE moves (
 	sort INT
 );
 
+SET max_stack_depth TO '3584 kB';
 CREATE INDEX movelist_gist_idx ON moves USING GIST (movelist);
 CREATE INDEX movelist_idx ON moves USING BTREE (movelist);
 
