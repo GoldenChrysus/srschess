@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_13_090921) do
+ActiveRecord::Schema.define(version: 2021_12_17_144129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2021_10_13_090921) do
     t.string "round"
     t.integer "source", null: false
     t.integer "result", null: false
+    t.index ["movelist"], name: "index_master_games_on_movelist", using: :gist
   end
 
   add_foreign_key "master_game_moves", "master_games"
