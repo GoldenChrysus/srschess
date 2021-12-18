@@ -26,7 +26,7 @@ module Types
 					WHERE
 						fen = :fen"
 				sql  = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
-				res  = MasterGame.connection.exec_query(sql)
+				res  = ::MasterGame.connection.exec_query(sql)
 				data = []
 
 				return nil unless res.count > 0

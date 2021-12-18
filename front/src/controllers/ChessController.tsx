@@ -41,7 +41,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		this.onMoveClick = this.onMoveClick.bind(this);
 	}
 
-	reset() {
+	reset(state?: ChessControllerState) {
 		this.chunk_limit     = 5;
 		this.progressing     = false;
 		this.preloaded_moves = [""];
@@ -49,11 +49,32 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 		this.chess.reset();
 		this.setOriginalQueue();
-		this.setState(initial_state);
+		this.setState(state ?? initial_state);
 		this.progressQueue();
 	}
 
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
+		if (this.props.mode === "database" && prev_props.game?.id !== this.props.game?.id) {
+			this.chess.reset();
+			this.chess.load_pgn(this.props.game?.pgn || initial_state.pgn);
+
+			const new_state = {...initial_state};
+
+			new_state.moves   = this.chess.history();
+			new_state.history = [];
+
+			for (const i in new_state.moves) {
+				new_state.history.push({
+					id   : i,
+					move : new_state.moves[i]
+				})
+			}
+
+			new_state.moves = [];
+
+			return this.reset(new_state);
+		}
+
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
 			return this.reset();
 		}
@@ -403,6 +424,38 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					}
 				});
 
+			case "database":
+				if (!uuid) {
+					uuid = "-1";
+				}
+
+				this.chess.reset();
+
+				this.history = [];
+
+				for (const i in this.state.history) {
+					if (+i > +uuid) {
+						break;
+					}
+
+					this.chess.move(this.state.history[i].move);
+
+					this.history.push({
+						move_id : "",
+						fen     : this.chess.fen()
+					})
+				}
+
+				return this.reducer({
+					type  : "click-game",
+					data  : {
+						fen     : this.chess.fen(),
+						pgn     : this.chess.pgn(),
+						moves   : this.chess.history(),
+						history : this.state.history
+					}
+				});
+
 			default:
 				break;
 		}
@@ -433,6 +486,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		switch (action.type) {
 			case "click-history":
 			case "click-tree":
+			case "click-game":
 				this.setState(new_state);
 				break;
 

@@ -1,6 +1,4 @@
 class MasterGame < MasterDbRecord
-	self.table_name = "master_games.master_games"
-
 	# Validation
 	validates :movelist, presence: true
 	validates :white, presence: true

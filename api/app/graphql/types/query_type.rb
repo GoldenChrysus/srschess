@@ -34,6 +34,9 @@ module Types
 		# /master_moves
 		field :master_moves, resolver: Types::Queries::MasterMoves
 
+		# /master_game
+		field :master_game, resolver: Types::Queries::MasterGame
+
 		# /fen_eco
 		field :fen_eco, resolver: Types::Queries::FenEco
 

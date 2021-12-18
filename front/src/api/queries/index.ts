@@ -376,6 +376,16 @@ export const GET_MASTER_MOVE = gql`
 	}
 `;
 
+export const GET_MASTER_GAME = gql`
+	query MasterGame($id: String!) {
+		masterGame(id: $id) {
+			id
+			pgn
+			movelist
+		}
+	}
+`;
+
 /**
  * FEN ECO DATA
  */

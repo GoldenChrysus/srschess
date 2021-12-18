@@ -43,7 +43,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 	render() {
 		const default_active = [""];
-		const route          = window.location.pathname.split("/").at(-2);
+		const route          = window.location.pathname.split("/").at(1);
 		const is_repertoire  = (["repertoire", "review", "lesson"].includes(this.props.mode) || (this.props.mode === "search" && route === "repertoires"));
 		const is_database    = (this.props.mode === "database" || (this.props.mode === "search" && route === "game-database"));
 

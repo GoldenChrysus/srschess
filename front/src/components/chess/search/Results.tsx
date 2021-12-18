@@ -13,7 +13,7 @@ import MasterGameItem from "./MasterGameItem";
 interface ResultsProps {
 	criteria: SearchState["criteria"],
 	mode: SearchProps["mode"],
-	onRepertoireClick: Function
+	onResultClick: Function
 }
 
 function Results(props: ResultsProps) {
@@ -43,8 +43,9 @@ function Results(props: ResultsProps) {
 				onRow={(record, index) => {
 					return {
 						onClick : e => {
+							props.onResultClick();
+
 							if (props.mode === "repertoires") {
-								props.onRepertoireClick();
 								history.push("/repertoires/" + record.slug);
 							} else if (props.mode === "master_games") {
 								history.push("/game-database/master-game/" + record.slug);

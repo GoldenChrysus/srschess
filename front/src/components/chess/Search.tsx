@@ -55,7 +55,7 @@ function Search(props: SearchProps) {
 		}
 	}
 
-	function onRepertoireClick() {
+	function onResultClick() {
 		if (move_searching) {
 			onMoveSearchClick();
 		}
@@ -108,7 +108,7 @@ function Search(props: SearchProps) {
 					<p><Button type="ghost" onClick={onMoveSearchClick}>{move_searching ? t("stop_searching") : t("start_searching")}</Button></p>
 				</Tabs.TabPane>
 			</Tabs>
-			<Results criteria={state.criteria} mode={props.mode} onRepertoireClick={onRepertoireClick}/>
+			<Results criteria={state.criteria} mode={props.mode} onResultClick={onResultClick}/>
 		</>
 	);
 }
