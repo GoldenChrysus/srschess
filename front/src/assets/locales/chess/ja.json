@@ -3,13 +3,15 @@
   "black": "ブラック",
   "choose_side": "サイドをお選びください。",
   "depth": "深さ",
+  "game_one": "試合",
+  "game_other": "試合",
   "move_note": "指し手のノート",
   "move_one": "指し手",
   "move_other": "指し手",
   "outcome_percent": "結果％",
   "position_data": "局面データ",
   "side": "サイド",
-  "total_games": "総ゲーム数",
+  "total_games": "総試合数",
   "waiting": "待機中…",
   "white": "ホワイト"
 }

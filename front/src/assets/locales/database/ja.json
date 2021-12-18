@@ -1,3 +1,8 @@
 {
-  "game_database": "ゲーム・データベース"
+  "create_collection": "コレクションの作成",
+  "edit_collection": "コレクションの修正",
+  "game_collections": "試合のコレクション",
+  "game_database": "試合のデータベース",
+  "game_list": "試合のリスト",
+  "search_master_games": "マスター試合の検索"
 }
