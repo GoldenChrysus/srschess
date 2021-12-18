@@ -110,6 +110,9 @@ for file in files:
 
 		for move in game.mainline():
 			moves.append(move.san())
+		
+		if (len(moves) >= 400):
+			continue
 
 		record["event"]       = game.headers["Event"]
 		record["round"]       = None if ("Round" not in game.headers) else game.headers["Round"]
