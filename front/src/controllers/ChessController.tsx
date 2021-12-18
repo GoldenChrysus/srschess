@@ -187,6 +187,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					history={this.history}
 					repertoire={this.props.repertoire}
 					collection={this.props.collection}
+					game={this.props.game}
 					onMoveClick={this.onMoveClick.bind(this, "history")}
 				/>
 			</div>
