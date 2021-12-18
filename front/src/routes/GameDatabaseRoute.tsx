@@ -10,10 +10,12 @@ import ChessState from "../stores/ChessState";
 
 interface GameDatabaseRouteParams {
 	collection_slug?: string
+	game_slug?: string
+	master_game_id?: string
 }
 
 function GameDatabaseRoute() {
-	const { collection_slug } = useParams<GameDatabaseRouteParams>();
+	const { collection_slug, game_slug, master_game_id } = useParams<GameDatabaseRouteParams>();
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
 	const { loading, error, data } = useQuery<CollectionQueryData>(
