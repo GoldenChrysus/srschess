@@ -9,5 +9,5 @@ class Game < ApplicationRecord
 	has_many :moves, -> { order("ply ASC") }, dependent: :destroy, class_name: "GameMove"
 
 	# Types
-	enum source: {local: 0, chesscom: 1, lichess: 2}
+	enum source: {local: 0, chesscom: 1, lichess: 2}, _prefix: true
 end
