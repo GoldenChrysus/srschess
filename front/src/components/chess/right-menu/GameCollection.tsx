@@ -8,12 +8,13 @@ import { TFunction } from "i18next";
 
 import AuthState from "../../../stores/AuthState";
 import { CollectionModel, CollectionQueryData } from "../../../lib/types/models/Collection";
-import { GET_COLLECTION, EDIT_COLLECTION, DELETE_COLLECTION, GET_COLLECTIONS } from "../../../api/queries";
+import { GET_COLLECTION, EDIT_COLLECTION, DELETE_COLLECTION, GET_COLLECTIONS, CREATE_COLLECTION_GAMES } from "../../../api/queries";
 
 import AddCollection from "../../modals/AddCollection";
 import { hasPremiumLockoutError } from "../../../helpers";
 import PremiumWarning from "../../PremiumWarning";
 import { Observer } from "mobx-react-lite";
+import AddCollectionGames from "../../modals/AddCollectionGames";
 
 interface GameCollectionProps {
 	collection?: CollectionModel
@@ -21,6 +22,7 @@ interface GameCollectionProps {
 
 function GameCollection(props: GameCollectionProps) {
 	const [ modal_active, setModalActive ] = useState(false);
+	const [ game_modal_active, setGameModalActive ] = useState(false);
 	const [ deleting, setDeleting ]        = useState(false);
 
 	const [ editCollection, edit_res ]   = useMutation(EDIT_COLLECTION, {
@@ -28,6 +30,9 @@ function GameCollection(props: GameCollectionProps) {
 	});
 	const [ deleteCollection, delete_res ] = useMutation(DELETE_COLLECTION, {
 		refetchQueries : [ GET_COLLECTIONS ]
+	});
+	const [ createCollectionGames, games_res ] = useMutation(CREATE_COLLECTION_GAMES, {
+		refetchQueries : [ GET_COLLECTION ]
 	});
 
 	const { t } = useTranslation(["database", "common", "premium"]);
@@ -53,6 +58,16 @@ function GameCollection(props: GameCollectionProps) {
 		});
 	};
 
+	const onGamesSubmit = (values: any) => {
+		setGameModalActive(false);
+		createCollectionGames({
+			variables : {
+				...values,
+				collectionId : data?.collection?.id
+			}
+		});
+	};
+
 	const onDelete = () => {
 		deleteCollection({
 			variables : {
@@ -73,8 +88,9 @@ function GameCollection(props: GameCollectionProps) {
 			<Collapse bordered={false} activeKey="repertoire-panel">
 				<Collapse.Panel showArrow={false} id="repertoire-panel" header={data?.collection?.name} key="repertoire-panel">
 					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
-						{renderContent(props, t, setModalActive, onDelete)}
+						{renderContent(props, t, setModalActive, onDelete, setGameModalActive)}
 						<AddCollection type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} collection={data?.collection}/>
+						{data?.collection && <AddCollectionGames visible={game_modal_active} toggleVisible={setGameModalActive} onSubmit={onGamesSubmit} collection={data.collection}/>}
 					</Spin>
 				</Collapse.Panel>
 			</Collapse>
@@ -82,7 +98,7 @@ function GameCollection(props: GameCollectionProps) {
 	);
 }
 
-function renderContent(props: GameCollectionProps, t: TFunction, setModalActive: Function, onDelete: Function) {
+function renderContent(props: GameCollectionProps, t: TFunction, setModalActive: Function, onDelete: Function, setGameModalActive: Function) {
 	return (
 		<Observer>
 			{
@@ -91,6 +107,7 @@ function renderContent(props: GameCollectionProps, t: TFunction, setModalActive:
 						{
 							AuthState.authenticated &&
 							<>
+								<Button className="mr-2" type="default" onClick={() => setGameModalActive(true)}>{t("import_pgn")}</Button>
 								<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
 								<Popconfirm
 									title={t("common:delete_confirm")}

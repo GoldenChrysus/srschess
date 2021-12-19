@@ -20,7 +20,7 @@ const Chess2      = ChessImport as ChessType;
 class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
 	private chess = Chess2();
 
-	private history: ChessControllerLocalState["history"] = [];
+	private fen_history: ChessControllerLocalState["fen_history"] = [];
 
 	private original_queue: ChessControllerLocalState["original_queue"] = [];
 	private chunk: ChessControllerLocalState["chunk"]                   = [];
@@ -45,7 +45,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		this.chunk_limit     = 5;
 		this.progressing     = false;
 		this.preloaded_moves = [""];
-		this.history         = [];
+		this.fen_history     = [];
 
 		this.chess.reset();
 		this.setOriginalQueue();
@@ -86,7 +86,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				this.chess.reset();
 
 				this.preloaded_moves = [""];
-				this.history         = [];
+				this.fen_history         = [];
 
 				setTimeout(
 					() => {
@@ -184,7 +184,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					moves={this.state.history}
 					fen={this.state.fen}
 					mode={this.props.mode}
-					history={this.history}
+					fen_history={this.fen_history}
 					repertoire={this.props.repertoire}
 					collection={this.props.collection}
 					game={this.props.game}
@@ -236,7 +236,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 			pre_moves = pre_moves.slice(-1);
 		} else {
 			this.preloaded_moves = [];
-			this.history         = [];
+			this.fen_history         = [];
 
 			this.chess.reset();
 		}
@@ -345,7 +345,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					});
 				}
 
-				this.history = [];
+				this.fen_history = [];
 
 				this.chess.reset();
 
@@ -354,7 +354,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				for (const item of data.history) {
 					this.chess.move(item.move);
 
-					this.history.push({
+					this.fen_history.push({
 						move_id : item.uuid,
 						fen     : this.chess.fen()
 					});
@@ -400,7 +400,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 				this.chess.reset();
 
-				this.history = [];
+				this.fen_history = [];
 
 				for (const i in this.state.history) {
 					if (+i > +uuid) {
@@ -409,7 +409,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 					this.chess.move(this.state.history[i].move);
 
-					this.history.push({
+					this.fen_history.push({
 						move_id : "",
 						fen     : this.chess.fen()
 					})
@@ -432,7 +432,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 				this.chess.reset();
 
-				this.history = [];
+				this.fen_history = [];
 
 				for (const i in this.state.history) {
 					if (+i > +uuid) {
@@ -441,7 +441,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 					this.chess.move(this.state.history[i].move);
 
-					this.history.push({
+					this.fen_history.push({
 						move_id : "",
 						fen     : this.chess.fen()
 					})
@@ -496,7 +496,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				if (action.type === "move-search") {
 					this.chess.move(last_move);
 
-					this.history.push({
+					this.fen_history.push({
 						move_id : "",
 						fen     : new_state.fen
 					});
@@ -629,7 +629,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				const prev_uuid = this.state.last_uuid;
 				const uuid      = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
 
-				this.history.push({
+				this.fen_history.push({
 					move_id : uuid,
 					fen     : new_state.fen
 				});

@@ -7,7 +7,7 @@ import { FenEcoQueryData } from "../../../lib/types/models/EcoPosition";
 import { useTranslation } from "react-i18next";
 
 interface ECOProps {
-	history: ChessControllerLocalState["history"]
+	history: ChessControllerLocalState["fen_history"]
 }
 
 function ECO(props: ECOProps) {

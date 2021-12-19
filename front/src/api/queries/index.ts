@@ -360,6 +360,20 @@ export const DELETE_COLLECTION = gql`
 	}
 `;
 
+export const CREATE_COLLECTION_GAMES = gql`
+	mutation CreateCollectionGames($collectionId: ID!, $pgn: String!) {
+		createCollectionGames(input: {
+			collectionId: $collectionId,
+			pgn: $pgn
+		}) {
+			games {
+				id
+			}
+			errors
+		}
+	}
+`;
+
 /**
  * MASTER GAME DATA
  */

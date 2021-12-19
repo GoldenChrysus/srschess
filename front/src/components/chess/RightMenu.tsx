@@ -18,7 +18,7 @@ interface RightMenuProps {
 	fen: string,
 	moves: ChessControllerState["history"],
 	mode: ChessControllerProps["mode"],
-	history: ChessControllerLocalState["history"],
+	fen_history: ChessControllerLocalState["fen_history"],
 	repertoire?: ChessControllerProps["repertoire"],
 	collection?: ChessControllerProps["collection"],
 	game?: ChessControllerProps["game"],
@@ -51,7 +51,7 @@ class RightMenu extends React.Component<RightMenuProps> {
 							<Collapse accordion bordered={false} defaultActiveKey="position-panel" className="top-border">
 								<Collapse.Panel id="position-panel" header={t("position_data")} key="position-panel">
 									<Input addonBefore="FEN" value={this.props.fen}/>
-									{this.props.repertoire?.id && <ECO history={this.props.history}/>}
+									{this.props.repertoire?.id && <ECO history={this.props.fen_history}/>}
 									{!["review", "lesson"].includes(this.props.mode) && <RepertoireMoveNote active_uuid={this.props.active_uuid}/>}
 								</Collapse.Panel>
 							</Collapse>

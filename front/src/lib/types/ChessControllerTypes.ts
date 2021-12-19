@@ -76,7 +76,7 @@ export interface ChessControllerLocalState {
 	progressing: boolean,
 	preloaded_moves: Array<string>
 
-	history: Array<{
+	fen_history: Array<{
 		move_id: RepertoireMoveModel["id"],
 		fen: RepertoireMoveModel["fen"]
 	}>

@@ -41,4 +41,14 @@ class PremiumPolicy < ApplicationPolicy
 
 		return valid
 	end
+
+	def create_collection_games?
+		valid = (record.games.length < 100)
+
+		if (!valid)
+			Current.internal_error_code = 200004
+		end
+
+		return valid
+	end
 end

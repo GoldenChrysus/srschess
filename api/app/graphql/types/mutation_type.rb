@@ -41,5 +41,8 @@ module Types
 
 		# /delete_collection
 		field :delete_collection, mutation: Types::Mutations::DeleteCollection
+
+		# /create_collection_games
+		field :create_collection_games, mutation: Types::Mutations::CreateCollectionGames
 	end
 end

@@ -4,6 +4,8 @@
 	"game_collections": "Game Collections",
 	"game_database": "Game Database",
 	"game_list": "Game List",
+	"import_pgn": "Import PGN",
+	"input_pgn": "Please input a PGN.",
 	"pgn_data": "PGN Data",
 	"search_master_games": "Search Master Games"
 }

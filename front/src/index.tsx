@@ -18,7 +18,7 @@ const http_link      = createHttpLink({ uri: "http://" + process.env.REACT_APP_A
 const shouldUseCable = () => {
 	return true;
 };
-const cable_link     = new ActionCableLink({cable, connectionParams: { token : AuthState.token }});
+const cable_link     = new ActionCableLink({cable, connectionParams: { token : localStorage.getItem("firebase_token") || AuthState.token }});
 const link           = ApolloLink.split(
 	shouldUseCable,
 	cable_link,

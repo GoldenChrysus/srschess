@@ -42,6 +42,8 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 			})
 			.then(() => {
 				// All good
+				localStorage.setItem("firebase_uid", user.uid);
+				localStorage.setItem("firebase_token", user.accessToken);
 			})
 			.catch((err) => {
 				// TODO: Revoke the session
