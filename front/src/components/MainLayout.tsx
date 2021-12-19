@@ -25,16 +25,13 @@ class MainLayout extends React.Component<any> {
 		];
 
 		let footer: any = (
-			<div className="bg-gray-500 h-32 absolute -bottom-32 w-full">
+			<div className="bg-gray-800 h-8 absolute -bottom-16 w-full mt-8">
 				Footer
 			</div>
 		);
 
-		if (["repertoires", "reviews", "lessons"].includes(this.props.location.pathname.split("/").at(-2))) {
-			footer = null;
-		} else {
-			content_classes.push("mb-32");
-		}
+		// Footer offset
+		content_classes.push("mb-16");
 
 		return (
 			<div className={layout_classes.join(" ")}>

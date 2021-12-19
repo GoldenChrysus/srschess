@@ -110,7 +110,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 	}
 
 	renderGameList(t: TFunction) {
-		if (this.props.mode !== "database" || !this.props.collection) {
+		if (!this.props.collection) {
 			return null;
 		}
 
