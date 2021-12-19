@@ -35,6 +35,19 @@ const COLLECTION_FRAG = gql`
 	}
 `;
 
+const GAME_FRAG = gql`
+	fragment CoreGameFields on Game {
+		id
+		white
+		black
+		result
+		name
+		date
+		event
+		round
+	}
+`;
+
 export const CREATE_USER = gql`
 	mutation CreateUser($email: String!, $uid: String!) {
 		createUser(input: {
@@ -314,9 +327,23 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 
 export const GET_COLLECTION = gql`
 	${COLLECTION_FRAG}
+	${GAME_FRAG}
 	query Collection($slug: String!) {
 		collection(slug: $slug) {
 			...CoreCollectionFields
+			games {
+				...CoreGameFields
+			}
+		}
+	}
+`;
+
+export const GET_GAME = gql`
+	${GAME_FRAG}
+	query Game($id: ID!) {
+		game(id: $id) {
+			...CoreGameFields
+			pgn
 		}
 	}
 `;
@@ -434,6 +461,8 @@ export const GET_CHESS_SEARCH = gql`
 			createdAt
 			moveCount
 			result
+			event
+			round
 		}
 	}
 `;

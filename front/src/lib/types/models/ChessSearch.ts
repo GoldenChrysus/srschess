@@ -4,6 +4,8 @@ export interface ChessSearchResultItemModel {
 	createdAt: string
 	moveCount?: number
 	result?: number
+	event?: string
+	round?: string
 }
 
 export interface ChessSearchQueryData {

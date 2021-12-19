@@ -13,9 +13,19 @@ export interface GameMoveModel {
 
 export interface GameModel {
 	id: string,
+	white: string,
+	black: string,
+	result: string,
+	name: string,
 	date: string,
 	pgn: string,
 	movelist: string,
 	source: string,
+	event: string,
+	round: string,
 	moves?: Array<GameMoveModel> | null
+}
+
+export interface GameQueryData {
+	game: GameModel | null
 }

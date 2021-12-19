@@ -14,6 +14,7 @@ import { CollectionModel } from "../../lib/types/models/Collection";
 import PublicRepertoires from "./left-menu/PublicRepertoires";
 import GameCollections from "./left-menu/GameCollections";
 import MasterGames from "./left-menu/MasterGames";
+import GameList from "./left-menu/GameCollections/GameList";
 
 interface LeftMenuProps {
 	repertoire?         : RepertoireModel | null
@@ -77,7 +78,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 								{is_database && this.props.authenticated &&
 									<>
-									{this.renderGameList(t)}
+										{this.renderGameList(t)}
 										<Collapse.Panel id="collections-panel" header={t("database:game_collections")} key="collections-panel">
 											<GameCollections/>
 										</Collapse.Panel>
@@ -115,6 +116,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 		return (
 			<Collapse.Panel id="game-list-panel" header={t("database:game_list")} key="game-list-panel" forceRender={true}>
+				<GameList collection_slug={this.props.collection.slug} games={this.props.collection.games}/>
 			</Collapse.Panel>
 		);
 	}

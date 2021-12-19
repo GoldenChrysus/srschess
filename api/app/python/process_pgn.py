@@ -19,8 +19,14 @@ try:
 			moves.append(move.san())
 
 		games.append({
-			"pgn"   : str(game),
-			"moves" : moves
+			"pgn"    : str(game),
+			"moves"  : moves,
+			"result" : None if ("Result" not in game.headers) else game.headers["Result"],
+			"white"  : None if ("White" not in game.headers) else game.headers["White"],
+			"black"  : None if ("Black" not in game.headers) else game.headers["Black"],
+			"date"   : None if ("Date" not in game.headers) else game.headers["Date"],
+			"event"  : None if ("Event" not in game.headers) else game.headers["Event"],
+			"round"  : None if ("Round" not in game.headers) else game.headers["Round"]
 		})
 
 	print(json.dumps(games))

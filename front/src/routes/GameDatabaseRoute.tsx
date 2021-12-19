@@ -4,19 +4,20 @@ import { ApolloConsumer, useQuery } from "@apollo/client";
 
 import ChessController from "../controllers/ChessController";
 import { CollectionQueryData } from "../lib/types/models/Collection";
-import { GET_COLLECTION, GET_MASTER_GAME } from "../api/queries";
+import { GET_COLLECTION, GET_GAME, GET_MASTER_GAME } from "../api/queries";
 import { runInAction } from "mobx";
 import ChessState from "../stores/ChessState";
 import { MasterGameQueryData } from "../lib/types/models/MasterGame";
+import { GameQueryData } from "../lib/types/models/Game";
 
 interface GameDatabaseRouteParams {
 	collection_slug?: string
-	game_slug?: string
+	game_id?: string
 	master_game_id?: string
 }
 
 function GameDatabaseRoute() {
-	const { collection_slug, game_slug, master_game_id } = useParams<GameDatabaseRouteParams>();
+	const { collection_slug, game_id, master_game_id } = useParams<GameDatabaseRouteParams>();
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
 	const { loading, error, data } = useQuery<CollectionQueryData>(
@@ -39,6 +40,16 @@ function GameDatabaseRoute() {
 		}
 	);
 
+	const { loading: game_loading, error: game_error, data: game_data } = useQuery<GameQueryData>(
+		GET_GAME,
+		{
+			variables : {
+				id : game_id
+			},
+			skip : !game_id
+		}
+	);
+
 	const onMoveSearchChange = function(new_state: boolean) {
 		setMoveSearching(new_state);
 	}
@@ -52,7 +63,7 @@ function GameDatabaseRoute() {
 					key="chess-controller"
 					mode={(move_searching) ? "search" : "database"}
 					collection={data?.collection}
-					game={master_game_data?.masterGame}
+					game={game_data?.game ?? master_game_data?.masterGame}
 					client={client}
 					onMoveSearchChange={onMoveSearchChange}
 				/>

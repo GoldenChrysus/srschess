@@ -34,7 +34,7 @@ class Container extends React.Component {
 						<Route exact path="/game-database/collection/:collection_slug">
 							<GameDatabaseRoute/>
 						</Route>
-						<Route exact path="/game-database/collection/:collection_slug/game/:game_slug">
+						<Route exact path="/game-database/collection/:collection_slug/game/:game_id">
 							<GameDatabaseRoute/>
 						</Route>
 						<Route exact path="/game-database/master-game/:master_game_id">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_14_092854) do
+ActiveRecord::Schema.define(version: 2021_12_19_114807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -62,13 +62,18 @@ ActiveRecord::Schema.define(version: 2021_12_14_092854) do
 
   create_table "games", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.datetime "date"
+    t.string "date"
     t.text "pgn", null: false
     t.ltree "movelist", null: false
     t.integer "source", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "collection_id"
+    t.string "event"
+    t.string "round"
+    t.string "white"
+    t.string "black"
+    t.integer "result"
     t.index ["collection_id"], name: "index_games_on_collection_id"
     t.index ["user_id"], name: "index_games_on_user_id"
   end

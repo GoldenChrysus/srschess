@@ -67,7 +67,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				new_state.history.push({
 					id   : i,
 					move : new_state.moves[i]
-				})
+				});
 			}
 
 			new_state.moves = [];

@@ -19,9 +19,11 @@ module Types
 			class ResultItem < Types::BaseObject
 				field :slug, String, null: false
 				field :name, String, null: false
-				field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+				field :created_at, String, null: false
 				field :move_count, Int, null: true
 				field :result, Int, null: true
+				field :event, String, null: true
+				field :round, String, null: true
 			end
 
 			type [ResultItem], null: false
@@ -242,8 +244,10 @@ module Types
 							"SELECT
 								g.id AS slug,
 								CONCAT(white, ' - ', black) AS name,
-								CONCAT(year, '-', COALESCE(month, '01'), '-', COALESCE(day, '01'))::TIMESTAMP AS created_at,
-								g.result
+								CONCAT(year, '-', LPAD(COALESCE(month::VARCHAR, '??'), 2, '0'), '-', LPAD(COALESCE(day::VARCHAR, '??'), 2, '0')) AS created_at,
+								g.result,
+								g.event,
+								g.round
 							FROM
 								master_games g
 							WHERE

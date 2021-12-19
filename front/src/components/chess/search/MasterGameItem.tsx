@@ -1,5 +1,6 @@
 import React from "react";
 import { Translation } from "react-i18next";
+import { formateDate } from "../../../helpers";
 import { ChessSearchResultItemModel } from "../../../lib/types/models/ChessSearch";
 
 import SearchItem from "./SearchItem";
@@ -30,10 +31,24 @@ class MasterGameItem extends React.Component<MasterGameItemProps> {
 					</Translation>
 				</div>
 				<div className="text-xs">
-					{(new Date(this.props.record.createdAt)).toLocaleDateString()}
+					{formateDate(this.props.record.createdAt)}
+					{this.renderEvent()}
+					{this.renderRound()}
 				</div>
 			</SearchItem>
 		)
+	}
+
+	renderEvent() {
+		const prefix = (this.props.record.createdAt) ? ", " : "";
+
+		return (this.props.record.event) ? prefix + this.props.record.event : null;
+	}
+
+	renderRound() {
+		const prefix = (this.props.record.event) ? ", " : "";
+
+		return (this.props.record.round) ? prefix + this.props.record.round : null;
 	}
 }
 

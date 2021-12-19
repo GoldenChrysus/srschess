@@ -1,4 +1,7 @@
 class Game < ApplicationRecord
+	# Attributes
+	attr_accessor :name
+
 	# Validation
 	validates :user, presence: true
 	validates :user_id, inclusion: { in: ->(i) { [ i.user_id_was ] }}, on: :update
@@ -10,4 +13,12 @@ class Game < ApplicationRecord
 
 	# Types
 	enum source: {local: 0, chesscom: 1, lichess: 2}, _prefix: true
+	enum result: {"0-1": 0, "1-0": 1, "1/2-1/2": 2}, _prefix: true
+
+	def name
+		white = self.white ||= "N/A"
+		black = self.black ||= "N/A"
+
+		white + " - " + black
+	end
 end

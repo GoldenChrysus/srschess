@@ -16,6 +16,9 @@ module Types
 		# /collection
 		field :collection, resolver: Types::Queries::Collection
 
+		# /game
+		field :game, resolver: Types::Queries::Game
+
 		# /repertoires
 		field :repertoires, resolver: Types::Queries::Repertoires
 

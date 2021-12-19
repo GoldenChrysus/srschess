@@ -153,9 +153,10 @@ for file in files:
 			record["month"] = date.strftime("%m")
 			record["day"]   = date.strftime("%d")
 
-			header_year = game.headers["Event"][-4:]
+			header_year        = game.headers["Event"][-4:]
+			second_header_year = game.headers["Event"][-9:-5]
 
-			if (str(record["year"]) != header_year and header_year.isdigit()):
+			if (str(record["year"]) != header_year and header_year.isdigit() and (str(record["year"]) != second_header_year or !second_header_year.isdigit())):
 				record["year"]  = header_year
 				record["month"] = None
 				record["day"]   = None
