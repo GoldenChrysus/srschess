@@ -28,8 +28,6 @@ module Types
 
 					data = ProcessPgnPython.call(file: file.path)
 
-					print(data)
-
 					if (data.result == false)
 						raise ApiErrors::ChessError::InvalidPgn.new
 					end
