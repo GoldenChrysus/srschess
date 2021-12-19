@@ -15,7 +15,7 @@ class Game extends React.Component<GameProps> {
 					<Translation ns={["chess", "common"]}>
 						{(t) => (
 							<>
-								<div className="flex-1 font-bold">{this.props.game.name}</div>
+								<div className="flex-1 font-bold">{this.props.game.name.replace("N/A", t("common:unknown"))}</div>
 								<div className="flex-initial text-right">{this.props.game.result ?? "N/A"}</div>
 							</>
 						)}

@@ -4,5 +4,8 @@
   "game_collections": "試合のコレクション",
   "game_database": "試合のデータベース",
   "game_list": "試合のリスト",
+  "import_pgn": "PGNのインポート",
+  "input_pgn": "PGN を入力してください。",
+  "pgn_data": "PGN・データ",
   "search_master_games": "マスター試合の検索"
 }

@@ -38,7 +38,7 @@ class AddCollectionGames extends React.PureComponent<AddCollectionGamesProps> {
 								autoComplete="off"
 							>
 								<Form.Item
-									label={t("chess:pgn")}
+									label="PGN"
 									name="pgn"
 									rules={[ { required: true, message: t("database:input_pgn")} ]}
 								>
