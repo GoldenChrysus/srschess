@@ -265,7 +265,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 			if (moves[i].captured) {
 				pieces.push(
 					<Piece key={"captures-" + player + "-" + i} type={moves[i].captured!} color={(player === "w") ? "black" : "white"}/>
-				)
+				);
 			}
 		}
 
