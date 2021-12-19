@@ -251,7 +251,7 @@ class Chessboard extends React.Component<ChessboardProps> {
 	}
 
 	renderCaptures(section: string) {
-		const player = ((this.props.orientation === "white" && section === "bottom") || (this.props.orientation === "black" && section === "top"))
+		const player = ((this.last_orientation === "white" && section === "bottom") || (this.last_orientation === "black" && section === "top"))
 			? "w"
 			: "b";
 		const moves  = this.chess.history({ verbose: true });
