@@ -31,6 +31,7 @@ const COLLECTION_FRAG = gql`
 		id
 		slug
 		name
+		gameCount
 	}
 `;
 

@@ -46,7 +46,7 @@ function GameCollections() {
 								mode="inline"
 								selectedKeys={[ "collection-" + ChessState.collection?.id ]}
 							>
-								<Button className="ml-6 mb-2" type="default" onClick={() => setModalActive(true)}>{t("create_collection")}</Button>
+								<Button type="default" onClick={() => setModalActive(true)}>{t("create_collection")}</Button>
 								{renderCollections(data)}
 							</Menu>
 						)}
@@ -68,7 +68,7 @@ function renderCollections(data: CollectionsQueryData | undefined) {
 	for (const collection of data.collections) {
 		items.push(
 			<Menu.Item key={"collection-" + collection.id}>
-				<GameCollection key={"collection-menu-item-" + collection.id} id={collection.id} slug={collection.slug} name={collection.name}/>
+				<GameCollection key={"collection-menu-item-" + collection.id} collection={collection}/>
 			</Menu.Item>
 		);
 	}

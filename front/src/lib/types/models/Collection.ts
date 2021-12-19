@@ -7,6 +7,7 @@ export interface CollectionModel {
 	name: string,
 	side: string,
 	public: boolean,
+	gameCount: number,
 	games?: Array<GameModel> | null,
 	user?: UserModel
 }
