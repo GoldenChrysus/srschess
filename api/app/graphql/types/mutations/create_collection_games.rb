@@ -48,7 +48,7 @@ module Types
 							collection: collection,
 							pgn: game["pgn"],
 							movelist: moves.join("."),
-							source: 0
+							source: "local"
 						)
 
 						games.append(db_game)
