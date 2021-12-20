@@ -32,6 +32,8 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	private progressing: ChessControllerLocalState["progressing"]         = false;
 	private preloaded_moves: ChessControllerLocalState["preloaded_moves"] = [""];
 
+	private last_search_state: ChessControllerState | undefined = undefined;
+
 	constructor(props: ChessControllerProps) {
 		super(props);
 
@@ -76,7 +78,17 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		}
 
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
-			return this.reset();
+			let new_state = undefined;
+
+			if (this.props.mode === "search" && prev_props.mode !== "search") {
+				new_state = this.last_search_state;
+			}
+
+			return this.reset(new_state);
+		}
+
+		if (this.props.mode === "search") {
+			this.last_search_state = {...this.state};
 		}
 
 		if (["review", "lesson"].includes(this.props.mode)) {
