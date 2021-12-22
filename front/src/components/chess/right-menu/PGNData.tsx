@@ -17,30 +17,33 @@ interface PGNDataState {
 class PGNData extends React.Component<PGNDataProps, PGNDataState> {
 	private chess = ChessMaker.create();
 
-	updateHeaders(construction?: boolean) {
+	processHeaders(construction?: boolean) {
 		this.chess.load_pgn(this.props.game?.pgn || "");
 
 		const header = this.chess.header();
 
-		if (!construction) {
-			this.setState({
-				headers : header
-			});
-		} else {
-			this.state = {
-				headers : header
-			};
+		if (construction) {
+			return header;
 		}
+
+		this.setState({
+			headers : header
+		});
 	}
 
 	constructor(props: PGNDataProps) {
 		super(props);
-		this.updateHeaders(true);
+
+		const header = this.processHeaders(true);
+
+		this.state = {
+			headers : header
+		};
 	}
 
 	componentDidUpdate(prev_props: PGNDataProps) {
 		if (prev_props.game?.id !== this.props.game?.id) {
-			this.updateHeaders();
+			this.processHeaders();
 		}
 	}
 

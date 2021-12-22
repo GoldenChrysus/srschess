@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 
 import Login from "./layout/Login";
 import Header from "./layout/Header";
+import Footer from "./layout/Footer";
 
 class MainLayout extends React.Component<any> {
 	render() {
@@ -24,12 +25,6 @@ class MainLayout extends React.Component<any> {
 			"relative"
 		];
 
-		let footer: any = (
-			<div className="bg-gray-800 h-8 absolute -bottom-16 w-full mt-8">
-				Footer
-			</div>
-		);
-
 		// Footer offset
 		content_classes.push("mb-16");
 
@@ -40,7 +35,7 @@ class MainLayout extends React.Component<any> {
 				</div>
 				<div id="content" className={content_classes.join(" ")}>
 					{this.props.children}
-					{footer}
+					<Footer/>
 				</div>
 			</div>
 		);
