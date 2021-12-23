@@ -21,16 +21,9 @@ class Collection < ApplicationRecord
 	end
 
 	private
-		def generate_slug
-			nonce_len = 4
-			nonce     = Digest::SHA256.hexdigest(SecureRandom.uuid)[0..(nonce_len - 1)]
-			
-			return (self.name.gsub(/[^A-Za-z\d ]/, "")[0..(255 - nonce_len - 2)] + " " + nonce).gsub(" ", "-").downcase
-		end
-
 		def set_slug
 			loop do
-				self.slug = self.generate_slug()
+				self.slug = GenerateSlug.call(value: self.name).result
 
 				break if (!self.class.slug_exists?(self.slug))
 			end
