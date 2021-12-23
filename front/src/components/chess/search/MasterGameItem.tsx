@@ -11,13 +11,6 @@ interface MasterGameItemProps {
 
 class MasterGameItem extends React.Component<MasterGameItemProps> {
 	render() {
-		const result = (this.props.record.result === 0)
-			? "0-1"
-			: ((this.props.record.result === 1)
-				? "1-0"
-				: ((this.props.record.result === 2)
-					? "1/2-1/2"
-					: "N/A"));
 		return (
 			<SearchItem route={"/game-database/master-game/" + this.props.record.slug}>
 				<div className="flex">
