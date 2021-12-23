@@ -23,10 +23,7 @@ class MasterGameItem extends React.Component<MasterGameItemProps> {
 				<div className="flex">
 					<Translation ns={["chess", "common"]}>
 						{(t) => (
-							<>
-								<div className="flex-1 font-bold">{this.props.record.name.replace("N/A", t("common:unknown"))}</div>
-								<div className="flex-initial text-right">{result}</div>
-							</>
+							<div className="flex-1 font-bold">{this.props.record.name.replace("N/A", t("common:unknown"))}</div>
 						)}
 					</Translation>
 				</div>

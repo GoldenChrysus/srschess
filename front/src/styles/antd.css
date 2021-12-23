@@ -86,8 +86,10 @@ body .ant-pagination-item-link > span.anticon {
 	top: -3px;
 }
 
+body .ant-pagination-item-link:hover,
+body .ant-pagination-item:hover,
 body .ant-pagination-item-active {
-	border-color: var(--green-500);
+	border-color: var(--green-500) !important;
 }
 
 body .ant-pagination-item-active > a,
