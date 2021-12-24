@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_17_144129) do
+ActiveRecord::Schema.define(version: 2021_12_24_090744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -53,7 +53,18 @@ ActiveRecord::Schema.define(version: 2021_12_17_144129) do
     t.string "round"
     t.integer "source", null: false
     t.integer "result", null: false
+    t.index ["black"], name: "index_master_games_on_black"
+    t.index ["black_elo"], name: "index_master_games_on_black_elo"
+    t.index ["black_title"], name: "index_master_games_on_black_title"
+    t.index ["day"], name: "index_master_games_on_day"
+    t.index ["eco"], name: "index_master_games_on_eco"
+    t.index ["month"], name: "index_master_games_on_month"
     t.index ["movelist"], name: "index_master_games_on_movelist", using: :gist
+    t.index ["result"], name: "index_master_games_on_result"
+    t.index ["white"], name: "index_master_games_on_white"
+    t.index ["white_elo"], name: "index_master_games_on_white_elo"
+    t.index ["white_title"], name: "index_master_games_on_white_title"
+    t.index ["year"], name: "index_master_games_on_year"
   end
 
   add_foreign_key "master_game_moves", "master_games"
