@@ -2,7 +2,7 @@ import React from "react";
 import { Divider } from "antd";
 import { useTranslation } from "react-i18next";
 import { EcoPositionModel } from "../../lib/types/models/EcoPosition";
-import OpeningPaginator from "./opening-volume.tsx/OpeningPaginator";
+import OpeningPaginator from "./opening-volume/OpeningPaginator";
 
 interface OpeningVolumeProps {
 	volume: string,
