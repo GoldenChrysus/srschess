@@ -22,6 +22,7 @@ export enum ChessControllerModes {
 	openings   = "opening",
 	database   = "database",
 	search     = "search",
+	static     = "static",
 }
 
 export interface ChessControllerProps {

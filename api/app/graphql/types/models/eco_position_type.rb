@@ -2,6 +2,7 @@ module Types
 	module Models
 		class EcoPositionType < Types::BaseObject
 			field :id, ID, null: false
+			field :slug, String, null: false
 			field :code, String, null: false
 			field :name, String, null: false
 			field :fen, String, null: false

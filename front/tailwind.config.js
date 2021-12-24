@@ -31,6 +31,9 @@ module.exports = {
 			minWidth : {
 				"chess-small" : "100%",
 				chess         : "430px"
+			},
+			screens : {
+				"3xl": "2560px"
 			}
 		}
 	},

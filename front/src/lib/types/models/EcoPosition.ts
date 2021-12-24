@@ -1,5 +1,8 @@
 export interface EcoPositionModel {
 	id: number,
+	slug: string,
+	fen: string,
+	pgn: string,
 	code: string,
 	name: string
 }

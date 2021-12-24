@@ -444,6 +444,9 @@ export const GET_ECO = gql`
 	query EcoPositions {
 		ecoPositions {
 			id
+			slug
+			fen
+			pgn
 			code
 			name
 		}

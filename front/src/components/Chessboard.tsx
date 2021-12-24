@@ -113,6 +113,12 @@ class Chessboard extends React.Component<ChessboardProps> {
 					dest    : this.props.queue_item.uci.slice(2, 4),
 				});
 				break;
+
+			case "static":
+				drawable.enabled = false;
+				drawable.display = false;
+
+				break;
 		}
 
 		if (this.props.mode === "review" || this.props.quizzing) {
@@ -121,10 +127,14 @@ class Chessboard extends React.Component<ChessboardProps> {
 
 		return (
 			<>
-				<div className="piece-store w-full" style={{ height: "25px" }}>
-					{this.renderCaptures("top")}
-				</div>
+				{
+					this.props.mode !== "static" && 
+					<div className="piece-store w-full" style={{ height: "25px" }}>
+						{this.renderCaptures("top")}
+					</div>
+				}
 				<ChessgroundBoard
+					mode={this.props.mode}
 					check={this.checkColor()}
 					orientation={this.props.orientation || this.last_orientation}
 					turn_color={this.toColor()}
@@ -134,9 +144,12 @@ class Chessboard extends React.Component<ChessboardProps> {
 					onMove={this.onMove}
 					drawable={drawable}
 				/>
-				<div className="piece-store w-full" style={{ height: "25px" }}>
-					{this.renderCaptures("bottom")}
-				</div>
+				{
+					this.props.mode !== "static" && 
+					<div className="piece-store w-full" style={{ height: "25px" }}>
+						{this.renderCaptures("bottom")}
+					</div>
+				}
 			</>
 		);
 	}

@@ -3,8 +3,10 @@ import { observer } from "mobx-react";
 import Chessground from "react-chessground";
 
 import ChessState from "../../stores/ChessState";
+import { ChessControllerProps } from "../../lib/types/ChessControllerTypes";
 
 interface ChessgroundProps {
+	mode: ChessControllerProps["mode"],
 	check: string,
 	orientation: string,
 	turn_color: string,
@@ -52,6 +54,8 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 				onMove={this.props.onMove}
 				drawable={drawable}
 				ref={this.board_ref}
+				viewOnly={this.props.mode === "static"}
+				coordinates={this.props.mode !== "static"}
 			/>
 		);
 	}
@@ -62,8 +66,10 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 		}
 
 		const board    = this.board_ref.current.el;
-		const parent   = board.closest("#chessboard-outer") ?? document;
-		const width    = Math.min(parent.offsetHeight - 50, parent.offsetWidth) + "px";
+		const parent   = board.closest("#chessboard-outer") ?? board.closest(".board-100w") ?? document;
+		const width    = (parent.classList.contains("board-100w"))
+			? parent.offsetWidth + "px"
+			: Math.min(parent.offsetHeight - 50, parent.offsetWidth) + "px";
 		const movelist = document.getElementById("movelist");
 
 		for (const child of parent.children) {
