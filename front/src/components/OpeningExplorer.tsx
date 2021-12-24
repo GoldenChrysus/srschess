@@ -1,5 +1,4 @@
 import React from "react";
-import { Spin } from "antd";
 import { EcoPositionModel, EcoPositionQueryData } from "../lib/types/models/EcoPosition";
 import OpeningVolume from "./opening-explorer/OpeningVolume";
 
@@ -35,9 +34,7 @@ function OpeningExplorer(props: OpeningExplorerProps) {
 	return (
 		
 		<div className="p-4">
-			<Spin spinning={!props.openings}>
-				{volumes}
-			</Spin>
+			{volumes}
 		</div>
 		
 	);
