@@ -644,8 +644,12 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				break;
 
 			case "move-repertoire":
+				if (!this.props.repertoire) {
+					return this.setState(this.state);
+				}
+
 				const prev_uuid = this.state.last_uuid;
-				const uuid      = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire?.id);
+				const uuid      = generateUUID(move_num, last_move!, new_state.fen, this.props.repertoire.id);
 
 				this.fen_history.push({
 					move_id : uuid,
