@@ -5,6 +5,8 @@ import { RepertoireModel } from "../lib/types/models/Repertoire";
 import { ApolloClient, ApolloError } from "@apollo/client";
 import { REPERTOIRE_MOVE_FRAG } from "../api/queries";
 import { GraphQLError } from "graphql";
+import { notification } from "antd";
+import i18n from "../i18n";
 
 export function getDBMoveNumFromIndex(index: number) {
 	return Math.floor(((index + 2) / 2) * 10);
@@ -154,4 +156,13 @@ export function formateDate(date: string) {
 	}
 
 	return date;
+}
+
+export function notifyError(code?: string) {
+	const duration = (process.env.NODE_ENV === "development") ? 0 : 4.5;
+
+	notification.error({
+		message  : (code && i18n.exists("errors:" + code)) ? i18n.t("errors:" + code) : i18n.t("errors:unexpected"),
+		duration : duration
+	});
 }
