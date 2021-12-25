@@ -3,6 +3,6 @@
 #chess-left-menu .ant-collapse-content {
 	/* min-height: calc(100vh - 47px - 47px - 3rem);
 	max-height: calc(100vh - 47px - 47px - 3rem); */
-	max-height: 800px;
+	max-height: 100vh;
 	overflow-y: auto;
 }

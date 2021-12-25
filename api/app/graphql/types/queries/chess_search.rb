@@ -176,7 +176,7 @@ module Types
 						params = {}
 						skip   = false
 
-						if (criteria[:data][:movelist] != nil)
+						if (criteria[:data][:movelist] != nil and criteria[:data][:movelist] != "")
 							skip  = true
 							moves = []
 
