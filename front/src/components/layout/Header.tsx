@@ -2,7 +2,7 @@ import React from "react";
 import { Menu, Dropdown } from "antd";
 import { Translation } from "react-i18next";
 import { Observer } from "mobx-react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import i18n from "../../i18n";
 import AuthState from "../../stores/AuthState";
@@ -10,6 +10,8 @@ import AuthState from "../../stores/AuthState";
 import Login from "./Login";
 
 import "../../styles/components/layout/header.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 interface Map {
 	[locale: string]: {
@@ -40,7 +42,9 @@ class Header extends React.Component {
 								Chess HQ
 							</div>
 							<nav className="flex flex-1 items-center h-full">
-								<NavLink to="/repertoires/">
+								<NavLink to="/repertoires/" isActive={(match, location) => {
+									return (!!match || ["reviews", "lessons"].includes(location.pathname.split("/")[1]))
+								}}>
 									{t("repertoires:repertoires")}
 								</NavLink>
 								<NavLink to={{ pathname: "/openings-explorer/"}}>
@@ -72,7 +76,11 @@ class Header extends React.Component {
 	}
 
 	renderUser() {
-		return <span>{AuthState.uid}</span>;
+		return (
+			<Link to="/dashboard" className="text-white">
+				<FontAwesomeIcon icon={faUser} size="sm"/>
+			</Link>
+		);
 	}
 
 	renderLanguageFlag() {
