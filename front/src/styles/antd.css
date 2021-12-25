@@ -70,6 +70,10 @@ body .ant-message-notice-content .anticon {
 	top: -3px;
 }
 
+body .ant-notification-notice-content .anticon {
+	transform: translateY(-2px);
+}
+
 body .ant-table .ant-table-thead > tr > th {
 	background-color: var(--black-15o);
 }
