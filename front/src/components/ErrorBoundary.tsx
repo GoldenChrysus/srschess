@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { message, notification } from "antd";
 import React from "react";
 import i18n from "../i18n";
 
@@ -7,7 +7,12 @@ class ErrorBoundary extends React.Component {
 	}
 
 	componentDidCatch(error: any, info: any) {
-		message.error(i18n.t("common:unexpected_error"));
+		const duration = (process.env.NODE_ENV === "development") ? 0 : 4.5;
+
+		notification.error({
+			message  : i18n.t("errors:unexpected"),
+			duration : duration
+		});
 	}
 
 	render() {

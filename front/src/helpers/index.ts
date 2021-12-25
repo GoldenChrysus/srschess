@@ -4,6 +4,7 @@ import moment from "moment";
 import { RepertoireModel } from "../lib/types/models/Repertoire";
 import { ApolloClient, ApolloError } from "@apollo/client";
 import { REPERTOIRE_MOVE_FRAG } from "../api/queries";
+import { GraphQLError } from "graphql";
 
 export function getDBMoveNumFromIndex(index: number) {
 	return Math.floor(((index + 2) / 2) * 10);
@@ -95,12 +96,14 @@ export function getMove(client: ApolloClient<object>, id: string | null) {
 	});
 }
 
-export function hasPremiumLockoutError(error?: ApolloError) {
+export function hasPremiumLockoutError(error?: ApolloError | readonly GraphQLError[]) {
 	if (!error) {
 		return false;
 	}
 
-	for (const e of error.graphQLErrors) {
+	const errors = (error instanceof ApolloError) ? error.graphQLErrors : error;
+
+	for (const e of errors) {
 		if (e.extensions?.code >= 200000 && e.extensions?.code < 300000) {
 			return true;
 		}

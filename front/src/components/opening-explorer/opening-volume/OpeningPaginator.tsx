@@ -46,7 +46,7 @@ function OpeningPaginator(props: OpeningPaginatorProps) {
 
 	return (
 		<>
-			<div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 3xl:grid-cols-12 gap-4">
+			<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 3xl:grid-cols-12 gap-4">
 				{boards}
 			</div>
 			<div className="mt-4">

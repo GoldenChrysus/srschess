@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { notification } from "antd";
 
 import i18n from "./i18n";
 import FirebaseAuth from "./lib/Firebase";
@@ -10,14 +11,31 @@ import { TYPES as GRAPHQL_TYPES } from "./api/types";
 
 import ActionCable from "actioncable";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
-import { ApolloProvider, ApolloLink, ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { ApolloProvider, ApolloLink, ApolloClient, InMemoryCache, createHttpLink, from } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import { Provider } from "mobx-react";
+import { hasPremiumLockoutError } from "./helpers";
 
 const cable          = ActionCable.createConsumer("ws://" + process.env.REACT_APP_API_ADDRESS + "/cable")
 const http_link      = createHttpLink({ uri: "http://" + process.env.REACT_APP_API_ADDRESS + "/graphql" });
 const shouldUseCable = () => {
 	return true;
 };
+const error_link     = onError(({ graphQLErrors, networkError }) => {
+	if (graphQLErrors) {
+		if (hasPremiumLockoutError(graphQLErrors)) {
+			return;
+		}
+
+		const code     = graphQLErrors[0].extensions?.code ?? "-1";
+		const duration = (process.env.NODE_ENV === "development") ? 0 : 4.5;
+
+		notification.error({
+			message  : (i18n.exists("errors:" + code)) ? i18n.t("errors:" + code) : i18n.t("errors:unexpected"),
+			duration : duration
+		});
+	}
+});
 const cable_link     = new ActionCableLink({cable, connectionParams: { token : localStorage.getItem("firebase_token") || AuthState.token }});
 const link           = ApolloLink.split(
 	shouldUseCable,
@@ -25,7 +43,7 @@ const link           = ApolloLink.split(
 	http_link,
 );
 const client         = new ApolloClient({
-	link     : link,
+	link     : from([error_link, link]),
 	cache    : new InMemoryCache(),
 	typeDefs : GRAPHQL_TYPES
 });

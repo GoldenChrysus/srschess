@@ -39,7 +39,7 @@ function Results(props: ResultsProps) {
 			<Table
 				dataSource={data?.chessSearch}
 				loading={loading}
-				pagination={{ pageSize : 10 }}
+				pagination={{ defaultPageSize : 10 }}
 				rowClassName="cursor-pointer"
 				showHeader={props.mode === "master_games"}
 				onRow={(record, index) => {

@@ -30,7 +30,7 @@ i18n
 		},
 		fallbackLng: "en",
 		lng: saved_locale,
-		ns: ["chess", "common", "repertoires"],
+		ns: ["chess", "common", "repertoires", "errors"],
 		interpolation: {
 			escapeValue: false
 		}

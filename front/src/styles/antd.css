@@ -56,11 +56,13 @@ body .ant-table {
 	background: var(--ant-bg);
 }
 
-body .ant-message-notice-content {
+body .ant-message-notice-content,
+body .ant-notification-notice {
 	background: var(--red-800);
 }
 
-body .ant-message-error .anticon {
+body .ant-message-error .anticon,
+body .ant-notification-notice-error .anticon {
 	color: var(--gray-200);
 }
 
@@ -104,6 +106,7 @@ body .ant-pagination-item-active:hover {
 
 body .ant-pagination-item:hover > a,
 body .ant-pagination-item-link:not([disabled]):hover,
+body .ant-tabs-tab:not(.ant-tabs-tab-active):hover,
 body .ant-tabs-tab:not(.ant-tabs-tab-active) > div:hover,
 body .ant-pagination-item-container .ant-pagination-item-link-icon  {
 	color: var(--green-500) !important;
