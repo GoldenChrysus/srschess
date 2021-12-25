@@ -19,6 +19,7 @@ import GameList from "./left-menu/GameCollections/GameList";
 interface LeftMenuProps {
 	repertoire?         : RepertoireModel | null
 	collection?         : CollectionModel | null,
+	game?               : ChessControllerProps["game"],
 	active_uuid         : ChessControllerState["last_uuid"],
 	mode                : ChessControllerProps["mode"],
 	movelist            : string,
@@ -37,6 +38,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 			prev_props.mode !== this.props.mode ||
 			prev_props.movelist !== this.props.movelist ||
 			prev_props.authenticated !== this.props.authenticated ||
+			prev_props.game?.id !== this.props.game?.id ||
 			JSON.stringify(prev_props.repertoire) !== JSON.stringify(this.props.repertoire) ||
 			JSON.stringify(prev_props.collection) !== JSON.stringify(this.props.collection)
 		);
@@ -72,7 +74,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 								}
 								{is_repertoire && !["review", "lesson"].includes(this.props.mode) &&
 									<Collapse.Panel id="public-repertoires-panel" header={t("search_public_repertoires")} key="public-repertoires-panel">
-										<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
+										<PublicRepertoires onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist} repertoire={this.props.repertoire}/>
 									</Collapse.Panel>
 								}
 
@@ -86,7 +88,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 								}
 								{is_database &&
 									<Collapse.Panel id="master-games-panel" header={t("database:search_master_games")} key="master-games-panel">
-										<MasterGames onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist}/>
+										<MasterGames onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist} game={this.props.game}/>
 									</Collapse.Panel>
 								}
 							</Collapse>
@@ -116,7 +118,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 		return (
 			<Collapse.Panel id="game-list-panel" header={t("database:game_list")} key="game-list-panel" forceRender={true}>
-				<GameList collection_slug={this.props.collection.slug} games={this.props.collection.games}/>
+				<GameList collection_slug={this.props.collection.slug} games={this.props.collection.games} game={this.props.game}/>
 			</Collapse.Panel>
 		);
 	}

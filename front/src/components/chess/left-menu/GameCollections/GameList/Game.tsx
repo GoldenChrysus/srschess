@@ -4,13 +4,20 @@ import { formateDate } from "../../../../../helpers";
 import { GameModel } from "../../../../../lib/types/models/Game";
 
 interface GameProps {
-	game: GameModel
+	game: GameModel,
+	active: boolean
 }
 
 class Game extends React.Component<GameProps> {
 	render() {
+		const classes = [];
+
+		if (this.props.active) {
+			classes.push("active-border");
+		}
+
 		return (
-			<div>
+			<div className={classes.join(" ")}>
 				<div className="flex">
 					<Translation ns={["chess", "common"]}>
 						{(t) => (

@@ -1,3 +1,5 @@
+import { ChessControllerProps } from "./ChessControllerTypes";
+
 export enum SearchModes {
 	repertoires = "repertoires",
 	master_games = "master_games"
@@ -6,6 +8,7 @@ export enum SearchModes {
 export interface SearchProps {
 	mode: keyof typeof SearchModes,
 	movelist: string,
+	record?: ChessControllerProps["game"] | ChessControllerProps["repertoire"],
 	onMoveSearchChange?: Function
 }
 

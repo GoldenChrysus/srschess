@@ -4,10 +4,12 @@ import { Table } from "antd";
 import { Observer } from "mobx-react";
 import { CollectionModel } from "../../../../lib/types/models/Collection";
 import Game from "./GameList/Game";
+import { ChessControllerProps } from "../../../../lib/types/ChessControllerTypes";
 
 interface GameListProps {
 	collection_slug: CollectionModel["slug"],
-	games: CollectionModel["games"]
+	games: CollectionModel["games"],
+	game: ChessControllerProps["game"]
 }
 
 function GameList(props: GameListProps) {
@@ -32,7 +34,7 @@ function GameList(props: GameListProps) {
 					>
 						<Table.Column
 							render={(text, record: any) => {
-								return <Game game={record}/>
+								return <Game game={record} active={props.game?.id === record.id}/>
 							}}
 						/>
 					</Table>

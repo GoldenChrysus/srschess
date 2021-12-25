@@ -74,6 +74,17 @@ body .ant-btn-default.premium:active {
 	border-color: var(--yellow-500);
 }
 
+body .active-border::after {
+	transform: scaleY(1);
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	transition: transform .15s cubic-bezier(.215,.61,.355,1),opacity .15s cubic-bezier(.215,.61,.355,1);
+	content: "";
+	border-right: 3px solid var(--green-500) !important;
+}
+
 ::-webkit-scrollbar {
 	width: 7px;
 }

@@ -5,7 +5,6 @@ import { GET_CHESS_SEARCH } from "../../../api/queries";
 import { ChessSearchQueryData, ChessSearchResultItemModel } from "../../../lib/types/models/ChessSearch";
 import { SearchProps, SearchState } from "../../../lib/types/SearchTypes";
 
-import GameItem from "./GameItem";
 import RepertoireItem from "./RepertoireItem";
 import { useHistory } from "react-router";
 import MasterGameItem from "./MasterGameItem";
@@ -14,6 +13,7 @@ import { useTranslation } from "react-i18next";
 interface ResultsProps {
 	criteria: SearchState["criteria"],
 	mode: SearchProps["mode"],
+	record?: SearchProps["record"],
 	onResultClick: Function
 }
 
@@ -44,7 +44,8 @@ function Results(props: ResultsProps) {
 				showHeader={props.mode === "master_games"}
 				onRow={(record, index) => {
 					return {
-						onClick : e => {
+						className : ([props.record?.id, props.record?.slug].includes(record.slug)) ? "active-border relative" : "",
+						onClick   : e => {
 							props.onResultClick();
 
 							if (props.mode === "repertoires") {

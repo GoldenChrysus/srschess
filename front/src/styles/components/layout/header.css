@@ -2,7 +2,7 @@ nav > a {
 	font-size: 1.15em;
 	line-height: 1.15em;
 	margin-right: 1.5em;
-	color: #fff;
+	color: rgba(255, 255, 255, 1);
 }
 
 nav > a.active {

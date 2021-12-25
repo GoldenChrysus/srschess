@@ -13,6 +13,7 @@ export interface GameMoveModel {
 
 export interface GameModel {
 	id: string,
+	slug: string,
 	white: string,
 	black: string,
 	result: string,
