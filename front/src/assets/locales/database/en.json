@@ -1,6 +1,7 @@
 {
-	"create_collection": "Create Collection",
-	"edit_collection": "Edit Collection",
+	"collection": "Collection",
+	"create_collection": "Create $t(collection)",
+	"edit_collection": "Edit $t(collection)",
 	"game_collections": "Game Collections",
 	"game_database": "Game Database",
 	"game_list": "Game List",

@@ -26,6 +26,8 @@ const error_link     = onError(({ graphQLErrors, networkError }) => {
 			return;
 		}
 
+		console.log(graphQLErrors)
+
 		notifyError(graphQLErrors[0].extensions?.code);
 	}
 });

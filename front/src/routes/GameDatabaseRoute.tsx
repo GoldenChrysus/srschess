@@ -9,6 +9,8 @@ import { runInAction } from "mobx";
 import ChessState from "../stores/ChessState";
 import { MasterGameQueryData } from "../lib/types/models/MasterGame";
 import { GameQueryData } from "../lib/types/models/Game";
+import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
 
 interface GameDatabaseRouteParams {
 	collection_slug?: string
@@ -17,6 +19,7 @@ interface GameDatabaseRouteParams {
 }
 
 function GameDatabaseRoute() {
+	const { t } = useTranslation(["database", "chess"]);
 	const { collection_slug, game_id, master_game_id } = useParams<GameDatabaseRouteParams>();
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
@@ -56,19 +59,38 @@ function GameDatabaseRoute() {
 
 	runInAction(() => ChessState.setCollection(data?.collection));
 
+	const title_parts = [];
+
+	if (game_data?.game || master_game_data?.masterGame) {
+		const game = game_data?.game ?? master_game_data?.masterGame;
+
+		title_parts.push(t("chess:game_one") + ": " + game!.white + " - " + game!.black);
+	}
+
+	if (data?.collection) {
+		title_parts.push(t("collection") + ": " + data.collection.name);
+	}
+
+	title_parts.push(t("game_database"));
+
 	return (
-		<ApolloConsumer>
-			{client => 
-				<ChessController
-					key="chess-controller"
-					mode={(move_searching) ? "search" : "database"}
-					collection={data?.collection}
-					game={game_data?.game ?? master_game_data?.masterGame}
-					client={client}
-					onMoveSearchChange={onMoveSearchChange}
-				/>
-			}
-		</ApolloConsumer>
+		<>
+			<Helmet>
+				<title>{title_parts.join(" - ")}</title>
+			</Helmet>
+			<ApolloConsumer>
+				{client => 
+					<ChessController
+						key="chess-controller"
+						mode={(move_searching) ? "search" : "database"}
+						collection={data?.collection}
+						game={game_data?.game ?? master_game_data?.masterGame}
+						client={client}
+						onMoveSearchChange={onMoveSearchChange}
+					/>
+				}
+			</ApolloConsumer>
+		</>
 	)
 };
 

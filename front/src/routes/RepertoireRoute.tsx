@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { runInAction } from "mobx";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
+import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
 
 import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_REPERTOIRE_MOVE, TRANSPOSE_REPERTOIRE_MOVE, CREATE_REVIEW } from "../api/queries";
 import ChessController from "../controllers/ChessController";
@@ -38,6 +40,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			break;
 	}
 
+	const { t } = useTranslation("repertoires");
 	const { slug } = useParams<RepertoireRouteParams>();
 	const [ createMove ] = useMutation(CREATE_REPERTOIRE_MOVE);
 	const [ transposeMove ] = useMutation(TRANSPOSE_REPERTOIRE_MOVE);
@@ -114,22 +117,33 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		setMoveSearching(new_state);
 	}
 
+	const title_parts = [t(props.mode + "s")];
+
+	if (data?.repertoire) {
+		title_parts.push(data.repertoire.name);
+	}
+
 	return (
-		<ApolloConsumer>
-			{client => 
-				<ChessController
-					key="chess-controller"
-					mode={(move_searching) ? "search" : props.mode}
-					repertoire={data?.repertoire}
-					client={client}
-					onMove={addMove}
-					onTransposition={setTransposition}
-					onReview={doReview}
-					arrows={arrows}
-					onMoveSearchChange={onMoveSearchChange}
-				/>
-			}
-		</ApolloConsumer>
+		<>
+			<Helmet>
+				<title>{title_parts.join(": ")}</title>
+			</Helmet>
+			<ApolloConsumer>
+				{client => 
+					<ChessController
+						key="chess-controller"
+						mode={(move_searching) ? "search" : props.mode}
+						repertoire={data?.repertoire}
+						client={client}
+						onMove={addMove}
+						onTransposition={setTransposition}
+						onReview={doReview}
+						arrows={arrows}
+						onMoveSearchChange={onMoveSearchChange}
+					/>
+				}
+			</ApolloConsumer>
+		</>
 	)
 };
 

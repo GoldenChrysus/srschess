@@ -422,6 +422,8 @@ export const GET_MASTER_GAME = gql`
 	query MasterGame($id: String!) {
 		masterGame(id: $id) {
 			id
+			white
+			black
 			pgn
 			movelist
 		}
