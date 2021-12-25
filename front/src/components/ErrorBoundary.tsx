@@ -1,4 +1,4 @@
-import { message, notification } from "antd";
+import { notification } from "antd";
 import React from "react";
 import i18n from "../i18n";
 
