@@ -9,6 +9,7 @@
 	"delete": "Delete",
 	"delete_confirm": "Are you sure you want to delete this?",
 	"edit": "Edit",
+	"filter": "Filter",
 	"input_name": "Please input a name.",
 	"login": "Login",
 	"move_down": "Move Down",
