@@ -19,7 +19,7 @@ interface ResultsProps {
 
 function Results(props: ResultsProps) {
 	const history = useHistory();
-	const { t } = useTranslation("chess");
+	const { t } = useTranslation(["chess", "common"]);
 	const { loading, error, data } = useQuery<ChessSearchQueryData>(
 		GET_CHESS_SEARCH,
 		{
@@ -42,6 +42,9 @@ function Results(props: ResultsProps) {
 				pagination={{ defaultPageSize : 10 }}
 				rowClassName="cursor-pointer"
 				showHeader={props.mode === "master_games"}
+				locale={{
+					emptyText : t("common:na")
+				}}
 				onRow={(record, index) => {
 					return {
 						className : ([props.record?.id, props.record?.slug].includes(record.slug)) ? "active-border relative" : "",

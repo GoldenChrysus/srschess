@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Pagination } from "antd";
+import { Empty, Pagination } from "antd";
 import { Link } from "react-router-dom";
 import { EcoPositionModel } from "../../../lib/types/models/EcoPosition";
 import Chessboard from "../../Chessboard";
+import { useTranslation } from "react-i18next";
 
 interface OpeningPaginatorProps {
 	openings: Array<EcoPositionModel>
@@ -11,6 +12,7 @@ interface OpeningPaginatorProps {
 const PAGE_SIZE = 20;
 
 function OpeningPaginator(props: OpeningPaginatorProps) {
+	const { t } = useTranslation("common");
 	const [ start, setStart ] = useState(0);
 	const boards = [];
 
@@ -43,6 +45,10 @@ function OpeningPaginator(props: OpeningPaginatorProps) {
 	const onPage = (page: number) => {
 		setStart((page - 1) * PAGE_SIZE);
 	};
+
+	if (!props.openings.length) {
+		return (<Empty description={t("na")} image={Empty.PRESENTED_IMAGE_SIMPLE}/>);
+	}
 
 	return (
 		<>

@@ -18,9 +18,9 @@ function OpeningVolume(props: OpeningVolumeProps) {
 		const filter = props.filter.toLowerCase();
 
 		for (const opening of props.openings) {
-			const search = (opening.code + ": " + opening.name + " " + opening.fen).toLowerCase();
+			const search = (opening.code + ": " + opening.name).toLowerCase();
 
-			if (search.indexOf(filter) !== -1) {
+			if (search.indexOf(filter) !== -1 || filter.indexOf(opening.fen.toLowerCase()) !== -1) {
 				openings.push(opening);
 			}
 		}

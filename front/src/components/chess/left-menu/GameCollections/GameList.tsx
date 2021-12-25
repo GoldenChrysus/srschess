@@ -5,6 +5,7 @@ import { Observer } from "mobx-react";
 import { CollectionModel } from "../../../../lib/types/models/Collection";
 import Game from "./GameList/Game";
 import { ChessControllerProps } from "../../../../lib/types/ChessControllerTypes";
+import { useTranslation } from "react-i18next";
 
 interface GameListProps {
 	collection_slug: CollectionModel["slug"],
@@ -13,6 +14,7 @@ interface GameListProps {
 }
 
 function GameList(props: GameListProps) {
+	const { t } = useTranslation("common");
 	const history = useHistory();
 
 	return (
@@ -24,6 +26,9 @@ function GameList(props: GameListProps) {
 						pagination={{ pageSize : 10 }}
 						rowClassName="cursor-pointer"
 						showHeader={false}
+						locale={{
+							emptyText : t("na")
+						}}
 						onRow={(record, index) => {
 							return {
 								onClick : e => {

@@ -15,7 +15,7 @@ interface MasterMoveListProps {
 
 function MasterMoveList(props: MasterMoveListProps) {
 	const last_data_ref = useRef<any>();
-	const { t } = useTranslation(["chess", "premium"]);
+	const { t } = useTranslation(["chess", "premium", "common"]);
 
 	const { loading, error, data } = useQuery(
 		GET_MASTER_MOVE,
@@ -41,6 +41,9 @@ function MasterMoveList(props: MasterMoveListProps) {
 				size="small"
 				pagination={{ pageSize: 7 }}
 				rowClassName="cursor-pointer"
+				locale={{
+					emptyText : t("common:na")
+				}}
 				onRow={(record, index) => {
 					return {
 						onClick : e => props.onMoveClick(undefined, record.move)

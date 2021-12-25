@@ -20,7 +20,7 @@ const indexed: {[key: string]: Array<EcoPositionModel>} = {
 
 function OpeningExplorer(props: OpeningExplorerProps) {
 	const [ filter, setFilter ] = useState<string | null>(null);
-	const { t } = useTranslation("common");
+	const { t } = useTranslation(["common", "openings"]);
 
 	if (!processed && props?.openings) {
 		for (const opening of props?.openings ?? []) {
@@ -48,7 +48,7 @@ function OpeningExplorer(props: OpeningExplorerProps) {
 
 	return (
 		<div className="px-6 py-4">
-			<Input addonBefore={t("filter")} onChange={onFilter} allowClear={true}/>
+			<Input addonBefore={t("filter")} onChange={onFilter} allowClear={true} placeholder={t("openings:filter")}/>
 			{volumes}
 		</div>
 	);
