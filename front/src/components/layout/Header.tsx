@@ -40,7 +40,7 @@ class Header extends React.Component {
 						<div className="w-full py-1 px-6 flex items-center">
 							<div id="logo" className="w-28 mr-6">
 								<Link to="/">
-									<img src="/assets/images/business/logo.png"/>
+									<img alt="Chess HQ" src="/assets/images/business/logo.png"/>
 								</Link>
 							</div>
 							<nav className="flex flex-1 items-center h-full">

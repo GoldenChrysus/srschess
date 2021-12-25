@@ -567,7 +567,12 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 			case "move-review":
 				const review_move = this.chunk[0];
-				const correct     = (review_move.move === last_move);
+
+				if (!review_move) {
+					return this.setState(this.state);
+				}
+
+				const correct = (review_move.move === last_move);
 
 				if (!this.reviews[review_move.id]) {
 					this.reviews[review_move.id] = {

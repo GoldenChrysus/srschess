@@ -19,20 +19,23 @@ function Search(props: SearchProps) {
 	const { loading, error, data } = useQuery<EcoPositionQueryData>(GET_ECO);
 	const prev_movelist = useRef<string>();
 
-	useEffect(() => {
-		if (move_searching && prev_movelist.current !== props.movelist) {
-			prev_movelist.current = props.movelist;
+	useEffect(
+		() => {
+			if (move_searching && prev_movelist.current !== props.movelist) {
+				prev_movelist.current = props.movelist;
 
-			setState({
-				criteria : {
-					mode : props.mode,
-					data : {
-						movelist : props.movelist
+				setState({
+					criteria : {
+						mode : props.mode,
+						data : {
+							movelist : props.movelist
+						}
 					}
-				}
-			});
-		}
-	});
+				});
+			}
+		},
+		[ move_searching, props.movelist, props.mode ]
+	);
 
 	function onSubmit(data: SearchCriteria["data"]) {
 		setState({

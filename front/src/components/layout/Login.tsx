@@ -24,7 +24,7 @@ class Login extends React.Component<LoginProps, LoginState> {
 				{
 					(t) => (
 						<>
-							<a href="#" onClick={this.login}>{t("login")}</a>
+							<button onClick={this.login}>{t("login")}</button>
 							<Modal
 								className="firebase-login"
 								visible={this.state.modal_visible}
