@@ -1,5 +1,5 @@
 const THEME = {
-	HEADER_HIGHT: "2.75rem"
+	HEADER_HEIGHT: "3rem"
 };
 
 export default THEME;

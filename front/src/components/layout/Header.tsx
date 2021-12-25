@@ -37,9 +37,11 @@ class Header extends React.Component {
 			<Translation ns={["common", "repertoires", "openings", "database"]}>
 				{
 					(t) => (
-						<div className="w-full py-1 px-4 flex">
-							<div id="logo" className="w-20">
-								Chess HQ
+						<div className="w-full py-1 px-6 flex items-center">
+							<div id="logo" className="w-28 mr-6">
+								<Link to="/">
+									<img src="/assets/images/business/logo.png"/>
+								</Link>
 							</div>
 							<nav className="flex flex-1 items-center h-full">
 								<NavLink to="/repertoires/" isActive={(match, location) => {

@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import Login from "./layout/Login";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 
@@ -16,8 +15,8 @@ class MainLayout extends React.Component<any> {
 		const header_classes  = [
 			"bg-gray-900",
 			"flex",
-			"h-11",
-			"min-h-11",
+			"h-12",
+			"min-h-12",
 		];
 		const content_classes = [
 			"flex-1",
