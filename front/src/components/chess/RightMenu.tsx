@@ -52,7 +52,7 @@ class RightMenu extends React.Component<RightMenuProps> {
 								<Collapse.Panel id="position-panel" header={t("position_data")} key="position-panel">
 									<Input addonBefore="FEN" value={this.props.fen}/>
 									{this.props.repertoire?.id && <ECO history={this.props.fen_history}/>}
-									{!["review", "lesson"].includes(this.props.mode) && <RepertoireMoveNote active_uuid={this.props.active_uuid}/>}
+									{!["review", "lesson"].includes(this.props.mode) && this.props.repertoire?.userOwned && <RepertoireMoveNote active_uuid={this.props.active_uuid}/>}
 								</Collapse.Panel>
 							</Collapse>
 						)

@@ -676,6 +676,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				const cached_move = getMove(this.props.client, uuid);
 
 				if (!cached_move) {
+					if (!this.props.repertoire.userOwned) {
+						return this.setState(this.state);
+					}
+
 					this.setState(new_state);
 					this.props.onMove?.(
 						{

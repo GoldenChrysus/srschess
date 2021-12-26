@@ -124,7 +124,7 @@ export const GET_REPERTOIRE = gql`
 	${REPERTOIRE_FRAG}
 	${REPERTOIRE_MOVE_FRAG}
 	query Repertoire($slug: String!) {
-		repertoire(slug: $slug) {
+		repertoire(slug: $slug, mode: "repertoire") {
 			...CoreRepertoireFields
 			moves {
 				...CoreMoveFields
@@ -137,7 +137,7 @@ export const GET_REPERTOIRE = gql`
 export const GET_REPERTOIRE_QUEUES = gql`
 	${REPERTOIRE_FRAG}
 	query Repertoire($slug: String!) {
-		repertoire(slug: $slug) {
+		repertoire(slug: $slug, mode: "review") {
 			...CoreRepertoireFields
 			reviewQueue {
 				id
@@ -161,7 +161,7 @@ export const GET_REPERTOIRE_QUEUES = gql`
 export const GET_REPERTOIRE_MOVES = gql`
 	${REPERTOIRE_MOVE_FRAG}
 	query Repertoire($slug: String!) {
-		repertoire(slug: $slug) {
+		repertoire(slug: $slug, mode: "repertoire") {
 			moves {
 				...CoreMoveFields
 			}
@@ -172,7 +172,7 @@ export const GET_REPERTOIRE_MOVES = gql`
 export const GET_REPERTOIRE_CACHED = gql`
 	${REPERTOIRE_FRAG}
 	query Repertoire($slug: String!) {
-		repertoire(slug: $slug) {
+		repertoire(slug: $slug, mode: "repertoire") {
 			...CoreRepertoireFields
 		}
 	}
