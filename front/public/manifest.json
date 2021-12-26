@@ -1,6 +1,7 @@
 {
 	"short_name": "Chess HQ",
 	"name": "Chess HQ",
+	"description": "Study chess openings with spaced repetition, search our chess database with over 5 million games, and build collections of master games or your own games.",
 	"icons": [
 		{
 			"src": "favicon.ico",
