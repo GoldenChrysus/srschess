@@ -153,10 +153,10 @@ for file in files:
 			record["month"] = date.strftime("%m")
 			record["day"]   = date.strftime("%d")
 
-			header_year        = game.headers["Event"][-4:]
-			second_header_year = game.headers["Event"][-9:-5]
+			header_year   = game.headers["Event"][-4:]
+			header_letter = game.headers["Event"][-5:-4]
 
-			if (str(record["year"]) != header_year and header_year.isdigit() and (str(record["year"]) != second_header_year or !second_header_year.isdigit())):
+			if (str(record["year"]) != header_year and header_year.isdigit() and int(header_year) < 2000 and int(header_year) >= 1900 and (header_letter == " " or header_letter == "-")):
 				record["year"]  = header_year
 				record["month"] = None
 				record["day"]   = None
@@ -259,6 +259,6 @@ for file in files:
 
 	data.close()
 	conn.commit()
-	rename(path + file, path + "processed/" + file)
+	rename(path + file, path + "processed/" + enviro + "/" + file)
 
 conn.close()

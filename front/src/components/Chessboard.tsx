@@ -268,18 +268,39 @@ class Chessboard extends React.Component<ChessboardProps> {
 			? "w"
 			: "b";
 		const moves  = this.chess.history({ verbose: true });
+		const count: {[type: string]: number} = {
+			p : 0,
+			n : 0,
+			b : 0,
+			r : 0,
+			q : 0
+		};
 		const pieces = [];
 
 		for (let i in moves) {
-			if (moves[i].color !== player) {
+			const move = moves[i];
+
+			if (move.color !== player) {
 				continue;
 			}
 
-			if (moves[i].captured) {
-				pieces.push(
-					<Piece key={"captures-" + player + "-" + i} type={moves[i].captured!} color={(player === "w") ? "black" : "white"}/>
-				);
+			if (move.captured) {
+				count[move.captured] += 1;
 			}
+		}
+
+		for (const type in count) {
+			if (count[type] === 0) {
+				continue;
+			}
+
+			const group = [];
+
+			for (let i = 0; i < count[type]; i++) {
+				group.push(<Piece key={"captures-" + player + "-" + i} type={type} color={(player === "w") ? "black" : "white"}/>);
+			}
+
+			pieces.push(<span className="piece-group" key={"piece-group-" + player + "-" + type}>{group}</span>);
 		}
 
 		return pieces;

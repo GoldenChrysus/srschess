@@ -50,6 +50,15 @@ body .piece-store {
 	align-items: center;
 }
 
+body .piece-store > .piece-group > .piece {
+	margin-right: -14px;
+	filter: drop-shadow(-1px 0px 1px rgb(0 0 0 / 0.3));
+}
+
+body .piece-store > .piece-group > .piece:last-child {
+	margin-right: 0;
+}
+
 body .standalone.piece {
 	width: 20px;
 	height: 20px;
