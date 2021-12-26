@@ -6,7 +6,11 @@ module Types
 			argument :move_id, ID, required: true
 	
 			def resolve(move_id:)
-				move = ::RepertoireMove.find(move_id)
+				begin
+					move = ::RepertoireMove.find(move_id)
+				rescue
+					return nil
+				end
 
 				authorize move, :show?
 				move.note

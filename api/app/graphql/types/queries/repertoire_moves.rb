@@ -6,7 +6,11 @@ module Types
 			argument :repertoire_id, ID, required: true
 	
 			def resolve(repertoire_id:)
-				repertoire = ::Repertoire.find(repertoire_id)
+				begin
+					repertoire = ::Repertoire.find(repertoire_id)
+				rescue
+					return nil
+				end
 
 				authorize repertoire, :show?
 				repertoire.moves

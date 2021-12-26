@@ -45,6 +45,7 @@ function Results(props: ResultsProps) {
 				locale={{
 					emptyText : t("common:na")
 				}}
+				rowKey={(record) => "result-item-" + record.slug}
 				onRow={(record, index) => {
 					return {
 						className : ([props.record?.id, props.record?.slug].includes(record.slug)) ? "active-border relative" : "",

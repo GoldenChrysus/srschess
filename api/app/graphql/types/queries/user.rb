@@ -6,7 +6,11 @@ module Types
 			argument :id, ID, required: true
 
 			def resolve(id:)
-				::User.find(id)
+				begin
+					::User.find(id)
+				rescue
+					return nil
+				end
 			end
 		end
 	end

@@ -29,6 +29,7 @@ function GameList(props: GameListProps) {
 						locale={{
 							emptyText : t("na")
 						}}
+						rowKey={(record) => "game-list-item-" + record.id}
 						onRow={(record, index) => {
 							return {
 								onClick : e => {

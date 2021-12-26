@@ -61,7 +61,7 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 				"#firebase-auth",
 				{
 					signInOptions : [
-						EmailAuthProvider.PROVIDER_ID
+						EmailAuthProvider.PROVIDER_ID,
 					]
 				}
 			);

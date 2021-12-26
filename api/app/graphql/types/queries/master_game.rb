@@ -6,7 +6,11 @@ module Types
 			argument :id, String, required: true
 			
 			def resolve(id:)
-				::MasterGame.find(id)
+				begin
+					::MasterGame.find(id)
+				rescue
+					return nil
+				end
 			end
 		end
 	end

@@ -6,7 +6,11 @@ module Types
 			argument :id, ID, required: true
 			
 			def resolve(id:)
-				game = ::Game.find(id)
+				begin
+					game = ::Game.find(id)
+				rescue
+					return nil
+				end
 
 				authorize game, :show?
 				game

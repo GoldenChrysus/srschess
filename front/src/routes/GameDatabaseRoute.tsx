@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ApolloConsumer, useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
@@ -58,7 +58,7 @@ function GameDatabaseRoute() {
 		setMoveSearching(new_state);
 	}
 
-	runInAction(() => ChessState.setCollection(data?.collection));
+	useEffect(() => ChessState.setCollection(data?.collection));
 
 	const meta = createGameDatabaseRouteMeta(t, data?.collection, game_data?.game, master_game_data?.masterGame);
 

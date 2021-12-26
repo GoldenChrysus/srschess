@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { runInAction } from "mobx";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
@@ -60,7 +60,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	);
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
-	runInAction(() => ChessState.setRepertoire(data?.repertoire));
+	useEffect(() => ChessState.setRepertoire(data?.repertoire));
 
 	const fens: { [key: string]: string } = {};
 	const arrows: { [key: string]: Array<any> } = {};

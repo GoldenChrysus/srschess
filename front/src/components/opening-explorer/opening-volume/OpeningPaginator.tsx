@@ -24,7 +24,7 @@ function OpeningPaginator(props: OpeningPaginatorProps) {
 		}
 
 		boards.push(
-			<Link type="div" className="board-100w" to={"/openings-explorer/" + opening.slug}>
+			<Link key={"opening-link-" + opening.id} type="div" className="board-100w" to={"/openings-explorer/" + opening.slug}>
 				<h1 style={{ height : "44px", maxHeight : "44px", WebkitLineClamp : 2, WebkitBoxOrient : "vertical", display: "-webkit-box" }} className="overflow-ellipsis overflow-hidden">
 					{opening.code}: {opening.name}
 				</h1>

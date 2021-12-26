@@ -190,9 +190,9 @@ module Types
 						end
 
 						if (!skip and criteria[:data][:eco].to_s != "")
-							eco = ::EcoPosition.find(criteria[:data][:eco])
-
-							if (eco == nil)
+							begin
+								eco = ::EcoPosition.find(criteria[:data][:eco])
+							rescue
 								raise ApiErrors::ChessError::InvalidEco.new
 							end
 

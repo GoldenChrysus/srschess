@@ -46,7 +46,9 @@ function GameCollections() {
 								mode="inline"
 								selectedKeys={[ "collection-" + ChessState.collection?.id ]}
 							>
-								<Button type="default" onClick={() => setModalActive(true)}>{t("create_collection")}</Button>
+								<Menu.Item key="create-collection-button" style={{ paddingLeft : 0, marginTop : 0 }}>
+									<Button type="default" onClick={() => setModalActive(true)}>{t("create_collection")}</Button>
+								</Menu.Item>
 								{renderCollections(data)}
 							</Menu>
 						)}
