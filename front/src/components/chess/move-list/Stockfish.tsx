@@ -26,7 +26,8 @@ interface StockfishState {
 
 class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	set_listener = false;
-	engine = null;
+	engine       = null;
+	waiting      = false;
 
 	constructor(props: StockfishProps) {
 		super(props);
@@ -44,7 +45,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 
 	componentDidUpdate(prev_props: StockfishProps) {
 		if (prev_props.fen !== this.props.fen) {
-			this.runEval();
+			this.runEval(true);
 		}
 
 		if (prev_props.mode !== this.props.mode) {
@@ -95,13 +96,17 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		});
 
 		if (enabled) {
-			this.runEval(true);
+			this.runEval(true, true);
 		} else {
 			ChessState.setBestMove("");
 		}
 	}
 
 	receiveEval(line: string) {
+		if (line === "readyok" && this.waiting) {
+			this.runEval(false, true);
+		}
+
 		if (line.slice(0, 8) === "bestmove") {
 			const move = line.split(" ")[1];
 
@@ -120,6 +125,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		const score_text = line.slice(score_index + 6, (node_index !== -1) ? node_index - 1 : 100);
 		const score_data = score_text.split(" ");
 		const multiplier = ((this.props.num ?? 0) % 10 !== 0) ? 1 : -1;
+		const best_move  = line?.match(/pv [a-z\d]{4}/)?.[0].replace("pv ", "");
 
 		switch (score_data[0]) {
 			case "cp":
@@ -142,6 +148,10 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 			default:
 				break;
 		}
+
+		if (best_move && depth >= 10) {
+			ChessState.setBestMove(best_move);
+		}
 	}
 
 	setListener() {
@@ -154,7 +164,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		window.sf.addMessageListener(this.receiveEval);
 	}
 
-	runEval(force?: boolean) {
+	runEval(waiting: boolean, force?: boolean) {
 		ChessState.setBestMove("");
 		this.setListener();
 
@@ -169,9 +179,18 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		const sf = window.sf;
 		
 		if (sf) {
-			sf.postMessage("ucinewgame");
-			sf.postMessage("position fen " + this.props.fen);
-			sf.postMessage("go depth 20");
+			if (waiting) {
+				this.waiting = true;
+
+				sf.postMessage("stop");
+				sf.postMessage("isready");
+			} else {
+				this.waiting = false;
+
+				sf.postMessage("ucinewgame");
+				sf.postMessage("position fen " + this.props.fen);
+				sf.postMessage("go depth 20");
+			}
 		}
 	}
 }
