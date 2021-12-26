@@ -29,9 +29,12 @@ class App extends React.Component {
 							<meta property="og:image" content={process.env.REACT_APP_PUBLIC_URL + "/assets/images/business/logo1024.png"}/>
 							<meta property="og:url" content={url}/>
 							<meta lang={i18n.lng} property="og:site_name" content="Chess HQ"/>
+							<meta name="twitter:card" content="summary_large_image"></meta>
 							<meta lang={i18n.lng} property="twitter:title" content={"Chess HQ - " + t("meta_title")}/>
 							<meta lang={i18n.lng} property="twitter:description" content={t("meta_description")}/>
 							<meta property="twitter:image" content={process.env.REACT_APP_PUBLIC_URL + "/assets/images/business/logo1024.png"}/>
+							<meta property="twitter:site" content="@ChessHQcom"/>
+							<meta property="twitter:creator" content="@ChessHQcom"/>
 						</Helmet>
 					)}
 				</Translation>
