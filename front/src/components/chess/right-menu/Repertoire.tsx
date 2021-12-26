@@ -134,10 +134,10 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 									AuthState.authenticated &&
 									<>
 										<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
-											<Button className="mr-2" type="primary">{t("train")} ({lesson_count})</Button>
+											<Button className="mr-2" type="primary" disabled={lesson_count === 0}>{t("train")} ({lesson_count})</Button>
 										</Link>
 										<Link to={{pathname: "/reviews/" + props.repertoire?.slug}}>
-											<Button className="mr-2" type="default">{t("review")} ({review_count})</Button>
+											<Button className="mr-2" type="default" disabled={review_count === 0}>{t("review")} ({review_count})</Button>
 										</Link>
 										<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
 										<Popconfirm
