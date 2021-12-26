@@ -17,19 +17,19 @@ class App extends React.Component {
 					{(t, i18n) => (
 						<Helmet
 							titleTemplate="%s - Chess HQ"
-							defaultTitle={"Chess HQ - " + t("site_title")}
+							defaultTitle={"Chess HQ - " + t("meta_title")}
 						>
 							<title lang={i18n.lng}></title>
-							<meta lang={i18n.lng} name="description" content={t("site_description")}/>
+							<meta lang={i18n.lng} name="description" content={t("meta_description")}/>
 							<link rel="canonical" href={url}/>
 							<link rel="manifest" href={process.env.PUBLIC_URL + "/manifest." + (i18n.lng ?? "en") + ".json"}/>
 							<meta lang={i18n.lng} property="og:type" content="website"/>
-							<meta lang={i18n.lng} property="og:title" content={"Chess HQ - " + t("site_title")}/>
-							<meta lang={i18n.lng} property="og:description" content=""/>
+							<meta lang={i18n.lng} property="og:title" content={"Chess HQ - " + t("meta_title")}/>
+							<meta lang={i18n.lng} property="og:description" content={t("meta_description")}/>
 							<meta property="og:url" content={url}/>
 							<meta lang={i18n.lng} property="og:site_name" content="Chess HQ"/>
-							<meta lang={i18n.lng} property="twitter:title" content={"Chess HQ - " + t("site_title")}/>
-							<meta lang={i18n.lng} property="twitter:description" content=""/>
+							<meta lang={i18n.lng} property="twitter:title" content={"Chess HQ - " + t("meta_title")}/>
+							<meta lang={i18n.lng} property="twitter:description" content={t("meta_description")}/>
 						</Helmet>
 					)}
 				</Translation>

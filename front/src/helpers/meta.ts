@@ -38,7 +38,8 @@ export function createGameDatabaseRouteMeta(t: TFunction<("database" | "chess")[
 		meta.url = ROUTES.game_database;
 	}
 
-	meta.url = generateCanonicalURL(meta.url);
+	meta.url         = generateCanonicalURL(meta.url);
+	meta.description = t("meta_description");
 
 	return meta;
 }
@@ -62,7 +63,8 @@ export function createRepertoireRouteMeta(t: TFunction<"repertoires">, mode: Che
 		meta.url = ROUTES.repertoires;
 	}
 
-	meta.url = generateCanonicalURL(meta.url.replace(/:slug\??/, repertoire?.slug ?? ""));
+	meta.url         = generateCanonicalURL(meta.url.replace(/:slug\??/, repertoire?.slug ?? ""));
+	meta.description = t("meta_description");
 
 	return meta;
 }
@@ -70,8 +72,10 @@ export function createRepertoireRouteMeta(t: TFunction<"repertoires">, mode: Che
 export function createOpeningExplorerRouteMeta(t: TFunction<"openings">) {
 	const meta = getMetaObject();
 
-	meta.title = t("openings_explorer");
-	meta.url   = generateCanonicalURL(ROUTES.openings_explorer);
+	meta.title       = t("openings_explorer");
+	meta.og_title    = createOGMetaTitle(meta.title);
+	meta.url         = generateCanonicalURL(ROUTES.openings_explorer);
+	meta.description = t("meta_description");
 
 	return meta;
 }
