@@ -56,6 +56,8 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	}
 
 	componentWillUnmount() {
+		ChessState.setBestMove("");
+
 		if (window.sf && this.set_listener) {
 			window.sf.removeMessageListener(this.receiveEval);
 		}
