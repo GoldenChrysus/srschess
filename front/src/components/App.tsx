@@ -22,6 +22,7 @@ class App extends React.Component {
 							<title lang={i18n.lng}></title>
 							<meta lang={i18n.lng} name="description" content=""/>
 							<link rel="canonical" href={url}/>
+							<link rel="manifest" href={process.env.PUBLIC_URL + "/manifest." + i18n.lng + ".json"}/>
 							<meta lang={i18n.lng} property="og:type" content="website"/>
 							<meta lang={i18n.lng} property="og:title" content={"Chess HQ - " + t("site_title")}/>
 							<meta lang={i18n.lng} property="og:description" content=""/>
