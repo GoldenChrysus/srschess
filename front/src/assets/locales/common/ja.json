@@ -9,6 +9,7 @@
   "delete": "削除",
   "delete_confirm": "これを削除してもよろしいですか？",
   "edit": "修正",
+  "filter": "フィルター",
   "input_name": "お名前をご入力ください。",
   "login": "ログイン",
   "move_down": "下に移動",
@@ -19,8 +20,8 @@
   "now": "今",
   "public": "公開",
   "save": "保存",
+  "site_title": "オープニングを学び、チェスデータベースを検索し、コレクションを構築する",
   "submit": "送信",
-  "unexpected_error": "予想されなかったエラーが出ました。",
   "unknown": "不明",
   "yes": "はい"
 }

@@ -1,6 +1,7 @@
 {
-  "create_collection": "コレクションの作成",
-  "edit_collection": "コレクションの修正",
+  "collection": "コレクション",
+  "create_collection": "$t(collection)の作成",
+  "edit_collection": "$t(collection)の修正",
   "game_collections": "試合のコレクション",
   "game_database": "試合のデータベース",
   "game_list": "試合のリスト",

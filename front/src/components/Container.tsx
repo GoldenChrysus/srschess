@@ -7,42 +7,44 @@ import RepertoireRoute from "../routes/RepertoireRoute";
 import GameDatabaseRoute from "../routes/GameDatabaseRoute";
 import OpeningExplorerRoute from "../routes/OpeningExplorerRoute";
 
+import { ROUTES } from "../helpers";
+
 class Container extends React.Component {
 	render() {
 		return (
 			<Router>
 				<MainLayout>				
 					<Switch>
-						<Route exact path="/">
+						<Route exact path={ROUTES.home}>
 							<div>
 								Hello<br/>
 							</div>
 						</Route>
 
-						<Route exact path="/repertoires/:slug?">
+						<Route exact path={ROUTES.repertoires}>
 							<RepertoireRoute mode="repertoire"/>
 						</Route>
-						<Route exact path="/lessons/:slug?">
+						<Route exact path={ROUTES.lessons}>
 							<RepertoireRoute mode="lesson"/>
 						</Route>
-						<Route exact path="/reviews/:slug?">
+						<Route exact path={ROUTES.reviews}>
 							<RepertoireRoute mode="review"/>
 						</Route>
 
-						<Route exact path="/openings-explorer/">
+						<Route exact path={ROUTES.openings_explorer}>
 							<OpeningExplorerRoute/>
 						</Route>
 
-						<Route exact path="/game-database/">
+						<Route exact path={ROUTES.game_database}>
 							<GameDatabaseRoute/>
 						</Route>
-						<Route exact path="/game-database/collection/:collection_slug">
+						<Route exact path={ROUTES.collection}>
 							<GameDatabaseRoute/>
 						</Route>
-						<Route exact path="/game-database/collection/:collection_slug/game/:game_id">
+						<Route exact path={ROUTES.collection_game}>
 							<GameDatabaseRoute/>
 						</Route>
-						<Route exact path="/game-database/master-game/:master_game_id">
+						<Route exact path={ROUTES.master_game}>
 							<GameDatabaseRoute/>
 						</Route>
 					</Switch>

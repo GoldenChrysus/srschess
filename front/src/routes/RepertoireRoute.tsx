@@ -10,6 +10,7 @@ import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
 import ChessState from "../stores/ChessState";
+import { createRepertoireRouteMeta } from "../helpers";
 
 interface RepertoireRouteProps {
 	mode: ChessControllerProps["mode"]
@@ -117,16 +118,19 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		setMoveSearching(new_state);
 	}
 
-	const title_parts = [t(props.mode + "s")];
-
-	if (data?.repertoire) {
-		title_parts.push(data.repertoire.name);
-	}
+	const meta = createRepertoireRouteMeta(t, props.mode, data?.repertoire);
 
 	return (
 		<>
 			<Helmet>
-				<title>{title_parts.join(": ")}</title>
+				<title>{meta.title}</title>
+				<meta name="description" content={meta.description}/>
+				<link rel="canonical" href={meta.url}/>
+				<meta property="og:title" content={meta.og_title}/>
+				<meta property="og:description" content={meta.description}/>
+				<meta property="og:url" content={meta.url}/>
+				<meta property="twitter:title" content={meta.og_title}/>
+				<meta property="twitter:description" content={meta.description}/>
 			</Helmet>
 			<ApolloConsumer>
 				{client => 

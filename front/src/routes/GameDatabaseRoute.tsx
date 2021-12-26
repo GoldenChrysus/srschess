@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ApolloConsumer, useQuery } from "@apollo/client";
+import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet";
+import { runInAction } from "mobx";
 
 import ChessController from "../controllers/ChessController";
 import { CollectionQueryData } from "../lib/types/models/Collection";
 import { GET_COLLECTION, GET_GAME, GET_MASTER_GAME } from "../api/queries";
-import { runInAction } from "mobx";
 import ChessState from "../stores/ChessState";
 import { MasterGameQueryData } from "../lib/types/models/MasterGame";
 import { GameQueryData } from "../lib/types/models/Game";
-import { useTranslation } from "react-i18next";
-import { Helmet } from "react-helmet";
+import { createGameDatabaseRouteMeta } from "../helpers";
 
 interface GameDatabaseRouteParams {
 	collection_slug?: string
@@ -59,24 +60,19 @@ function GameDatabaseRoute() {
 
 	runInAction(() => ChessState.setCollection(data?.collection));
 
-	const title_parts = [];
-
-	if (game_data?.game || master_game_data?.masterGame) {
-		const game = game_data?.game ?? master_game_data?.masterGame;
-
-		title_parts.push(t("chess:game_one") + ": " + game!.white + " - " + game!.black);
-	}
-
-	if (data?.collection) {
-		title_parts.push(t("collection") + ": " + data.collection.name);
-	}
-
-	title_parts.push(t("game_database"));
+	const meta = createGameDatabaseRouteMeta(t, data?.collection, game_data?.game, master_game_data?.masterGame);
 
 	return (
 		<>
 			<Helmet>
-				<title>{title_parts.join(" - ")}</title>
+				<title>{meta.title}</title>
+				<meta name="description" content={meta.description}/>
+				<link rel="canonical" href={meta.url}/>
+				<meta property="og:title" content={meta.og_title}/>
+				<meta property="og:description" content={meta.description}/>
+				<meta property="og:url" content={meta.url}/>
+				<meta property="twitter:title" content={meta.og_title}/>
+				<meta property="twitter:description" content={meta.description}/>
 			</Helmet>
 			<ApolloConsumer>
 				{client => 
