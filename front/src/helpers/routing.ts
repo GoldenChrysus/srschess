@@ -11,5 +11,5 @@ export const ROUTES = {
 };
 
 export function generateCanonicalURL(path: string) {
-	return process.env.PUBLIC_URL + path;
+	return process.env.REACT_APP_PUBLIC_URL + path;
 }

@@ -5,7 +5,7 @@ import { CollectionQueryData } from "../lib/types/models/Collection";
 import { GameModel } from "../lib/types/models/Game";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 
-import { ROUTES } from ".";
+import { generateCanonicalURL, ROUTES } from ".";
 
 export function createGameDatabaseRouteMeta(t: TFunction<("database" | "chess")[]>, collection?: CollectionQueryData["collection"], collection_game?: GameModel | null, master_game?: GameModel | null) {
 	const meta = getMetaObject();
@@ -38,6 +38,8 @@ export function createGameDatabaseRouteMeta(t: TFunction<("database" | "chess")[
 		meta.url = ROUTES.game_database;
 	}
 
+	meta.url = generateCanonicalURL(meta.url);
+
 	return meta;
 }
 
@@ -60,7 +62,7 @@ export function createRepertoireRouteMeta(t: TFunction<"repertoires">, mode: Che
 		meta.url = ROUTES.repertoires;
 	}
 
-	meta.url = meta.url.replace(/:slug\??/, repertoire?.slug ?? "");
+	meta.url = generateCanonicalURL(meta.url.replace(/:slug\??/, repertoire?.slug ?? ""));
 
 	return meta;
 }
@@ -69,7 +71,7 @@ export function createOpeningExplorerRouteMeta(t: TFunction<"openings">) {
 	const meta = getMetaObject();
 
 	meta.title = t("openings_explorer");
-	meta.url   = ROUTES.openings_explorer;
+	meta.url   = generateCanonicalURL(ROUTES.openings_explorer);
 
 	return meta;
 }
