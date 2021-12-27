@@ -8,7 +8,7 @@ function Home() {
 
 	return (
 		<div className="px-6 py-4">
-			<div className="grid grid-cols-2 3xl:grid-cols-4 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-2 3xl:grid-cols-4 gap-6">
 				<div className="px-8 py-4 bg-gray-900 rounded-3xl">
 					<div>
 						<h1 className="text-xl text-green-500">{t("repertoires:repertoire_builder")}</h1>
@@ -35,7 +35,7 @@ function Home() {
 						<h1 className="text-xl text-green-500">{t("database:game_collections")}</h1>
 						<div>{t("database:collection_info")}</div>
 					</div>
-					<div className="grid grid-cols-3 gap-x-8 py-4">
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 py-4">
 						<div className="text-5xl flex items-center justify-center text-green-500" style={{fontFamily : "Roboto", filter: "drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8))"}}>
 							PGN
 						</div>

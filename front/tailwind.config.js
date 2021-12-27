@@ -9,6 +9,11 @@ module.exports = {
 	theme    : {
 		...default_theme,
 		extend : {
+			fontSize : {
+				"2xs" : "0.5rem",
+				"3xs" : "0.375rem",
+				"4xs" : "0.25rem"
+			},
 			spacing : {
 				"4.5"  : "1.125rem",
 				"-4.5" : "-1.125rem"
