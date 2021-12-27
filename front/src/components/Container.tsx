@@ -8,6 +8,7 @@ import GameDatabaseRoute from "../routes/GameDatabaseRoute";
 import OpeningExplorerRoute from "../routes/OpeningExplorerRoute";
 
 import { ROUTES } from "../helpers";
+import Home from "./Home";
 
 class Container extends React.Component {
 	render() {
@@ -16,9 +17,7 @@ class Container extends React.Component {
 				<MainLayout>				
 					<Switch>
 						<Route exact path={ROUTES.home}>
-							<div>
-								Hello<br/>
-							</div>
+							<Home/>
 						</Route>
 
 						<Route exact path={ROUTES.repertoires}>

@@ -2,7 +2,7 @@ import SparkMD5 from "spark-md5";
 import moment from "moment";
 import { ApolloClient } from "@apollo/client";
 
-import { RepertoireModel } from "../lib/types/models/Repertoire";
+import { RepertoireModel, RepertoireMoveModel } from "../lib/types/models/Repertoire";
 import { REPERTOIRE_MOVE_FRAG } from "../api/queries";
 
 export function getDBMoveNumFromIndex(index: number) {
@@ -93,4 +93,14 @@ export function getMove(client: ApolloClient<object>, id: string | null) {
 		id       : "RepertoireMove:" + id,
 		fragment : REPERTOIRE_MOVE_FRAG
 	});
+}
+
+export function getMoveSimple(moves: Array<RepertoireMoveModel>, id: string | null) {
+	for (const move of moves) {
+		if (move.id === id) {
+			return move;
+		}
+	}
+
+	return undefined;
 }

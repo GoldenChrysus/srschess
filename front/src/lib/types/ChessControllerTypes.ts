@@ -27,6 +27,7 @@ export enum ChessControllerModes {
 
 export interface ChessControllerProps {
 	mode                : keyof typeof ChessControllerModes,
+	demo                : boolean,
 	repertoire?         : RepertoireModel | null,
 	repertoires?        : Array<RepertoireModel>,
 	collection?         : CollectionModel | null,

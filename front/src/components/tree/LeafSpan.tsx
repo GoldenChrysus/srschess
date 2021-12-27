@@ -9,6 +9,7 @@ import ContextMenu from "./LeafSpan/ContextMenu";
 
 interface LeafSpanProps {
 	move: any,
+	demo: boolean,
 	start?: boolean,
 	has_children: boolean,
 	children_active: boolean,
@@ -56,7 +57,7 @@ class LeafSpan extends React.Component<LeafSpanProps> {
 		return (
 			<>
 				{icon}
-				<Dropdown overlay={menu} trigger={["contextMenu"]}>
+				<Dropdown disabled={this.props.demo} overlay={menu} trigger={["contextMenu"]}>
 					<span key={"leafspan-span-" + this.props.move.id} onClick={() => this.props.onClick?.(this.props.move.id)} className={classes.join(" ")}>{move_num}{move_prefix}{this.props.move.move}{move_suffix}</span>
 				</Dropdown>
 			</>

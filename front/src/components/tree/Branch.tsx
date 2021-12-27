@@ -6,6 +6,7 @@ import LeafSpan from "./LeafSpan";
 
 interface BranchProps {
 	tree: any,
+	demo: boolean,
 	root?: boolean,
 	active?: boolean,
 	active_uuid?: string | null,
@@ -82,7 +83,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 				: (
 					(child_count > 1)
 						? (
-							<Branch key={"branch-" + move.id} parent_uuid={move.id} active={this.state.child_active} tree={children} active_uuid={active_uuid} onMoveClick={this.props.onMoveClick}/>
+							<Branch demo={this.props.demo} key={"branch-" + move.id} parent_uuid={move.id} active={this.state.child_active} tree={children} active_uuid={active_uuid} onMoveClick={this.props.onMoveClick}/>
 						) :
 						this.buildHtml(Object.values(children)[0], true)
 				);
@@ -92,7 +93,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 			if (single) {
 				return (
 					<>
-						<LeafSpan key={"leaf-span-" + move.id} active={active} has_children={child_count > 0} children_active={this.state.child_active} onArrowClick={this.toggle} move={move} onClick={this.props.onMoveClick}/>
+						<LeafSpan demo={this.props.demo} key={"leaf-span-" + move.id} active={active} has_children={child_count > 0} children_active={this.state.child_active} onArrowClick={this.toggle} move={move} onClick={this.props.onMoveClick}/>
 						{ul}
 					</>
 				);
@@ -102,7 +103,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 
 				html.push(
 					<Leaf key={"leaf-" + move.id} move={move}>
-						<LeafSpan key={"span-" + move.id} active={active} start={true} has_children={move.has_children} children_active={this.state.child_active} move={move} first_child={first_child} last_child={last_child} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
+						<LeafSpan demo={this.props.demo} key={"span-" + move.id} active={active} start={true} has_children={move.has_children} children_active={this.state.child_active} move={move} first_child={first_child} last_child={last_child} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
 						{ul}
 					</Leaf>
 				);

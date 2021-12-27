@@ -77,6 +77,7 @@ function GameDatabaseRoute() {
 			<ApolloConsumer>
 				{client => 
 					<ChessController
+						demo={false}
 						key="chess-controller"
 						mode={(move_searching) ? "search" : "database"}
 						collection={data?.collection}

@@ -53,6 +53,12 @@ export interface RepertoireQueryData {
 	repertoire: RepertoireModel | null
 }
 
+export interface RepertoireMovesQueryData {
+	repertoire: {
+		moves: Array<RepertoireMoveModel>
+	}
+}
+
 export interface RepertoiresQueryData {
 	repertoires: Array<RepertoireModel>
 }

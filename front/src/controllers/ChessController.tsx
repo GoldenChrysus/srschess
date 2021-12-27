@@ -1,13 +1,15 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
+import { inject } from "mobx-react";
 
 import { ChessControllerLocalState, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
-import { generateUUID, getMove } from "../helpers";
+import Tree from "../components/Tree";
+import { generateUUID, getMove, getMoveSimple } from "../helpers";
 import MasterMoveList from "../components/chess/MasterMoveList";
-import { inject } from "mobx-react";
+import { RepertoireMoveModel } from "../lib/types/models/Repertoire";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -159,56 +161,78 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	render() {
-		const children   = (this.state.last_uuid) ? this.props.arrows?.[this.state.last_uuid] || [] : this.props.arrows?.["root"] || [];
-		const queue_item = (this.props.mode === "lesson" && this.original_queue) ? this.original_queue[this.state.queue_index] : null;
+		const children      = (this.state.last_uuid) ? this.props.arrows?.[this.state.last_uuid] || [] : this.props.arrows?.["root"] || [];
+		const queue_item    = (this.props.mode === "lesson" && this.original_queue) ? this.original_queue[this.state.queue_index] : null;
+		const board_classes = [""];
+		const outer_classes = ["flex gap-x-8"];
+
+		if (this.props.demo) {
+			board_classes.push("board-100w flex-1");
+		} else {
+			board_classes.push("flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess min-w-chess-small md:min-w-chess");
+			outer_classes.push("flex-wrap min-h-full");
+		}
 
 		return (
-			<div key="chess-outer" className="flex flex-wrap gap-x-8 min-h-full">
-				<div key="chessboard-outer" id="chessboard-outer" className="flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess min-w-chess-small md:min-w-chess">
-					<Chessboard
+			<>
+				<div key="chess-outer" className={outer_classes.join(" ")}>
+					{
+						this.props.demo &&
+						this.props.mode === "repertoire" &&
+						<div id="tree-panel" className="flex-initial w-1/3">
+							<Tree
+								repertoire={this.props.repertoire}
+								active_uuid={this.state.last_uuid}
+								onMoveClick={this.onMoveClick.bind(this, "tree")}
+							/>
+						</div>
+					}
+					<div key="chessboard-outer" id="chessboard-outer" className={board_classes.join(" ")}>
+						<Chessboard
+							mode={this.props.mode}
+							key="chessboard"
+							fen={this.state.fen}
+							pgn={this.state.pgn}
+							orientation={(this.props.demo || (this.props.authenticated && this.props.repertoire?.userOwned)) ? this.props.repertoire?.side : undefined}
+							repertoire_id={this.props.repertoire?.id}
+							onMove={this.reducer}
+							children={children}
+							queue_item={(this.state.awaiting_user) ? queue_item : null}
+							quizzing={this.state.quizzing}
+						/>
+						{this.renderMasterMoveList()}
+					</div>
+					{!this.props.demo && <LeftMenu
+						key="chess-left-menu-component"
+						active_uuid={this.state.last_uuid}
+						movelist={this.state.moves.join(".")}
 						mode={this.props.mode}
-						key="chessboard"
+						repertoire={this.props.repertoire}
+						collection={this.props.collection}
+						game={this.props.game}
+						onMoveClick={this.onMoveClick.bind(this, "tree")}
+						onMoveSearchChange={this.props.onMoveSearchChange}
+					/>}
+					{!this.props.demo && <RightMenu
+						key="chess-right-menu-component"
+						active_num={this.state.last_num}
+						active_uuid={this.state.last_uuid}
+						moves={this.state.history}
 						fen={this.state.fen}
-						pgn={this.state.pgn}
-						orientation={(this.props.authenticated && this.props.repertoire?.userOwned) ? this.props.repertoire?.side : undefined}
-						repertoire_id={this.props.repertoire?.id}
-						onMove={this.reducer}
-						children={children}
-						queue_item={(this.state.awaiting_user) ? queue_item : null}
-						quizzing={this.state.quizzing}
-					/>
-					{this.renderMasterMoveList()}
+						mode={this.props.mode}
+						fen_history={this.fen_history}
+						repertoire={this.props.repertoire}
+						collection={this.props.collection}
+						game={this.props.game}
+						onMoveClick={this.onMoveClick.bind(this, "history")}
+					/>}
 				</div>
-				<LeftMenu
-					key="chess-left-menu-component"
-					active_uuid={this.state.last_uuid}
-					movelist={this.state.moves.join(".")}
-					mode={this.props.mode}
-					repertoire={this.props.repertoire}
-					collection={this.props.collection}
-					game={this.props.game}
-					onMoveClick={this.onMoveClick.bind(this, "tree")}
-					onMoveSearchChange={this.props.onMoveSearchChange}
-				/>
-				<RightMenu
-					key="chess-right-menu-component"
-					active_num={this.state.last_num}
-					active_uuid={this.state.last_uuid}
-					moves={this.state.history}
-					fen={this.state.fen}
-					mode={this.props.mode}
-					fen_history={this.fen_history}
-					repertoire={this.props.repertoire}
-					collection={this.props.collection}
-					game={this.props.game}
-					onMoveClick={this.onMoveClick.bind(this, "history")}
-				/>
-			</div>
+			</>
 		);
 	}
 
 	renderMasterMoveList() {
-		return (["review", "lesson"].includes(this.props.mode))
+		return (this.props.demo || ["review", "lesson"].includes(this.props.mode))
 			? <></>
 			: <MasterMoveList fen={this.state.fen} onMoveClick={this.onMoveClick.bind(this, "master-movelist")}/>;
 	}
@@ -307,7 +331,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		}
 
 		do {
-			const move = getMove(this.props.client, uuid);
+			const move: RepertoireMoveModel = (this.props.demo) ? getMoveSimple(this.props.repertoire?.moves ?? [], uuid) : getMove(this.props.client, uuid);
 
 			if (!move) {
 				// TODO: Throw error, undo action
@@ -673,7 +697,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					});
 				}
 
-				const cached_move = getMove(this.props.client, uuid);
+				const cached_move = (this.props.demo) ? getMoveSimple(this.props.repertoire.moves ?? [], uuid) : getMove(this.props.client, uuid);
 
 				if (!cached_move) {
 					if (!this.props.repertoire.userOwned) {

@@ -7,12 +7,13 @@ import Branch from "./tree/Branch";
 
 import "../styles/components/tree.css";
 import { Spin } from "antd";
-import { RepertoireModel } from "../lib/types/models/Repertoire";
-import { getMove } from "../helpers";
+import { RepertoireModel, RepertoireMoveModel, RepertoireMovesQueryData } from "../lib/types/models/Repertoire";
+import { getMove, getMoveSimple } from "../helpers";
 
 interface TreeProps {
 	repertoire?  : RepertoireModel | null
 	active_uuid  : ChessControllerState["last_uuid"],
+	mode?        : string,
 	onMoveClick? : Function
 }
 
@@ -31,23 +32,29 @@ function Tree(props: TreeProps) {
 	const client       = useApolloClient();
 	const prev_rep_ref = useRef<string>();
 	const branches     = [];
+	const demo         = props.repertoire?.id === -1;
 
-	const { loading, error, data } = useQuery(
+	const { loading, error, data } = useQuery<RepertoireMovesQueryData>(
 		GET_REPERTOIRE_MOVES,
 		{
 			variables : {
 				slug : props.repertoire?.slug
 			},
 			fetchPolicy : "cache-only",
-			skip        : (props.repertoire?.slug === undefined)
+			skip        : (props.repertoire?.slug === undefined || demo)
 		}
 	);
 
 	if (props.repertoire) {
 		const data_string = JSON.stringify(data);
+		let moves         = data?.repertoire?.moves;
 
-		if (prev_rep_ref.current !== data_string) {
-			base_tree = buildBaseTree(client, data?.repertoire?.moves ?? []);
+		if (demo) {
+			moves = props.repertoire.moves!;
+		}
+
+		if (prev_rep_ref.current !== data_string || demo) {
+			base_tree = buildBaseTree(client, moves ?? [], demo);
 		}
 
 		prev_rep_ref.current = data_string;
@@ -69,6 +76,7 @@ function Tree(props: TreeProps) {
 			branches.push(
 				<Branch
 					key={"root-branch-" + sort}
+					demo={demo}
 					root={true}
 					active={true}
 					tree={tree[sort]}
@@ -88,11 +96,11 @@ function Tree(props: TreeProps) {
 	);
 }
 
-function buildBaseTree(client: ApolloClient<object>, moves: any) {
+function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQueryData["repertoire"]["moves"], demo: boolean) {
 	const tree: BaseTree = {};
 
 	for (const move of moves ?? []) {
-		const tmp_move = {...move};
+		const tmp_move: any = {...move};
 
 		if (!tree[tmp_move.moveNumber]) {
 			tree[tmp_move.moveNumber] = {};
@@ -123,7 +131,7 @@ function buildBaseTree(client: ApolloClient<object>, moves: any) {
 			continue;
 		}
 
-		let parent = getMove(client, tmp_move.parentId);
+		let parent = (demo) ? getMoveSimple(moves, tmp_move.parentId) : getMove(client, tmp_move.parentId);
 
 		if (!parent) {
 			continue;
@@ -140,13 +148,17 @@ function buildBaseTree(client: ApolloClient<object>, moves: any) {
 		let local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
 
 		while (parent.parentId) {
-			parent = getMove(client, parent.parentId);
+			parent = (demo) ? getMoveSimple(moves, parent.parentId) : getMove(client, parent.parentId);
 
 			if (!parent) {
 				break;
 			}
 
-			const parent_parent = (parent.parentId) ? getMove(client, parent.parentId) : false;
+			const parent_parent = (parent.parentId)
+				? ((demo)
+					? getMoveSimple(moves, parent.parentId)
+					: getMove(client, parent.parentId))
+				: false;
 
 			if ((local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
 				has_children = true;							

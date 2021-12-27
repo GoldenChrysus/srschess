@@ -135,6 +135,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			<ApolloConsumer>
 				{client => 
 					<ChessController
+						demo={false}
 						key="chess-controller"
 						mode={(move_searching) ? "search" : props.mode}
 						repertoire={data?.repertoire}
