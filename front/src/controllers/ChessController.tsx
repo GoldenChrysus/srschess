@@ -236,7 +236,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 					{
 						this.props.demo &&
-						this.props.mode === "database" &&
+						(["database", "openings"].includes(this.props.mode)) &&
 						<div className="flex-initial w-1/3">
 							<MoveList
 								demo={true}
