@@ -27,11 +27,11 @@ const error_link     = onError(({ graphQLErrors, networkError }) => {
 			return;
 		}
 
+		notifyError(graphQLErrors[0].extensions?.code);
+
 		if (process.env.NODE_ENV === "development") {
 			console.error(graphQLErrors);
 		}
-
-		notifyError(graphQLErrors[0].extensions?.code);
 	}
 });
 const cable_link     = new ActionCableLink({cable, connectionParams: { token : localStorage.getItem("firebase_token") || AuthState.token }});
