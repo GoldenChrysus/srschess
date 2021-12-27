@@ -12,6 +12,7 @@ import { getDBMoveNumFromIndex, getIndexFromDBMoveNum } from "../../helpers";
 
 interface MoveListProps {
 	mode: ChessControllerProps["mode"],
+	demo?: boolean,
 	active_num?: ChessControllerState["last_num"],
 	fen: string,
 	moves: ChessControllerState["history"],
@@ -31,7 +32,7 @@ class MoveList extends React.Component<MoveListProps> {
 	render() {
 		return (
 			<>
-				<Stockfish mode={this.props.mode} fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>
+				{!this.props.demo && <Stockfish mode={this.props.mode} fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>}
 				<div key="movelist" id="movelist" className={"max-w-full md:max-w-sm " + this.props.mode}>
 					{this.props.moves?.map((move, i, moves) => this.renderListMove(move, i, moves))}
 				</div>

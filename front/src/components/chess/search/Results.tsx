@@ -9,9 +9,11 @@ import RepertoireItem from "./RepertoireItem";
 import { useHistory } from "react-router";
 import MasterGameItem from "./MasterGameItem";
 import { useTranslation } from "react-i18next";
+import { DEMO_MASTER_GAME_RESULTS } from "../../../lib/constants/chess";
 
 interface ResultsProps {
 	criteria: SearchState["criteria"],
+	demo?: boolean,
 	mode: SearchProps["mode"],
 	record?: SearchProps["record"],
 	onResultClick: Function
@@ -20,18 +22,23 @@ interface ResultsProps {
 function Results(props: ResultsProps) {
 	const history = useHistory();
 	const { t } = useTranslation(["chess", "common"]);
-	const { loading, error, data } = useQuery<ChessSearchQueryData>(
+	let { loading, error, data } = useQuery<ChessSearchQueryData>(
 		GET_CHESS_SEARCH,
 		{
 			variables : {
 				criteria : props.criteria
 			},
-			skip : !props.criteria?.mode
+			skip : !props.criteria?.mode || props.demo
 		}
 	);
 
-	if (!props.criteria) {
+	if (!props.criteria && !props.demo) {
 		return <></>;
+	}
+
+	if (props.demo) {
+		loading = false;
+		data    = DEMO_MASTER_GAME_RESULTS;
 	}
 
 	return (
@@ -39,9 +46,9 @@ function Results(props: ResultsProps) {
 			<Table
 				dataSource={data?.chessSearch}
 				loading={loading}
-				pagination={{ defaultPageSize : 10 }}
+				pagination={(!props.demo) ? { defaultPageSize : 10 } : false}
 				rowClassName="cursor-pointer"
-				showHeader={props.mode === "master_games"}
+				showHeader={props.mode === "master_games" && !props.demo}
 				locale={{
 					emptyText : t("common:na")
 				}}
@@ -50,12 +57,14 @@ function Results(props: ResultsProps) {
 					return {
 						className : ([props.record?.id, props.record?.slug].includes(record.slug)) ? "active-border relative" : "",
 						onClick   : e => {
-							props.onResultClick();
+							props.onResultClick(record.slug);
 
-							if (props.mode === "repertoires") {
-								history.push("/repertoires/" + record.slug);
-							} else if (props.mode === "master_games") {
-								history.push("/game-database/master-game/" + record.slug);
+							if (!props.demo) {
+								if (props.mode === "repertoires") {
+									history.push("/repertoires/" + record.slug);
+								} else if (props.mode === "master_games") {
+									history.push("/game-database/master-game/" + record.slug);
+								}
 							}
 						}
 					}
@@ -73,6 +82,7 @@ function Results(props: ResultsProps) {
 				/>
 				{
 					props.mode === "master_games" &&
+					!props.demo &&
 					<Table.Column
 						title={t("result")}
 						dataIndex="result"

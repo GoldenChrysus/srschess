@@ -10,6 +10,7 @@ import Tree from "../components/Tree";
 import { generateUUID, getMove, getMoveSimple } from "../helpers";
 import MasterMoveList from "../components/chess/MasterMoveList";
 import { RepertoireMoveModel } from "../lib/types/models/Repertoire";
+import MoveList from "../components/chess/MoveList";
 
 type ChessType = (fen?: string) => ChessInstance;
 
@@ -167,7 +168,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		const outer_classes = ["flex gap-x-8"];
 
 		if (this.props.demo) {
-			board_classes.push("board-100w flex-1");
+			board_classes.push("board-100w flex-1 demo");
+
+			if (this.props.mode === "database") {
+				board_classes.push("max-w-2/3")
+			}
 		} else {
 			board_classes.push("flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess min-w-chess-small md:min-w-chess");
 			outer_classes.push("flex-wrap min-h-full");
@@ -187,6 +192,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 							/>
 						</div>
 					}
+
 					<div key="chessboard-outer" id="chessboard-outer" className={board_classes.join(" ")}>
 						<Chessboard
 							mode={this.props.mode}
@@ -202,6 +208,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						/>
 						{this.renderMasterMoveList()}
 					</div>
+
 					{!this.props.demo && <LeftMenu
 						key="chess-left-menu-component"
 						active_uuid={this.state.last_uuid}
@@ -226,6 +233,21 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						game={this.props.game}
 						onMoveClick={this.onMoveClick.bind(this, "history")}
 					/>}
+
+					{
+						this.props.demo &&
+						this.props.mode === "database" &&
+						<div className="flex-initial w-1/3">
+							<MoveList
+								demo={true}
+								mode={this.props.mode}
+								active_num={this.state.last_num}
+								fen={this.state.fen}
+								moves={this.state.history}
+								onMoveClick={this.onMoveClick.bind(this, "history")}
+							/>
+						</div>
+					}
 				</div>
 			</>
 		);

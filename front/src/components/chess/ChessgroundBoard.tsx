@@ -81,6 +81,10 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 		}
 
 		if (movelist) {
+			if (parent.classList?.contains("demo")) {
+				return movelist.style.maxHeight = (parent.offsetWidth - 5) + "px";
+			}
+
 			let move_height = width;
 
 			const stockfish  = document.getElementById("stockfish")?.offsetHeight ?? 0;

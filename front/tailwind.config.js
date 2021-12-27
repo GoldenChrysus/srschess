@@ -26,11 +26,17 @@ module.exports = {
 				chess : "calc(100vh - 20rem)"
 			},
 			maxWidth : {
-				chess : "calc(100vw * 0.4)"
+				chess : "calc(100vw * 0.4)",
+				"1/2" : "50%",
+				"2/3" : "66.67%",
+				"1/3" : "33.33%"
 			},
 			minWidth : {
 				"chess-small" : "100%",
-				chess         : "430px"
+				chess         : "430px",
+				"1/2"         : "50%",
+				"2/3"         : "66.67%",
+				"1/3"         : "33.33%"
 			},
 			screens : {
 				"3xl": "2560px"

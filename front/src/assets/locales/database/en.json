@@ -1,6 +1,6 @@
 {
 	"collection": "Collection",
-	"collection_info": "Build collections of master games and personal games. Chess HQ supports importing by PGN, Chess.com*, and Lichess*.",
+	"collection_info": "Build collections of master games* and personal games. Chess HQ supports importing by PGN, Chess.com*, and Lichess*. Easily share your collections with friends or coaches.",
 	"create_collection": "Create $t(collection)",
 	"edit_collection": "Edit $t(collection)",
 	"game_collections": "Game Collections",
