@@ -110,7 +110,7 @@ function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQuery
 		tmp_move.uuids = [tmp_move.id];
 
 		if (tmp_move.transpositionId) {
-			const transposition = getMove(client, tmp_move.transpositionId);
+			const transposition = (!demo) ? getMove(client, tmp_move.transpositionId) : getMoveSimple(moves, tmp_move.transpositionId);
 
 			if (transposition) {
 				tmp_move.moves.push({
@@ -131,7 +131,7 @@ function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQuery
 			continue;
 		}
 
-		let parent = (demo) ? getMoveSimple(moves, tmp_move.parentId) : getMove(client, tmp_move.parentId);
+		let parent = (!demo) ? getMove(client, tmp_move.parentId) :  getMoveSimple(moves, tmp_move.parentId);
 
 		if (!parent) {
 			continue;
@@ -148,16 +148,16 @@ function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQuery
 		let local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
 
 		while (parent.parentId) {
-			parent = (demo) ? getMoveSimple(moves, parent.parentId) : getMove(client, parent.parentId);
+			parent = (!demo) ? getMove(client, parent.parentId) : getMoveSimple(moves, parent.parentId);
 
 			if (!parent) {
 				break;
 			}
 
 			const parent_parent = (parent.parentId)
-				? ((demo)
-					? getMoveSimple(moves, parent.parentId)
-					: getMove(client, parent.parentId))
+				? ((!demo)
+					? getMove(client, parent.parentId)
+					: getMoveSimple(moves, parent.parentId))
 				: false;
 
 			if ((local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {

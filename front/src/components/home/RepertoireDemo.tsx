@@ -3,7 +3,7 @@ import { ApolloConsumer } from "@apollo/client";
 
 import ChessController from "../../controllers/ChessController";
 import { generateUUID, getMoveSimple } from "../../helpers";
-import { RepertoireModel } from "../../lib/types/models/Repertoire";
+import { RepertoireModel, RepertoireMoveModel } from "../../lib/types/models/Repertoire";
 
 const REPERTOIRE: RepertoireModel = {
 	id: -1,
@@ -493,6 +493,19 @@ function RepertoireDemo() {
 		setRepertoire({...REPERTOIRE});
 	}
 
+	const setTransposition = function(current_uuid: RepertoireMoveModel["id"], prev_uuid: RepertoireMoveModel["id"]) {
+		for (let i = 0; i < REPERTOIRE.moves!.length; i++) {
+			const move = REPERTOIRE.moves![i];
+
+			if (move.id === prev_uuid) {
+				console.log("Gh11");
+				REPERTOIRE.moves![i].transpositionId = current_uuid;
+				
+				return setRepertoire({...REPERTOIRE});
+			}
+		}
+	}
+
 	return (
 		<ApolloConsumer>
 			{client => 
@@ -503,6 +516,7 @@ function RepertoireDemo() {
 					repertoire={repertoire}
 					client={client}
 					onMove={addMove}
+					onTransposition={setTransposition}
 					arrows={arrows}
 				/>
 			}

@@ -724,7 +724,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 					});
 				}
 
-				const cached_move = (this.props.demo) ? getMoveSimple(this.props.repertoire.moves ?? [], uuid) : getMove(this.props.client, uuid);
+				const cached_move = (!this.props.demo) ? getMove(this.props.client, uuid) : getMoveSimple(this.props.repertoire.moves ?? [], uuid);
 
 				if (!cached_move) {
 					if (!this.props.repertoire.userOwned) {
@@ -743,7 +743,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 						}
 					);
 				} else if (prev_uuid && cached_move.parentId !== prev_uuid) {
-					const prev_move = getMove(this.props.client, prev_uuid);
+					const prev_move = (!this.props.demo) ? getMove(this.props.client, prev_uuid) : getMoveSimple(this.props.repertoire.moves ?? [], prev_uuid);
 
 					if (prev_move && prev_move.transpositionId !== uuid) {
 						this.props.onTransposition?.(uuid, prev_uuid);
