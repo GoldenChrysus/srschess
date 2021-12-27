@@ -8,6 +8,20 @@ import Container from "./Container";
 import ErrorBoundary from "./ErrorBoundary";
 
 class App extends React.Component {
+	componentDidMount() {
+		document.addEventListener("click", (e) => {
+			const target = e.target;
+
+			if (target instanceof HTMLElement) {
+				if (target.nodeName === "BUTTON") {
+					target.blur();
+				} else if (target.parentElement?.nodeName === "BUTTON") {
+					target.parentElement.blur();
+				}
+			}
+		});
+	}
+
 	render() {
 		const url = generateCanonicalURL(ROUTES.home);
 
