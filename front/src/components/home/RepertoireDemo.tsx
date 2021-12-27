@@ -498,7 +498,6 @@ function RepertoireDemo() {
 			const move = REPERTOIRE.moves![i];
 
 			if (move.id === prev_uuid) {
-				console.log("Gh11");
 				REPERTOIRE.moves![i].transpositionId = current_uuid;
 				
 				return setRepertoire({...REPERTOIRE});
