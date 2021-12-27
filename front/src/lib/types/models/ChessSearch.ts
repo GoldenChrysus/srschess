@@ -10,5 +10,5 @@ export interface ChessSearchResultItemModel {
 }
 
 export interface ChessSearchQueryData {
-	chessSearch: [ChessSearchResultItemModel]
+	chessSearch: ChessSearchResultItemModel[]
 }

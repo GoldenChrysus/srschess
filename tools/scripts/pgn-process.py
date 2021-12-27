@@ -157,9 +157,7 @@ for file in files:
 			header_letter = game.headers["Event"][-5:-4]
 
 			if (str(record["year"]) != header_year and header_year.isdigit() and int(header_year) < 2000 and int(header_year) >= 1900 and (header_letter == " " or header_letter == "-")):
-				record["year"]  = header_year
-				record["month"] = None
-				record["day"]   = None
+				continue
 
 		record["pgn"] = game.accept(exporter)
 		record["id"]  = hashlib.md5(

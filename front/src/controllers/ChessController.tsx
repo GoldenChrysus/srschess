@@ -40,7 +40,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	constructor(props: ChessControllerProps) {
 		super(props);
 
-		this.state = initial_state;
+		if (this.props.mode === "database" && this.props.game) {
+			this.state = this.buildGameState();
+		} else {
+			this.state = initial_state;
+		}
 
 		this.reducer     = this.reducer.bind(this);
 		this.onMoveClick = this.onMoveClick.bind(this);
@@ -58,26 +62,30 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 		this.progressQueue();
 	}
 
+	buildGameState() {
+		this.chess.reset();
+		this.chess.load_pgn(this.props.game?.pgn || initial_state.pgn);
+
+		const new_state = {...initial_state};
+
+		new_state.moves   = this.chess.history();
+		new_state.history = [];
+
+		for (const i in new_state.moves) {
+			new_state.history.push({
+				id   : i,
+				move : new_state.moves[i]
+			});
+		}
+
+		new_state.moves = [];
+
+		return new_state;
+	}
+
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
 		if (this.props.mode === "database" && (prev_props.game?.id !== this.props.game?.id || prev_props.mode !== this.props.mode)) {
-			this.chess.reset();
-			this.chess.load_pgn(this.props.game?.pgn || initial_state.pgn);
-
-			const new_state = {...initial_state};
-
-			new_state.moves   = this.chess.history();
-			new_state.history = [];
-
-			for (const i in new_state.moves) {
-				new_state.history.push({
-					id   : i,
-					move : new_state.moves[i]
-				});
-			}
-
-			new_state.moves = [];
-
-			return this.reset(new_state);
+			return this.reset(this.buildGameState());
 		}
 
 		if (prev_props.repertoire?.id !== this.props.repertoire?.id || prev_props.mode !== this.props.mode) {
