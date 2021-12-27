@@ -465,6 +465,7 @@ export const GET_CHESS_SEARCH = gql`
 			name
 			createdAt
 			moveCount
+			side
 			result
 			event
 			round

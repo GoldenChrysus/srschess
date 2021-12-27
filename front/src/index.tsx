@@ -27,7 +27,9 @@ const error_link     = onError(({ graphQLErrors, networkError }) => {
 			return;
 		}
 
-		console.log(graphQLErrors)
+		if (process.env.NODE_ENV === "development") {
+			console.error(graphQLErrors);
+		}
 
 		notifyError(graphQLErrors[0].extensions?.code);
 	}

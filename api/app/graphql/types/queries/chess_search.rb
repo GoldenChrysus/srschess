@@ -21,6 +21,7 @@ module Types
 				field :name, String, null: false
 				field :created_at, String, null: false
 				field :move_count, Int, null: true
+				field :side, Int, null: true
 				field :result, Int, null: true
 				field :event, String, null: true
 				field :round, String, null: true
@@ -148,19 +149,22 @@ module Types
 								r.slug,
 								r.name,
 								r.created_at,
+								r.side,
 								COUNT(m.*) AS move_count
 							FROM
 								repertoires r
 							JOIN
 								repertoire_moves m
 							ON
-								m.repertoire_id = r.id
+								m.repertoire_id = r.id AND
+								ABS((m.move_number %% 2) - 1) = r.side
 							WHERE
 								#{where}
 							GROUP BY
 								r.slug,
 								r.name,
-								r.created_at"
+								r.created_at,
+								r.side"
 						sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 						res = ::Repertoire.connection.exec_query(sql)
 

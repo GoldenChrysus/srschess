@@ -10,13 +10,18 @@ interface RepertoireItemProps {
 
 class RepertoireItem extends React.Component<RepertoireItemProps> {
 	render() {
+		const color = (this.props.record.side === 1) ? "white" : "gray-900";
+
 		return (
 			<SearchItem route={"/repertoires/" + this.props.record.slug}>
 				<div className="flex">
 					<Translation ns={["chess", "common"]}>
 						{(t) => (
 							<>
-								<div className="flex-1 font-bold">{this.props.record.name}</div>
+								<div className="flex flex-1 font-bold items-center">
+									<span className={"flex w-3 h-3 mr-1 rounded-md bg-" + color}></span>
+									<span className="flex leading-3 h-3 justify-center">{this.props.record.name}</span>
+								</div>
 								<div className="flex-initial text-right">{this.props.record.moveCount} {t("move", { count : this.props.record.moveCount })}</div>
 							</>
 						)}
