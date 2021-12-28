@@ -1,6 +1,5 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
-import { inject } from "mobx-react";
 
 import { ChessControllerLocalState, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
 import Chessboard from "../components/Chessboard";
@@ -11,16 +10,15 @@ import { generateUUID, getMove, getMoveSimple } from "../helpers";
 import MasterMoveList from "../components/chess/MasterMoveList";
 import { RepertoireMoveModel } from "../lib/types/models/Repertoire";
 import MoveList from "../components/chess/MoveList";
+import { RootState } from "../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
 type ChessType = (fen?: string) => ChessInstance;
 
 const ChessImport = Chess as unknown;
 const Chess2      = ChessImport as ChessType;
 
-@inject(stores => ({
-	authenticated: (stores as any).AuthState.authenticated
-}))
-class ChessController extends React.Component<ChessControllerProps, ChessControllerState> {
+class ChessController extends React.Component<ChessControllerProps & PropsFromRedux, ChessControllerState> {
 	private chess = Chess2();
 
 	private fen_history: ChessControllerLocalState["fen_history"] = [];
@@ -37,7 +35,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 
 	private last_search_state: ChessControllerState | undefined = undefined;
 
-	constructor(props: ChessControllerProps) {
+	constructor(props: ChessControllerProps & PropsFromRedux) {
 		super(props);
 
 		if (["database", "opening"].includes(this.props.mode) && this.props.game) {
@@ -771,4 +769,10 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 }
 
-export default ChessController;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(ChessController);

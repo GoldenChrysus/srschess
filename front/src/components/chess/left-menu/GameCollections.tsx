@@ -1,21 +1,20 @@
 import React, { useState } from "react";
-import { Observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { Menu, Spin, Button } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
 
-import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { CREATE_COLLECTION, GET_COLLECTIONS } from "../../../api/queries";
 import "../../../styles/components/chess/left-menu/game-collections.css";
 
-import ChessState from "../../../stores/ChessState";
 import { CollectionsQueryData } from "../../../lib/types/models/Collection";
 import AddCollection from "../../modals/AddCollection";
 import { hasPremiumLockoutError } from "../../../helpers";
 import PremiumWarning from "../../PremiumWarning";
 import GameCollection from "./GameCollections/GameCollection";
+import { RootState } from "../../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-function GameCollections() {
+function GameCollections(props: PropsFromRedux) {
 	const { t }       = useTranslation(["database", "common", "premium"]);
 	const [ modal_active, setModalActive ] = useState(false);
 	const [ createCollection, create_res ] = useMutation(CREATE_COLLECTION, {
@@ -39,20 +38,16 @@ function GameCollections() {
 	return (
 		<>
 			<Spin spinning={loading}>
-					<Observer>
-						{() => (
-							<Menu
-								id="collection-menu"
-								mode="inline"
-								selectedKeys={[ "collection-" + ChessState.collection?.id ]}
-							>
-								<Menu.Item key="create-collection-button" style={{ paddingLeft : 0, marginTop : 0 }}>
-									<Button type="default" onClick={() => setModalActive(true)}>{t("create_collection")}</Button>
-								</Menu.Item>
-								{renderCollections(data)}
-							</Menu>
-						)}
-					</Observer>
+				<Menu
+					id="collection-menu"
+					mode="inline"
+					selectedKeys={[ "collection-" + props.collection?.id ]}
+				>
+					<Menu.Item key="create-collection-button" style={{ paddingLeft : 0, marginTop : 0 }}>
+						<Button type="default" onClick={() => setModalActive(true)}>{t("create_collection")}</Button>
+					</Menu.Item>
+					{renderCollections(data)}
+				</Menu>
 				<AddCollection type="add" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit}/>
 			</Spin>
 			{premium}
@@ -78,4 +73,10 @@ function renderCollections(data: CollectionsQueryData | undefined) {
 	return items;
 }
 
-export default GameCollections;
+const mapStateToProps = (state: RootState) => ({
+	collection : state.Chess.collection
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(GameCollections);

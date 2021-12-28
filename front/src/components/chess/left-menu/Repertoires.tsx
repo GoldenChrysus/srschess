@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Observer } from "mobx-react";
 import { Translation } from "react-i18next";
 import { Menu, Spin, Button } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
@@ -12,9 +11,10 @@ import AddRepertoire from "../../modals/AddRepertoire";
 import { TFunction } from "i18next";
 import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
 import Repertoire from "./Repertoires/Repertoire";
-import ChessState from "../../../stores/ChessState";
+import { RootState } from "../../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-interface RepertoiresProps {
+interface RepertoiresProps extends PropsFromRedux {
 	mode : ChessControllerProps["mode"]
 }
 
@@ -39,26 +39,22 @@ function Repertoires(props: RepertoiresProps) {
 			<Translation ns={["repertoires", "common"]}>
 				{
 					(t) => (
-						<Observer>
-							{() => (
-								<Menu
-									id="repertoire-menu"
-									mode="inline"
-									defaultOpenKeys={["white-repertoires", "black-repertoires"]}
-									selectedKeys={[ "repertoire-" + ChessState.repertoire?.id, "repertoire-" + props.mode + "s-" + ChessState.repertoire?.id ]}
-								>
-									<Menu.Item key="create-repertoire-button" style={{ paddingLeft : 0, marginTop : 0 }}>
-										<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
-									</Menu.Item>
-									<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
-										{renderRepertoires(data, "white", t)}
-									</Menu.SubMenu>
-									<Menu.SubMenu title={t("black_repertoires")} key="black-repertoires">
-										{renderRepertoires(data, "black", t)}
-									</Menu.SubMenu>
-								</Menu>
-							)}
-						</Observer>
+						<Menu
+							id="repertoire-menu"
+							mode="inline"
+							defaultOpenKeys={["white-repertoires", "black-repertoires"]}
+							selectedKeys={[ "repertoire-" + props.repertoire?.id, "repertoire-" + props.mode + "s-" + props.repertoire?.id ]}
+						>
+							<Menu.Item key="create-repertoire-button" style={{ paddingLeft : 0, marginTop : 0 }}>
+								<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
+							</Menu.Item>
+							<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
+								{renderRepertoires(data, "white", t)}
+							</Menu.SubMenu>
+							<Menu.SubMenu title={t("black_repertoires")} key="black-repertoires">
+								{renderRepertoires(data, "black", t)}
+							</Menu.SubMenu>
+						</Menu>
 					)
 				}
 			</Translation>
@@ -89,4 +85,10 @@ function renderRepertoires(data: RepertoiresQueryData | undefined, color: string
 	return items;
 }
 
-export default Repertoires;
+const mapStateToProps = (state: RootState) => ({
+	repertoire : state.Chess.repertoire
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Repertoires);

@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { ApolloConsumer, useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
-import { runInAction } from "mobx";
 
 import ChessController from "../controllers/ChessController";
 import { CollectionQueryData } from "../lib/types/models/Collection";
 import { GET_COLLECTION, GET_GAME, GET_MASTER_GAME } from "../api/queries";
-import ChessState from "../stores/ChessState";
 import { MasterGameQueryData } from "../lib/types/models/MasterGame";
 import { GameQueryData } from "../lib/types/models/Game";
 import { createGameDatabaseRouteMeta } from "../helpers";
+import { ChessState } from "../lib/types/ReduxTypes";
+import { setCollection } from "../redux/slices/chess";
+import { connect, ConnectedProps } from "react-redux";
 
 interface GameDatabaseRouteParams {
 	collection_slug?: string
@@ -19,7 +20,7 @@ interface GameDatabaseRouteParams {
 	master_game_id?: string
 }
 
-function GameDatabaseRoute() {
+function GameDatabaseRoute(props: PropsFromRedux) {
 	const { t } = useTranslation(["database", "chess"]);
 	const { collection_slug, game_id, master_game_id } = useParams<GameDatabaseRouteParams>();
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
@@ -58,7 +59,7 @@ function GameDatabaseRoute() {
 		setMoveSearching(new_state);
 	}
 
-	useEffect(() => ChessState.setCollection(data?.collection));
+	props.setCollection(data?.collection);
 
 	const meta = createGameDatabaseRouteMeta(t, data?.collection, game_data?.game, master_game_data?.masterGame);
 
@@ -91,4 +92,10 @@ function GameDatabaseRoute() {
 	)
 };
 
-export default GameDatabaseRoute;
+const mapDispatchToProps = {
+	setCollection : (collection: ChessState["collection"]) => setCollection(collection)
+};
+const connector      = connect(undefined, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(GameDatabaseRoute);

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { runInAction } from "mobx";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 import { useTranslation } from "react-i18next";
@@ -9,10 +8,12 @@ import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_REPERTOIRE_MOVE, TRANSPOS
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
-import ChessState from "../stores/ChessState";
 import { createRepertoireRouteMeta } from "../helpers";
+import { ChessState } from "../lib/types/ReduxTypes";
+import { setRepertoire } from "../redux/slices/chess";
+import { connect, ConnectedProps } from "react-redux";
 
-interface RepertoireRouteProps {
+interface RepertoireRouteProps extends PropsFromRedux {
 	mode: ChessControllerProps["mode"]
 }
 interface RepertoireRouteParams {
@@ -60,7 +61,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	);
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
-	useEffect(() => ChessState.setRepertoire(data?.repertoire));
+	props.setRepertoire(data?.repertoire);
 
 	const fens: { [key: string]: string } = {};
 	const arrows: { [key: string]: Array<any> } = {};
@@ -152,4 +153,10 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	)
 };
 
-export default RepertoireRoute;
+const mapDispatchToProps = {
+	setRepertoire : (repertoire: ChessState["repertoire"]) => setRepertoire(repertoire)
+};
+const connector      = connect(undefined, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(RepertoireRoute);

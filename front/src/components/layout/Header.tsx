@@ -1,17 +1,17 @@
 import React from "react";
-import { Menu, Dropdown, Button, Drawer } from "antd";
+import { Menu, Dropdown, Drawer } from "antd";
 import { Translation } from "react-i18next";
-import { Observer } from "mobx-react";
 import { Link, NavLink } from "react-router-dom";
 
 import i18n from "../../i18n";
-import AuthState from "../../stores/AuthState";
 
 import Login from "./Login";
 
 import "../../styles/components/layout/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser } from "@fortawesome/free-solid-svg-icons";
+import { RootState } from "../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
 interface Map {
 	[locale: string]: {
@@ -31,7 +31,7 @@ const LANGUAGE_MAP: Map = {
 	}
 };
 
-interface HeaderProps {
+interface HeaderProps extends PropsFromRedux {
 }
 
 interface HeaderState {
@@ -76,9 +76,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 									</NavLink>
 								</nav>
 								<div className="flex flex-initial items-center h-full">
-									<Observer>
-										{() => this.renderUserLogin()}
-									</Observer>
+									{this.renderUserLogin()}
 									{this.renderLanguageFlag()}
 								</div>
 							</div>
@@ -87,9 +85,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 									<button onClick={this.openDrawer}><FontAwesomeIcon icon={faBars} size="2x"/></button>
 								</div>
 								<div className="flex items-center h-full justify-end">
-									<Observer>
-										{() => this.renderUserLogin()}
-									</Observer>
+								{this.renderUserLogin()}
 									{this.renderLanguageFlag()}
 								</div>
 								<div className="absolute h-full py-2 left-1/2 transform -translate-x-1/2">
@@ -157,7 +153,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 	}
 
 	renderUserLogin() {
-		return (AuthState.authenticated) ? this.renderUser() : this.renderLogin();
+		return (this.props.authenticated) ? this.renderUser() : this.renderLogin();
 	}
 
 	renderLogin() {
@@ -212,4 +208,10 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 	}
 }
 
-export default Header;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Header);

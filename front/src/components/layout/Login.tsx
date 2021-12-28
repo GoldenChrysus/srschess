@@ -1,9 +1,10 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import AuthState from "../../stores/AuthState";
+import { connect, ConnectedProps } from "react-redux";
+import { toggleLogin } from "../../redux/slices/auth";
 
-class Login extends React.Component {
-	constructor(props: any) {
+class Login extends React.Component<PropsFromRedux> {
+	constructor(props: PropsFromRedux) {
 		super(props);
 
 		this.login = this.login.bind(this);
@@ -20,8 +21,14 @@ class Login extends React.Component {
 	}
 
 	login() {
-		AuthState.setNeedsAuth(true);
+		this.props.showLogin(true);
 	}
 }
 
-export default Login;
+const mapDispatchToProps = {
+	showLogin : (on: boolean) => toggleLogin(on)
+}
+const connector      = connect(undefined, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Login);

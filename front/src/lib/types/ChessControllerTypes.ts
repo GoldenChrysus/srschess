@@ -38,8 +38,7 @@ export interface ChessControllerProps {
 	onTransposition?    : Function,
 	onReview?           : Function,
 	onMoveSearchChange? : Function,
-	arrows?             : { [key: string]: Array<any> },
-	authenticated?      : boolean
+	arrows?             : { [key: string]: Array<any> }
 }
 
 export interface ChessControllerState {

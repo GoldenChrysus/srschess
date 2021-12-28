@@ -1,5 +1,4 @@
 import React from "react";
-import { observer } from "mobx-react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import MainLayout from "./MainLayout";
@@ -58,4 +57,4 @@ class Container extends React.Component {
 	}
 }
 
-export default observer(Container);
+export default Container;

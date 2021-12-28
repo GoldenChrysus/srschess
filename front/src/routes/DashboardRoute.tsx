@@ -1,28 +1,28 @@
 import React from "react";
-import { Observer, observer } from "mobx-react";
 import { Redirect, useParams } from "react-router-dom";
 
 import Dashboard from "../components/Dashboard";
-import AuthState from "../stores/AuthState";
+import { RootState } from "../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
 interface DashboardRouteParams {
 	section: string
 }
 
-function DashboardRoute() {
+function DashboardRoute(props: PropsFromRedux) {
 	const { section } = useParams<DashboardRouteParams>();
 
-	return (
-		<Observer>
-			{() => {
-				if (!AuthState.auth?.currentUser) {
-					return <Redirect to="/"/>;
-				}
+	if (!props.authenticated) {
+		return <Redirect to="/"/>;
+	}
 
-				return <Dashboard active_section={section}/>;
-			}}
-		</Observer>
-	);
+	return <Dashboard active_section={section}/>;
 }
 
-export default DashboardRoute;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(DashboardRoute);

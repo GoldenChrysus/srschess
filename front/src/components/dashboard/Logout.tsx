@@ -1,10 +1,17 @@
 import React from "react";
+import { connect, ConnectedProps } from "react-redux";
 import { Redirect } from "react-router-dom";
-import AuthState from "../../stores/AuthState";
+import { logout } from "../../redux/slices/auth";
 
-function Logout() {
-	AuthState.logout();
+function Logout(props: PropsFromRedux) {
+	props.logout();
 	return <Redirect to="/"/>;
 }
 
-export default Logout;
+const mapDispatchToProps = {
+	logout : logout
+};
+const connector      = connect(undefined, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Logout);

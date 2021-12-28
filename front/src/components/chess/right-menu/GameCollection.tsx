@@ -6,17 +6,17 @@ import { useTranslation } from "react-i18next";
 import { Collapse, Button, Popconfirm } from "antd";
 import { TFunction } from "i18next";
 
-import AuthState from "../../../stores/AuthState";
 import { CollectionModel, CollectionQueryData } from "../../../lib/types/models/Collection";
 import { GET_COLLECTION, EDIT_COLLECTION, DELETE_COLLECTION, GET_COLLECTIONS, CREATE_COLLECTION_GAMES } from "../../../api/queries";
 
 import AddCollection from "../../modals/AddCollection";
 import { hasPremiumLockoutError } from "../../../helpers";
 import PremiumWarning from "../../PremiumWarning";
-import { Observer } from "mobx-react-lite";
 import AddCollectionGames from "../../modals/AddCollectionGames";
+import { RootState } from "../../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-interface GameCollectionProps {
+interface GameCollectionProps extends PropsFromRedux {
 	collection?: CollectionModel
 }
 
@@ -100,30 +100,30 @@ function GameCollection(props: GameCollectionProps) {
 
 function renderContent(props: GameCollectionProps, t: TFunction, setModalActive: Function, onDelete: Function, setGameModalActive: Function) {
 	return (
-		<Observer>
+		<>
 			{
-				() =>
-					<>
-						{
-							AuthState.authenticated &&
-							<>
-								<Button className="mr-2" type="default" onClick={() => setGameModalActive(true)}>{t("import_pgn")}</Button>
-								<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
-								<Popconfirm
-									title={t("common:delete_confirm")}
-									okText={t("common:yes")}
-									cancelText={t("common:cancel")}
-									onConfirm={() => onDelete()}
-								>
-									<Button type="ghost">{t("common:delete")}</Button>
-								</Popconfirm>
-							</>
-						}
-					</>
+				props.authenticated &&
+				<>
+					<Button className="mr-2" type="default" onClick={() => setGameModalActive(true)}>{t("import_pgn")}</Button>
+					<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
+					<Popconfirm
+						title={t("common:delete_confirm")}
+						okText={t("common:yes")}
+						cancelText={t("common:cancel")}
+						onConfirm={() => onDelete()}
+					>
+						<Button type="ghost">{t("common:delete")}</Button>
+					</Popconfirm>
+				</>
 			}
-		
-		</Observer>
+		</>
 	);
 }
 
-export default GameCollection;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(GameCollection);

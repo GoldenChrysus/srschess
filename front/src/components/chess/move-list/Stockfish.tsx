@@ -2,9 +2,10 @@ import React from "react";
 import { Translation } from "react-i18next";
 import { Switch } from "antd";
 
-import ChessState from "../../../stores/ChessState";
 import "../../../styles/components/chess/move-list/stockfish.css";
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
+import { setBestMove } from "../../../redux/slices/chess";
+import { connect, ConnectedProps } from "react-redux";
 
 declare global {
 	interface Window {
@@ -12,7 +13,7 @@ declare global {
 	}
 }
 
-interface StockfishProps {
+interface StockfishProps extends PropsFromRedux {
 	mode: ChessControllerProps["mode"],
 	fen: string,
 	num?: number
@@ -56,7 +57,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	}
 
 	componentWillUnmount() {
-		ChessState.setBestMove("");
+		this.props.setBestMove("");
 
 		if (window.sf && this.set_listener) {
 			window.sf.removeMessageListener(this.receiveEval);
@@ -100,7 +101,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		if (enabled) {
 			this.runEval(true, true);
 		} else {
-			ChessState.setBestMove("");
+			this.props.setBestMove("");
 		}
 	}
 
@@ -112,7 +113,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		if (line.slice(0, 8) === "bestmove") {
 			const move = line.split(" ")[1];
 
-			ChessState.setBestMove(move);
+			this.props.setBestMove(move);
 			return;
 		}
 
@@ -152,7 +153,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		}
 
 		if (best_move && depth >= 10) {
-			ChessState.setBestMove(best_move);
+			this.props.setBestMove(best_move);
 		}
 	}
 
@@ -167,7 +168,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	}
 
 	runEval(waiting: boolean, force?: boolean) {
-		ChessState.setBestMove("");
+		this.props.setBestMove("");
 		this.setListener();
 
 		if (!this.state.enabled && !force) {
@@ -197,4 +198,10 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	}
 }
 
-export default Stockfish;
+const mapDispatchToProps = {
+	setBestMove : (move: string) => setBestMove(move)
+};
+const connector      = connect(undefined, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Stockfish);

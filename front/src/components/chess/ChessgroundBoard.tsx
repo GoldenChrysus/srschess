@@ -1,11 +1,11 @@
 import React from "react";
-import { observer } from "mobx-react";
 import Chessground from "react-chessground";
 
-import ChessState from "../../stores/ChessState";
 import { ChessControllerProps } from "../../lib/types/ChessControllerTypes";
+import { RootState } from "../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-interface ChessgroundProps {
+interface ChessgroundProps extends PropsFromRedux {
 	mode: ChessControllerProps["mode"],
 	check: string,
 	orientation: string,
@@ -34,12 +34,12 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 	render() {
 		const drawable = JSON.parse(JSON.stringify(this.props.drawable));
 
-		if (ChessState.best_move) {
+		if (this.props.best_move) {
 			drawable.autoShapes.push({
 				brush   : "bestMove",
-				orig    : ChessState.best_move.substring(0, 2),
-				mouseSq : ChessState.best_move.substring(2, 4),
-				dest    : ChessState.best_move.substring(2, 4),
+				orig    : this.props.best_move.substring(0, 2),
+				mouseSq : this.props.best_move.substring(2, 4),
+				dest    : this.props.best_move.substring(2, 4),
 			});
 		}
 
@@ -116,4 +116,10 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 	}
 }
 
-export default observer(ChessgroundBoard);
+const mapStateToProps = (state: RootState) => ({
+	best_move : state.Chess.best_move
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(ChessgroundBoard);

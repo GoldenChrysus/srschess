@@ -1,10 +1,11 @@
 import React from "react"
 import Modal from "antd/lib/modal/Modal"
-import AuthState from "../../stores/AuthState";
-import { Observer } from "mobx-react";
+import { toggleLogin } from "../../redux/slices/auth";
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../redux/store";
 
-function Login() {
-	const onCancel = () => AuthState.setNeedsAuth(false);
+function Login(props: PropsFromRedux) {
+	const onCancel = () => props.showLogin(false);
 
 	const name_input = document.querySelector("[for=ui-sign-in-name-input]");
 
@@ -12,26 +13,27 @@ function Login() {
 		name_input.innerHTML = "Display name";
 	}
 
-	console.log(AuthState.needs_auth);
-
 	return (
-		<Observer>
-			{
-				() => (
-					<Modal
-						className="firebase-login"
-						visible={AuthState.needs_auth}
-						footer=""
-						forceRender={true}
-						width={360}
-						onCancel={onCancel}
-					>
-						<div id="firebase-auth"></div>
-					</Modal>
-				)
-			}
-		</Observer>
+		<Modal
+			className="firebase-login"
+			visible={props.needs_login}
+			footer=""
+			forceRender={true}
+			width={360}
+			onCancel={onCancel}
+		>
+			<div id="firebase-auth"></div>
+		</Modal>
 	);
 }
 
-export default Login;
+const mapStateToProps = (state: RootState) => ({
+	needs_login : state.Auth.show_login
+});
+const mapDispatchToProps = {
+	showLogin : (on: boolean) => toggleLogin(on)
+}
+const connector      = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Login);

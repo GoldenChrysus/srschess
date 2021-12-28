@@ -6,16 +6,16 @@ import { useTranslation } from "react-i18next";
 import { Collapse, Button, Progress, Popconfirm } from "antd";
 import { TFunction } from "i18next";
 
-import AuthState from "../../../stores/AuthState";
 import { RepertoireModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
 import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOIRES, CLONE_REPERTOIRE } from "../../../api/queries";
 
 import AddRepertoire from "../../modals/AddRepertoire";
 import { hasPremiumLockoutError } from "../../../helpers";
 import PremiumWarning from "../../PremiumWarning";
-import { Observer } from "mobx-react-lite";
+import { RootState } from "../../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-interface RepertoireProps {
+interface RepertoireProps extends PropsFromRedux {
 	repertoire?: RepertoireModel
 	mode: string
 }
@@ -125,48 +125,42 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 	switch (props.mode) {
 		case "repertoire":
 			return (
-				<Observer>
+				<>
 					{
-						() =>
-							<>
-								{
-									props.repertoire?.userOwned &&
-									AuthState.authenticated &&
-									<>
-										<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
-											<Button className="mr-2" type="primary" disabled={lesson_count === 0}>{t("train")} ({lesson_count})</Button>
-										</Link>
-										<Link to={{pathname: "/reviews/" + props.repertoire?.slug}}>
-											<Button className="mr-2" type="default" disabled={review_count === 0}>{t("review")} ({review_count})</Button>
-										</Link>
-										<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
-										<Popconfirm
-											title={t("common:delete_confirm")}
-											okText={t("common:yes")}
-											cancelText={t("common:cancel")}
-											onConfirm={() => onDelete()}
-										>
-											<Button type="ghost">{t("common:delete")}</Button>
-										</Popconfirm>
-									</>
-								}
-								{
-									props.repertoire?.public &&
-									!props.repertoire?.userOwned &&
-									AuthState.authenticated &&
-									<Popconfirm
-										title={t("common:copy_confirm")}
-										okText={t("common:yes")}
-										cancelText={t("common:cancel")}
-										onConfirm={() => onCopy()}
-									>
-										<Button type="ghost">{t("common:copy")}</Button>
-									</Popconfirm>
-								}
-							</>
+						props.repertoire?.userOwned &&
+						props.authenticated &&
+						<>
+							<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
+								<Button className="mr-2" type="primary" disabled={lesson_count === 0}>{t("train")} ({lesson_count})</Button>
+							</Link>
+							<Link to={{pathname: "/reviews/" + props.repertoire?.slug}}>
+								<Button className="mr-2" type="default" disabled={review_count === 0}>{t("review")} ({review_count})</Button>
+							</Link>
+							<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
+							<Popconfirm
+								title={t("common:delete_confirm")}
+								okText={t("common:yes")}
+								cancelText={t("common:cancel")}
+								onConfirm={() => onDelete()}
+							>
+								<Button type="ghost">{t("common:delete")}</Button>
+							</Popconfirm>
+						</>
 					}
-				
-				</Observer>
+					{
+						props.repertoire?.public &&
+						!props.repertoire?.userOwned &&
+						props.authenticated &&
+						<Popconfirm
+							title={t("common:copy_confirm")}
+							okText={t("common:yes")}
+							cancelText={t("common:cancel")}
+							onConfirm={() => onCopy()}
+						>
+							<Button type="ghost">{t("common:copy")}</Button>
+						</Popconfirm>
+					}
+				</>
 			);
 
 		case "lesson":
@@ -198,4 +192,10 @@ function getTitle(props: RepertoireProps, t: TFunction) {
 	return props.repertoire?.name + ": " + t(t_key);
 }
 
-export default Repertoire;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Repertoire);

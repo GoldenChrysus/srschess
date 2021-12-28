@@ -1,24 +1,26 @@
 import React, { useState } from "react";
-import { Button, Col, Form, Input, Row, Spin } from "antd";
+import { Button, Form, Input, Spin } from "antd";
 import { useTranslation } from "react-i18next";
-import { observer } from "mobx-react";
-import AuthState from "../../stores/AuthState";
 import { updateEmail, updatePassword } from "firebase/auth";
 import { notifyError } from "../../helpers";
+import { RootState } from "../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
+import { toggleLogin } from "../../redux/slices/auth";
 
-let awaiting_refresh: boolean = false;
-let last_submit: any          = undefined;
-let last_token: string        = "";
+let awaiting_refresh: boolean          = false;
+let last_submit: any                   = undefined;
+let last_auth_time: string | undefined = "";
 
-function UserInfo() {
+function UserInfo(props: PropsFromRedux) {
 	const [ processing, setProcessing ] = useState(false);
 	const { t }                         = useTranslation(["dashboard", "common", "errors"]);
-	const user                          = AuthState.user;
-	const onSubmit                      = async (values: any) => {
-		if (!user) {
+	const user                          = props.user;
+	const onSubmit                      = async (values: any, from_refresh?: boolean) => {
+		if (!user || (awaiting_refresh && !from_refresh)) {
 			return;
 		}
 
+		console.log("SUBMITTED");
 		setProcessing(true);
 
 		try {
@@ -34,15 +36,21 @@ function UserInfo() {
 
 			setProcessing(false);
 		} catch (e: any) {
-			console.log(e.code)
+			if (awaiting_refresh) {
+				return;
+			}
+
+			console.log("FAILED");
+			console.log(e.code);
+
 			switch (e.code) {
 				case "auth/user-token-expired":
 				case "auth/requires-recent-login":
 					awaiting_refresh = true;
 					last_submit      = values;
-					last_token       = await user.getIdToken();
+					last_auth_time   = user.metadata.lastSignInTime;
 
-					AuthState.setNeedsAuth(true);
+					props.showLogin(true);
 					break;
 
 				default:
@@ -55,16 +63,12 @@ function UserInfo() {
 	};
 
 	(async () => {
-		console.log(last_submit);
-		console.log(last_token);
-		console.log(awaiting_refresh);
-		console.log(await user?.getIdToken());
-		if (awaiting_refresh && user && last_token !== await user.getIdToken()) {
-			console.log("gh2");
+		if (awaiting_refresh && user && last_auth_time !== user.metadata.lastSignInTime) {
+			console.log("RESUBMITTING");
 
 			awaiting_refresh = false;
 
-			onSubmit(last_submit);
+			onSubmit(last_submit, true);
 		}
 	})();
 
@@ -104,4 +108,13 @@ function UserInfo() {
 	);
 }
 
-export default observer(UserInfo);
+const mapStateToProps = (state: RootState) => ({
+	user : state.Auth.user
+});
+const mapDispatchToProps = {
+	showLogin : (on: boolean) => toggleLogin(on)
+};
+const connector      = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(UserInfo);

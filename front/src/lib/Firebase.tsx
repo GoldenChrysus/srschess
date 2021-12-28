@@ -6,38 +6,36 @@ import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 import "firebaseui/dist/firebaseui.css";
 
-import AuthState from "../stores/AuthState";
+import store from "../redux/store";
+import { login, logout } from "../redux/slices/auth";
 import { CREATE_USER } from "../api/queries";
-import { runInAction } from "mobx";
+
+const app = initializeApp({
+	apiKey            : process.env.REACT_APP_FIREBASE_KEY,
+	authDomain        : process.env.REACT_APP_FIREBASE_DOMAIN,
+	projectId         : process.env.REACT_APP_FIREBASE_PROJECT,
+	storageBucket     : process.env.REACT_APP_FIREBASE_BUCKET,
+	messagingSenderId : process.env.REACT_APP_FIREBASE_SENDER,
+	appId             : process.env.REACT_APP_FIREBASE_APP,
+	measurementId     : process.env.REACT_APP_FIREBASE_MEASUREMENT
+});
+
+export const auth = getAuth(app);
 
 function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
-	const app = initializeApp({
-		apiKey            : process.env.REACT_APP_FIREBASE_KEY,
-		authDomain        : process.env.REACT_APP_FIREBASE_DOMAIN,
-		projectId         : process.env.REACT_APP_FIREBASE_PROJECT,
-		storageBucket     : process.env.REACT_APP_FIREBASE_BUCKET,
-		messagingSenderId : process.env.REACT_APP_FIREBASE_SENDER,
-		appId             : process.env.REACT_APP_FIREBASE_APP,
-		measurementId     : process.env.REACT_APP_FIREBASE_MEASUREMENT
-	});
-	const auth = getAuth(app);
-
-	AuthState.provideAuth(auth);
-
 	const handleAuth = (res: User | any | null, from_ui?: boolean) => {
 		const user = (from_ui) ? res.user : res;
 
-		console.log("gh1");
-		console.log(res);
+		console.log("AUTH CHANGED");
 
 		if (!user) {
 			console.log("LOGOUT");
-			runInAction(() => AuthState.logout());
+			store.dispatch(logout());
 			return false;
 		}
 
-		console.log("gh2");
-		runInAction(() => AuthState.login(user));
+		console.log("AUTH OKAY");
+		store.dispatch(login(user));
 
 		client
 			.mutate({
@@ -60,14 +58,13 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 	};
 
 	const handleTokenChange = (user: User | null) => {
-		console.log("gh4");
-		console.log(user);
+		console.log("TOKEN CHANGE");
 
 		if (!user) {
 			return;
 		}
 
-		runInAction(() => AuthState.login(user));
+		store.dispatch(login(user));
 	}
 
 	auth.onAuthStateChanged(handleAuth);
@@ -85,14 +82,11 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 					],
 					callbacks : {
 						signInSuccessWithAuthResult : (res: any) => {
-							console.log("gh3");
-							console.log(res);
+							console.log("SIGN IN SUCCESS");
 
 							auth.updateCurrentUser(res.user).then(() => {
-								runInAction(() => AuthState.provideAuth(auth));
-								runInAction(() => AuthState.login(res.user));
+								store.dispatch(login(res.user));
 							});
-
 							return false;
 						}
 					}

@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Button, Collapse, notification } from "antd";
-import { Observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
-import AuthState from "../../../stores/AuthState";
 import SelectRepertoire from "../../modals/SelectRepertoire";
 import { useMutation } from "@apollo/client";
 import { GET_REPERTOIRE, GET_REPERTOIRES, IMPORT_ECO_TO_REPERTOIRE } from "../../../api/queries";
+import { RootState } from "../../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-interface OpeningProps {
+interface OpeningProps extends PropsFromRedux {
 	opening?: ChessControllerProps["game"]
 }
 
@@ -57,18 +57,10 @@ function Opening(props: OpeningProps) {
 	return (
 		<Collapse bordered={false} activeKey="opening-panel">
 			<Collapse.Panel showArrow={false} id="opening-panel" header={props.opening?.name} key="opening-panel">
-				<Observer>
-					{
-						() => (
-							<>
-								{
-									AuthState.authenticated &&
-									<Button type="default" onClick={() => setModalActive(true)}>{t("add_to_repertoire")}</Button>
-								}
-							</>
-						)
-					}
-				</Observer>
+				{
+					props.authenticated &&
+					<Button type="default" onClick={() => setModalActive(true)}>{t("add_to_repertoire")}</Button>
+				}
 				<SelectRepertoire
 					visible={modal_active}
 					toggleVisible={() => setModalActive(!modal_active)}
@@ -79,4 +71,10 @@ function Opening(props: OpeningProps) {
 	);
 }
 
-export default Opening;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(Opening);

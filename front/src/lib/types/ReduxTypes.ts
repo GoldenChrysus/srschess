@@ -7,26 +7,12 @@ import { RepertoireModel, RepertoireMoveModel } from "./models/Repertoire";
 export interface AuthState {
 	show_login    : boolean
 	authenticated : boolean
-	auth_object?  : Auth
 	user?         : User
-	token         : string
-	link?         : ActionCableLink
-	client?       : ApolloClient<NormalizedCacheObject>
 }
 
-export interface ReduxStore {
-	Auth : {
-		show_login    : boolean
-		authenticated : boolean
-		auth_object?  : Auth
-		user?         : User
-		link?         : ActionCableLink
-		client?       : ApolloClient<NormalizedCacheObject>
-	},
-	Chess : {
-		best_move   : string
-		move_id     : RepertoireMoveModel["id"] | null
-		repertoire? : RepertoireModel | null
-		collection? : CollectionModel | null
-	}
-};
+export interface ChessState {
+	best_move   : string
+	move_id     : RepertoireMoveModel["id"] | null
+	repertoire? : RepertoireModel | null
+	collection? : CollectionModel | null  
+}

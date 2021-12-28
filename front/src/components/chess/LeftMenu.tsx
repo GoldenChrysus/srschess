@@ -2,7 +2,6 @@ import React from "react";
 import { Translation } from "react-i18next";
 import { TFunction } from "i18next";
 import { Collapse } from "antd";
-import { inject } from "mobx-react";
 
 import { ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 import Tree from "../Tree";
@@ -16,22 +15,20 @@ import GameCollections from "./left-menu/GameCollections";
 import MasterGames from "./left-menu/MasterGames";
 import GameList from "./left-menu/GameCollections/GameList";
 import Results from "./search/Results";
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../redux/store";
 
-interface LeftMenuProps {
+interface LeftMenuProps extends PropsFromRedux {
 	repertoire?         : RepertoireModel | null
 	collection?         : CollectionModel | null,
 	game?               : ChessControllerProps["game"],
 	active_uuid         : ChessControllerState["last_uuid"],
 	mode                : ChessControllerProps["mode"],
 	movelist            : string,
-	authenticated?      : boolean,
 	onMoveClick?        : Function
 	onMoveSearchChange? : Function
 }
 
-@inject(stores => ({
-	authenticated: (stores as any).AuthState.authenticated
-}))
 class LeftMenu extends React.Component<LeftMenuProps> {
 	shouldComponentUpdate(prev_props: LeftMenuProps) {
 		return (
@@ -147,4 +144,10 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 	}
 }
 
-export default LeftMenu;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
+const connector      = connect(mapStateToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(LeftMenu);
