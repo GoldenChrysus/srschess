@@ -174,18 +174,18 @@ Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0`,
 export const DEMO_OPENING_RESULT: EcoPositionsQueryData = {
 	ecoPositions : [
 		{
-			id   : 5647,
+			id   : 9044,
 			code : "C51",
 			name : "Italian Game: Evans Gambit",
-			slug : "c51-italian-game-evans-gambit-0fcd",
+			slug : "c51-italian-game-evans-gambit-016f",
 			fen  : "r1bqk1nr/pppp1ppp/2n5/2b1p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R b KQkq -",
 			pgn  : "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4"
 		},
 		{
-			id   : 4385,
+			id   : 7782,
 			code : "B10",
 			name : "Caro-Kann Defense",
-			slug : "b10-carokann-defense-ec87",
+			slug : "b10-caro-kann-defense-1358",
 			fen  : "rnbqkbnr/pp2pppp/2p5/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq -",
 			pgn  : "1. e4 c6 2. Nc3 d5"
 		}

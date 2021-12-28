@@ -11,14 +11,14 @@ function OpeningsDemo() {
 	const boards                               = [];
 
 	for (const opening of DEMO_OPENING_RESULT.ecoPositions) {
-		const classes = ["overflow-ellipsis overflow-hidden relative"];
+		const classes = ["pr-2 lg:pr-0 overflow-ellipsis overflow-hidden relative"];
 
 		if (active_opening.id === opening.id) {
 			classes.push("active-border");
 		}
 
 		boards.push(
-			<button key={"opening-link-" + opening.id} className="block board-100w max-w-full mb-4" onClick={() => setActiveOpening(opening)}>
+			<button key={"opening-link-" + opening.id} className="inline-block lg:block w-1/2 lg:w-full board-100w max-w-full lg:mb-4" onClick={() => setActiveOpening(opening)}>
 				<h1 style={{ height : "44px", maxHeight : "44px", WebkitLineClamp : 2, WebkitBoxOrient : "vertical", display: "-webkit-box" }} className={classes.join(" ")}>
 					{opening.code}: {opening.name}
 				</h1>
