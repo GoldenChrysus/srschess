@@ -40,12 +40,17 @@ body .ant-modal-header,
 body .ant-select-dropdown,
 body .ant-dropdown-menu,
 body .ant-popover-inner,
-body .ant-popover-arrow-content {
+body .ant-popover-arrow-content,
+body .ant-drawer-wrapper-body {
 	background: var(--gray-800);
 }
 
 body .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
 	background: var(--black-15o);
+}
+
+body .ant-drawer-header {
+	background: var(--gray-900);
 }
 
 body .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional):before {
@@ -122,6 +127,10 @@ body .ant-tabs-ink-bar {
 
 body .ant-menu-sub.ant-menu-inline {
 	background: none;
+}
+
+body .ant-drawer .ant-menu.ant-menu-vertical {
+	background: var(--gray-900);
 }
 
 body .ant-menu-sub > .ant-menu-item {

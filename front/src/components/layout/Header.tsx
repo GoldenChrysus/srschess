@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Dropdown } from "antd";
+import { Menu, Dropdown, Button, Drawer } from "antd";
 import { Translation } from "react-i18next";
 import { Observer } from "mobx-react";
 import { Link, NavLink } from "react-router-dom";
@@ -11,7 +11,7 @@ import Login from "./Login";
 
 import "../../styles/components/layout/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faUser } from "@fortawesome/free-solid-svg-icons";
 
 interface Map {
 	[locale: string]: {
@@ -29,44 +29,131 @@ const LANGUAGE_MAP: Map = {
 		lang : "日本語",
 		flag : "JP"
 	}
+};
+
+interface HeaderProps {
 }
 
-class Header extends React.Component {
+interface HeaderState {
+	drawer_visible: boolean
+}
+
+class Header extends React.Component<HeaderProps, HeaderState> {
+	constructor(props: HeaderProps) {
+		super(props);
+
+		this.state = {
+			drawer_visible: false
+		};
+
+		this.openDrawer  = this.openDrawer.bind(this);
+		this.closeDrawer = this.closeDrawer.bind(this);
+	}
+
 	render() {
 		return (
 			<Translation ns={["common", "repertoires", "openings", "database"]}>
 				{
 					(t) => (
-						<div className="w-full py-1 px-6 flex items-center">
-							<div id="logo" className="w-28 mr-6">
-								<Link to="/">
-									<img alt="Chess HQ" src="/assets/images/business/logo.png"/>
-								</Link>
+						<>
+							<div className="w-full py-1 px-6 hidden md:flex items-center">
+								<div id="logo" className="w-28 mr-6">
+									<Link to="/">
+										<img alt="Chess HQ" src="/assets/images/business/logo.png"/>
+									</Link>
+								</div>
+								<nav className="flex flex-1 items-center h-full">
+									<NavLink to="/repertoires/" isActive={(match, location) => {
+										return (!!match || ["reviews", "lessons"].includes(location.pathname.split("/")[1]))
+									}}>
+										{t("repertoires:repertoires")}
+									</NavLink>
+									<NavLink to={{ pathname: "/openings-explorer/"}}>
+										{t("openings:openings_explorer")}
+									</NavLink>
+									<NavLink to={{ pathname: "/game-database/"}}>
+										{t("database:game_database")}
+									</NavLink>
+								</nav>
+								<div className="flex flex-initial items-center h-full">
+									<Observer>
+										{() => this.renderUserLogin()}
+									</Observer>
+									{this.renderLanguageFlag()}
+								</div>
 							</div>
-							<nav className="flex flex-1 items-center h-full">
-								<NavLink to="/repertoires/" isActive={(match, location) => {
-									return (!!match || ["reviews", "lessons"].includes(location.pathname.split("/")[1]))
-								}}>
-									{t("repertoires:repertoires")}
-								</NavLink>
-								<NavLink to={{ pathname: "/openings-explorer/"}}>
-									{t("openings:openings_explorer")}
-								</NavLink>
-								<NavLink to={{ pathname: "/game-database/"}}>
-									{t("database:game_database")}
-								</NavLink>
-							</nav>
-							<div className="flex flex-initial items-center h-full">
-								<Observer>
-									{() => this.renderUserLogin()}
-								</Observer>
-								{this.renderLanguageFlag()}
+							<div className="w-full py-1 px-6 grid grid-cols-2 relative md:hidden">
+								<div className="flex items-center h-full">
+									<button onClick={this.openDrawer}><FontAwesomeIcon icon={faBars} size="2x"/></button>
+								</div>
+								<div className="flex items-center h-full justify-end">
+									<Observer>
+										{() => this.renderUserLogin()}
+									</Observer>
+									{this.renderLanguageFlag()}
+								</div>
+								<div className="absolute h-full py-2 left-1/2 transform -translate-x-1/2">
+									<Link to="/">
+										<img className="max-h-full" alt="Chess HQ" src="/assets/images/business/logo.png"/>
+									</Link>
+								</div>
 							</div>
-						</div>
+							<Drawer
+								title="Chess HQ"
+								placement="left"
+								visible={this.state.drawer_visible}
+								onClose={this.closeDrawer}
+								key="navigation-drawer"
+								className="max-w-full"
+								contentWrapperStyle={{maxWidth : "100%"}}
+								drawerStyle={{
+									backgroundImage: "url(" + process.env.PUBLIC_URL + "/assets/images/business/logo192.png" + ")",
+									backgroundRepeat: "no-repeat",
+									backgroundPosition: "center bottom 50px",
+								}}
+							>
+								<Menu activeKey="" selectedKeys={undefined} selectable={false} onClick={this.closeDrawer}>
+									<Menu.Item key="menu-item-home">
+										<NavLink to="/">
+											{t("common:home")}
+										</NavLink>
+									</Menu.Item>
+									<Menu.Item key="menu-item-repertoires">
+										<NavLink to="/repertoires/" isActive={(match, location) => {
+											return (!!match || ["reviews", "lessons"].includes(location.pathname.split("/")[1]))
+										}}>
+											{t("repertoires:repertoires")}
+										</NavLink>
+									</Menu.Item>
+									<Menu.Item key="menu-item-openings">
+										<NavLink to={{ pathname: "/openings-explorer/"}}>
+											{t("openings:openings_explorer")}
+										</NavLink>
+									</Menu.Item>
+									<Menu.Item key="menu-item-database">
+										<NavLink to={{ pathname: "/game-database/"}}>
+											{t("database:game_database")}
+										</NavLink>
+									</Menu.Item>
+								</Menu>
+							</Drawer>
+						</>
 					)
 				}
 			</Translation>
 		);
+	}
+
+	openDrawer() {
+		this.setState({
+			drawer_visible: true
+		});
+	}
+
+	closeDrawer() {
+		this.setState({
+			drawer_visible: false
+		});
 	}
 
 	renderUserLogin() {
