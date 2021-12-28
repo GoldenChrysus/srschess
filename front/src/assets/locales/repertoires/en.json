@@ -1,16 +1,20 @@
 {
+	"add_to_repertoire": "Add to Repertoire",
 	"black_repertoires": "Black Repertoires",
 	"create_repertoire": "Create Repertoire",
 	"edit_repertoire": "Edit Repertoire",
+	"input_repertoire": "Please select a repertoire.",
 	"lessons": "Lessons",
 	"meta_description": "Learn chess opening repertoires at Chess HQ. Build your own opening trees or search public repertoires, and study with the popular spaced repetition system.",
 	"move_tree": "Move Tree",
-	"repertoire_builder": "Repertoire Builder",
+	"opening_import_success": "Successfully imported opening into repertoire.",
 	"personal_repertoires": "Personal Repertoires",
+	"repertoire_builder": "Repertoire Builder",
 	"repertoires": "Repertoires",
 	"review": "Review",
 	"reviews": "Reviews",
 	"search_public_repertoires": "Search Public Repertoires",
+	"select_repertoire": "Select Repertoire",
 	"train": "Train",
 	"white_repertoires": "White Repertoires"
 }

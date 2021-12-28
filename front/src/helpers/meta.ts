@@ -73,7 +73,11 @@ export function createRepertoireRouteMeta(t: TFunction<"repertoires">, mode: Che
 export function createOpeningExplorerRouteMeta(t: TFunction<"openings">, opening?: EcoPositionQueryData["ecoPosition"]) {
 	const meta = getMetaObject();
 
-	meta.title       = t("openings_explorer");
+	if (opening) {
+		meta.title = t("opening") + ": " + opening.name + " - ";
+	}
+
+	meta.title      += t("openings_explorer");
 	meta.og_title    = createOGMetaTitle(meta.title);
 	meta.url         = generateCanonicalURL(ROUTES.openings_explorer.replace(/:slug\??/, opening?.slug ?? ""));
 	meta.description = t("meta_description");

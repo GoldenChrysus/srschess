@@ -14,13 +14,19 @@ try:
 			break
 
 		moves = []
+		ucis  = []
+		fens  = []
 
 		for move in game.mainline():
 			moves.append(move.san())
+			ucis.append(move.uci())
+			fens.append(move.board().fen())
 
 		games.append({
 			"pgn"    : str(game),
 			"moves"  : moves,
+			"ucis"   : ucis,
+			"fens"   : fens,
 			"result" : None if ("Result" not in game.headers) else game.headers["Result"],
 			"white"  : None if ("White" not in game.headers) else game.headers["White"],
 			"black"  : None if ("Black" not in game.headers) else game.headers["Black"],

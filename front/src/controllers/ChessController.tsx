@@ -40,7 +40,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	constructor(props: ChessControllerProps) {
 		super(props);
 
-		if (this.props.mode === "database" && this.props.game) {
+		if (["database", "opening"].includes(this.props.mode) && this.props.game) {
 			this.state = this.buildGameState();
 		} else {
 			this.state = initial_state;

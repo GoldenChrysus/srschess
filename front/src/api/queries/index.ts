@@ -313,6 +313,25 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 	}
 `;
 
+export const IMPORT_ECO_TO_REPERTOIRE = gql`
+	${REPERTOIRE_MOVE_FRAG}
+	mutation ImportEcoToRepertoire($repertoireId: ID!, $ecoId: ID!) {
+		importEcoToRepertoire(input: {
+			repertoireId: $repertoireId,
+			ecoId: $ecoId
+		}) {
+			repertoire {
+				id
+				slug
+				moves {
+					...CoreMoveFields
+				}
+			}
+			errors
+		}
+	}
+`;
+
 /**
  * COLLECTION DATA
  */

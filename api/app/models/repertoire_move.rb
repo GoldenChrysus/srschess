@@ -50,12 +50,17 @@ class RepertoireMove < ApplicationRecord
 		end
 	end
 
+	def self.generateId(repertoire_id, move_number, move, fen)
+		hash = Digest::MD5.hexdigest(repertoire_id + ":" + move_number.to_s + ":" + move + ":" + fen)
+		
+		return ([hash[0, 8], hash[8, 4], hash[12, 4], hash[16, 4], hash[20..-1]]).join("-")
+	end
+
 	private
 		def set_id
-			id   = if self.repertoire != nil then self.repertoire.id.to_s else "" end
-			hash = Digest::MD5.hexdigest (id + ":" + self.move_number.to_s + ":" + self.move + ":" + self.fen)
-			
-			self.id = ([hash[0, 8], hash[8, 4], hash[12, 4], hash[16, 4], hash[20..-1]]).join("-")
+			id = if self.repertoire != nil then self.repertoire.id.to_s else "" end
+
+			self.id = self.class.generateId(id, self.move_number, self.move, self.fen)
 		end
 
 		def set_sort

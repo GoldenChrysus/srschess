@@ -24,7 +24,8 @@ export interface GameModel {
 	source: string,
 	event: string,
 	round: string,
-	moves?: Array<GameMoveModel> | null
+	moves?: Array<GameMoveModel> | null,
+	fen?: undefined
 }
 
 export interface GameQueryData {

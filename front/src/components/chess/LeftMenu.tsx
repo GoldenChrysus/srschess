@@ -15,6 +15,7 @@ import PublicRepertoires from "./left-menu/PublicRepertoires";
 import GameCollections from "./left-menu/GameCollections";
 import MasterGames from "./left-menu/MasterGames";
 import GameList from "./left-menu/GameCollections/GameList";
+import Results from "./search/Results";
 
 interface LeftMenuProps {
 	repertoire?         : RepertoireModel | null
@@ -49,6 +50,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 		const route          = window.location.pathname.split("/").at(1);
 		const is_repertoire  = (["repertoire", "review", "lesson"].includes(this.props.mode) || (this.props.mode === "search" && route === "repertoires"));
 		const is_database    = (this.props.mode === "database" || (this.props.mode === "search" && route === "game-database"));
+		const is_opening     = (this.props.mode === "opening");
 
 		if (is_repertoire) {
 			default_active.push("personal-repertoires-panel");
@@ -60,9 +62,13 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 			default_active.push("game-list-panel");
 		}
 
+		if (is_opening) {
+			default_active.push("related-master-games-panel");
+		}
+
 		return (
 			<div key="chess-left-menu-inner" id="chess-left-menu" className="flex-1 w-full min-w-full md:w-auto md:min-w-0 order-3 md:order-1">
-				<Translation ns={["repertoires", "database"]}>
+				<Translation ns={["repertoires", "database", "openings"]}>
 					{
 						(t) => (
 							<Collapse bordered={false} defaultActiveKey={default_active}>
@@ -89,6 +95,23 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 								{is_database &&
 									<Collapse.Panel id="master-games-panel" header={t("database:search_master_games")} key="master-games-panel">
 										<MasterGames onMoveSearchChange={this.props.onMoveSearchChange} movelist={this.props.movelist} game={this.props.game}/>
+									</Collapse.Panel>
+								}
+
+								{
+									is_opening &&
+									this.props.game &&
+									<Collapse.Panel id="related-master-games-panel" header={t("database:related_master_games")} key="related-master-games-panel">
+										<Results
+											mode="master_games"
+											criteria={{
+												mode : "master_games",
+												data : {
+													eco : String(this.props.game?.id)
+												}
+											}}
+											onResultClick={() => ""}
+										/>
 									</Collapse.Panel>
 								}
 							</Collapse>

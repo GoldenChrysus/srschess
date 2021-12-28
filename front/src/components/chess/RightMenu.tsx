@@ -11,6 +11,7 @@ import RepertoireMoveNote from "./right-menu/RepertoireMoveNote";
 import ECO from "./right-menu/ECO";
 import GameCollection from "./right-menu/GameCollection";
 import PGNData from "./right-menu/PGNData";
+import Opening from "./right-menu/Opening";
 
 interface RightMenuProps {
 	active_num?: ChessControllerState["last_num"],
@@ -41,9 +42,22 @@ class RightMenu extends React.Component<RightMenuProps> {
 	render() {
 		return (
 			<div key="chess-right-menu-inner" id="chess-right-menu" className="flex-1 order-2 mb-6 md:order-3 md:mb-0">
-				{this.props.repertoire?.id && ["repertoire", "lesson", "review"].includes(this.props.mode) && <Repertoire mode={this.props.mode} repertoire={this.props.repertoire}/>}
-				{this.props.collection?.id && this.props.mode === "database" && <GameCollection collection={this.props.collection}/>}
-				{this.props.game?.id && this.props.mode === "database" && <PGNData game={this.props.game}/>}
+				{
+					this.props.repertoire?.id && ["repertoire", "lesson", "review"].includes(this.props.mode) &&
+					<Repertoire mode={this.props.mode} repertoire={this.props.repertoire}/>
+				}
+				{
+					this.props.collection?.id && this.props.mode === "database" &&
+					<GameCollection collection={this.props.collection}/>
+				}
+				{
+					this.props.game?.id && this.props.mode === "database" &&
+					<PGNData game={this.props.game}/>
+				}
+				{
+					this.props.game?.id && this.props.mode === "opening" &&
+					<Opening opening={this.props.game}/>
+				}
 				<MoveList mode={this.props.mode} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
 				<Translation ns="chess">
 					{

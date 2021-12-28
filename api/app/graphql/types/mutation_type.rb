@@ -27,6 +27,9 @@ module Types
 		# /reorder_repertoire_move
 		field :reorder_repertoire_move, mutation: Types::Mutations::ReorderRepertoireMove
 
+		# /import_eco_to_repertoire
+		field :import_eco_to_repertoire, mutation: Types::Mutations::ImportEcoToRepertoire
+
 		# /create_repertoire_move_note
 		field :create_repertoire_move_note, mutation: Types::Mutations::CreateRepertoireMoveNote
 

@@ -62,13 +62,17 @@ body .ant-table {
 }
 
 body .ant-message-notice-content,
-body .ant-notification-notice {
+body .ant-notification-notice-error {
 	background: var(--red-800);
 }
 
 body .ant-message-error .anticon,
 body .ant-notification-notice-error .anticon {
 	color: var(--gray-200);
+}
+
+body .ant-notification-notice-success {
+	background: var(--gray-700);
 }
 
 body .ant-message-notice-content .anticon {
