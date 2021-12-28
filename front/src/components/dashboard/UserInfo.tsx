@@ -20,8 +20,6 @@ function UserInfo() {
 		}
 
 		setProcessing(true);
-		await user.getIdToken(true);
-		await user.reload();
 
 		try {
 			const email = values.email;
@@ -63,6 +61,9 @@ function UserInfo() {
 		console.log(await user?.getIdToken());
 		if (awaiting_refresh && user && last_token !== await user.getIdToken()) {
 			console.log("gh2");
+
+			awaiting_refresh = false;
+
 			onSubmit(last_submit);
 		}
 	})();

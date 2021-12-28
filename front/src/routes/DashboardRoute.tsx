@@ -1,5 +1,5 @@
 import React from "react";
-import { observer } from "mobx-react";
+import { Observer, observer } from "mobx-react";
 import { Redirect, useParams } from "react-router-dom";
 
 import Dashboard from "../components/Dashboard";
@@ -12,11 +12,17 @@ interface DashboardRouteParams {
 function DashboardRoute() {
 	const { section } = useParams<DashboardRouteParams>();
 
-	if (!AuthState.auth?.currentUser) {
-		return <Redirect to="/"/>;
-	}
+	return (
+		<Observer>
+			{() => {
+				if (!AuthState.auth?.currentUser) {
+					return <Redirect to="/"/>;
+				}
 
-	return <Dashboard active_section={section}/>;
+				return <Dashboard active_section={section}/>;
+			}}
+		</Observer>
+	);
 }
 
-export default observer(DashboardRoute);
+export default DashboardRoute;

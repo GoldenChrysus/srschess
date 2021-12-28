@@ -28,9 +28,11 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 		const user = (from_ui) ? res.user : res;
 
 		console.log("gh1");
+		console.log(res);
 
 		if (!user) {
-			AuthState.logout();
+			console.log("LOGOUT");
+			runInAction(() => AuthState.logout());
 			return false;
 		}
 
@@ -84,6 +86,13 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 					callbacks : {
 						signInSuccessWithAuthResult : (res: any) => {
 							console.log("gh3");
+							console.log(res);
+
+							auth.updateCurrentUser(res.user).then(() => {
+								runInAction(() => AuthState.provideAuth(auth));
+								runInAction(() => AuthState.login(res.user));
+							});
+
 							return false;
 						}
 					}

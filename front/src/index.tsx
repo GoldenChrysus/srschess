@@ -15,6 +15,8 @@ import ActionCable from "actioncable";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink"
 import { ApolloProvider, ApolloLink, ApolloClient, InMemoryCache, createHttpLink, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import store from "./redux/store";
+import { provideClient, provideLink } from "./redux/slices/auth";
 
 const cable          = ActionCable.createConsumer("ws://" + process.env.REACT_APP_API_ADDRESS + "/cable")
 const http_link      = createHttpLink({ uri: "http://" + process.env.REACT_APP_API_ADDRESS + "/graphql" });
@@ -51,11 +53,14 @@ AuthState.provideLink(cable_link);
 FirebaseAuth(client);
 i18n.setDefaultNamespace("common");
 
+store.dispatch(provideClient(client));
+store.dispatch(provideLink(cable_link));
+
 (async () => {
 	ReactDOM.render(
 		<React.StrictMode>
 			<ApolloProvider client={client}>
-				<Provider AuthState={AuthState}>
+				<Provider AuthState={AuthState} provider={store}>
 					<App />
 				</Provider>
 			</ApolloProvider>
