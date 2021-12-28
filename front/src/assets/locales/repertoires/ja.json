@@ -1,15 +1,20 @@
 {
+  "add_to_repertoire": "レパートリーに追加",
   "black_repertoires": "ブラック・レパートリーズ",
   "create_repertoire": "レパートリーの作成",
   "edit_repertoire": "レパートリーの修正",
+  "input_repertoire": "レパートリーをお選びください。",
   "lessons": "レッスン",
+  "meta_description": "Chess HQでチェスのオープニングレパートリーズが学べます。自分のオープニングツリーを作成したり、公開レパートリーズを検索したり、間隔反復をして勉強したりできます。",
   "move_tree": "指し手図",
+  "opening_import_success": "オープニングをレパートリーに正常にインポートしました。",
   "personal_repertoires": "個人レパートリーズ",
   "repertoire_builder": "レパートリー・ビルダー",
   "repertoires": "レパートリーズ",
   "review": "レビュー",
   "reviews": "レビュー",
   "search_public_repertoires": "公開レパートリーズの検索",
+  "select_repertoire": "レパートリーの選び",
   "train": "訓練",
   "white_repertoires": "ホワイト・レパートリーズ"
 }

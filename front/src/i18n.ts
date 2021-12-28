@@ -28,11 +28,18 @@ i18n
 		react: {
 			useSuspense: false
 		},
-		fallbackLng: "en",
-		lng: saved_locale,
-		ns: ["chess", "common", "repertoires", "errors"],
-		interpolation: {
-			escapeValue: false
+		fallbackLng   : "en",
+		lng           : saved_locale,
+		ns            : ["chess", "common", "repertoires", "errors"],
+		interpolation : {
+			escapeValue : false,
+			format      : function(value, format, lng) {
+				if (format === "lowercase") {
+					value = (value ?? "").toLowerCase();
+				}
+
+				return value;
+			}
 		}
 	});
 

@@ -1,4 +1,6 @@
 {
   "filter": "ECO、ネーム、FENによるフィルターする",
-  "openings_explorer": "戦法の調べ"
+  "meta_description": "Chess HQで3300以上の既知のオープニングが検索できます。名前、ECO、またはFENで検索したり、関連するマスター試合を表示したり、Chess HQのレパートリーにオープニングを簡単にインポートしたりできます。",
+  "opening": "オープニング",
+  "openings_explorer": "オープニングの調べ"
 }

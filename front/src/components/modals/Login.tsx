@@ -12,6 +12,8 @@ function Login() {
 		name_input.innerHTML = "Display name";
 	}
 
+	console.log(AuthState.needs_auth);
+
 	return (
 		<Observer>
 			{

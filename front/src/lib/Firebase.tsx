@@ -8,6 +8,7 @@ import "firebaseui/dist/firebaseui.css";
 
 import AuthState from "../stores/AuthState";
 import { CREATE_USER } from "../api/queries";
+import { runInAction } from "mobx";
 
 function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 	const app = initializeApp({
@@ -26,12 +27,15 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 	const handleAuth = (res: User | any | null, from_ui?: boolean) => {
 		const user = (from_ui) ? res.user : res;
 
+		console.log("gh1");
+
 		if (!user) {
 			AuthState.logout();
 			return false;
 		}
 
-		AuthState.login(user);
+		console.log("gh2");
+		runInAction(() => AuthState.login(user));
 
 		client
 			.mutate({
@@ -67,6 +71,7 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 					],
 					callbacks : {
 						signInSuccessWithAuthResult : (res: any) => {
+							console.log("gh3");
 							return false;
 						}
 					}

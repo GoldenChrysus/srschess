@@ -3,13 +3,13 @@
 	"100002": "$t(errors:100001)",
 	"100003": "$t(errors:100001)",
 	"100004": "$t(errors:100001)",
-	"300101": "Login failed. The email or password was incorrect.",
+	"300101": "Login failed. The $t(dashboard:email, lowercase) or $t(dashboard:password, lowercase) was incorrect.",
 	"300102": "$t(errors:100001)",
 	"300301": "Invalid FEN provided.",
 	"300201": "This move cannot be reviewed yet.",
 	"300302": "Invalid ECO provided.",
 	"300303": "Invalid PGN provided.",
-	"auth/invalid-email": "Invalid e-mail provided.",
-	"auth/weak-password": "Please use a stronger password.",
+	"auth/invalid-email": "Invalid $t(dashboard:email, lowercase) provided.",
+	"auth/weak-password": "Please use a stronger $t(dashboard:password, lowercase).",
 	"unexpected": "An unexpected error occurred."
 }

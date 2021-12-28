@@ -19,11 +19,11 @@ class AuthState {
 	}
 
 	login(user: User | any) {
-		this.user       = user;
-		this.uid        = user.uid;
-		this.token      = user.accessToken;
-		this.needs_auth = false;
+		this.user  = user;
+		this.uid   = user.uid;
+		this.token = user.accessToken;
 
+		this.setNeedsAuth(false);
 		this.updateLinkConnection();
 		this.updateAuthenticated();
 	}
