@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../lib/Firebase";
-import { Button, Form, Input, Spin } from "antd";
+import { Button, Form, Input, notification, Spin } from "antd";
 import { useTranslation } from "react-i18next";
 import { notifyError } from "../helpers";
 import { RootState } from "../redux/store";
@@ -15,6 +15,7 @@ enum ProgressStates {
 };
 
 function Login(props: PropsFromRedux) {
+	const [ form ]                  = Form.useForm();
 	const { t }                     = useTranslation(["dashboard", "common"]);
 	const [ loading, setLoading ]   = useState<boolean>(false);
 	const [ progress, setProgress ] = useState<keyof typeof ProgressStates>("initial");
@@ -83,6 +84,28 @@ function Login(props: PropsFromRedux) {
 		}
 	};
 
+	const resetPassword = (e: any) => {
+		e.preventDefault();
+
+		const email = form.getFieldValue("email");
+
+		if (!email) {
+			return form.validateFields();
+		}
+
+		setLoading(true);
+		sendPasswordResetEmail(auth, email)
+			.then(() => {
+				notification.success({
+					message : t("reset_password_email")
+				});
+			})
+			.catch((e) => {
+				notifyError(e.code);
+			})
+			.finally(() => setLoading(false));
+	}
+
 	const button_key = (progress === "initial") ? "continue" : "submit";
 
 	return (
@@ -92,6 +115,7 @@ function Login(props: PropsFromRedux) {
 					<Form
 						id="login-form"
 						onFinish={onSubmit}
+						form={form}
 						autoComplete="off"
 						layout="vertical"
 					>
@@ -122,9 +146,17 @@ function Login(props: PropsFromRedux) {
 								<Input type="password"/>
 							</Form.Item>
 						}
-						<Form.Item className="text-right">
-							<Button type="default" htmlType="submit">{t("common:" + button_key)}</Button>
-						</Form.Item>
+						<div className="flex items-center flex-wrap">
+							<Form.Item className="order-1 flex-1 justify-end md:text-right md:order-2" style={{margin: 0}}>
+								<Button type="default" htmlType="submit">{t("common:" + button_key)}</Button>
+							</Form.Item>
+							{
+								progress !== "registering" &&
+								<div className="w-full order-2 mt-2 md:mt-0 md:w-auto md:flex-initial md:order-1">
+									<Button type="link" onClick={resetPassword} style={{fontSize: "0.75rem"}}>{t("reset_password")}</Button>
+								</div>
+							}
+						</div>
 					</Form>
 				</div>
 			</Spin>

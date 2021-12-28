@@ -182,3 +182,8 @@ body .ant-menu-item-selected:after {
 body .ant-menu-submenu-title {
 	background: var(--white-7o) !important;
 }
+
+body .ant-btn-link {
+	margin: 0;
+	padding: 0;
+}

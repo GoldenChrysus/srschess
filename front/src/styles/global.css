@@ -50,15 +50,18 @@ body .firebase-login .ant-modal-close-x {
 	color: #000;
 }
 
-body a {
+body a,
+body .ant-btn-link {
 	color: var(--blue-200);
 }
 
-body a:hover {
+body a:hover,
+body .ant-btn-link:hover {
 	color: var(--green-500);
 }
 
-body a:active {
+body a:active,
+body .ant-btn-link:active {
 	color: var(--green-400);
 }
 
