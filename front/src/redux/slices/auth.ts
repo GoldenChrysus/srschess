@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "firebase/auth";
 
 import { cable_link } from "../../lib/Apollo";
+import { auth } from "../../lib/Firebase";
 import { AuthState } from "../../lib/types/ReduxTypes";
 
 const initialState: AuthState = {
@@ -16,20 +17,22 @@ export const AuthSlice = createSlice({
 		toggleLogin(state, action: PayloadAction<AuthState["show_login"]>) {
 			state.show_login = action.payload;
 		},
-		login(state, action: PayloadAction<User>) {
-			state.user          = action.payload;
+		login(state, action: PayloadAction<User | any>) {
+			state.uid           = action.payload?.uid
+			state.token         = action.payload?.accessToken;
 			state.authenticated = true;
 			state.show_login    = false;
 			
-			action.payload.getIdToken().then((token: string) => {
-				cable_link.connectionParams = {
-					token : token
-				};
-			});
+			cable_link.connectionParams = {
+				token : state.token ?? ""
+			};
 		},
 		logout(state) {
-			state.user          = undefined;
+			state.uid           = undefined;
+			state.token         = undefined;
 			state.authenticated = false;
+
+			auth.signOut();
 
 			cable_link.connectionParams = {
 				token : ""

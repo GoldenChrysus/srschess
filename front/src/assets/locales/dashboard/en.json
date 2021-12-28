@@ -1,7 +1,10 @@
 {
 	"email": "E-mail",
 	"input_email": "Please input an e-mail address.",
+	"input_password": "Please input your $t(password, lowercase).",
+	"input_username": "Please input your $t(username, lowercase).",
 	"logout": "Logout",
 	"password": "Password",
-	"user_info": "User Info"
+	"user_info": "User Info",
+	"username": "Display Name"
 }

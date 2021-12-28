@@ -1,14 +1,12 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, EmailAuthProvider, setPersistence, browserLocalPersistence, User } from "firebase/auth";
-import { auth as FirebaseUIAuth } from "firebaseui";
+import { getAuth, setPersistence, browserLocalPersistence, User } from "firebase/auth";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
-
-import "firebaseui/dist/firebaseui.css";
 
 import store from "../redux/store";
 import { login, logout } from "../redux/slices/auth";
 import { CREATE_USER } from "../api/queries";
+import { notifyError } from "../helpers";
 
 const app = initializeApp({
 	apiKey            : process.env.REACT_APP_FIREBASE_KEY,
@@ -29,6 +27,7 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 		console.log("AUTH CHANGED");
 
 		if (!user) {
+			console.log(res);
 			console.log("LOGOUT");
 			store.dispatch(logout());
 			return false;
@@ -52,12 +51,13 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 				localStorage.setItem("firebase_token", user.accessToken);
 			})
 			.catch((err) => {
-				// TODO: Revoke the session
+				auth.signOut();
+				notifyError();
 				console.error(err);
 			});
 	};
 
-	const handleTokenChange = (user: User | null) => {
+	const handleTokenChange = (user: User | any | null) => {
 		console.log("TOKEN CHANGE");
 
 		if (!user) {
@@ -65,6 +65,8 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 		}
 
 		store.dispatch(login(user));
+		localStorage.setItem("firebase_uid", user.uid);
+		localStorage.setItem("firebase_token", user.accessToken);
 	}
 
 	auth.onAuthStateChanged(handleAuth);
@@ -72,26 +74,6 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 
 	setPersistence(auth, browserLocalPersistence)
 		.then(() => {
-			const ui = new FirebaseUIAuth.AuthUI(getAuth(app));
-
-			ui.start(
-				"#firebase-auth",
-				{
-					signInOptions : [
-						EmailAuthProvider.PROVIDER_ID,
-					],
-					callbacks : {
-						signInSuccessWithAuthResult : (res: any) => {
-							console.log("SIGN IN SUCCESS");
-
-							auth.updateCurrentUser(res.user).then(() => {
-								store.dispatch(login(res.user));
-							});
-							return false;
-						}
-					}
-				}
-			);
 		})
 		.catch((err) => {
 			console.error(err);

@@ -9,6 +9,7 @@ import OpeningExplorerRoute from "../routes/OpeningExplorerRoute";
 import { ROUTES } from "../helpers";
 import Home from "./Home";
 import DashboardRoute from "../routes/DashboardRoute";
+import LoginRoute from "../routes/LoginRoute";
 
 class Container extends React.Component {
 	render() {
@@ -47,6 +48,9 @@ class Container extends React.Component {
 							<GameDatabaseRoute/>
 						</Route>
 
+						<Route exact path={ROUTES.login}>
+							<LoginRoute/>
+						</Route>
 						<Route exact path={ROUTES.dashboard}>
 							<DashboardRoute/>
 						</Route>

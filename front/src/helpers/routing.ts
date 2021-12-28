@@ -8,6 +8,7 @@ export const ROUTES = {
 	"collection"        : "/game-database/collection/:collection_slug",
 	"collection_game"   : "/game-database/collection/:collection_slug/game/:game_id",
 	"master_game"       : "/game-database/master-game/:master_game_id",
+	"login"             : "/login/",
 	"dashboard"         : "/dashboard/:section"
 };
 

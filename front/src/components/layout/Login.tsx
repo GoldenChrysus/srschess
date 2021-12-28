@@ -1,34 +1,17 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { connect, ConnectedProps } from "react-redux";
-import { toggleLogin } from "../../redux/slices/auth";
+import { Link } from "react-router-dom";
 
-class Login extends React.Component<PropsFromRedux> {
-	constructor(props: PropsFromRedux) {
-		super(props);
-
-		this.login = this.login.bind(this);
-	}
-
+class Login extends React.Component {
 	render() {
 		return (
 			<Translation ns="common">
 				{
-					(t) => <button onClick={this.login}>{t("login")}</button>
+					(t) => <Link to="/login/">{t("login")}</Link>
 				}
 			</Translation>
 		);
 	}
-
-	login() {
-		this.props.showLogin(true);
-	}
 }
 
-const mapDispatchToProps = {
-	showLogin : (on: boolean) => toggleLogin(on)
-}
-const connector      = connect(undefined, mapDispatchToProps);
-type PropsFromRedux  = ConnectedProps<typeof connector>;
-
-export default connector(Login);
+export default Login;

@@ -11,5 +11,7 @@
 	"300303": "Invalid PGN provided.",
 	"auth/invalid-email": "Invalid $t(dashboard:email, lowercase) provided.",
 	"auth/weak-password": "Please use a stronger $t(dashboard:password, lowercase).",
+	"auth/wrong-password": "Invalid $t(dashboard:password, lowercase) provided.",
+	"relogin": "These changes require you to first login again.",
 	"unexpected": "An unexpected error occurred."
 }

@@ -19,7 +19,6 @@
 		"chessground": "^8.1.7",
 		"eslint": "^7.32.0",
 		"firebase": "^9.1.0",
-		"firebaseui": "^0.600.0",
 		"graphql": "^15.5.3",
 		"graphql-ruby-client": "^1.10.0",
 		"i18next": "^21.1.0",

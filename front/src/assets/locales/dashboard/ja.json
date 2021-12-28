@@ -1,7 +1,10 @@
 {
   "email": "メールアドレス",
   "input_email": "メールアドレスをご入力ください。",
+  "input_password": "$t(password, lowercase)をご入力ください。",
+  "input_username": "$t(username, lowercase)をご入力ください。",
   "logout": "ログアウト",
   "password": "パスワード",
-  "user_info": "ユーザー情報"
+  "user_info": "ユーザー情報",
+  "username": "表示名"
 }

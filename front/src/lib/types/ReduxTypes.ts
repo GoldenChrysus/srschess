@@ -1,13 +1,16 @@
-import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
-import { Auth, User } from "firebase/auth";
-import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink";
 import { CollectionModel } from "./models/Collection";
 import { RepertoireModel, RepertoireMoveModel } from "./models/Repertoire";
 
 export interface AuthState {
 	show_login    : boolean
 	authenticated : boolean
-	user?         : User
+	uid?          : string
+	token?        : string
+}
+
+export interface AuthStateUserPayload {
+	uid?: AuthState["uid"]
+	token?: AuthState["token"]
 }
 
 export interface ChessState {
