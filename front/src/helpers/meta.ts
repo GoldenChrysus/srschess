@@ -6,6 +6,7 @@ import { GameModel } from "../lib/types/models/Game";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 
 import { generateCanonicalURL, ROUTES } from ".";
+import { EcoPositionQueryData } from "../lib/types/models/EcoPosition";
 
 export function createGameDatabaseRouteMeta(t: TFunction<("database" | "chess")[]>, collection?: CollectionQueryData["collection"], collection_game?: GameModel | null, master_game?: GameModel | null) {
 	const meta = getMetaObject();
@@ -69,12 +70,12 @@ export function createRepertoireRouteMeta(t: TFunction<"repertoires">, mode: Che
 	return meta;
 }
 
-export function createOpeningExplorerRouteMeta(t: TFunction<"openings">) {
+export function createOpeningExplorerRouteMeta(t: TFunction<"openings">, opening?: EcoPositionQueryData["ecoPosition"]) {
 	const meta = getMetaObject();
 
 	meta.title       = t("openings_explorer");
 	meta.og_title    = createOGMetaTitle(meta.title);
-	meta.url         = generateCanonicalURL(ROUTES.openings_explorer);
+	meta.url         = generateCanonicalURL(ROUTES.openings_explorer.replace(/:slug\??/, opening?.slug ?? ""));
 	meta.description = t("meta_description");
 
 	return meta;

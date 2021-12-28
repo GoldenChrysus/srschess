@@ -107,7 +107,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 								className="max-w-full"
 								contentWrapperStyle={{maxWidth : "100%"}}
 								drawerStyle={{
-									backgroundImage: "url(" + process.env.PUBLIC_URL + "/assets/images/business/logo192.png" + ")",
+									backgroundImage: "url(" + process.env.PUBLIC_URL + "/assets/images/business/logo192.png)",
 									backgroundRepeat: "no-repeat",
 									backgroundPosition: "center bottom 50px",
 								}}

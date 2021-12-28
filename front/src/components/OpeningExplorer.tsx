@@ -1,11 +1,11 @@
 import { Input } from "antd";
 import React, { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { EcoPositionModel, EcoPositionQueryData } from "../lib/types/models/EcoPosition";
+import { EcoPositionModel, EcoPositionsQueryData } from "../lib/types/models/EcoPosition";
 import OpeningVolume from "./opening-explorer/OpeningVolume";
 
 interface OpeningExplorerProps {
-	openings?: EcoPositionQueryData["ecoPositions"]
+	openings?: EcoPositionsQueryData["ecoPositions"]
 }
 
 var processed = false;

@@ -12,5 +12,9 @@ export interface FenEcoQueryData {
 }
 
 export interface EcoPositionQueryData {
+	ecoPosition: EcoPositionModel
+}
+
+export interface EcoPositionsQueryData {
 	ecoPositions: Array<EcoPositionModel>
 }

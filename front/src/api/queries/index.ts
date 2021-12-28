@@ -442,9 +442,22 @@ export const GET_FEN_ECO = gql`
 	}
 `;
 
-export const GET_ECO = gql`
+export const GET_ECOS = gql`
 	query EcoPositions {
 		ecoPositions {
+			id
+			slug
+			fen
+			pgn
+			code
+			name
+		}
+	}
+`;
+
+export const GET_ECO = gql`
+	query EcoPosition($slug: String!) {
+		ecoPosition(slug: $slug) {
 			id
 			slug
 			fen

@@ -3,8 +3,8 @@ import { Form, Input, Tabs, Select, Button } from "antd";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
 
-import { GET_ECO } from "../../api/queries";
-import { EcoPositionQueryData } from "../../lib/types/models/EcoPosition";
+import { GET_ECOS } from "../../api/queries";
+import { EcoPositionsQueryData } from "../../lib/types/models/EcoPosition";
 import { SearchCriteria, SearchProps, SearchState } from "../../lib/types/SearchTypes";
 
 import Results from "./search/Results";
@@ -16,7 +16,7 @@ function Search(props: SearchProps) {
 	});
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 	const { t } = useTranslation(["search", "chess"]);
-	const { loading, error, data } = useQuery<EcoPositionQueryData>(GET_ECO);
+	const { loading, error, data } = useQuery<EcoPositionsQueryData>(GET_ECOS);
 	const prev_movelist = useRef<string>();
 
 	useEffect(

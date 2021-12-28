@@ -1,17 +1,39 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { useQuery } from "@apollo/client";
-import { GET_ECO } from "../api/queries";
-import { EcoPositionQueryData } from "../lib/types/models/EcoPosition";
+import { ApolloConsumer, useQuery } from "@apollo/client";
+import { GET_ECO, GET_ECOS } from "../api/queries";
+import { EcoPositionQueryData, EcoPositionsQueryData } from "../lib/types/models/EcoPosition";
 import OpeningExplorer from "../components/OpeningExplorer";
 import { useTranslation } from "react-i18next";
 import { createOpeningExplorerRouteMeta } from "../helpers";
+import { useParams } from "react-router-dom";
+import ChessController from "../controllers/ChessController";
+
+interface OpeningExplorerRouteParams {
+	slug?: string
+}
 
 function OpeningExplorerRoute() {
-	const { t } = useTranslation("openings");
-	const { loading, error, data } = useQuery<EcoPositionQueryData>(GET_ECO);
+	const { slug }                 = useParams<OpeningExplorerRouteParams>();
+	const { t }                    = useTranslation("openings");
+	const { loading, error, data } = useQuery<EcoPositionsQueryData>(
+		GET_ECOS,
+		{
+			skip : !!slug
+		}
+	);
+	const { loading: opening_load, error: opening_error, data: opening_data } = useQuery<EcoPositionQueryData>(
+		GET_ECO,
+		{
+			variables : {
+				slug : slug
+			},
+			skip : !slug
+		}
+	);
 
-	const meta = createOpeningExplorerRouteMeta(t);
+	const opening = opening_data?.ecoPosition;
+	const meta    = createOpeningExplorerRouteMeta(t, opening);
 
 	return (
 		<>
@@ -25,7 +47,21 @@ function OpeningExplorerRoute() {
 				<meta property="twitter:title" content={meta.og_title}/>
 				<meta property="twitter:description" content={meta.description}/>
 			</Helmet>
-			<OpeningExplorer openings={data?.ecoPositions}/>
+			{!slug && <OpeningExplorer openings={data?.ecoPositions}/>}
+			{
+				slug &&
+				<ApolloConsumer>
+					{client => 
+						<ChessController
+							demo={false}
+							key="chess-controller"
+							mode="opening"
+							game={opening}
+							client={client}
+						/>
+					}
+				</ApolloConsumer>
+			}
 		</>
 	);
 }

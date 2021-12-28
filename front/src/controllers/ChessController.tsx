@@ -84,7 +84,7 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 	}
 
 	componentDidUpdate(prev_props: ChessControllerProps, prev_state: ChessControllerState) {
-		if (this.props.mode === "database" && (prev_props.game?.id !== this.props.game?.id || prev_props.mode !== this.props.mode)) {
+		if (["database", "opening"].includes(this.props.mode) && (prev_props.game?.id !== this.props.game?.id || prev_props.mode !== this.props.mode)) {
 			return this.reset(this.buildGameState());
 		}
 
@@ -490,6 +490,11 @@ class ChessController extends React.Component<ChessControllerProps, ChessControl
 				});
 
 			case "database":
+			case "opening":
+				if (source === "master-movelist") {
+					return;
+				}
+
 				if (!uuid) {
 					uuid = "-1";
 				}

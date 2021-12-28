@@ -2,6 +2,7 @@ import { ApolloClient } from "@apollo/client";
 import Chess, { ChessInstance } from "chess.js";
 import { START_FEN } from "../constants/chess";
 import { CollectionModel } from "./models/Collection";
+import { EcoPositionModel } from "./models/EcoPosition";
 import { GameModel } from "./models/Game";
 import { RepertoireModel, RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "./models/Repertoire";
 
@@ -19,7 +20,7 @@ export enum ChessControllerModes {
 	repertoire = "repertoire",
 	review     = "review",
 	lesson     = "lesson",
-	openings   = "opening",
+	opening    = "opening",
 	database   = "database",
 	search     = "search",
 	static     = "static",
@@ -31,7 +32,7 @@ export interface ChessControllerProps {
 	repertoire?         : RepertoireModel | null,
 	repertoires?        : Array<RepertoireModel>,
 	collection?         : CollectionModel | null,
-	game?               : GameModel | null,
+	game?               : GameModel | EcoPositionModel | null,
 	client              : ApolloClient<object>,
 	onMove?             : Function,
 	onTransposition?    : Function,
