@@ -315,10 +315,11 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 
 export const IMPORT_ECO_TO_REPERTOIRE = gql`
 	${REPERTOIRE_MOVE_FRAG}
-	mutation ImportEcoToRepertoire($repertoireId: ID!, $ecoId: ID!) {
+	mutation ImportEcoToRepertoire($repertoireId: ID!, $ecoId: ID!, $side: String) {
 		importEcoToRepertoire(input: {
 			repertoireId: $repertoireId,
-			ecoId: $ecoId
+			ecoId: $ecoId,
+			side: $side
 		}) {
 			repertoire {
 				id

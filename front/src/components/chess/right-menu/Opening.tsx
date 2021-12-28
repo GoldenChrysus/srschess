@@ -31,12 +31,17 @@ function Opening(props: OpeningProps) {
 			return;
 		}
 
+		if (+values.repertoire === -1 && !values.side) {
+			return;
+		}
+
 		notification_allowed = true;
 
 		importEcoToRepertoire({
 			variables : {
 				repertoireId : values.repertoire,
-				ecoId        : props.opening.id
+				ecoId        : props.opening.id,
+				side         : values.side || ""
 			}
 		});
 	}

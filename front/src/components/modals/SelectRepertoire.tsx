@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Form, Input, Button, Select, Switch, Spin } from "antd";
 import { useQuery } from "@apollo/client";
@@ -12,9 +12,13 @@ interface SelectRepertoireProps {
 }
 
 function SelectRepertoire(props: SelectRepertoireProps) {
-	const { t }                    = useTranslation(["common", "repertoires"]);
-	const { loading, error, data } = useQuery<RepertoiresQueryData>(GET_REPERTOIRES);
-	const onSubmit                 = (values: any) => props.onSubmit(values);
+	const { t }                            = useTranslation(["common", "repertoires", "chess"]);
+	const [ side_visible, setSideVisible ] = useState(false);
+	const { loading, error, data }         = useQuery<RepertoiresQueryData>(GET_REPERTOIRES);
+	const onSubmit                         = (values: any) => props.onSubmit(values);
+	const onSelectChange                   = (value: any) => {
+		setSideVisible(+value === -1);
+	};
 
 	const options: {[side: string]: Array<JSX.Element>} = {
 		white : [],
@@ -54,7 +58,7 @@ function SelectRepertoire(props: SelectRepertoireProps) {
 						name="repertoire"
 						rules={[ { required: true, message: t("repertoires:input_repertoire")} ]}
 					>
-						<Select>
+						<Select onChange={onSelectChange}>
 							<Select.OptGroup label={t("new")}>
 								<Select.Option value="-1">{t("repertoires:create_repertoire")}</Select.Option>
 							</Select.OptGroup>
@@ -72,6 +76,18 @@ function SelectRepertoire(props: SelectRepertoireProps) {
 							}
 						</Select>
 					</Form.Item>
+					{side_visible && (
+						<Form.Item
+							label={t("chess:side")}
+							name="side"
+							rules={[ { required: side_visible, message: t("chess:choose_side")} ]}
+						>
+							<Select>
+								<Select.Option value="white">{t("chess:white")}</Select.Option>
+								<Select.Option value="black">{t("chess:black")}</Select.Option>
+							</Select>
+						</Form.Item>
+					)}
 				</Form>
 			</Spin>
 		</Modal>

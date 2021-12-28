@@ -3,18 +3,19 @@ module Types
 		class ImportEcoToRepertoire < BaseMutation
 			argument :repertoire_id, ID, required: true
 			argument :eco_id, ID, required: true
+			argument :side, String, required: false
 
 			field :repertoire, Types::Models::RepertoireType, null: true
 			field :errors, [String], null: false
 
-			def resolve(repertoire_id:, eco_id:)
+			def resolve(repertoire_id:, eco_id:, side:)
 				eco = ::EcoPosition.find(eco_id)
 
 				if (repertoire_id == "-1")
 					repertoire = ::Repertoire.create(
 						user: context[:user],
 						name: eco.name,
-						side: "white",
+						side: side,
 						public: false
 					)
 				else
