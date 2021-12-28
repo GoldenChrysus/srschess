@@ -65,12 +65,22 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 			return;
 		}
 
-		const board    = this.board_ref.current.el;
-		const parent   = board.closest("#chessboard-outer") ?? board.closest(".board-100w") ?? document;
-		const width    = (parent.classList?.contains("board-100w"))
+		const board = this.board_ref.current.el;
+
+		if (!board) {
+			return
+		};
+
+		const parent = board.closest("#chessboard-outer") ?? board.closest(".board-100w") ?? document;
+
+		if (!parent) {
+			return;
+		}
+
+		const width = (parent.classList?.contains("board-100w"))
 			? parent.offsetWidth + "px"
 			: Math.min(parent.offsetHeight - 50, parent.offsetWidth) + "px";
-		const movelist = document.getElementById("movelist");
+		const movelist = board.closest(".chess-outer")?.getElementsByClassName("movelist")[0];
 
 		for (const child of parent.children) {
 			child.style.width = width;

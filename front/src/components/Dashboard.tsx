@@ -36,12 +36,12 @@ function Dashboard(props: DashboardProps) {
 
 	return (
 		<div id="dashboard-container" className="px-6 py-4 grid grid-cols-12 gap-4">
-			<div className="col-span-2">
+			<div className="col-span-12 md:col-span-2">
 				<Menu selectedKeys={["dashboard-menu-item-" + props.active_section]}>
 					{items}
 				</Menu>
 			</div>
-			<div className="col-span-10">
+			<div className="col-span-12 md:col-span-10">
 				{renderComponent(props.active_section)}
 			</div>
 		</div>

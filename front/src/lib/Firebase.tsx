@@ -57,7 +57,19 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 			});
 	};
 
+	const handleTokenChange = (user: User | null) => {
+		console.log("gh4");
+		console.log(user);
+
+		if (!user) {
+			return;
+		}
+
+		runInAction(() => AuthState.login(user));
+	}
+
 	auth.onAuthStateChanged(handleAuth);
+	auth.onIdTokenChanged(handleTokenChange);
 
 	setPersistence(auth, browserLocalPersistence)
 		.then(() => {

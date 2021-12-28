@@ -78,8 +78,8 @@ function UserInfo() {
 						email : user?.email
 					}}
 				>
-					<Row gutter={24}>
-						<Col span={12}>
+					<div className="grid grid-cols-2 gap-x-4">
+						<div className="col-span-2 md:col-span-1">
 							<Form.Item
 								label={t("email")}
 								name="email"
@@ -87,13 +87,13 @@ function UserInfo() {
 							>
 								<Input name="email"/>
 							</Form.Item>
-						</Col>
-						<Col span={12}>
+						</div>
+						<div className="col-span-2 md:col-span-1">
 							<Form.Item label={t("password")} name="password">
 								<Input type="password"/>
 							</Form.Item>
-						</Col>
-					</Row>
+						</div>
+					</div>
 					<Form.Item>
 						<Button type="default" htmlType="submit">{t("common:save")}</Button>
 					</Form.Item>

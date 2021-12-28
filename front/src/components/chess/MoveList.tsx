@@ -37,7 +37,7 @@ class MoveList extends React.Component<MoveListProps> {
 		return (
 			<>
 				{!this.props.demo && <Stockfish mode={this.props.mode} fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>}
-				<div key="movelist" id="movelist" className={"max-w-full md:max-w-sm " + this.props.mode}>
+				<div key="movelist" id="movelist" className={"movelist max-w-full md:max-w-sm " + this.props.mode}>
 					{this.props.moves?.map((move, i, moves) => this.renderListMove(move, i, moves))}
 				</div>
 				<div key="movelist-controller" id="movelist-controller" className="max-w-full">
