@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import DatabaseDemo from "./home/DatabaseDemo";
+import OpeningsDemo from "./home/OpeningsDemo";
 import RepertoireDemo from "./home/RepertoireDemo";
 
 function Home() {
@@ -28,7 +29,7 @@ function Home() {
 						<h1 className="text-xl text-green-500">{t("openings:openings_explorer")}</h1>
 						<p>{t("openings:meta_description")}</p>
 					</div>
-					<div></div>
+					<div><OpeningsDemo/></div>
 				</div>
 				<div className="px-8 py-4 bg-gray-900 rounded-3xl">
 					<div>

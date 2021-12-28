@@ -1,4 +1,5 @@
 import { ChessSearchQueryData, ChessSearchResultItemModel } from "../types/models/ChessSearch";
+import { EcoPositionsQueryData } from "../types/models/EcoPosition";
 import { GameModel } from "../types/models/Game";
 
 export const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -169,3 +170,24 @@ Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0`,
 		movelist : "e4.e5.Nf3.d6.d4.Bg4.dxe5.Bxf3.Qxf3.dxe5.Bc4.Nf6.Qb3.Qe7.Nc3.c6.Bg5.b5.Nxb5.cxb5.Bxb5.Nbd7.OOO.Rd8.Rxd7.Rxd7.Rd1.Qe6.Bxd7.Nxd7.Qb8.Nxb8.Rd8"
 	}
 ];
+
+export const DEMO_OPENING_RESULT: EcoPositionsQueryData = {
+	ecoPositions : [
+		{
+			id   : 5647,
+			code : "C51",
+			name : "Italian Game: Evans Gambit",
+			slug : "c51-italian-game-evans-gambit-0fcd",
+			fen  : "r1bqk1nr/pppp1ppp/2n5/2b1p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R b KQkq -",
+			pgn  : "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4"
+		},
+		{
+			id   : 4385,
+			code : "B10",
+			name : "Caro-Kann Defense",
+			slug : "b10-carokann-defense-ec87",
+			fen  : "rnbqkbnr/pp2pppp/2p5/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq -",
+			pgn  : "1. e4 c6 2. Nc3 d5"
+		}
+	]
+};
