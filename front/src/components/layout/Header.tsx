@@ -166,7 +166,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 
 	renderUser() {
 		return (
-			<Link to="/dashboard" className="text-white">
+			<Link to="/dashboard/user-info" className="text-white">
 				<FontAwesomeIcon icon={faUser} size="sm"/>
 			</Link>
 		);

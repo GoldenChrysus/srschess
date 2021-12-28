@@ -21,6 +21,8 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 	});
 	const auth = getAuth(app);
 
+	AuthState.provideAuth(auth);
+
 	const handleAuth = (res: User | any | null, from_ui?: boolean) => {
 		const user = (from_ui) ? res.user : res;
 
@@ -29,7 +31,7 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 			return false;
 		}
 
-		AuthState.login(user.uid, user.accessToken);
+		AuthState.login(user);
 
 		client
 			.mutate({
@@ -62,7 +64,12 @@ function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
 				{
 					signInOptions : [
 						EmailAuthProvider.PROVIDER_ID,
-					]
+					],
+					callbacks : {
+						signInSuccessWithAuthResult : (res: any) => {
+							return false;
+						}
+					}
 				}
 			);
 		})

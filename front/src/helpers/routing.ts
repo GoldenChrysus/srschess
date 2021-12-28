@@ -7,7 +7,8 @@ export const ROUTES = {
 	"game_database"     : "/game-database/",
 	"collection"        : "/game-database/collection/:collection_slug",
 	"collection_game"   : "/game-database/collection/:collection_slug/game/:game_id",
-	"master_game"       : "/game-database/master-game/:master_game_id"
+	"master_game"       : "/game-database/master-game/:master_game_id",
+	"dashboard"         : "/dashboard/:section"
 };
 
 export function generateCanonicalURL(path: string) {

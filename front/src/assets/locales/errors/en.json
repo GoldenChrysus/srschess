@@ -9,5 +9,7 @@
 	"300201": "This move cannot be reviewed yet.",
 	"300302": "Invalid ECO provided.",
 	"300303": "Invalid PGN provided.",
+	"auth/invalid-email": "Invalid e-mail provided.",
+	"auth/weak-password": "Please use a stronger password.",
 	"unexpected": "An unexpected error occurred."
 }
