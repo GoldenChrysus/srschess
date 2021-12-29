@@ -2,7 +2,8 @@ import { UserModel } from "./User";
 
 export interface RepertoireMoveNoteModel {
 	id: string,
-	value: string | null
+	value: string | null,
+	repertoireMoveId: string
 }
 
 export interface RepertoireReviewModel {
@@ -47,6 +48,17 @@ export interface RepertoireModel {
 	reviewQueueLength?: number,
 	reviewQueue?: Array<RepertoireQueueItemModel>,
 	nextReview?: string | null
+}
+
+export interface RepertoireMoveNoteQueryData {
+	repertoireMoveNote: RepertoireMoveNoteModel | null
+}
+
+export interface RepertoireMoveNoteMutationData {
+	createRepertoireMoveNote : {
+		note: RepertoireMoveNoteModel | null
+		errors: Array<string>
+	}
 }
 
 export interface RepertoireQueryData {
