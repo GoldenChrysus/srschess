@@ -177,23 +177,22 @@ for file in files:
 			print(record["id"])
 
 		# print(record["white"], record["black"])
-		conflict = "NOTHING" if enviro == "pgnmentor" else """
+		conflict = """
 			UPDATE SET
-				event = CASE WHEN master_games.source = 1 THEN EXCLUDED.event ELSE master_games.event END,
-				round = CASE WHEN master_games.source = 1 THEN EXCLUDED.round ELSE master_games.round END,
-				year = CASE WHEN master_games.source = 1 THEN EXCLUDED.year ELSE master_games.year END,
-				month = CASE WHEN master_games.source = 1 THEN EXCLUDED.month ELSE master_games.month END,
-				day = CASE WHEN master_games.source = 1 THEN EXCLUDED.day ELSE master_games.day END,
-				white_elo = CASE WHEN master_games.source = 1 THEN EXCLUDED.white_elo ELSE master_games.white_elo END,
-				black_elo = CASE WHEN master_games.source = 1 THEN EXCLUDED.black_elo ELSE master_games.black_elo END,
-				white_title = CASE WHEN master_games.source = 1 THEN EXCLUDED.white_title ELSE master_games.white_title END,
-				black_title = CASE WHEN master_games.source = 1 THEN EXCLUDED.black_title ELSE master_games.black_title END,
-				white_fide_id = CASE WHEN master_games.source = 1 THEN EXCLUDED.white_fide_id ELSE master_games.white_fide_id END,
-				black_fide_id = CASE WHEN master_games.source = 1 THEN EXCLUDED.black_fide_id ELSE master_games.black_fide_id END,
-				white = CASE WHEN master_games.source = 1 THEN EXCLUDED.white ELSE master_games.white END,
-				black = CASE WHEN master_games.source = 1 THEN EXCLUDED.black ELSE master_games.black END,
-				pgn = CASE WHEN master_games.source = 1 THEN EXCLUDED.pgn ELSE master_games.pgn END,
-				source = CASE WHEN master_games.source = 1 THEN EXCLUDED.source ELSE master_games.source END
+				event = COALESCE(NULLIF(master_games.event, ''), EXCLUDED.event),
+				round = COALESCE(NULLIF(master_games.round, ''), EXCLUDED.round),
+				year = COALESCE(NULLIF(master_games.year, 0), EXCLUDED.year),
+				month = COALESCE(NULLIF(master_games.month, 0), EXCLUDED.month),
+				day = COALESCE(NULLIF(master_games.day, 0), EXCLUDED.day),
+				white_elo = COALESCE(NULLIF(master_games.white_elo, 0), EXCLUDED.white_elo),
+				black_elo = COALESCE(NULLIF(master_games.black_elo, 0), EXCLUDED.black_elo),
+				white_title = COALESCE(NULLIF(master_games.white_title, ''), EXCLUDED.white_title),
+				black_title = COALESCE(NULLIF(master_games.black_title, ''), EXCLUDED.black_title),
+				white_fide_id = COALESCE(NULLIF(master_games.white_fide_id, ''), EXCLUDED.white_fide_id),
+				black_fide_id = COALESCE(NULLIF(master_games.black_fide_id, ''), EXCLUDED.black_fide_id),
+				white = COALESCE(NULLIF(master_games.white, ''), EXCLUDED.white),
+				black = COALESCE(NULLIF(master_games.black, ''), EXCLUDED.black),
+				pgn = CASE WHEN LENGTH(master_games.pgn) > LENGTH(COALESCE(EXCLUDED.pgn, '')) THEN master_games.pgn ELSE EXCLUDED.pgn END
 		"""
 
 		cur.execute("""
