@@ -52,7 +52,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 
 	render() {
 		return (
-			<Translation ns={["common", "repertoires", "openings", "database"]}>
+			<Translation ns={["common", "repertoires", "openings", "database", "premium"]}>
 				{
 					(t) => (
 						<>
@@ -73,6 +73,9 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 									</NavLink>
 									<NavLink to={{ pathname: "/game-database/"}}>
 										{t("database:game_database")}
+									</NavLink>
+									<NavLink to={{ pathname: "/upgrade/"}}>
+										{t("premium:upgrade")}
 									</NavLink>
 								</nav>
 								<div className="flex flex-initial items-center h-full">
@@ -129,6 +132,11 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 									<Menu.Item key="menu-item-database">
 										<NavLink to={{ pathname: "/game-database/"}}>
 											{t("database:game_database")}
+										</NavLink>
+									</Menu.Item>
+									<Menu.Item key="menu-item-upgrade">
+										<NavLink to={{ pathname: "/upgrade/"}}>
+											{t("premium:upgrade")}
 										</NavLink>
 									</Menu.Item>
 								</Menu>
