@@ -199,7 +199,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 			const candidates = this.chess.moves({ verbose: true });
 
 			for (const candidate of candidates) {
-				if (candidate.from === orig && candidate.promotion?.length) {
+				if (candidate.from === orig && candidate.to === dest && candidate.promotion?.length) {
 					return this.setState({
 						pending_move : { from: orig, to: dest },
 						promoting    : true
