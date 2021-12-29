@@ -127,3 +127,11 @@ body .cg-wrap piece.white.king,
 body .standalone.piece.white.k {
 	background-image: url("../../assets/chess/pieces/staunty/white-king.svg");
 }
+
+body .promotion .standalone.piece {
+	width: auto;
+	height: 4rem;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor: pointer;
+}

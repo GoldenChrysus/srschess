@@ -8,6 +8,7 @@ import Piece from "./chess/Piece";
 
 import "react-chessground/dist/styles/chessground.css";
 import "../styles/components/chessboard.css";
+import { Modal } from "antd";
 
 interface ChessboardProps {
 	mode: ChessControllerProps["mode"],
@@ -21,7 +22,17 @@ interface ChessboardProps {
 	quizzing: boolean
 }
 
-class Chessboard extends React.Component<ChessboardProps> {
+interface Move {
+	from: string,
+	to: string
+}
+
+interface ChessboardState {
+	pending_move?: Move,
+	promoting: boolean
+}
+
+class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 	private chess            = ChessMaker.create();
 	private last_orientation = "white";
 	private fen?: string     = START_FEN;
@@ -31,18 +42,23 @@ class Chessboard extends React.Component<ChessboardProps> {
 	constructor(props: ChessboardProps) {
 		super(props);
 
-		this.onMove = this.onMove.bind(this);
-		this.onDraw = this.onDraw.bind(this);
+		this.onMove      = this.onMove.bind(this);
+		this.onDraw      = this.onDraw.bind(this);
+		this.onPromotion = this.onPromotion.bind(this);
 
 		this.last_orientation = props.orientation ?? this.last_orientation;
 		this.fen              = props.fen || START_FEN;
 		this.pgn              = props.pgn || START_FEN;
 
+		this.state = {
+			promoting : false
+		};
+
 		this.chess.load(this.fen);
 		this.chess.load_pgn(this.pgn);
 	}
 
-	shouldComponentUpdate(next_props: ChessboardProps) {
+	shouldComponentUpdate(next_props: ChessboardProps, next_state: ChessboardState) {
 		this.last_orientation = next_props.orientation ?? this.last_orientation;
 
 		if (this.props.fen !== next_props.fen || this.props.quizzing || (this.props.queue_item !== next_props.queue_item) || this.props.mode === "review") {
@@ -65,7 +81,8 @@ class Chessboard extends React.Component<ChessboardProps> {
 			next_props.orientation !== this.props.orientation ||
 			next_props.repertoire_id !== this.props.repertoire_id ||
 			next_props.queue_item?.id !== this.props.queue_item?.id ||
-			next_props.mode !== this.props.mode
+			next_props.mode !== this.props.mode ||
+			next_state.promoting !== this.state.promoting
 		);
 	}
 
@@ -125,6 +142,8 @@ class Chessboard extends React.Component<ChessboardProps> {
 			this.time = new Date().getTime();
 		}
 
+		const turn = this.toColor();
+
 		return (
 			<>
 				{
@@ -133,11 +152,19 @@ class Chessboard extends React.Component<ChessboardProps> {
 						{this.renderCaptures("top")}
 					</div>
 				}
+				<Modal visible={this.state.promoting} footer={null} closable={false}>
+					<div className="promotion grid grid-cols-4 gap-4">
+						<div className={"standalone piece " + turn + " q"} onClick={() => this.onPromotion("q")}></div>
+						<div className={"standalone piece " + turn + " r"} onClick={() => this.onPromotion("r")}></div>
+						<div className={"standalone piece " + turn + " b"} onClick={() => this.onPromotion("b")}></div>
+						<div className={"standalone piece " + turn + " n"} onClick={() => this.onPromotion("n")}></div>
+					</div>
+				</Modal>
 				<ChessgroundBoard
 					mode={this.props.mode}
 					check={this.checkColor()}
 					orientation={this.props.orientation || this.last_orientation}
-					turn_color={this.toColor()}
+					turn_color={turn}
 					movable={this.toDests()}
 					fen={this.props.fen}
 					last_move={this.lastMove()}
@@ -163,19 +190,40 @@ class Chessboard extends React.Component<ChessboardProps> {
 			: null;
 	}
 
-	onMove(orig: any, dest: any) {
+	onMove(orig: any, dest: any, capture?: any, promo?: any) {
 		if (!this.props.orientation && !["search", "lesson", "review"].includes(this.props.mode)) {
 			return false;
 		}
 
+		if (dest && !promo && ["8", "1"].includes(dest[1])) {
+			const candidates = this.chess.moves({ verbose: true });
+
+			for (const candidate of candidates) {
+				if (candidate.from === orig && candidate.promotion?.length) {
+					return this.setState({
+						pending_move : { from: orig, to: dest },
+						promoting    : true
+					});
+				}
+			}
+		}
+
 		const res = this.chess.move({
-			from : orig,
-			to   : dest
+			from      : orig,
+			to        : dest,
+			promotion : promo
 		});
 
 		if (!res) {
 			this.chess.undo();
 			return false;
+		}
+
+		if (promo) {
+			this.setState({
+				pending_move : undefined,
+				promoting    : false
+			});
 		}
 
 		const time = (new Date()).getTime() - this.time;
@@ -195,6 +243,10 @@ class Chessboard extends React.Component<ChessboardProps> {
 				moves : this.chess.history(),
 			}
 		});	
+	}
+
+	onPromotion(piece: string) {
+		this.onMove(this.state.pending_move?.from, this.state.pending_move?.to, undefined, piece);
 	}
 	
 	toColor() {
