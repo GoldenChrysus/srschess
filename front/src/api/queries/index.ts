@@ -160,6 +160,7 @@ export const GET_REPERTOIRE_QUEUES = gql`
 	query Repertoire($slug: String!) {
 		repertoire(slug: $slug, mode: "review") {
 			...CoreRepertoireFields
+			userOwned
 			reviewQueue {
 				id
 				parentId

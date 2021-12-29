@@ -22,15 +22,9 @@ class Container extends React.Component {
 							<Home/>
 						</Route>
 
-						<Route exact path={ROUTES.repertoires}>
-							<RepertoireRoute mode="repertoire"/>
-						</Route>
-						<Route exact path={ROUTES.lessons}>
-							<RepertoireRoute mode="lesson"/>
-						</Route>
-						<Route exact path={ROUTES.reviews}>
-							<RepertoireRoute mode="review"/>
-						</Route>
+						<Route exact path={ROUTES.repertoires} render={props => <RepertoireRoute {...props} mode="repertoire"/>}/>
+						<Route exact path={ROUTES.lessons} render={props => <RepertoireRoute {...props} mode="lesson"/>}/>
+						<Route exact path={ROUTES.reviews} render={props => <RepertoireRoute {...props} mode="review"/>}/>
 
 						<Route exact path={ROUTES.openings_explorer}>
 							<OpeningExplorerRoute/>

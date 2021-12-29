@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Redirect, RouteProps, useParams } from "react-router-dom";
 import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
@@ -12,8 +12,9 @@ import { createRepertoireRouteMeta } from "../helpers";
 import { ChessState } from "../lib/types/ReduxTypes";
 import { setRepertoire } from "../redux/slices/chess";
 import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../redux/store";
 
-interface RepertoireRouteProps extends PropsFromRedux {
+interface RepertoireRouteProps extends PropsFromRedux, RouteProps {
 	mode: ChessControllerProps["mode"]
 }
 interface RepertoireRouteParams {
@@ -27,7 +28,8 @@ interface RepertoireRouteParams {
 // or after the mutation request. If after, the possibility of a race condition still exists, so a route-level cache is needed.
 
 function RepertoireRoute(props: RepertoireRouteProps) {
-	let main_query = GET_REPERTOIRE;
+	let main_query   = GET_REPERTOIRE;
+	let require_auth = false;
 
 	switch (props.mode) {
 		case "repertoire":
@@ -37,7 +39,8 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 
 		case "lesson":
 		case "review":
-			main_query = GET_REPERTOIRE_QUEUES;
+			main_query   = GET_REPERTOIRE_QUEUES;
+			require_auth = true;
 
 			break;
 	}
@@ -60,6 +63,10 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		}
 	);
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
+
+	if (require_auth && !props.authenticated) {
+		return <Redirect to={{ pathname : "/login/", state : { redirect : props.location?.pathname }}}/>;
+	}
 
 	props.setRepertoire(data?.repertoire);
 
@@ -153,10 +160,13 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	)
 };
 
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated
+});
 const mapDispatchToProps = {
 	setRepertoire : (repertoire: ChessState["repertoire"]) => setRepertoire(repertoire)
 };
-const connector      = connect(undefined, mapDispatchToProps);
+const connector      = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux  = ConnectedProps<typeof connector>;
 
 export default connector(RepertoireRoute);
