@@ -10,6 +10,7 @@ import { ROUTES } from "../helpers";
 import Home from "./Home";
 import DashboardRoute from "../routes/DashboardRoute";
 import LoginRoute from "../routes/LoginRoute";
+import UpgradeRoute from "../routes/UpgradeRoute";
 
 class Container extends React.Component {
 	render() {
@@ -48,11 +49,13 @@ class Container extends React.Component {
 							<GameDatabaseRoute/>
 						</Route>
 
-						<Route exact path={ROUTES.login}>
-							<LoginRoute/>
-						</Route>
+						<Route exact path={ROUTES.login} component={LoginRoute}/>
 						<Route exact path={ROUTES.dashboard}>
 							<DashboardRoute/>
+						</Route>
+
+						<Route exact path={ROUTES.upgrade}>
+							<UpgradeRoute/>
 						</Route>
 					</Switch>
 				</MainLayout>

@@ -51,7 +51,7 @@ function UserInfo(props: PropsFromRedux) {
 
 	if (logout) {
 		props.logout();
-		return <Redirect to={"/login/?redirect=" + window.encodeURIComponent("dashboard/user-info")}/>;
+		return <Redirect to={{ pathname : "/login/", state: { redirect : "dashboard/user-info" }}}/>;
 	}
 
 	return (

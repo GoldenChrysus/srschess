@@ -62,6 +62,27 @@ export const CREATE_USER = gql`
 	}
 `;
 
+export const CREATE_COMMUNICATION_ENROLLMENT = gql`
+	mutation CreateCommunicationEnrollment($name: String!) {
+		createCommunicationEnrollment(input: {
+			name: $name
+		}) {
+			enrollment {
+				id
+			}
+			errors
+		}
+	}
+`;
+
+export const GET_COMMUNICATION_ENROLLMENTS = gql`
+	query CommunicationEnrollments {
+		communicationEnrollments {
+			name
+		}
+	}
+`;
+
 export const CREATE_REPERTOIRE = gql`
 	mutation CreateRepertoire($name: String!, $side: String!, $public: Boolean!) {
 		createRepertoire(input: {

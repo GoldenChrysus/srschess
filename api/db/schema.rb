@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_23_123800) do
+ActiveRecord::Schema.define(version: 2021_12_29_053209) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(version: 2021_12_23_123800) do
     t.string "slug", null: false
     t.index ["slug"], name: "index_collections_on_slug", unique: true
     t.index ["user_id"], name: "index_collections_on_user_id"
+  end
+
+  create_table "communication_enrollments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_communication_enrollments_on_user_id"
   end
 
   create_table "eco_positions", force: :cascade do |t|
@@ -157,6 +165,7 @@ ActiveRecord::Schema.define(version: 2021_12_23_123800) do
   end
 
   add_foreign_key "collections", "users"
+  add_foreign_key "communication_enrollments", "users"
   add_foreign_key "game_move_notes", "game_moves"
   add_foreign_key "game_moves", "games"
   add_foreign_key "games", "users"

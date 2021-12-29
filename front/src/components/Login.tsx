@@ -7,6 +7,7 @@ import { notifyError } from "../helpers";
 import { RootState } from "../redux/store";
 import { connect, ConnectedProps } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { LocationState } from "../lib/types/RouteTypes";
 
 enum ProgressStates {
 	initial,
@@ -14,15 +15,18 @@ enum ProgressStates {
 	existing
 };
 
-function Login(props: PropsFromRedux) {
+interface LoginProps extends PropsFromRedux {
+	state?: LocationState
+}
+
+function Login(props: LoginProps) {
 	const [ form ]                  = Form.useForm();
 	const { t }                     = useTranslation(["dashboard", "common"]);
 	const [ loading, setLoading ]   = useState<boolean>(false);
 	const [ progress, setProgress ] = useState<keyof typeof ProgressStates>("initial");
-	const params                    = new URLSearchParams(window.location.search);
 	
 	if (props.authenticated) {
-		return (<Redirect to={"/" + (params.get("redirect") || "repertoires") + "/"}/>);
+		return (<Redirect to={"/" + (props.state?.redirect ?? "repertoires") + "/"}/>);
 	}
 
 	const onSubmit = (values: any) => {

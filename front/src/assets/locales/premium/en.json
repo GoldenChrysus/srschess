@@ -1,8 +1,29 @@
 {
 	"cloned_repertoire_limit": "Maximum number of cloned repertoires reached.",
 	"created_collection_limit": "Maximum number of collections reached.",
+	"current_plan": "Current Plan",
+
+	"database_result_limit": "{{count, number}} games per search",
+	"game_collections_game_limit": "{{count, number}} games per collection",
+	"game_collections_limit": "Up to {{count, number}} collections",
+	"opening_database_limit": "{{count, number}} moves on opening database",
+	"public_repertoires_copy_limit": "Copy up to {{count, number}}",
+	"repertoire_limit": "Up to {{count, number}} positions",
+
+	"has_notification_enrollment": "Signed Up for Notifications",
+
+	"month": "Month",
+	"notify_when_available": "Notify When Available",
 	"opening_depth_limit": "Maximum opening explorer depth reached.",
+
+	"plan_bishop": "Bishop",
+	"plan_free": "Free Plan",
+	"plan_monarch": "Monarch",
+	"plan_rook": "Rook",
+
+	"purchase_now": "Purchase Now",
 	"premium_only": "Premium feature only.",
+	"register_now": "Register Now",
 	"upgrade": "Upgrade",
 	"upgrade_now": "Upgrade Now"
 }

@@ -98,7 +98,8 @@ body .ant-table .ant-table-tbody > tr:hover > td {
 }
 
 body .ant-pagination-item-link > span.anticon,
-body .ant-pagination-item-container > span.anticon {
+body .ant-pagination-item-container > span.anticon,
+body span.ant-btn-loading-icon {
 	position: relative;
 	top: -3px;
 }

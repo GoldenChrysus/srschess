@@ -3,6 +3,9 @@ module Types
 		# /create_user
 		field :create_user, mutation: Types::Mutations::CreateUser
 
+		# /create_communication_enrollment
+		field :create_communication_enrollment, mutation: Types::Mutations::CreateCommunicationEnrollment
+
 		# /create_repertoire
 		field :create_repertoire, mutation: Types::Mutations::CreateRepertoire
 

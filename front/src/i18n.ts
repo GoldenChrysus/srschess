@@ -37,6 +37,10 @@ i18n
 				if (format === "lowercase") {
 					value = (value ?? "").toLowerCase();
 				}
+				
+				if (format === "number") {
+					value = (!isNaN(value)) ? new Intl.NumberFormat().format(value) : value;
+				}
 
 				return value;
 			}
