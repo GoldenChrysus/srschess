@@ -47,7 +47,7 @@ function OpeningExplorer(props: OpeningExplorerProps) {
 	}
 
 	return (
-		<div className="px-6 py-4">
+		<div className="p-6">
 			<Input addonBefore={t("filter")} onChange={onFilter} allowClear={true} placeholder={t("openings:filter")}/>
 			{volumes}
 		</div>

@@ -115,7 +115,7 @@ function Login(props: LoginProps) {
 	return (
 		<div className="w-full md:w-96 m-auto md:px-6 md:py-4">
 			<Spin spinning={loading}>
-				<div className="px-6 py-4">
+				<div className="p-6">
 					<Form
 						id="login-form"
 						onFinish={onSubmit}

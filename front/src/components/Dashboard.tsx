@@ -35,7 +35,7 @@ function Dashboard(props: DashboardProps) {
 	}
 
 	return (
-		<div id="dashboard-container" className="px-6 py-4 grid grid-cols-12 gap-4">
+		<div id="dashboard-container" className="p-6 grid grid-cols-12 gap-4">
 			<div className="col-span-12 md:col-span-2">
 				<Menu selectedKeys={["dashboard-menu-item-" + props.active_section]}>
 					{items}

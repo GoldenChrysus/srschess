@@ -8,7 +8,7 @@ function Home() {
 	const { t } = useTranslation(["repertoires", "database", "openings", "premium"]);
 
 	return (
-		<div className="px-6 py-4">
+		<div className="p-6">
 			<div className="grid grid-cols-1 md:grid-cols-2 3xl:grid-cols-4 gap-6">
 				<div className="px-8 py-4 bg-gray-900 rounded-3xl">
 					<div>
