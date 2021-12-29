@@ -26,7 +26,9 @@ class LeafSpan extends React.Component<LeafSpanProps> {
 			this.props.move.id !== next_props.move.id ||
 			this.props.has_children !== next_props.has_children ||
 			this.props.children_active !== next_props.children_active ||
-			this.props.active !== next_props.active
+			this.props.active !== next_props.active ||
+			this.props.first_child !== next_props.first_child ||
+			this.props.last_child !== next_props.last_child
 		);
 	}
 

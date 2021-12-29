@@ -26,10 +26,27 @@ class RepertoireMove < ApplicationRecord
 		["type"]
 	end
 
+	def sort_is_max?
+		return (
+			self == self.class
+				.where({
+					repertoire_id: self.repertoire_id,
+					move_number: self.move_number
+				})
+				.order("sort DESC")
+				.limit(1)
+				.first
+		)
+	end
+
 	def setSort(new_sort)
 		sort = 0
 
 		self.sort = new_sort
+
+		if (self.sort < 0)
+			raise ApiErrors::RepertoireError::InvalidMoveSort.new
+		end
 
 		self
 			.repertoire
