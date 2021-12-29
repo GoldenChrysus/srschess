@@ -15,7 +15,8 @@ function RepertoireMoveNote(props: RepertoireMoveNoteProps) {
 		variables : {
 			moveId : props.active_uuid
 		},
-		skip : (!props.active_uuid)
+		skip        : (!props.active_uuid),
+		fetchPolicy : "network-only"
 	});
 	const [ createNote ] = useMutation(CREATE_REPERTOIRE_MOVE_NOTE);
 
