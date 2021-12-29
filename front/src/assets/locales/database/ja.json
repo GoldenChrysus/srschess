@@ -1,6 +1,6 @@
 {
   "collection": "コレクション",
-  "collection_info": "マスター試合*と個人の試合のコレクションを作ります。Chess HQ はPGN、Chess.com*、Lichess*によるインポートをさせます。コレクションを友人やコーチと簡単に共有できます。",
+  "collection_info": "マスター試合*と個人の試合のコレクションを作ります。Chess HQはPGN、Chess.com*、Lichess*によるインポートをさせます。コレクションを友人やコーチと簡単に共有できます。",
   "create_collection": "$t(collection)の作成",
   "edit_collection": "$t(collection)の修正",
   "game_collections": "試合のコレクション",

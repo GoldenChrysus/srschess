@@ -14,6 +14,11 @@ module Types
 				if (!good)
 					user = User.new(email: email, uid: uid)
 					good = user.save
+				elsif (user == context[:user])
+					user.email = email
+					user.uid   = uid
+					
+					user.save
 				end
 
 				if (good)

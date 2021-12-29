@@ -6,22 +6,22 @@ import { auth } from "../../lib/Firebase";
 import { AuthState } from "../../lib/types/ReduxTypes";
 
 const initialState: AuthState = {
-	show_login    : false,
 	authenticated : false
 };
+
+interface LoginPayload {
+	uid?: string,
+	token?: string
+}
 
 export const AuthSlice = createSlice({
 	name: "Auth",
 	initialState,
 	reducers : {
-		toggleLogin(state, action: PayloadAction<AuthState["show_login"]>) {
-			state.show_login = action.payload;
-		},
-		login(state, action: PayloadAction<User | any>) {
-			state.uid           = action.payload?.uid
-			state.token         = action.payload?.accessToken;
+		login(state, action: PayloadAction<LoginPayload>) {
+			state.uid           = action.payload.uid
+			state.token         = action.payload.token;
 			state.authenticated = true;
-			state.show_login    = false;
 			
 			cable_link.connectionParams = {
 				token : state.token ?? ""
@@ -41,6 +41,6 @@ export const AuthSlice = createSlice({
 	}
 });
 
-export const { toggleLogin, login, logout } = AuthSlice.actions;
+export const { login, logout } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

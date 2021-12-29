@@ -1,12 +1,12 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserLocalPersistence, User } from "firebase/auth";
-import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 import store from "../redux/store";
 import { login, logout } from "../redux/slices/auth";
 import { CREATE_USER } from "../api/queries";
 import { notifyError } from "../helpers";
+import { client } from "./Apollo";
 
 const app = initializeApp({
 	apiKey            : process.env.REACT_APP_FIREBASE_KEY,
@@ -20,51 +20,54 @@ const app = initializeApp({
 
 export const auth = getAuth(app);
 
-function FirebaseAuth(client: ApolloClient<NormalizedCacheObject>) {
+const serverLogin = (user: User | any) => {
+	client
+		.mutate({
+			mutation       : CREATE_USER,
+			refetchQueries : "active",
+			variables : {
+				email : user.email,
+				uid   : user.uid
+			}
+		})
+		.then(() => {
+			// All good
+			localStorage.setItem("firebase_uid", user.uid);
+			localStorage.setItem("firebase_token", user.accessToken);
+		})
+		.catch((err) => {
+			auth.signOut();
+			notifyError();
+			console.error(err);
+		});
+};
+
+function FirebaseAuth() {
 	const handleAuth = (res: User | any | null, from_ui?: boolean) => {
 		const user = (from_ui) ? res.user : res;
 
-		console.log("AUTH CHANGED");
-
 		if (!user) {
-			console.log(res);
-			console.log("LOGOUT");
 			store.dispatch(logout());
 			return false;
 		}
 
-		console.log("AUTH OKAY");
-		store.dispatch(login(user));
-
-		client
-			.mutate({
-				mutation       : CREATE_USER,
-				refetchQueries : "active",
-				variables : {
-					email : user.email,
-					uid   : user.uid
-				}
-			})
-			.then(() => {
-				// All good
-				localStorage.setItem("firebase_uid", user.uid);
-				localStorage.setItem("firebase_token", user.accessToken);
-			})
-			.catch((err) => {
-				auth.signOut();
-				notifyError();
-				console.error(err);
-			});
+		store.dispatch(login({
+			uid   : user.uid,
+			token : user.accessToken
+		}));
+		serverLogin(user);
 	};
 
 	const handleTokenChange = (user: User | any | null) => {
-		console.log("TOKEN CHANGE");
-
 		if (!user) {
 			return;
 		}
 
-		store.dispatch(login(user));
+		store.dispatch(login({
+			uid   : user.uid,
+			token : user.accessToken
+		}));
+		serverLogin(user);
 		localStorage.setItem("firebase_uid", user.uid);
 		localStorage.setItem("firebase_token", user.accessToken);
 	}

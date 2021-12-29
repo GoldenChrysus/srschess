@@ -3,7 +3,6 @@ import { withRouter } from "react-router-dom";
 
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
-import Login from "./modals/Login";
 
 class MainLayout extends React.Component<any> {
 	render() {
@@ -37,7 +36,6 @@ class MainLayout extends React.Component<any> {
 					{this.props.children}
 					<Footer/>
 				</div>
-				<Login/>
 			</div>
 		);
 	}

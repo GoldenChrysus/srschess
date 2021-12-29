@@ -12,7 +12,7 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import { client } from "./lib/Apollo";
 
-FirebaseAuth(client);
+FirebaseAuth();
 i18n.setDefaultNamespace("common");
 
 (async () => {

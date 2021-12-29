@@ -33,9 +33,6 @@ function UserInfo(props: PropsFromRedux) {
 
 			setProcessing(false);
 		} catch (e: any) {
-			console.log("FAILED");
-			console.log(e.code);
-
 			switch (e.code) {
 				case "auth/user-token-expired":
 				case "auth/requires-recent-login":

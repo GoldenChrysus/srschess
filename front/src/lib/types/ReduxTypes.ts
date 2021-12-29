@@ -2,7 +2,6 @@ import { CollectionModel } from "./models/Collection";
 import { RepertoireModel, RepertoireMoveModel } from "./models/Repertoire";
 
 export interface AuthState {
-	show_login    : boolean
 	authenticated : boolean
 	uid?          : string
 	token?        : string
