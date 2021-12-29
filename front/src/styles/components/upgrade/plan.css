@@ -66,6 +66,7 @@ body .ant-card.feature-card .subscription-notice-success > .ant-result-title {
 
 .features > li.feature-section > span {
 	font-weight: bold;
+	display: block;
 	padding: 0 0.5rem;
 }
 
