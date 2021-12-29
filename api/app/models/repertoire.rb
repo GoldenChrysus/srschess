@@ -193,7 +193,8 @@ class Repertoire < ApplicationRecord
 			LEFT JOIN
 				repertoire_moves fen_parents
 			ON
-				fen_parents.fen = parent_move.fen
+				fen_parents.fen = parent_move.fen AND
+				fen_parents.repertoire_id = r.id
 			LEFT JOIN
 				repertoire_moves similar_moves
 			ON
@@ -202,7 +203,7 @@ class Repertoire < ApplicationRecord
 						mt.parent_id IS NULL
 					THEN
 						similar_moves.parent_id IS NULL AND
-						similar_moves.repertoire_id = :repertoire_id AND
+						similar_moves.repertoire_id = r.id AND
 						similar_moves.id != mt.id
 					ELSE
 						similar_moves.parent_id = fen_parents.id AND
