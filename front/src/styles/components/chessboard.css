@@ -128,6 +128,10 @@ body .standalone.piece.white.k {
 	background-image: url("../../assets/chess/pieces/staunty/white-king.svg");
 }
 
+body .promotion-modal .ant-modal-content {
+	background: rgba(31, 41, 55, 0.88);
+}
+
 body .promotion .standalone.piece {
 	width: auto;
 	height: 4rem;

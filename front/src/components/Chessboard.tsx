@@ -152,7 +152,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 						{this.renderCaptures("top")}
 					</div>
 				}
-				<Modal visible={this.state.promoting} footer={null} closable={false}>
+				<Modal visible={this.state.promoting} footer={null} closable={false} className="promotion-modal">
 					<div className="promotion grid grid-cols-4 gap-4">
 						<div className={"standalone piece " + turn + " q"} onClick={() => this.onPromotion("q")}></div>
 						<div className={"standalone piece " + turn + " r"} onClick={() => this.onPromotion("r")}></div>
