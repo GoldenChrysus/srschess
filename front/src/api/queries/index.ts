@@ -69,6 +69,7 @@ export const CREATE_COMMUNICATION_ENROLLMENT = gql`
 		}) {
 			enrollment {
 				id
+				name
 			}
 			errors
 		}

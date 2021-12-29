@@ -181,9 +181,6 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 			outer_classes.push("flex-wrap min-h-full");
 		}
 
-		console.log(this.props.repertoire);
-		console.log(this.props.authenticated);
-
 		return (
 			<>
 				<div key="chess-outer" className={outer_classes.join(" ")}>

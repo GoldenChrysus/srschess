@@ -18,7 +18,9 @@ interface PlanProps extends PropsFromRedux {
 function Plan(props: PlanProps) {
 	const { t }                                = useTranslation(["premium", "repertoires", "common", "database", "search"]);
 	const plan                                 = props.plan;
-	const [ createEnrollment, enrollment_res ] = useMutation(CREATE_COMMUNICATION_ENROLLMENT);
+	const [ createEnrollment, enrollment_res ] = useMutation(CREATE_COMMUNICATION_ENROLLMENT, {
+		refetchQueries : [ GET_COMMUNICATION_ENROLLMENTS ]
+	});
 	const { loading, error, data }             = useQuery<CommunicationEnrollmentsQueryData>(GET_COMMUNICATION_ENROLLMENTS);
 	const enrollment_name                      = "notify_plan_" + plan.id;
 
@@ -49,10 +51,10 @@ function Plan(props: PlanProps) {
 			state    : {
 				plan : plan.id
 			}}} component={ButtonLink}/>;
-	} else if (has_enrollment) {
-		action = <div>{t("has_notification_enrollment")}</div>;
 	} else if (enrollment_res.data && !enrollment_res.error) {
 		action = <Result className="subscription-notice-success" status="success" title={t("has_notification_enrollment")}/>;
+	} else if (has_enrollment) {
+		action = <div>{t("has_notification_enrollment")}</div>;
 	} else {
 		action = <Button key="action" type="primary" loading={enrollment_res.loading} disabled={!props.authenticated} onClick={onNotify}>{t("notify_when_available")}</Button>;
 	}
