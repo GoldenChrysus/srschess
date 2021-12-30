@@ -42,13 +42,15 @@
 		<% } %>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
 		<div id="root"></div>
-		<script src="%PUBLIC_URL%/assets/stockfish/stockfish.js"></script>
 		<script>
-			Stockfish().then((sf) => {
-				window.sf = sf;
+			function initStockfish() {
+				Stockfish().then((sf) => {
+					window.sf = sf;
 
-				sf.postMessage("uci");
-			});
+					sf.postMessage("uci");
+				});
+			}
 		</script>
+		<script src="%PUBLIC_URL%/assets/stockfish/stockfish.js" async defer onload="initStockfish();"></script>
 	</body>
 </html>

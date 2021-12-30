@@ -19,3 +19,6 @@ API/Front:
 Database:
 	Postgres:
 		postgres 13
+	Firebase:
+		pip install --upgrade firebase-admin
+		pip install -U protobuf (https://github.com/googleapis/python-bigquery/issues/99)

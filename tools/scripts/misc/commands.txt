@@ -15,3 +15,10 @@ All:
 
 SQL:
 	REFRESH MATERIALIZED VIEW master_move_stats;
+
+Run in background (example):
+	nohup python3 -u pgn-process.py -e development -s pgnmentor &
+		https://janakiev.com/blog/python-background/
+		output is logged to nohup.out
+		-u stops output buffering so the output file is continuously updated
+		& runs script in background
