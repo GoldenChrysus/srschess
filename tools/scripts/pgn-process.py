@@ -264,13 +264,7 @@ def make_process(num, chunk_size):
 
 					fb_record[key] = list(dict.fromkeys(fb_record[key]))
 
-				try:
-					fire_db.collection("master_games").document(record["id"]).set(fb_record)
-				except:
-					pass
-					print("   P" + str(num) + ": Retrying In: " + file)
-					sleep(5)
-					continue
+				# fire_db.collection("master_games").document(record["id"]).set(fb_record)
 
 				conflict = """
 					UPDATE SET
