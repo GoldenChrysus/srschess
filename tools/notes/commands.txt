@@ -7,6 +7,7 @@ AWS:
 
 GPG:
 	gpg --symmetric --cipher-algo AES256 input.file
+	gpg --decrypt --pinentry-mode=loopback --output output.file input.file
 
 Docker:
 	docker build .
