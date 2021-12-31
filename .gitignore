@@ -1,4 +1,5 @@
 tools/scripts/data/**/*.*
+!tools/scripts/data/**/.gitignore
 api/data/**/*.*
 
 # Environments
