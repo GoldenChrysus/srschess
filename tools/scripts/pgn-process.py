@@ -15,6 +15,7 @@ from getopt import getopt
 from os import listdir
 from os import rename
 from os.path import isfile, join
+from time import sleep
 
 enviro = False
 source = False
@@ -263,7 +264,13 @@ def make_process(num, chunk_size):
 
 					fb_record[key] = list(dict.fromkeys(fb_record[key]))
 
-				fire_db.collection("master_games").document(record["id"]).set(fb_record)
+				try:
+					fire_db.collection("master_games").document(record["id"]).set(fb_record)
+				except:
+					pass
+					print("   P" + str(num) + ": Retrying In: " + file)
+					sleep(5)
+					continue
 
 				conflict = """
 					UPDATE SET
