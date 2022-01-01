@@ -28,7 +28,8 @@ valid  = {
 	"source" : [
 		"pgnmentor",
 		"chessbomb",
-		"caissabase"
+		"caissabase",
+		"365chess"
 	],
 	"result" : [
 		"1/2-1/2",
@@ -50,7 +51,7 @@ for opt, arg in opts:
 	elif opt == "-s":
 		source = arg
 	else:
-		print("Invalid option: " + opt)
+		print(f"Invalid option: {opt}")
 		sys.exit(2)
 
 if enviro not in valid["enviro"]:
@@ -63,11 +64,11 @@ if source not in valid["source"]:
 
 config = {
 	**dotenv_values("../../config/.env"),
-	**dotenv_values("../../config/.env." + enviro)
+	**dotenv_values(f"../../config/.env.{enviro}")
 }
 
 # Firebase init
-creds = credentials.Certificate("../../config/firebase.service." + enviro + ".json");
+creds = credentials.Certificate(f"../../config/firebase.service.{enviro}.json");
 
 firebase_admin.initialize_app(creds)
 
@@ -81,7 +82,7 @@ db_password = config["MASTERGAMES_DB_PASSWORD"]
 db_database = config["MASTERGAMES_DB_DATABASE"]
 
 ## Files init
-path  = "data/" + source + "/games/"
+path  = f"data/{source}/games/"
 files = [file for file in sorted(listdir(path)) if isfile(join(path, file))]
 
 def getGame(data):
@@ -111,19 +112,19 @@ def make_process(num, chunk_size):
 	conn   = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
 	cur    = conn.cursor()
 
-	with open("state/ids." + enviro + ".txt", "a+") as ids_file:
+	with open(f"state/ids.{enviro}.{source}.txt", "a+") as ids_file:
 		ids_file.seek(0)
 
 		ids = ids_file.read().split("\n")
 
 		for file in files[offset:(offset + chunk_size)]:
-			if (len(re.findall("pgn$", file)) == 0):
+			if (len(re.findall("A32\.pgn$", file)) == 0):
 				continue
 
 			data = open(path + file, encoding="latin-1")
 			game = getGame(data)
 
-			print("P" + str(num) + ": Starting: " + file)
+			print(f"P{num}: Starting: {file}")
 
 			while (game != None):
 				record    = {}
@@ -346,9 +347,9 @@ def make_process(num, chunk_size):
 
 				game = getGame(data)
 
-			print("   P" + str(num) + ": Finished: " + file)
+			print(f"   P{num}: Finished: {file}")
 			data.close()
-			rename(path + file, path + "processed/" + enviro + "/" + file)
+			rename(path + file, f"{path}processed/{enviro}/{file}")
 
 		ids_file.close()
 
@@ -357,7 +358,7 @@ def make_process(num, chunk_size):
 if __name__ == "__main__":
 	count = len(files)
 
-	print("Count: " + str(count))
+	print(f"Count: {count}")
 
 	processes  = []
 	proc_count = multiprocessing.cpu_count() * 2
