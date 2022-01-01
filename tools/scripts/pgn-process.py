@@ -196,7 +196,7 @@ def make_process(num, chunk_size):
 					record["white_fide_id"] = None if ("WhiteFIDE" not in game.headers) else game.headers["WhiteFIDE"]
 					record["black_fide_id"] = None if ("BlackFIDE" not in game.headers) else game.headers["BlackFIDE"]
 
-				if (source == "pgnmentor" or source == "caissabase"):
+				if (source in ["pgnmentor", "caissabase", "365chess"]):
 					record["year"]  = None if (date[0] == "????") else int(date[0])
 					record["month"] = None if (date[1] == "??") else int(date[1])
 					record["day"]   = None if (date[2] == "??" or len(date[2]) == 0) else int(date[2])
