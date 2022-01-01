@@ -37,13 +37,13 @@ class App extends React.Component {
 							<meta lang={i18n.lng} name="description" content={t("meta_description")}/>
 							<link rel="canonical" href={url}/>
 							<link rel="manifest" href={process.env.PUBLIC_URL + "/manifest." + (i18n.lng ?? "en") + ".json"}/>
-							<meta lang={i18n.lng} property="og:type" content="website"/>
+							<meta property="og:type" content="website"/>
 							<meta lang={i18n.lng} property="og:title" content={"Chess HQ - " + t("meta_title")}/>
 							<meta lang={i18n.lng} property="og:description" content={t("meta_description")}/>
 							<meta property="og:image" content={process.env.REACT_APP_PUBLIC_URL + "/assets/images/business/logo1024.png"}/>
 							<meta property="og:url" content={url}/>
 							<meta lang={i18n.lng} property="og:site_name" content="Chess HQ"/>
-							<meta name="twitter:card" content="summary_large_image"></meta>
+							<meta name="twitter:card" content="summary_large_image"/>
 							<meta lang={i18n.lng} property="twitter:title" content={"Chess HQ - " + t("meta_title")}/>
 							<meta lang={i18n.lng} property="twitter:description" content={t("meta_description")}/>
 							<meta property="twitter:image" content={process.env.REACT_APP_PUBLIC_URL + "/assets/images/business/logo1024.png"}/>
