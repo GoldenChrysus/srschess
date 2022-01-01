@@ -32,7 +32,7 @@ function Plan(props: PlanProps) {
 		});
 	};
 
-	const has_enrollment = ((data?.communicationEnrollments?.filter(x => x.name === enrollment_name))?.length ?? 0 > 0);
+	const has_enrollment = (data?.communicationEnrollments?.filter(x => x.name === enrollment_name).length);
 	const unlimited      = t("common:unlimited");
 	const purchase_text  = t("purchase_now") + ": $" + plan.price.toFixed(2) + "/" + t("month").toLocaleLowerCase();
 	let   action         = null;
