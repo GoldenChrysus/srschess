@@ -118,7 +118,7 @@ def make_process(num, chunk_size):
 		ids = ids_file.read().split("\n")
 
 		for file in files[offset:(offset + chunk_size)]:
-			if (len(re.findall("A32\.pgn$", file)) == 0):
+			if (len(re.findall("pgn$", file)) == 0):
 				continue
 
 			data = open(path + file, encoding="latin-1")
@@ -265,85 +265,88 @@ def make_process(num, chunk_size):
 
 					fb_record[key] = list(dict.fromkeys(fb_record[key]))
 
-				# fire_db.collection("master_games").document(record["id"]).set(fb_record)
+				try:
+					# fire_db.collection("master_games").document(record["id"]).set(fb_record)
 
-				conflict = """
-					UPDATE SET
-						event = COALESCE(NULLIF(master_games.event, ''), EXCLUDED.event),
-						round = COALESCE(NULLIF(master_games.round, ''), EXCLUDED.round),
-						year = COALESCE(NULLIF(master_games.year, 0), EXCLUDED.year),
-						month = COALESCE(NULLIF(master_games.month, 0), EXCLUDED.month),
-						day = COALESCE(NULLIF(master_games.day, 0), EXCLUDED.day),
-						white_elo = COALESCE(NULLIF(master_games.white_elo, 0), EXCLUDED.white_elo),
-						black_elo = COALESCE(NULLIF(master_games.black_elo, 0), EXCLUDED.black_elo),
-						white_title = COALESCE(NULLIF(master_games.white_title, ''), EXCLUDED.white_title),
-						black_title = COALESCE(NULLIF(master_games.black_title, ''), EXCLUDED.black_title),
-						white_fide_id = COALESCE(NULLIF(master_games.white_fide_id, ''), EXCLUDED.white_fide_id),
-						black_fide_id = COALESCE(NULLIF(master_games.black_fide_id, ''), EXCLUDED.black_fide_id),
-						white = COALESCE(NULLIF(master_games.white, ''), EXCLUDED.white),
-						black = COALESCE(NULLIF(master_games.black, ''), EXCLUDED.black),
-						pgn = CASE WHEN LENGTH(master_games.pgn) > LENGTH(COALESCE(EXCLUDED.pgn, '')) THEN master_games.pgn ELSE EXCLUDED.pgn END
-				"""
+					conflict = """
+						UPDATE SET
+							event = COALESCE(NULLIF(master_games.event, ''), EXCLUDED.event),
+							round = COALESCE(NULLIF(master_games.round, ''), EXCLUDED.round),
+							year = COALESCE(NULLIF(master_games.year, 0), EXCLUDED.year),
+							month = COALESCE(NULLIF(master_games.month, 0), EXCLUDED.month),
+							day = COALESCE(NULLIF(master_games.day, 0), EXCLUDED.day),
+							white_elo = COALESCE(NULLIF(master_games.white_elo, 0), EXCLUDED.white_elo),
+							black_elo = COALESCE(NULLIF(master_games.black_elo, 0), EXCLUDED.black_elo),
+							white_title = COALESCE(NULLIF(master_games.white_title, ''), EXCLUDED.white_title),
+							black_title = COALESCE(NULLIF(master_games.black_title, ''), EXCLUDED.black_title),
+							white_fide_id = COALESCE(NULLIF(master_games.white_fide_id, ''), EXCLUDED.white_fide_id),
+							black_fide_id = COALESCE(NULLIF(master_games.black_fide_id, ''), EXCLUDED.black_fide_id),
+							white = COALESCE(NULLIF(master_games.white, ''), EXCLUDED.white),
+							black = COALESCE(NULLIF(master_games.black, ''), EXCLUDED.black),
+							pgn = CASE WHEN LENGTH(master_games.pgn) > LENGTH(COALESCE(EXCLUDED.pgn, '')) THEN master_games.pgn ELSE EXCLUDED.pgn END
+					"""
 
-				cur.execute("""
-					INSERT INTO
-						master_games
+					cur.execute("""
+						INSERT INTO
+							master_games
+								(
+									id,
+									source,
+									event,
+									round,
+									movelist,
+									eco,
+									white,
+									black,
+									white_elo,
+									black_elo,
+									white_title,
+									black_title,
+									white_fide_id,
+									black_fide_id,
+									result,
+									location,
+									year,
+									month,
+									day,
+									pgn,
+									created_at,
+									updated_at
+								)
+						VALUES
 							(
-								id,
-								source,
-								event,
-								round,
-								movelist,
-								eco,
-								white,
-								black,
-								white_elo,
-								black_elo,
-								white_title,
-								black_title,
-								white_fide_id,
-								black_fide_id,
-								result,
-								location,
-								year,
-								month,
-								day,
-								pgn,
-								created_at,
-								updated_at
+								%(id)s,
+								%(source)s,
+								%(event)s,
+								%(round)s,
+								%(movelist)s,
+								%(eco)s,
+								%(white)s,
+								%(black)s,
+								%(white_elo)s,
+								%(black_elo)s,
+								%(white_title)s,
+								%(black_title)s,
+								%(white_fide_id)s,
+								%(black_fide_id)s,
+								%(result)s,
+								%(location)s,
+								%(year)s,
+								%(month)s,
+								%(day)s,
+								%(pgn)s,
+								CURRENT_TIMESTAMP,
+								CURRENT_TIMESTAMP
 							)
-					VALUES
-						(
-							%(id)s,
-							%(source)s,
-							%(event)s,
-							%(round)s,
-							%(movelist)s,
-							%(eco)s,
-							%(white)s,
-							%(black)s,
-							%(white_elo)s,
-							%(black_elo)s,
-							%(white_title)s,
-							%(black_title)s,
-							%(white_fide_id)s,
-							%(black_fide_id)s,
-							%(result)s,
-							%(location)s,
-							%(year)s,
-							%(month)s,
-							%(day)s,
-							%(pgn)s,
-							CURRENT_TIMESTAMP,
-							CURRENT_TIMESTAMP
-						)
-					ON CONFLICT (id)
-						DO """ + conflict,
-					record
-				)
-				conn.commit()
-				ids_file.write(record["id"] + "\n")
-				ids.append(record["id"])
+						ON CONFLICT (id)
+							DO """ + conflict,
+						record
+					)
+					conn.commit()
+					ids_file.write(record["id"] + "\n")
+					ids.append(record["id"])
+				except:
+					pass
 
 				game = getGame(data)
 
