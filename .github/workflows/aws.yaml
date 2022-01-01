@@ -34,7 +34,7 @@ jobs:
       - name: Decrypt Default Environment
         uses: GoldenChrysus/decrypt-action@master
         with:
-          files: config/.env.gpg
+          files: config/.env.gpg,config/master.key.gpg
           passphrase: ${{ secrets.DECRYPT_PASSPHRASE_DEFAULT }}
 
       - name: Decrypt Production Environment

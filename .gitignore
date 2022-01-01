@@ -6,4 +6,5 @@ api/data/**/*.*
 **/*.env*
 !**/*.env*.gpg
 config/*.json
+config/*.key
 api/config/firebase.*.json
