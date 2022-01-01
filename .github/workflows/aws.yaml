@@ -5,7 +5,16 @@
 
 name: Deploy to Amazon ECS
 
-on: [ push ]
+on:
+  push:
+    paths:
+      - '.aws/**'
+      - '.github/workflows/aws.yml'
+      - 'config/**'
+      - 'front/**'
+      - 'api/**'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}                       # set this to your preferred AWS region, e.g. us-west-1
