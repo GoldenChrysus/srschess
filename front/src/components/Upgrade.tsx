@@ -81,7 +81,7 @@ const PLANS: Array<PlanModel> = [
 					{
 						key     : "database_result_limit",
 						options : {
-							count : 10
+							count : 25
 						}
 					},
 					{
@@ -167,7 +167,7 @@ const PLANS: Array<PlanModel> = [
 					{
 						key     : "database_result_limit",
 						options : {
-							count : 25
+							count : 100
 						}
 					},
 					{
@@ -253,7 +253,7 @@ const PLANS: Array<PlanModel> = [
 					{
 						key     : "database_result_limit",
 						options : {
-							count : -1
+							count : 1000
 						}
 					},
 					{
