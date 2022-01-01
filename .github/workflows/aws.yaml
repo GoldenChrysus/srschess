@@ -9,7 +9,7 @@ on:
   push:
     paths:
       - '.aws/**'
-      - '.github/workflows/aws.yml'
+      - '.github/workflows/aws.yaml'
       - 'config/**'
       - 'front/**'
       - 'api/**'
