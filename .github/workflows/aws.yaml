@@ -14,8 +14,6 @@ env:
   ECS_CLUSTER: ${{ secrets.AWS_ECS_CLUSTER }}                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ${{ secrets.AWS_ECS_TASK_DEFINITION }} # set this to the path to your Amazon ECS task definition file, e.g. .aws/task-definition.json
   CONTAINER_NAME: ${{ secrets.AWS_CONTAINER_NAME }}           # set this to the name of the container in the containerDefinitions section of your task definition
-  DECRYPT_PASSPHRASE_DEFAULT: ${{ secrets.DECRYPT_PASSPHRASE_DEFAULT }}
-  DECRYPT_PASSPHRASE_PRODUCTION: ${{ secrets.DECRYPT_PASSPHRASE_PRODUCTION }}
 
 defaults:
   run:
