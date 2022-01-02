@@ -1,1 +1,6 @@
 chrome.exe --enable-features=SharedArrayBuffer
+
+Main repo: https://github.com/official-stockfish/Stockfish
+Emscripten: https://github.com/hi-ogawa/Stockfish
+
+Add /src/emscripten folder to main Stockfish repo and build.
