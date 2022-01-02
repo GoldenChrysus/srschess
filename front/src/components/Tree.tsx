@@ -160,7 +160,7 @@ function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQuery
 					: getMoveSimple(moves, parent.parentId))
 				: false;
 
-			if ((local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) && (!parent_parent || tree[parent_parent.moveNumber][parent_parent.sort].moves.length === 1)) {
+			if (local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) {
 				has_children = true;							
 			}
 

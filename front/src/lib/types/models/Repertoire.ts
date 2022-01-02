@@ -50,8 +50,22 @@ export interface RepertoireModel {
 	nextReview?: string | null
 }
 
+interface PreviousMoveModel {
+	id: RepertoireMoveModel["id"],
+	transpositionId: RepertoireMoveModel["transpositionId"]
+	sort: RepertoireMoveModel["sort"]
+}
+
 export interface RepertoireMoveNoteQueryData {
 	repertoireMoveNote: RepertoireMoveNoteModel | null
+}
+
+export interface RepertoireMoveDeletionMutationData {
+	deleteRepertoireMove : {
+		repertoire: RepertoireModel | null,
+		previousMoves: Array<PreviousMoveModel> | null,
+		errors: Array<string>
+	}
 }
 
 export interface RepertoireMoveNoteMutationData {

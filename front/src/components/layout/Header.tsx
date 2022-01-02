@@ -84,7 +84,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 								</div>
 							</div>
 							<div className="w-full py-1 px-6 grid grid-cols-2 relative md:hidden">
-								<div className="flex items-center h-full">
+								<div className="flex items-center h-full z-10">
 									<button onClick={this.openDrawer}><FontAwesomeIcon icon={faBars} size="2x"/></button>
 								</div>
 								<div className="flex items-center h-full justify-end">

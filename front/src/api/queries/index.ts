@@ -284,10 +284,24 @@ export const REORDER_REPERTOIRE_MOVE = gql`
 `;
 
 export const DELETE_REPERTOIRE_MOVE = gql`
+	${REPERTOIRE_FRAG}
+	${REPERTOIRE_MOVE_FRAG}
 	mutation DeleteRepertoireMove($id: String!) {
 		deleteRepertoireMove(input: {
 			id: $id
 		}) {
+			repertoire {
+				...CoreRepertoireFields
+				moves {
+					...CoreMoveFields
+				}
+				userOwned
+			}
+			previousMoves {
+				id
+				transpositionId
+				sort
+			}
 			errors
 		}
 	}

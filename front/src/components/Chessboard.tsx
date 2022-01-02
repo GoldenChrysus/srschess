@@ -82,7 +82,8 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 			next_props.repertoire_id !== this.props.repertoire_id ||
 			next_props.queue_item?.id !== this.props.queue_item?.id ||
 			next_props.mode !== this.props.mode ||
-			next_state.promoting !== this.state.promoting
+			next_state.promoting !== this.state.promoting ||
+			JSON.stringify(next_props.children) !== JSON.stringify(this.props.children)
 		);
 	}
 

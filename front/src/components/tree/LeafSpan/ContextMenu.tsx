@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu } from "antd";
 import { useTranslation } from "react-i18next";
-import { RepertoireMoveModel } from "../../../lib/types/models/Repertoire";
+import { RepertoireMoveDeletionMutationData, RepertoireMoveModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
 import { useMutation } from "@apollo/client";
 import { DELETE_REPERTOIRE_MOVE, GET_REPERTOIRE, REORDER_REPERTOIRE_MOVE } from "../../../api/queries";
 
@@ -13,11 +13,27 @@ interface ContextMenuProps {
 
 function ContextMenu(props: ContextMenuProps) {
 	const { t } = useTranslation("common");
-	const [ deleteMove ] = useMutation(DELETE_REPERTOIRE_MOVE,
+	const [ deleteMove ] = useMutation<RepertoireMoveDeletionMutationData>(DELETE_REPERTOIRE_MOVE,
 		{
-			refetchQueries: [
-				GET_REPERTOIRE
-			]
+			update(cache, data) {
+				const network_repertoire = data.data?.deleteRepertoireMove?.repertoire;
+
+				const network_moves: {[id: RepertoireMoveModel["id"]] : RepertoireMoveModel} = {};
+
+				for (const move of network_repertoire?.moves ?? []) {
+					network_moves[move.id] = move;
+				}
+
+				const cache_moves = data.data?.deleteRepertoireMove?.previousMoves;
+
+				for (const move of cache_moves ?? []) {
+					const network_move = network_moves[move.id];
+
+					if (!network_move) {
+						cache.evict({ id: "RepertoireMove:" + move.id });
+					}
+				}
+			}
 		}
 	);
 	const [ reorderMove ] = useMutation(REORDER_REPERTOIRE_MOVE);
