@@ -4,34 +4,40 @@ import DatabaseDemo from "./home/DatabaseDemo";
 import OpeningsDemo from "./home/OpeningsDemo";
 import RepertoireDemo from "./home/RepertoireDemo";
 
+import "../styles/components/home.css";
+import Header from "./home/Header";
+
 function Home() {
 	const { t } = useTranslation(["repertoires", "database", "openings", "premium"]);
 
 	return (
 		<div className="p-6">
-			<div className="grid grid-cols-1 md:grid-cols-2 3xl:grid-cols-4 gap-6">
-				<div className="px-8 py-4 bg-gray-900 rounded-3xl">
+			<div className="mb-6">
+				<Header/>
+			</div>
+			<div className="grid grid-cols-1 md:grid-cols-2 3xl:grid-cols-2 gap-6">
+				<div className="demo-section px-8 py-4">
 					<div>
 						<h1 className="text-xl text-green-500">{t("repertoires:repertoire_builder")}</h1>
 						<p>{t("repertoires:meta_description")}</p>
 					</div>
-					<div><RepertoireDemo/></div>
+					<div id="repertoire-demo"><RepertoireDemo/></div>
 				</div>
-				<div className="px-8 py-4 bg-gray-900 rounded-3xl">
+				<div className="demo-section px-8 py-4">
 					<div>
 						<h1 className="text-xl text-green-500">{t("database:game_database")}</h1>
 						<p>{t("database:meta_description")}</p>
 					</div>
 					<div><DatabaseDemo/></div>
 				</div>
-				<div className="px-8 py-4 bg-gray-900 rounded-3xl">
+				<div className="demo-section px-8 py-4">
 					<div>
 						<h1 className="text-xl text-green-500">{t("openings:openings_explorer")}</h1>
 						<p>{t("openings:meta_description")}</p>
 					</div>
 					<div><OpeningsDemo/></div>
 				</div>
-				<div className="px-8 py-4 bg-gray-900 rounded-3xl">
+				<div className="demo-section px-8 py-4">
 					<div>
 						<h1 className="text-xl text-green-500">{t("database:game_collections")}</h1>
 						<div>{t("database:collection_info")}</div>

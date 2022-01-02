@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_29_053209) do
+ActiveRecord::Schema.define(version: 2022_01_02_050729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -49,6 +49,16 @@ ActiveRecord::Schema.define(version: 2021_12_29_053209) do
     t.index ["movelist"], name: "index_eco_positions_on_movelist", using: :gist
     t.index ["pgn"], name: "index_eco_positions_on_pgn", unique: true
     t.index ["slug"], name: "index_eco_positions_on_slug", unique: true
+  end
+
+  create_table "error_logs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "message"
+    t.string "trace"
+    t.string "request"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_error_logs_on_user_id"
   end
 
   create_table "game_move_notes", force: :cascade do |t|

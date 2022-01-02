@@ -7,6 +7,8 @@ class GraphqlChannel < ApplicationCable::Channel
 	# protect_from_forgery with: :null_session
 
 	def execute(data)
+		@data = data
+
 		variables      = prepare_variables(data["variables"])
 		query          = data["query"]
 		operation_name = data["operationName"]
@@ -52,6 +54,17 @@ class GraphqlChannel < ApplicationCable::Channel
 		if (Rails.env.development?)
 			logger.error e.message
 			logger.error e.backtrace.join("\n")
+		end
+
+		begin
+			::ErrorLog.create(
+				user: @current_user,
+				message: e.message,
+				trace: e.backtrace,
+				request: @data.to_s
+			)
+		rescue
+			# Couldn't log
 		end
 
 		transmit({

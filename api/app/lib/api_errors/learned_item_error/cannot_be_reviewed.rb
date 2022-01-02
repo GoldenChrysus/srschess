@@ -1,6 +1,8 @@
 module ApiErrors
 	class LearnedItemError < ApiErrors::BaseError
 		class CannotBeReviewed < ApiErrors::LearnedItemError
+			include ApiErrors::LoggedError
+
 			def initialize
 				Current.internal_error_code = 300201
 

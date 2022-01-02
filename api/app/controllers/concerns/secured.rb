@@ -9,7 +9,7 @@ module Secured
 		def authenticate_request!
 			token = params[:token]
 
-			decode(token) unless token == ""
+			decode(token) unless (token == "" or token == nil)
 		end
 
 		def decode(token)

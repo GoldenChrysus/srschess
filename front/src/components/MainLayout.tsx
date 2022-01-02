@@ -21,7 +21,7 @@ class MainLayout extends React.Component<any> {
 		const content_classes = [
 			"flex-1",
 			"h-full",
-			"relative"
+			"relative",
 		];
 
 		// Footer offset

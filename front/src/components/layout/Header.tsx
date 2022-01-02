@@ -57,7 +57,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 					(t) => (
 						<>
 							<div className="w-full py-1 px-6 hidden md:flex items-center">
-								<div id="logo" className="w-28 mr-6">
+								<div id="logo" className="w-28 mr-6 z-10">
 									<Link to="/">
 										<img alt="Chess HQ" src="/assets/images/business/logo.png"/>
 									</Link>

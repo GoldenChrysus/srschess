@@ -16,6 +16,13 @@ ActiveRecord::Schema.define(version: 2021_12_24_090744) do
   enable_extension "ltree"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
+
+  create_table "fens", id: :bigint, default: nil, force: :cascade do |t|
+    t.string "fen"
+    t.index ["fen"], name: "fens_fen_key", unique: true
+    t.index ["fen"], name: "index_fens_fen", unique: true
+  end
 
   create_table "master_game_moves", force: :cascade do |t|
     t.uuid "master_game_id", null: false
@@ -65,6 +72,11 @@ ActiveRecord::Schema.define(version: 2021_12_24_090744) do
     t.index ["white_elo"], name: "index_master_games_on_white_elo"
     t.index ["white_title"], name: "index_master_games_on_white_title"
     t.index ["year"], name: "index_master_games_on_year"
+  end
+
+  create_table "test", id: false, force: :cascade do |t|
+    t.string "names", array: true
+    t.index ["names"], name: "test_names_gin", using: :gin
   end
 
   add_foreign_key "master_game_moves", "master_games"
@@ -137,4 +149,10 @@ ActiveRecord::Schema.define(version: 2021_12_24_090744) do
   SQL
   add_index "master_move_stats", ["fen"], name: "master_move_stats_fen_idx", unique: true
 
+  create_view "fen_master_games", materialized: true, sql_definition: <<-SQL
+      SELECT DISTINCT f.id AS fen_id,
+      m.master_game_id
+     FROM (master_game_moves m
+       JOIN fens f ON (((f.fen)::text = (m.fen)::text)));
+  SQL
 end

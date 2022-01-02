@@ -1,0 +1,30 @@
+.demo-section > div {
+	position: relative;
+	width: 100%;
+}
+
+.demo-section > div > h1 {
+	font-family: 'Verdana', sans-serif;
+	text-transform: uppercase;
+	text-rendering: optimizeLegibility;
+	font-weight: bold;
+	font-size: 3em;
+	color: #f5f5f5;
+	text-shadow: 1px 1px 1px #919191,
+		1px 2px 1px #919191,
+		1px 3px 1px #10b981,
+		1px 4px 1px #10b981,
+		1px 5px 1px #919191,
+		1px 18px 6px rgba(16,16,16,0.4),
+		1px 22px 10px rgba(16,16,16,0.2),
+		1px 25px 35px rgba(16,16,16,0.2),
+		1px 30px 60px rgba(16,16,16,0.4);
+}
+
+.demo-section > div > p {
+	font-size: 14pt;
+}
+
+.demo-section > div.right {
+	text-align: right;
+}
