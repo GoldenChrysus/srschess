@@ -4,11 +4,12 @@
 }
 
 .demo-section > div > h1 {
-	font-family: 'Verdana', sans-serif;
+	font-family: 'Lato', sans-serif;
 	text-transform: uppercase;
 	text-rendering: optimizeLegibility;
 	font-weight: bold;
 	font-size: 3em;
+	line-height: 1em;
 	color: #f5f5f5;
 	text-shadow: 1px 1px 1px #919191,
 		1px 2px 1px #919191,
