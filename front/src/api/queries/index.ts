@@ -49,10 +49,11 @@ const GAME_FRAG = gql`
 `;
 
 export const CREATE_USER = gql`
-	mutation CreateUser($email: String!, $uid: String!) {
+	mutation CreateUser($email: String!, $uid: String!, $type: String!) {
 		createUser(input: {
 			email: $email,
-			uid: $uid
+			uid: $uid,
+			type: $type
 		}) {
 			user {
 				id

@@ -20,14 +20,15 @@ const app = initializeApp({
 
 export const auth = getAuth(app);
 
-const serverLogin = (user: User | any) => {
+const serverLogin = (user: User | any, type: string) => {
 	client
 		.mutate({
 			mutation       : CREATE_USER,
 			refetchQueries : "active",
 			variables : {
 				email : user.email,
-				uid   : user.uid
+				uid   : user.uid,
+				type  : type
 			}
 		})
 		.then(() => {
@@ -36,9 +37,14 @@ const serverLogin = (user: User | any) => {
 			localStorage.setItem("firebase_token", user.accessToken);
 		})
 		.catch((err) => {
-			auth.signOut();
-			notifyError();
-			console.error(err);
+			if (type === "auth") {
+				auth.signOut();
+				notifyError();
+				
+				if (process.env.NODE_ENV === "development") {
+					console.error(err);
+				}
+			}
 		});
 };
 
@@ -55,7 +61,7 @@ function FirebaseAuth() {
 			uid   : user.uid,
 			token : user.accessToken
 		}));
-		serverLogin(user);
+		serverLogin(user, "auth");
 	};
 
 	const handleTokenChange = (user: User | any | null) => {
@@ -67,7 +73,7 @@ function FirebaseAuth() {
 			uid   : user.uid,
 			token : user.accessToken
 		}));
-		serverLogin(user);
+		serverLogin(user, "token");
 		localStorage.setItem("firebase_uid", user.uid);
 		localStorage.setItem("firebase_token", user.accessToken);
 	}

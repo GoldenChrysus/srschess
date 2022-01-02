@@ -3,15 +3,16 @@ module Types
 		class CreateUser < BaseMutation
 			argument :email, String, required: true
 			argument :uid, String, required: true
+			argument :type, String, required: true
 
 			field :user, Types::Models::UserType, null: true
 			field :errors, [String], null: false
 
-			def resolve(email:, uid:)
+			def resolve(email:, uid:, type:)
 				user = User.where({ uid: uid }).first
 				good = (user != nil)
 
-				if (!good)
+				if (!good and type == "auth")
 					user = User.new(email: email, uid: uid)
 					good = user.save
 				elsif (user == context[:user])
@@ -21,7 +22,7 @@ module Types
 					user.save
 				end
 
-				if (good)
+				if (good or type == "token")
 					{
 						user: user,
 						errors: []
