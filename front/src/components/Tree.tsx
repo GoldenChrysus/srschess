@@ -154,12 +154,6 @@ function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQuery
 				break;
 			}
 
-			const parent_parent = (parent.parentId)
-				? ((!demo)
-					? getMove(client, parent.parentId)
-					: getMoveSimple(moves, parent.parentId))
-				: false;
-
 			if (local_has_children || tree[parent.moveNumber][parent.sort].moves.length > 1) {
 				has_children = true;							
 			}

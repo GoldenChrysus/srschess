@@ -347,7 +347,7 @@ def make_process(num, chunk_size):
 					conn.commit()
 					ids_file.write(record["id"] + "\n")
 					ids.append(record["id"])
-				except (psycopg2.errors.SyntaxError):
+				except (psycopg2.errors.SyntaxError, ValueError):
 					conn.rollback()
 					pass
 

@@ -45,7 +45,7 @@ class LeafSpan extends React.Component<LeafSpanProps> {
 		}
 
 		const icon = (this.props.start && this.props.has_children)
-			? <FontAwesomeIcon key={"leafspan-icon-" + this.props.move.id} onClick={this.props.onArrowClick} className={icon_classes.join(" ")} icon={faChevronCircleRight}/>
+			? <FontAwesomeIcon key={"leafspan-icon-" + this.props.move.id} onClick={() => this.props.onArrowClick(this.props.move.id)} className={icon_classes.join(" ")} icon={faChevronCircleRight}/>
 			: "";
 
 		const move_prefix = (this.props.move.transpose) ? "(\u2192 " : null;
