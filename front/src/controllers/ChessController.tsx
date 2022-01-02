@@ -1,4 +1,4 @@
-import React from "react";
+import React, { LegacyRef, RefObject } from "react";
 import Chess, { ChessInstance } from "chess.js";
 
 import { ChessControllerLocalState, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
@@ -35,6 +35,8 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 	private last_search_state: ChessControllerState | undefined = undefined;
 
+	private ref: any | undefined = undefined;
+
 	constructor(props: ChessControllerProps & PropsFromRedux) {
 		super(props);
 
@@ -46,6 +48,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 		this.reducer     = this.reducer.bind(this);
 		this.onMoveClick = this.onMoveClick.bind(this);
+		this.ref         = React.createRef<HTMLDivElement>();
 	}
 
 	reset(state?: ChessControllerState) {
@@ -183,7 +186,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 		return (
 			<>
-				<div key="chess-outer" className={outer_classes.join(" ")}>
+				<div key="chess-outer" ref={this.ref} className={outer_classes.join(" ")}>
 					{
 						this.props.demo &&
 						this.props.mode === "repertoire" &&
@@ -543,6 +546,20 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 		return real_history;
 	}
 
+	shakeBoard() {
+		const board = this.ref.current?.getElementsByClassName("cg-wrap")[0];
+
+		if (!board) {
+			return;
+		}
+
+		board.classList.remove("shake");
+
+		const height = board.offsetHeight; // Force DOM update
+
+		board.classList.add("shake");
+	}
+
 	reducer(action: any) {
 		let new_state = action.data;
 
@@ -647,7 +664,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 						pseudo_correct = review_move.similarMoves.split(",").includes(last_move);
 					}
 
-					// shake board
+					this.shakeBoard();
 
 					if (!pseudo_correct) {
 						this.reviews[review_move.id].incorrectAttempts += 1;

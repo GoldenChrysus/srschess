@@ -348,6 +348,7 @@ def make_process(num, chunk_size):
 					ids_file.write(record["id"] + "\n")
 					ids.append(record["id"])
 				except (psycopg2.errors.SyntaxError):
+					conn.rollback()
 					pass
 
 				game = getGame(data)
