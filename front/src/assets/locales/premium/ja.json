@@ -1,6 +1,7 @@
 {
   "cloned_repertoire_limit": "複写されたレパートリーズの最大数に達しました。",
   "created_collection_limit": "コレクションの最大数に達しました。",
+  "created_position_limit": "レパートリーの局面の最大数に達しました。",
   "current_plan": "現在のプラン",
   "database_result_limit": "1回の検索につき{{count, number}}試合",
   "game_collections_game_limit": "コレクションごとに{{count, number}}試合",

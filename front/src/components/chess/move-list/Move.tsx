@@ -36,7 +36,7 @@ class Move extends React.PureComponent<MoveProps> {
 			const move         = (color === "white") ? this.props.white : this.props.black;
 
 			moves.push(
-				<div key={"movelist-item-" + color + "-" + this.props.index} className={"col-span-5 p-1 py-1 px-3.5 hover:bg-green-700 cursor-pointer " + active_class} onClick={() => this.props.onClick(move!.id)}>
+				<div key={"movelist-item-" + color + "-" + this.props.index} className={"col-span-5 p-1 py-1 px-3.5 hover:bg-green-700 cursor-pointer " + active_class} onClick={() => this.props.onClick(move?.id)}>
 					{move!.move}
 				</div>
 			);

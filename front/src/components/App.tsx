@@ -8,7 +8,7 @@ import Container from "./Container";
 import ErrorBoundary from "./ErrorBoundary";
 
 class App extends React.Component {
-	componentDidMount() {
+	componentDidMount(): void {
 		document.addEventListener("click", (e) => {
 			const target = e.target;
 
@@ -22,7 +22,7 @@ class App extends React.Component {
 		});
 	}
 
-	render() {
+	render(): JSX.Element {
 		const url = generateCanonicalURL(ROUTES.home);
 
 		return (
