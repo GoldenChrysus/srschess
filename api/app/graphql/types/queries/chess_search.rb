@@ -177,6 +177,7 @@ module Types
 							"g.black != '?'",
 							"g.year IS NOT NULL"
 						]
+						joins  = []
 						params = {}
 						skip   = false
 
@@ -200,22 +201,15 @@ module Types
 								raise ApiErrors::ChessError::InvalidEco.new
 							end
 
-							where.push(
-								"EXISTS
-									(
-										SELECT
-											1
-										FROM
-											master_game_moves m2
-										WHERE
-											m2.master_game_id = g.id AND
-											m2.fen = :eco_fen
-										LIMIT
-											1
-									)"
-							)
-
 							params[:eco_fen] = eco.fen
+
+							joins.push(
+								"JOIN
+									fen_master_games fg1
+								ON
+									fg1.fen = :eco_fen AND
+									g.id = ANY(fg1.master_game_ids)"
+							)
 						end
 
 						if (!skip and criteria[:data][:fen].to_s != "")
@@ -225,24 +219,18 @@ module Types
 								raise ApiErrors::ChessError::InvalidFen.new
 							end
 
-							where.push(
-								"EXISTS
-									(
-										SELECT
-											1
-										FROM
-											master_game_moves m2
-										WHERE
-											m2.master_game_id = g.id AND
-											m2.fen = TRIM(SUBSTRING(:fen FROM '^(([^ ]* ){4})'))
-										LIMIT
-											1
-									)"
-							)
+							params[:fen] = criteria[:data][:fen].split(" ").slice(0..3).join(" ")
 
-							params[:fen] = criteria[:data][:fen]
+							joins.push(
+								"JOIN
+									fen_master_games fg2
+								ON
+									fg2.fen = :fen AND
+									g.id = ANY(fg2.master_game_ids)"
+							)
 						end
 
+						joins = joins.join(" ")
 						where = where.join(" AND ")
 						sql   =
 							"SELECT
@@ -254,6 +242,7 @@ module Types
 								g.round
 							FROM
 								master_games g
+							#{joins}
 							WHERE
 								#{where}
 							LIMIT

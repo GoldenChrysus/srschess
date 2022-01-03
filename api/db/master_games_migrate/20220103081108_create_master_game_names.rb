@@ -49,7 +49,7 @@ class CreateMasterGameNames < ActiveRecord::Migration[6.1]
 			$$ LANGUAGE plpgsql;
 		"
 
-		# create_view :master_game_names, materialized: true
+		create_view :master_game_names, materialized: true
 		add_index :master_game_names, [:master_game_id, :side], unique: true
 	end
 end
