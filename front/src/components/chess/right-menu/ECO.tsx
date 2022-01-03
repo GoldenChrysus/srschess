@@ -13,7 +13,7 @@ interface ECOProps {
 function ECO(props: ECOProps) {
 	const { t } = useTranslation("common");
 	const fens = props.history.map((x) => x.fen);
-	const { loading, error, data } = useQuery<FenEcoQueryData>(
+	const { data } = useQuery<FenEcoQueryData>(
 		GET_FEN_ECO,
 		{
 			variables : {

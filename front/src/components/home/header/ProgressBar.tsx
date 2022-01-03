@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Progress } from "antd";
 import useInterval from "../../../lib/hooks/useInterval";
 

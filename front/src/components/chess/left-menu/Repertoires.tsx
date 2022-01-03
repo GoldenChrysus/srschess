@@ -23,7 +23,7 @@ function Repertoires(props: RepertoiresProps) {
 	const [ createRepertoire ] = useMutation(CREATE_REPERTOIRE, {
 		refetchQueries : [ GET_REPERTOIRES ]
 	});
-	const { loading, error, data } = useQuery<RepertoiresQueryData>(
+	const { loading, data } = useQuery<RepertoiresQueryData>(
 		GET_REPERTOIRES
 	);
 

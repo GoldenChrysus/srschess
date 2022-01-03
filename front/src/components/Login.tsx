@@ -13,7 +13,7 @@ enum ProgressStates {
 	initial,
 	registering,
 	existing
-};
+}
 
 interface LoginProps extends PropsFromRedux {
 	state?: LocationState
@@ -66,6 +66,7 @@ function Login(props: LoginProps) {
 							displayName : username
 						})
 							.catch(() => {
+								// Do nothing
 							})
 							.finally(() => setLoading(false));
 					} else {

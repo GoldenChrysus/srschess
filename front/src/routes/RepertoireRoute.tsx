@@ -53,7 +53,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	const [ createReview ] = useMutation(CREATE_REVIEW, {
 		refetchQueries : [ main_query ]
 	});
-	const { loading, error, data } = useQuery<RepertoireQueryData>(
+	const { data } = useQuery<RepertoireQueryData>(
 		main_query,
 		{
 			variables : {
@@ -163,7 +163,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			{premium}
 		</>
 	)
-};
+}
 
 const mapStateToProps = (state: RootState) => ({
 	authenticated : state.Auth.authenticated

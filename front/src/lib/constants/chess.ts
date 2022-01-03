@@ -1,4 +1,4 @@
-import { ChessSearchQueryData, ChessSearchResultItemModel } from "../types/models/ChessSearch";
+import { ChessSearchQueryData } from "../types/models/ChessSearch";
 import { EcoPositionsQueryData } from "../types/models/EcoPosition";
 import { GameModel } from "../types/models/Game";
 

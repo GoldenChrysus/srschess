@@ -16,13 +16,13 @@ interface OpeningExplorerRouteParams {
 function OpeningExplorerRoute() {
 	const { slug }                 = useParams<OpeningExplorerRouteParams>();
 	const { t }                    = useTranslation("openings");
-	const { loading, error, data } = useQuery<EcoPositionsQueryData>(
+	const { data } = useQuery<EcoPositionsQueryData>(
 		GET_ECOS,
 		{
 			skip : !!slug
 		}
 	);
-	const { loading: opening_load, error: opening_error, data: opening_data } = useQuery<EcoPositionQueryData>(
+	const { data: opening_data } = useQuery<EcoPositionQueryData>(
 		GET_ECO,
 		{
 			variables : {

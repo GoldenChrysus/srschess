@@ -31,15 +31,12 @@ const LANGUAGE_MAP: Map = {
 	}
 };
 
-interface HeaderProps extends PropsFromRedux {
-}
-
 interface HeaderState {
 	drawer_visible: boolean
 }
 
-class Header extends React.Component<HeaderProps, HeaderState> {
-	constructor(props: HeaderProps) {
+class Header extends React.Component<PropsFromRedux, HeaderState> {
+	constructor(props: PropsFromRedux) {
 		super(props);
 
 		this.state = {

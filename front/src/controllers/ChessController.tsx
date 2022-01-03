@@ -1,4 +1,4 @@
-import React, { LegacyRef, RefObject } from "react";
+import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
 import { ChessControllerLocalState, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
@@ -267,10 +267,10 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 	setOriginalQueue() {
 		if (this.props.mode === "review") {
-			this.original_queue = this.props.repertoire?.reviewQueue!;
-			this.chunk          = this.props.repertoire?.reviewQueue!;
+			this.original_queue = this.props.repertoire?.reviewQueue ?? [];
+			this.chunk          = this.props.repertoire?.reviewQueue ?? [];
 		} else if (this.props.mode === "lesson") {
-			this.original_queue = this.props.repertoire?.lessonQueue!;
+			this.original_queue = this.props.repertoire?.lessonQueue ?? [];
 			this.chunk          = [];
 		}
 	}
@@ -555,14 +555,14 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 		board.classList.remove("shake");
 
+		// eslint-disable-next-line
 		const height = board.offsetHeight; // Force DOM update
 
 		board.classList.add("shake");
 	}
 
 	reducer(action: any) {
-		let new_state = action.data;
-
+		const new_state = action.data;
 		const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
 		const last_move = new_state.moves.at(-1);
 
@@ -587,7 +587,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 					new_state.history = [];
 
-					for (let i in new_state.moves) {
+					for (const i in new_state.moves) {
 						new_state.history.push({
 							id   : i,
 							move : new_state.moves[i]

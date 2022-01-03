@@ -37,7 +37,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 	private last_orientation = "white";
 	private fen?: string     = START_FEN;
 	private pgn?: string     = "";
-	private time: number     = 0.0;
+	private time             = 0.0;
 
 	constructor(props: ChessboardProps) {
 		super(props);
@@ -330,7 +330,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		};
 		const pieces = [];
 
-		for (let i in moves) {
+		for (const i in moves) {
 			const move = moves[i];
 
 			if (move.color !== player) {

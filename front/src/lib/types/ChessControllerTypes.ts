@@ -1,15 +1,15 @@
 import { ApolloClient } from "@apollo/client";
-import Chess, { ChessInstance } from "chess.js";
+// import Chess, { ChessInstance } from "chess.js";
 import { START_FEN } from "../constants/chess";
 import { CollectionModel } from "./models/Collection";
 import { EcoPositionModel } from "./models/EcoPosition";
 import { GameModel } from "./models/Game";
 import { RepertoireModel, RepertoireMoveModel, RepertoireQueueItemModel, RepertoireReviewModel } from "./models/Repertoire";
 
-type ChessType = (fen?: string) => ChessInstance;
+/* type ChessType = (fen?: string) => ChessInstance;
 
 const ChessImport = Chess as unknown;
-const Chess2      = ChessImport as ChessType;
+const Chess2      = ChessImport as ChessType; */
 
 export interface ChessControllerHistoryItem {
 	id: number | string,
@@ -33,7 +33,7 @@ export interface ChessControllerProps {
 	repertoires?        : Array<RepertoireModel>,
 	collection?         : CollectionModel | null,
 	game?               : GameModel | EcoPositionModel | null,
-	client              : ApolloClient<object>,
+	client              : ApolloClient<unknown>,
 	onMove?             : Function,
 	onTransposition?    : Function,
 	onReview?           : Function,

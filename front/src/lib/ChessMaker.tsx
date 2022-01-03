@@ -9,6 +9,6 @@ class ChessMaker {
 	create() {
 		return Chess2();
 	}
-};
+}
 
 export default new ChessMaker();

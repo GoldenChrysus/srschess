@@ -2,7 +2,7 @@ import React from "react";
 
 interface LeafProps {
 	move: any
-};
+}
 
 class Leaf extends React.PureComponent<LeafProps> {
 	render() {

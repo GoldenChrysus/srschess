@@ -1,4 +1,3 @@
-import React from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserLocalPersistence, User } from "firebase/auth";
 
@@ -82,8 +81,6 @@ function FirebaseAuth() {
 	auth.onIdTokenChanged(handleTokenChange);
 
 	setPersistence(auth, browserLocalPersistence)
-		.then(() => {
-		})
 		.catch((err) => {
 			console.error(err);
 		});

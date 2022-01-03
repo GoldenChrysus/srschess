@@ -1,4 +1,3 @@
-import { transcode } from "buffer";
 import React from "react";
 
 import Leaf from "./Leaf";
@@ -14,7 +13,7 @@ interface BranchProps {
 	first_child?: boolean,
 	last_child?: boolean,
 	onMoveClick?: Function
-};
+}
 
 interface BranchState {
 	child_states: {
@@ -56,7 +55,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 		);
 	}
 
-	buildHtml(segment: any, single: boolean = false): any {
+	buildHtml(segment: any, single = false): any {
 		if (single || this.props.root) {
 			segment = [segment];
 		}
@@ -65,7 +64,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 		const limit = Object.keys(segment).length;
 		let count   = 0;
 
-		for (let sort in segment) {
+		for (const sort in segment) {
 			count++;
 
 			const move         = segment[sort];

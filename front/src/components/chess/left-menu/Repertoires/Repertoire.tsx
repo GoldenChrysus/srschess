@@ -18,7 +18,7 @@ interface RepertoireProps {
 function Repertoire(props: RepertoireProps) {
 	const { t } = useTranslation("repertoires");
 
-	const { loading, error, data } = useQuery<RepertoireQueryData>(
+	const { data } = useQuery<RepertoireQueryData>(
 		GET_REPERTOIRE_CACHED,
 		{
 			variables : {

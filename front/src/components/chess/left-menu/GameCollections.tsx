@@ -20,7 +20,7 @@ function GameCollections(props: PropsFromRedux) {
 	const [ createCollection, create_res ] = useMutation(CREATE_COLLECTION, {
 		refetchQueries : [ GET_COLLECTIONS ]
 	});
-	const { loading, error, data } = useQuery<CollectionsQueryData>(
+	const { loading, data } = useQuery<CollectionsQueryData>(
 		GET_COLLECTIONS
 	);
 

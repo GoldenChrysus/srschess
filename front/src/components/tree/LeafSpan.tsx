@@ -1,5 +1,4 @@
 import React from "react";
-import { Translation } from "react-i18next";
 import { Menu, Dropdown } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
@@ -18,7 +17,7 @@ interface LeafSpanProps {
 	last_child?: boolean,
 	onArrowClick?: any,
 	onClick?: Function,
-};
+}
 
 class LeafSpan extends React.Component<LeafSpanProps> {
 	shouldComponentUpdate(next_props: LeafSpanProps) {

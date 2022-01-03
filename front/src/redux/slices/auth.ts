@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "firebase/auth";
 
 import { cable_link } from "../../lib/Apollo";
 import { auth } from "../../lib/Firebase";

@@ -1,5 +1,5 @@
-import { Input } from "antd";
 import React, { ChangeEvent, useState } from "react";
+import { Input } from "antd";
 import { useTranslation } from "react-i18next";
 import { EcoPositionModel, EcoPositionsQueryData } from "../lib/types/models/EcoPosition";
 import OpeningVolume from "./opening-explorer/OpeningVolume";
@@ -8,7 +8,7 @@ interface OpeningExplorerProps {
 	openings?: EcoPositionsQueryData["ecoPositions"]
 }
 
-var processed = false;
+let processed = false;
 
 const indexed: {[key: string]: Array<EcoPositionModel>} = {
 	A : [],

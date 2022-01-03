@@ -12,7 +12,7 @@ interface RepertoireMoveNoteProps {
 
 function RepertoireMoveNote(props: RepertoireMoveNoteProps) {
 	const { t } = useTranslation("chess");
-	const { loading, error, data } = useQuery<RepertoireMoveNoteQueryData>(GET_REPERTOIRE_MOVE_NOTE, {
+	const { loading, data } = useQuery<RepertoireMoveNoteQueryData>(GET_REPERTOIRE_MOVE_NOTE, {
 		variables : {
 			moveId : props.active_uuid
 		},

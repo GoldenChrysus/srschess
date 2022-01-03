@@ -13,7 +13,7 @@ interface OpeningProps extends PropsFromRedux {
 	opening?: ChessControllerProps["game"]
 }
 
-let notification_allowed: boolean = false;
+let notification_allowed = false;
 
 function Opening(props: OpeningProps) {
 	const [ modal_active, setModalActive ]      = useState(false);

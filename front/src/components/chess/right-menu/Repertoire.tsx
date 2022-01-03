@@ -20,8 +20,8 @@ interface RepertoireProps extends PropsFromRedux {
 	mode: string
 }
 
-var original_review_count = 0;
-var original_lesson_count = 0;
+let original_review_count = 0;
+let original_lesson_count = 0;
 
 function Repertoire(props: RepertoireProps) {
 	const [ modal_active, setModalActive ] = useState(false);

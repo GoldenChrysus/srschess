@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, Form, Input, Button, Select, Switch, Spin } from "antd";
+import { Modal, Form, Button, Select, Spin } from "antd";
 import { useQuery } from "@apollo/client";
 import { GET_REPERTOIRES } from "../../api/queries";
 import { RepertoiresQueryData } from "../../lib/types/models/Repertoire";

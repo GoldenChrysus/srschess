@@ -1,5 +1,4 @@
-import { move } from "chessground/draw";
-import React, { EventHandler, MouseEventHandler } from "react";
+import React from "react";
 import { getClientMoveNumFromIndex } from "../../../helpers";
 import { ChessControllerHistoryItem } from "../../../lib/types/ChessControllerTypes";
 

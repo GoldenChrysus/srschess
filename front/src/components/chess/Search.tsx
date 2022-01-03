@@ -16,7 +16,7 @@ function Search(props: SearchProps) {
 	});
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 	const { t } = useTranslation(["search", "chess"]);
-	const { loading, error, data } = useQuery<EcoPositionsQueryData>(GET_ECOS);
+	const { data } = useQuery<EcoPositionsQueryData>(GET_ECOS);
 	const prev_movelist = useRef<string>();
 
 	useEffect(

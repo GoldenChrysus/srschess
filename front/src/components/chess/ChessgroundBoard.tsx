@@ -68,8 +68,8 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 		const board = this.board_ref.current.el;
 
 		if (!board) {
-			return
-		};
+			return;
+		}
 
 		const parent = board.closest("#chessboard-outer") ?? board.closest(".board-100w") ?? document;
 

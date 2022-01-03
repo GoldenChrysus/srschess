@@ -9,10 +9,9 @@ import { generateCanonicalURL, ROUTES } from ".";
 import { EcoPositionQueryData } from "../lib/types/models/EcoPosition";
 
 export function createGameDatabaseRouteMeta(t: TFunction<("database" | "chess")[]>, collection?: CollectionQueryData["collection"], collection_game?: GameModel | null, master_game?: GameModel | null) {
-	const meta = getMetaObject();
-	const game = collection_game ?? master_game;
-
-	let title_parts = [];
+	const meta        = getMetaObject();
+	const game        = collection_game ?? master_game;
+	const title_parts = [];
 
 	if (game) {
 		title_parts.push(t("chess:game_one") + ": " + game!.white + " - " + game!.black);

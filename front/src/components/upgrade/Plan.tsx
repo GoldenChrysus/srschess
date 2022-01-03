@@ -1,12 +1,12 @@
-import React, { Suspense, useState } from "react";
-import { Button, Card, Result, Spin } from "antd";
+import React from "react";
+import { Button, Card, Result } from "antd";
 import { useTranslation } from "react-i18next";
 import { PlanModel } from "../../lib/types/models/Premium";
 
 import "../../styles/components/upgrade/plan.css";
 import { RootState } from "../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COMMUNICATION_ENROLLMENT, GET_COMMUNICATION_ENROLLMENTS } from "../../api/queries";
 import { CommunicationEnrollmentsQueryData } from "../../lib/types/models/User";
@@ -21,7 +21,7 @@ function Plan(props: PlanProps) {
 	const [ createEnrollment, enrollment_res ] = useMutation(CREATE_COMMUNICATION_ENROLLMENT, {
 		refetchQueries : [ GET_COMMUNICATION_ENROLLMENTS ]
 	});
-	const { loading, error, data }             = useQuery<CommunicationEnrollmentsQueryData>(GET_COMMUNICATION_ENROLLMENTS);
+	const { data }                             = useQuery<CommunicationEnrollmentsQueryData>(GET_COMMUNICATION_ENROLLMENTS);
 	const enrollment_name                      = "notify_plan_" + plan.id;
 
 	const onNotify = () => {

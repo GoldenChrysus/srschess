@@ -1,5 +1,6 @@
 {
 	"cloned_repertoire_limit": "Maximum number of cloned repertoires reached.",
+	"collection_game_limit": "Maximum number of games reached in this collection.",
 	"created_collection_limit": "Maximum number of collections reached.",
 	"created_position_limit": "Maximum number of repertoire positions reached.",
 	"current_plan": "Current Plan",

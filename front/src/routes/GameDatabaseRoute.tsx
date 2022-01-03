@@ -25,7 +25,7 @@ function GameDatabaseRoute(props: PropsFromRedux) {
 	const { collection_slug, game_id, master_game_id } = useParams<GameDatabaseRouteParams>();
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
-	const { loading, error, data } = useQuery<CollectionQueryData>(
+	const { data } = useQuery<CollectionQueryData>(
 		GET_COLLECTION,
 		{
 			variables : {
@@ -35,7 +35,7 @@ function GameDatabaseRoute(props: PropsFromRedux) {
 		}
 	);
 
-	const { loading: master_game_loading, error: master_game_error, data: master_game_data } = useQuery<MasterGameQueryData>(
+	const { data: master_game_data } = useQuery<MasterGameQueryData>(
 		GET_MASTER_GAME,
 		{
 			variables : {
@@ -45,7 +45,7 @@ function GameDatabaseRoute(props: PropsFromRedux) {
 		}
 	);
 
-	const { loading: game_loading, error: game_error, data: game_data } = useQuery<GameQueryData>(
+	const { data: game_data } = useQuery<GameQueryData>(
 		GET_GAME,
 		{
 			variables : {
@@ -90,7 +90,7 @@ function GameDatabaseRoute(props: PropsFromRedux) {
 			</ApolloConsumer>
 		</>
 	)
-};
+}
 
 const mapDispatchToProps = {
 	setCollection : (collection: ChessState["collection"]) => setCollection(collection)

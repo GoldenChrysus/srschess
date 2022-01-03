@@ -20,7 +20,7 @@ export function getClientMoveNumFromIndex(index: number) {
 export function getClientMoveNumFromDBMoveNum(db_move_num: number, black_suffix?: string, white_suffix?: string, black_substitute?: string) {
 	const is_black  = ((db_move_num % 10) === 5);
 	const real_move = Math.floor(db_move_num / 10);
-	let text: string = String(real_move);
+	let text        = String(real_move);
 
 	if (is_black) {
 		if (black_substitute !== undefined) {
@@ -52,7 +52,7 @@ export function generateUUID(move_num: number, move: string, fen: string, repert
 }
 
 export function getRepertoireNextReview(next_review: RepertoireModel["nextReview"]) {
-	interface ReviewString { t_key: string | null, val: string | number | null };
+	interface ReviewString { t_key: string | null, val: string | number | null }
 
 	const data: ReviewString = {
 		t_key : null,
@@ -88,7 +88,7 @@ export function getRepertoireNextReview(next_review: RepertoireModel["nextReview
 	return data;
 }
 
-export function getMove(client: ApolloClient<object>, id: string | null) {
+export function getMove(client: ApolloClient<unknown>, id: string | null) {
 	return client.readFragment({
 		id       : "RepertoireMove:" + id,
 		fragment : REPERTOIRE_MOVE_FRAG

@@ -1,9 +1,9 @@
 import React from "react";
 import { Menu } from "antd";
 import { useTranslation } from "react-i18next";
-import { RepertoireMoveDeletionMutationData, RepertoireMoveModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
+import { RepertoireMoveDeletionMutationData, RepertoireMoveModel } from "../../../lib/types/models/Repertoire";
 import { useMutation } from "@apollo/client";
-import { DELETE_REPERTOIRE_MOVE, GET_REPERTOIRE, REORDER_REPERTOIRE_MOVE } from "../../../api/queries";
+import { DELETE_REPERTOIRE_MOVE, REORDER_REPERTOIRE_MOVE } from "../../../api/queries";
 
 interface ContextMenuProps {
 	move_id: RepertoireMoveModel["id"],

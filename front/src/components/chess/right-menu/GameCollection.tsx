@@ -83,6 +83,10 @@ function GameCollection(props: GameCollectionProps) {
 		);
 	}
 
+	const premium = hasPremiumLockoutError(games_res.error)
+		? <PremiumWarning message={t("premium:collection_game_limit")} type="modal"/>
+		: null;
+
 	return (
 		<>
 			<Collapse bordered={false} activeKey="repertoire-panel">
@@ -94,6 +98,7 @@ function GameCollection(props: GameCollectionProps) {
 					</Spin>
 				</Collapse.Panel>
 			</Collapse>
+			{premium}
 		</>
 	);
 }

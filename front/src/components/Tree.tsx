@@ -7,7 +7,7 @@ import Branch from "./tree/Branch";
 
 import "../styles/components/tree.css";
 import { Spin } from "antd";
-import { RepertoireModel, RepertoireMoveModel, RepertoireMovesQueryData } from "../lib/types/models/Repertoire";
+import { RepertoireModel, RepertoireMovesQueryData } from "../lib/types/models/Repertoire";
 import { getMove, getMoveSimple } from "../helpers";
 
 interface TreeProps {
@@ -25,8 +25,8 @@ interface BaseTree {
 	}
 }
 
-var base_tree: BaseTree = {};
-var tree: any           = {};
+let base_tree: BaseTree = {};
+let tree: any           = {};
 
 function Tree(props: TreeProps) {
 	const client       = useApolloClient();
@@ -64,7 +64,7 @@ function Tree(props: TreeProps) {
 		const limit = Object.keys(tree).length;
 		let count   = 0;
 	
-		for (let sort in tree) {
+		for (const sort in tree) {
 			count++;
 
 			let active_uuid = props.active_uuid;
@@ -96,7 +96,7 @@ function Tree(props: TreeProps) {
 	);
 }
 
-function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQueryData["repertoire"]["moves"], demo: boolean) {
+function buildBaseTree(client: ApolloClient<unknown>, moves: RepertoireMovesQueryData["repertoire"]["moves"], demo: boolean) {
 	const tree: BaseTree = {};
 
 	for (const move of moves ?? []) {
@@ -144,8 +144,8 @@ function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQuery
 			moveNumber : tmp_move.moveNumber
 		});
 
-		let has_children       = false;
-		let local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
+		let has_children         = false;
+		const local_has_children = (tree[parent.moveNumber][parent.sort].moves.length > 1)
 
 		while (parent.parentId) {
 			parent = (!demo) ? getMove(client, parent.parentId) : getMoveSimple(moves, parent.parentId);
@@ -167,7 +167,7 @@ function buildBaseTree(client: ApolloClient<object>, moves: RepertoireMovesQuery
 	return tree;
 }
 
-function buildTree(move_num: number = 10, focus_sort?: number, transpose?: boolean) {
+function buildTree(move_num = 10, focus_sort?: number, transpose?: boolean) {
 	const tree: any     = {};
 	const allowed_sorts = (focus_sort !== undefined) ? [focus_sort] : Object.keys(base_tree[move_num]);
 
@@ -185,7 +185,7 @@ function buildTree(move_num: number = 10, focus_sort?: number, transpose?: boole
 			uuids        : item.uuids
 		};
 
-		for (let index in item.moves) {
+		for (const index in item.moves) {
 			tree[sort].children = Object.assign(tree[sort].children, buildTree(item.moves[index].moveNumber, item.moves[index].sort, item.moves[index].transpose));
 		}
 	}
