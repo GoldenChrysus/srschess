@@ -22,6 +22,16 @@ class PremiumPolicy < ApplicationPolicy
 		return valid
 	end
 
+	def create_repertoire_moves?
+		valid = (user.position_count < 2000)
+
+		if (!valid)
+			Current.internal_error_code = 200005
+		end
+
+		return valid
+	end
+
 	def clone_repertoires?
 		valid = (user.repertoires.where(copied_from_public: true).length < 5)
 
