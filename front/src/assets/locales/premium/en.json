@@ -1,6 +1,7 @@
 {
 	"cloned_repertoire_limit": "Maximum number of cloned repertoires reached.",
 	"created_collection_limit": "Maximum number of collections reached.",
+	"created_position_limit": "Maximum number of repertoire positions reached.",
 	"current_plan": "Current Plan",
 
 	"database_result_limit": "{{count, number}} games per search",

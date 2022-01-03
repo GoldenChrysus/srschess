@@ -1,6 +1,8 @@
 import React from "react";
 import { Button, Modal } from "antd";
 import { Translation } from "react-i18next";
+import { Link } from "react-router-dom";
+import Container from "./premium-warning/Container";
 
 enum PremiumWarningTypes {
 	embed = "embed",
@@ -12,82 +14,37 @@ interface PremiumWarningProps {
 	message?: string
 }
 
-interface PremiumWarningState {
-	modal_visible: boolean
-}
-
-class PremiumWarning extends React.Component<PremiumWarningProps, PremiumWarningState> {
-	constructor(props: PremiumWarningProps) {
-		super(props);
-
-		this.state = {
-			modal_visible : true
-		};
-
-		this.closeModal = this.closeModal.bind(this);
-	}
-
+class PremiumWarning extends React.Component<PremiumWarningProps> {
 	render() {
-		switch (this.props.type) {
-			case "embed":
-				return (
-					<div className="w-full flex items-center absolute inset-0" style={{ backdropFilter: "blur(6px)" }}>
-						<div className="m-auto text-center">
-							<Translation ns="premium">
-								{
-									(t) => (
-										<>
-											<span className="filter text-lg font-semibold" style={{ textShadow: "0 0 5px #000" }}>
-												{(this.props.message) ?? t("premium_only")}
-											</span>
-											<div>
-												<Button className="premium" type="default" style={{ color: "#fff", textShadow: "0 0 4px #000" }}>
-													{t("upgrade_now")}
-												</Button>
-											</div>
-										</>
-									)
-								}
-							</Translation>
-						</div>
-					</div>
-				);
-
-			case "modal":
-				return (
-					<Modal visible={this.state.modal_visible} onCancel={this.closeModal} footer={""}>
-						<div className="w-full flex items-center inset-0" style={{ backdropFilter: "blur(6px)" }}>
-							<div className="m-auto text-center">
-								<Translation ns="premium">
-									{
-										(t) => (
-											<>
-												<span className="filter text-lg font-semibold" style={{ textShadow: "0 0 5px #000" }}>
-													{(this.props.message) ?? t("premium_only")}
-												</span>
-												<div>
-													<Button className="premium" type="default" style={{ color: "#fff", textShadow: "0 0 4px #000" }}>
+		return (
+			<Container mode={this.props.type}>
+				<Translation ns="premium">
+					{
+						(t) => (
+							<>
+								<span className="filter text-lg font-semibold" style={{ textShadow: "0 0 5px #000" }}>
+									{(this.props.message) ?? t("premium_only")}
+								</span>
+								<div>
+									<Link
+										to="/upgrade/"
+										component={
+											React.forwardRef((props: any, ref: any) => {
+												return (
+													<Button className="premium" type="default" onClick={props.navigate} style={{ color: "#fff", textShadow: "0 0 4px #000" }}>
 														{t("upgrade_now")}
 													</Button>
-												</div>
-											</>
-										)
-									}
-								</Translation>
-							</div>
-						</div>
-					</Modal>
-				);
-
-			default:
-				break;
-		}
-	}
-
-	closeModal() {
-		this.setState({
-			modal_visible : false
-		});
+												)
+											})
+										}
+									/>
+								</div>
+							</>
+						)
+					}
+				</Translation>
+			</Container>
+		);
 	}
 }
 

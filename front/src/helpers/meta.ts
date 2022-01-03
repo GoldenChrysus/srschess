@@ -45,7 +45,7 @@ export function createGameDatabaseRouteMeta(t: TFunction<("database" | "chess")[
 	return meta;
 }
 
-export function createRepertoireRouteMeta(t: TFunction<"repertoires">, mode: ChessControllerProps["mode"], repertoire?: RepertoireQueryData["repertoire"]) {
+export function createRepertoireRouteMeta(t: TFunction<("repertoires" | "premium")[]>, mode: ChessControllerProps["mode"], repertoire?: RepertoireQueryData["repertoire"]) {
 	const meta = getMetaObject();
 
 	meta.title = t(mode + "s");

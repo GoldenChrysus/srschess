@@ -8,11 +8,12 @@ import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_REPERTOIRE_MOVE, TRANSPOS
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
-import { createRepertoireRouteMeta } from "../helpers";
+import { createRepertoireRouteMeta, hasPremiumLockoutError } from "../helpers";
 import { ChessState } from "../lib/types/ReduxTypes";
 import { setRepertoire } from "../redux/slices/chess";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../redux/store";
+import PremiumWarning from "../components/PremiumWarning";
 
 interface RepertoireRouteProps extends PropsFromRedux, RouteProps {
 	mode: ChessControllerProps["mode"]
@@ -45,9 +46,9 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			break;
 	}
 
-	const { t } = useTranslation("repertoires");
+	const { t } = useTranslation(["repertoires", "premium"]);
 	const { slug } = useParams<RepertoireRouteParams>();
-	const [ createMove ] = useMutation(CREATE_REPERTOIRE_MOVE);
+	const [ createMove, create_move_res ] = useMutation(CREATE_REPERTOIRE_MOVE);
 	const [ transposeMove ] = useMutation(TRANSPOSE_REPERTOIRE_MOVE);
 	const [ createReview ] = useMutation(CREATE_REVIEW, {
 		refetchQueries : [ main_query ]
@@ -126,7 +127,10 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		setMoveSearching(new_state);
 	}
 
-	const meta = createRepertoireRouteMeta(t, props.mode, data?.repertoire);
+	const meta    = createRepertoireRouteMeta(t, props.mode, data?.repertoire);
+	const premium = hasPremiumLockoutError(create_move_res.error)
+		? <PremiumWarning type="modal" message={t("premium:created_position_limit")}/>
+		: null;
 
 	return (
 		<>
@@ -156,6 +160,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 					/>
 				}
 			</ApolloConsumer>
+			{premium}
 		</>
 	)
 };
