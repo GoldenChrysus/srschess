@@ -9,6 +9,9 @@ import Piece from "./chess/Piece";
 import "react-chessground/dist/styles/chessground.css";
 import "../styles/components/chessboard.css";
 import { Modal } from "antd";
+import { Destinations, Drawable, DrawShape } from "../lib/types/models/Chessboard";
+import { RepertoireQueueItemModel } from "../lib/types/models/Repertoire";
+import { ShortMove, Square } from "chess.js";
 
 interface ChessboardProps {
 	mode: ChessControllerProps["mode"],
@@ -17,14 +20,14 @@ interface ChessboardProps {
 	fen?: string,
 	pgn?: string,
 	onMove: Function,
-	children: Array<any>
-	queue_item: { [key: string] : any } | undefined | null,
+	children: string[]
+	queue_item?: RepertoireQueueItemModel | null
 	quizzing: boolean
 }
 
 interface Move {
-	from: string,
-	to: string
+	from: Square,
+	to: Square
 }
 
 interface ChessboardState {
@@ -58,7 +61,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		this.chess.load_pgn(this.pgn);
 	}
 
-	shouldComponentUpdate(next_props: ChessboardProps, next_state: ChessboardState) {
+	shouldComponentUpdate(next_props: ChessboardProps, next_state: ChessboardState): boolean {
 		this.last_orientation = next_props.orientation ?? this.last_orientation;
 
 		if (this.props.fen !== next_props.fen || this.props.quizzing || (this.props.queue_item !== next_props.queue_item) || this.props.mode === "review") {
@@ -87,8 +90,8 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		);
 	}
 
-	render() {
-		const drawable: any = {
+	render(): JSX.Element {
+		const drawable: Drawable = {
 			autoShapes : [],
 			onChange   : this.onDraw,
 			brushes: {
@@ -100,9 +103,9 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 				paleGreen : { key: "pg", color: "#15781B", opacity: 0.4, lineWidth: 15 },
 				paleRed   : { key: "pr", color: "#882020", opacity: 0.4, lineWidth: 15 },
 				paleGrey  : { key: "pgr", color: "#4a4a4a", opacity: 0.35, lineWidth: 15 },
-				nextMove  : { key: "m", color: "#800080", opacity: 0.5, linewidth: 10 },
-				bestMove  : { key: "bm", color: "#a52a2a", opacity: 0.7, linewidth: 10 },
-				queueMove : { key: "qm", color: "#ffff00", opacity: 0.7, linewidth: 10 }
+				nextMove  : { key: "m", color: "#800080", opacity: 0.5, lineWidth: 10 },
+				bestMove  : { key: "bm", color: "#a52a2a", opacity: 0.7, lineWidth: 10 },
+				queueMove : { key: "qm", color: "#ffff00", opacity: 0.7, lineWidth: 10 }
 			},
 		};
 
@@ -182,7 +185,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		);
 	}
 
-	lastMove() {
+	lastMove(): string[] | null {
 		const history   = this.chess.history({ verbose: true });
 		const last_item = (history.length) ? history.at(-1) : null;
 
@@ -191,9 +194,9 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 			: null;
 	}
 
-	onMove(orig: any, dest: any, capture?: any, promo?: any) {
+	onMove(orig: Square, dest: Square, capture?: unknown, promo?: ShortMove["promotion"]): void {
 		if (!this.props.orientation && !["search", "lesson", "review"].includes(this.props.mode)) {
-			return false;
+			return;
 		}
 
 		if (dest && !promo && ["8", "1"].includes(dest[1])) {
@@ -217,7 +220,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 
 		if (!res) {
 			this.chess.undo();
-			return false;
+			return;
 		}
 
 		if (promo) {
@@ -246,22 +249,26 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		});	
 	}
 
-	onPromotion(piece: string) {
-		this.onMove(this.state.pending_move?.from, this.state.pending_move?.to, undefined, piece);
+	onPromotion(piece: ShortMove["promotion"]): void {
+		if (!this.state.pending_move) {
+			return;
+		}
+
+		this.onMove(this.state.pending_move.from, this.state.pending_move.to, undefined, piece);
 	}
 	
-	toColor() {
+	toColor(): string {
 		return (this.chess.turn() === "w") ? "white" : "black";
 	}
 
-	checkColor() {
+	checkColor(): string {
 		return (this.chess.in_check())
 			? this.toColor()
 			: "";
 	}
 
-	toDests() {
-		const dests = new Map();
+	toDests(): Destinations {
+		const dests = new Map<string, string[]>();
 		
 		switch (this.props.mode) {
 			case "repertoire":
@@ -293,7 +300,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		};
 	}
 
-	buildRealDests(dests: any) {
+	buildRealDests(dests: Map<string, string[]>): void {
 		if (this.props.orientation || ["search", "lesson", "review"].includes(this.props.mode)) {
 			this.chess.SQUARES.forEach(s => {
 				const ms = this.chess.moves({
@@ -308,15 +315,15 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		}
 	}
 
-	onDraw(shapes: any) {
-		const data: any = [];
+	onDraw(shapes: DrawShape[]): void {
+		const data: string[] = [];
 
 		for (const shape of shapes) {
 			data.push(shape.orig + ":" + shape.dest + ":" + shape.brush);
 		}
 	}
 
-	renderCaptures(section: string) {
+	renderCaptures(section: string): JSX.Element[] {
 		const player = ((this.last_orientation === "white" && section === "bottom") || (this.last_orientation === "black" && section === "top"))
 			? "w"
 			: "b";

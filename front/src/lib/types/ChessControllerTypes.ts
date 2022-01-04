@@ -1,6 +1,7 @@
 import { ApolloClient } from "@apollo/client";
 // import Chess, { ChessInstance } from "chess.js";
 import { START_FEN } from "../constants/chess";
+import { ForcedArrows } from "./models/Chessboard";
 import { CollectionModel } from "./models/Collection";
 import { EcoPositionModel } from "./models/EcoPosition";
 import { GameModel } from "./models/Game";
@@ -38,7 +39,7 @@ export interface ChessControllerProps {
 	onTransposition?    : Function,
 	onReview?           : Function,
 	onMoveSearchChange? : Function,
-	arrows?             : { [key: string]: Array<any> }
+	arrows?             : ForcedArrows
 }
 
 export interface ChessControllerState {

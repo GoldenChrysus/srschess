@@ -14,6 +14,7 @@ import { setRepertoire } from "../redux/slices/chess";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../redux/store";
 import PremiumWarning from "../components/PremiumWarning";
+import { ForcedArrows } from "../lib/types/models/Chessboard";
 
 interface RepertoireRouteProps extends PropsFromRedux, RouteProps {
 	mode: ChessControllerProps["mode"]
@@ -72,7 +73,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	props.setRepertoire(data?.repertoire);
 
 	const fens: { [key: string]: string } = {};
-	const arrows: { [key: string]: Array<any> } = {};
+	const arrows: ForcedArrows = {};
 
 	if (data?.repertoire?.moves) {
 		for (const move of data?.repertoire.moves) {

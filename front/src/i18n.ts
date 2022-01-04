@@ -2,6 +2,12 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 
+import EN_REPERTOIRES from "./assets/locales/repertoires/en.json";
+import EN_COMMON from "./assets/locales/common/en.json";
+
+import JA_REPERTOIRES from "./assets/locales/repertoires/ja.json";
+import JA_COMMON from "./assets/locales/common/ja.json";
+
 const ALLOWED_LOCALES: Array<string> = [
 	"en",
 	"ja"
@@ -30,7 +36,7 @@ i18n
 		},
 		fallbackLng   : "en",
 		lng           : saved_locale,
-		ns            : ["chess", "common", "repertoires", "errors"],
+		ns            : ["common", "premium", "repertoires", "errors"],
 		interpolation : {
 			escapeValue : false,
 			format      : function(value, format, lng) {
@@ -46,5 +52,15 @@ i18n
 			}
 		}
 	});
+
+if (saved_locale === "en") {
+	i18n.addResourceBundle("en", "repertoires", EN_REPERTOIRES);
+	i18n.addResourceBundle("en", "common", EN_COMMON);
+}
+
+if (saved_locale === "ja") {
+	i18n.addResourceBundle("ja", "repertoires", JA_REPERTOIRES);
+	i18n.addResourceBundle("ja", "common", JA_COMMON);
+}
 
 export default i18n;
