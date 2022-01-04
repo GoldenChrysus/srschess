@@ -1,7 +1,7 @@
 import React from "react";
 import ChessMaker from "../lib/ChessMaker";
 
-import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
+import { ChessControllerProps, ReducerArgument } from "../lib/types/ChessControllerTypes";
 import { START_FEN } from "../lib/constants/chess";
 import ChessgroundBoard from "./chess/ChessgroundBoard";
 import Piece from "./chess/Piece";
@@ -19,7 +19,7 @@ interface ChessboardProps {
 	orientation?: string,
 	fen?: string,
 	pgn?: string,
-	onMove: Function,
+	onMove: (action: ReducerArgument) => void,
 	children: string[]
 	queue_item?: RepertoireQueueItemModel | null
 	quizzing: boolean

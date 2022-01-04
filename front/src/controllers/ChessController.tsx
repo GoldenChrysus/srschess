@@ -1,7 +1,7 @@
 import React from "react";
 import Chess, { ChessInstance } from "chess.js";
 
-import { ChessControllerLocalState, ChessControllerProps, ChessControllerState, initial_state } from "../lib/types/ChessControllerTypes";
+import { ChessControllerLocalState, ChessControllerProps, ChessControllerState, initial_state, ReducerArgument } from "../lib/types/ChessControllerTypes";
 import Chessboard from "../components/Chessboard";
 import LeftMenu from "../components/chess/LeftMenu";
 import RightMenu from "../components/chess/RightMenu";
@@ -331,8 +331,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 							preloading : this.progressing,
 							pgn        : this.chess.pgn(),
 							fen        : this.chess.fen(),
-							moves      : history,
-							history    : history
+							moves      : history
 						}
 					});
 				},
@@ -534,7 +533,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 	buildQueueHistory(new_state: any) {
 		const real_history = [];
-		let history_id = 0;
+		let history_id     = 0;
 
 		for (const move of new_state.moves) {
 			real_history.push({
@@ -561,10 +560,21 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 		board.classList.add("shake");
 	}
 
-	reducer(action: any) {
-		const new_state = action.data;
+	reducer(action: ReducerArgument): void {
+		const new_state: ChessControllerState = {
+			fen           : action.data.fen,
+			pgn           : action.data.pgn,
+			last_num      : this.state.last_num,
+			last_uuid     : action.data.last_uuid ?? this.state.last_uuid,
+			moves         : action.data.moves,
+			history       : action.data.history ?? this.state.history,                                // fix
+			queue_index   : this.state.queue_index,
+			preloading    : action.data.preloading ?? this.state.preloading,
+			quizzing      : this.state.quizzing,
+			awaiting_user : this.state.awaiting_user
+		};
 		const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
-		const last_move = new_state.moves.at(-1);
+		const last_move = new_state.moves.at(-1) ?? "";
 
 		new_state.last_num = move_num;
 
@@ -672,7 +682,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 						this.reviews[review_move.id].averageTime = (
 							(
 								(this.reviews[review_move.id].averageTime * (this.reviews[review_move.id].attempts - 1)) +
-								action.time
+								(action.time ?? 0)
 							) /
 							this.reviews[review_move.id].attempts
 						);
@@ -689,7 +699,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 				this.reviews[review_move.id].averageCorrectTime = (
 					(
 						(this.reviews[review_move.id].averageCorrectTime * (correct_attempts- 1)) +
-						action.time
+						(action.time ?? 0)
 					) /
 					correct_attempts
 				);
@@ -699,7 +709,11 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 				const quizzing = (this.chunk.length > 0 && this.props.mode === "lesson");
 
 				this.chess.move(last_move);
-				this.preloaded_moves.push(new_state.moves.at(-1));
+
+				if (last_move) {
+					this.preloaded_moves.push(last_move);
+				}
+
 				this.setState({
 					awaiting_user : false,
 					preloading    : false,

@@ -84,3 +84,18 @@ export interface ChessControllerLocalState {
 		fen: RepertoireMoveModel["fen"]
 	}>
 }
+
+export interface ReducerArgument {
+	type: string,
+	uci?: string,
+	time?: number,
+	moved?: boolean,
+	data: {
+		preloading?: boolean,
+		last_uuid?: string,
+		pgn: string,
+		fen: string,
+		moves: string[],
+		history?: ChessControllerHistoryItem[]
+	}
+}
