@@ -567,7 +567,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 			last_num      : this.state.last_num,
 			last_uuid     : action.data.last_uuid ?? this.state.last_uuid,
 			moves         : action.data.moves,
-			history       : action.data.history ?? this.state.history,                                // fix
+			history       : action.data.history ?? this.state.history,
 			queue_index   : this.state.queue_index,
 			preloading    : action.data.preloading ?? this.state.preloading,
 			quizzing      : this.state.quizzing,
