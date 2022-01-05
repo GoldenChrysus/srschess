@@ -110,7 +110,6 @@ def make_process(num, chunk_size):
 
 		cur.execute(sql)
 		conn.commit()
-		print("P" + str(num) + ": " + id)
 		sleep(0.01)
 	
 	cur.close()

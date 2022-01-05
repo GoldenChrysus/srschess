@@ -72,7 +72,7 @@ function UserInfo(props: PropsFromRedux) {
 								name="email"
 								rules={[ { required: true, message: t("input_email")} ]}
 							>
-								<Input name="email"/>
+								<Input name="email" type="email"/>
 							</Form.Item>
 						</div>
 						<div className="col-span-2 md:col-span-1">

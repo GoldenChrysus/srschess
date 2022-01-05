@@ -131,7 +131,7 @@ function Login(props: LoginProps) {
 							name="email"
 							rules={[ { required: true, message: t("input_email")} ]}
 						>
-							<Input name="email"/>
+							<Input name="email" type="email"/>
 						</Form.Item>
 						{
 							progress === "registering" &&
