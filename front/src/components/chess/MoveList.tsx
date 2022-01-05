@@ -33,7 +33,7 @@ class MoveList extends React.Component<MoveListProps> {
 		);
 	}
 
-	componentDidMount() {
+	componentDidMount = () => {
 		window.dispatchEvent(new Event("resize"));
 	}
 
