@@ -18,12 +18,6 @@ module ChessHq
 		#
 		# config.time_zone = "Central Time (US & Canada)"
 		# config.eager_load_paths << Rails.root.join("extras")
-		if (config.public_file_server.headers == nil)
-			config.public_file_server.headers = {}
-		end
-
-		config.public_file_server.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
-		config.public_file_server.headers["Cross-Origin-Opener-Policy"] = "same-origin"
 
 		if Rails.env.development?
 			config.assets.precompile += [

@@ -7,7 +7,7 @@ import RepertoireDemo from "./home/RepertoireDemo";
 import "../styles/components/home.css";
 import Header from "./home/Header";
 
-function Home() {
+function Home(): JSX.Element {
 	const { t } = useTranslation(["repertoires", "database", "openings", "premium"]);
 
 	return (

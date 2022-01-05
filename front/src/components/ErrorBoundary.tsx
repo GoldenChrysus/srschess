@@ -1,8 +1,8 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { notifyError } from "../helpers";
 
 class ErrorBoundary extends React.Component {
-	componentDidCatch(error: any, info: any) {
+	componentDidCatch(error: unknown, info: unknown): void {
 		notifyError();
 
 		if (process.env.NODE_ENV === "development") {
@@ -11,7 +11,7 @@ class ErrorBoundary extends React.Component {
 		}
 	}
 
-	render() {
+	render(): ReactNode {
 		return this.props.children;
 	}
 }

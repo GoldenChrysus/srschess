@@ -1,10 +1,10 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 
-class MainLayout extends React.Component<any> {
+class MainLayout extends React.Component<RouteComponentProps> {
 	render() {
 		const layout_classes  = [
 			"bg-gray-800",

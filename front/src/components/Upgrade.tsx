@@ -330,7 +330,7 @@ const PLANS: Array<PlanModel> = [
 	}
 ];
 
-function Upgrade() {
+function Upgrade(): JSX.Element {
 	const plans = [];
 
 	for (const plan of PLANS) {
@@ -338,6 +338,7 @@ function Upgrade() {
 			<Plan key={"plan-" + plan.id} plan={plan}/>
 		)
 	}
+
 	return (
 		<div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 			{plans}

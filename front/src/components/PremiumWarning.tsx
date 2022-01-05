@@ -15,7 +15,7 @@ interface PremiumWarningProps {
 }
 
 class PremiumWarning extends React.Component<PremiumWarningProps> {
-	render() {
+	render(): JSX.Element {
 		return (
 			<Container mode={this.props.type}>
 				<Translation ns="premium">
@@ -29,7 +29,9 @@ class PremiumWarning extends React.Component<PremiumWarningProps> {
 									<Link
 										to="/upgrade/"
 										component={
-											React.forwardRef((props: any, ref: any) => {
+											React.forwardRef((props: any, ref: any) => { // eslint-disable-line
+												console.log(props)
+
 												return (
 													<Button className="premium" type="default" onClick={props.navigate} style={{ color: "#fff", textShadow: "0 0 4px #000" }}>
 														{t("upgrade_now")}

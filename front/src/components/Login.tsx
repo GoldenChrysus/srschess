@@ -19,6 +19,10 @@ interface LoginProps extends PropsFromRedux {
 	state?: LocationState
 }
 
+interface FormValues {
+	[key: string]: string | null | undefined
+}
+
 function Login(props: LoginProps) {
 	const [ form ]                  = Form.useForm();
 	const { t }                     = useTranslation(["dashboard", "common"]);
@@ -29,7 +33,7 @@ function Login(props: LoginProps) {
 		return (<Redirect to={"/" + (props.state?.redirect ?? "repertoires") + "/"}/>);
 	}
 
-	const onSubmit = (values: any) => {
+	const onSubmit = (values: FormValues) => {
 		setLoading(true);
 
 		const email = values?.email;
@@ -89,9 +93,7 @@ function Login(props: LoginProps) {
 		}
 	};
 
-	const resetPassword = (e: any) => {
-		e.preventDefault();
-
+	const resetPassword = () => {
 		const email = form.getFieldValue("email");
 
 		if (!email) {

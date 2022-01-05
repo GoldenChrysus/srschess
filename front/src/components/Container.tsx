@@ -13,7 +13,7 @@ import LoginRoute from "../routes/LoginRoute";
 import UpgradeRoute from "../routes/UpgradeRoute";
 
 class Container extends React.Component {
-	render() {
+	render(): JSX.Element {
 		return (
 			<Router>
 				<MainLayout>				

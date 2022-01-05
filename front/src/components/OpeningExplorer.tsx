@@ -18,7 +18,7 @@ const indexed: {[key: string]: Array<EcoPositionModel>} = {
 	E : []
 };
 
-function OpeningExplorer(props: OpeningExplorerProps) {
+function OpeningExplorer(props: OpeningExplorerProps): JSX.Element {
 	const [ filter, setFilter ] = useState<string | null>(null);
 	const { t } = useTranslation(["common", "openings"]);
 

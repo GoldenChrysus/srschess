@@ -22,7 +22,7 @@ const MENU = [
 	}
 ];
 
-function Dashboard(props: DashboardProps) {
+function Dashboard(props: DashboardProps): JSX.Element {
 	const { t } = useTranslation("dashboard");
 	const items = [];
 
