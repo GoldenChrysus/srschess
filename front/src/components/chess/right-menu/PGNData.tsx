@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, Descriptions } from "antd";
+import { Descriptions } from "antd";
 import ChessMaker from "../../../lib/ChessMaker";
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { Translation } from "react-i18next";
@@ -63,13 +63,9 @@ class PGNData extends React.Component<PGNDataProps, PGNDataState> {
 		return (
 			<Translation ns="database">
 				{t => (
-					<Collapse accordion bordered={false} defaultActiveKey="pgn-data-panel">
-						<Collapse.Panel id="pgn-data-panel" header={t("pgn_data")} key="pgn-data-panel">
-							<Descriptions className="max-h-40" layout="vertical" bordered>
-								{items}
-							</Descriptions>
-						</Collapse.Panel>
-					</Collapse>
+					<Descriptions layout="vertical" bordered>
+						{items}
+					</Descriptions>
 				)}
 			</Translation>
 		);

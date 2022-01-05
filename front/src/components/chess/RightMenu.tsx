@@ -10,7 +10,6 @@ import "../../styles/components/chess/right-menu.css";
 import RepertoireMoveNote from "./right-menu/RepertoireMoveNote";
 import ECO from "./right-menu/ECO";
 import GameCollection from "./right-menu/GameCollection";
-import PGNData from "./right-menu/PGNData";
 import Opening from "./right-menu/Opening";
 
 interface RightMenuProps {
@@ -51,14 +50,10 @@ class RightMenu extends React.Component<RightMenuProps> {
 					<GameCollection collection={this.props.collection}/>
 				}
 				{
-					this.props.game?.id && this.props.mode === "database" &&
-					<PGNData game={this.props.game}/>
-				}
-				{
 					this.props.game?.id && this.props.mode === "opening" &&
 					<Opening opening={this.props.game}/>
 				}
-				<MoveList mode={this.props.mode} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
+				<MoveList mode={this.props.mode} game={this.props.game} active_num={this.props.active_num} fen={this.props.fen} moves={this.props.moves} onMoveClick={this.props.onMoveClick}/>
 				<Translation ns="chess">
 					{
 						(t) => (

@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDoubleLeft, faAngleLeft, faAngleDoubleRight, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDoubleLeft, faAngleLeft, faAngleDoubleRight, faAngleRight, faChess, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { ChessControllerHistoryItem, ChessControllerProps, ChessControllerState } from "../../lib/types/ChessControllerTypes";
 
@@ -9,9 +9,13 @@ import "../../styles/components/chess/move-list.css";
 import Move from "./move-list/Move";
 import Stockfish from "./move-list/Stockfish";
 import { getDBMoveNumFromIndex, getIndexFromDBMoveNum } from "../../helpers";
+import { Tabs } from "antd";
+import PGNData from "./right-menu/PGNData";
+import { Translation } from "react-i18next";
 
 interface MoveListProps {
 	mode: ChessControllerProps["mode"],
+	game?: ChessControllerProps["game"],
 	demo?: boolean,
 	active_num?: ChessControllerState["last_num"],
 	fen: string,
@@ -34,18 +38,36 @@ class MoveList extends React.Component<MoveListProps> {
 	}
 
 	render() {
+		const solo_class = (!this.props.game || this.props.mode !== "database") ? "solo" : "";
+
 		return (
-			<>
-				{!this.props.demo && <Stockfish mode={this.props.mode} fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>}
-				<div key="movelist" id="movelist" className={"movelist max-w-full md:max-w-sm " + this.props.mode}>
-					{this.props.moves?.map((move, i, moves) => this.renderListMove(move, i, moves))}
-				</div>
-				<div key="movelist-controller" id="movelist-controller" className="max-w-full">
-					<div className="max-w-full md:max-w-sm">
-						{this.renderControls()}
-					</div>
-				</div>
-			</>
+			<Translation ns={["chess", "database"]}>
+				{
+					(t) => (
+						<>
+							{!this.props.demo && <Stockfish mode={this.props.mode} fen={this.props.fen} num={this.props.active_num} key="stockfish-component"/>}
+							<Tabs type="card" tabBarGutter={0} tabBarStyle={{ margin: 0 }} centered={true} id="movelist-tabs" className={solo_class}>
+								<Tabs.TabPane tab={<><FontAwesomeIcon icon={faChess} className="mr-2"/>{t("move_other")}</>} key="movelist">
+									<div key="movelist" id="movelist" className={"movelist scroll-shadow max-w-full " + this.props.mode}>
+										{this.props.moves?.map((move, i, moves) => this.renderListMove(move, i, moves))}
+									</div>
+									<div key="movelist-controller" id="movelist-controller" className="max-w-full">
+										<div className="max-w-full">
+											{this.renderControls()}
+										</div>
+									</div>
+								</Tabs.TabPane>
+								<Tabs.TabPane tab={<><FontAwesomeIcon icon={faInfoCircle} className="mr-2"/>{t("database:pgn_data")}</>} key="pgn">
+									{
+										this.props.game?.id && this.props.mode === "database" &&
+										<PGNData game={this.props.game}/>
+									}
+								</Tabs.TabPane>
+							</Tabs>
+						</>
+					)
+				}
+			</Translation>
 		);
 	}
 

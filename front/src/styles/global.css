@@ -88,6 +88,34 @@ body .active-border::after {
 	border-right: 3px solid var(--green-500) !important;
 }
 
+.scroll-shadow {
+	background:
+		linear-gradient(
+			var(--gray-800) 30%,
+			rgba(255, 255, 255, 0)
+		) center top,
+
+		linear-gradient(
+			rgba(255, 255, 255, 0), 
+			var(--gray-800) 70%
+		) center bottom,
+
+		radial-gradient(
+			farthest-side at 50% 0,
+			rgba(0, 0, 0, 0.2),
+			rgba(0, 0, 0, 0)
+		) center top,
+
+		radial-gradient(
+			farthest-side at 50% 100%,
+			rgba(0, 0, 0, 0.2),
+			rgba(0, 0, 0, 0)
+		) center bottom;
+	background-repeat: no-repeat;
+	background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+	background-attachment: local, local, scroll, scroll;
+}
+
 ::-webkit-scrollbar {
 	width: 7px;
 }

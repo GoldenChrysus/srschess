@@ -35,6 +35,16 @@ body .ant-btn-ghost:focus {
 	border-color: var(--green-300);
 }
 
+body .ant-menu-inline,
+body .ant-menu-vertical,
+body .ant-menu-vertical-left {
+	border-right: 0;
+}
+
+body .ant-tabs-top > .ant-tabs-nav:before {
+	border-bottom: 0;
+}
+
 body .ant-modal-content,
 body .ant-modal-header,
 body .ant-select-dropdown,

@@ -18,3 +18,29 @@
 	position: relative;
 	top: 2px;
 }
+
+#movelist-tabs .ant-tabs-nav-list {
+	width: 100%;
+	border-bottom: 1px solid #303030;
+	border-top: 1px solid #303030;
+}
+
+#movelist-tabs.solo .ant-tabs-nav-list {
+	display: none;
+}
+
+#movelist-tabs .ant-tabs-nav-list > .ant-tabs-tab {
+	width: 50%;
+	border: 0;
+	text-align: center;
+	background: var(--gray-800);
+}
+
+#movelist-tabs .ant-tabs-nav-list > .ant-tabs-tab:not(.ant-tabs-tab-active):hover {
+	background: var(--gray-700);
+}
+
+#movelist-tabs .ant-tabs-nav-list > .ant-tabs-tab-active {
+	background: var(--black-15o);
+	border-bottom: 0;
+}
