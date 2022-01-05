@@ -35,8 +35,8 @@ if enviro not in valid["enviro"]:
 	sys.exit(2)
 
 config = {
-	**dotenv_values("../../config/.env." + enviro),
-	**dotenv_values("../../config/.env")
+	**dotenv_values("../../config/.env"),
+	**dotenv_values("../../config/.env." + enviro)
 }
 
 db_host     = config["MASTERGAMES_DB_HOST"]
