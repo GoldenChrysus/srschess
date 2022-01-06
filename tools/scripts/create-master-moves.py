@@ -121,7 +121,7 @@ if __name__ == "__main__":
 	print("Count: " + str(count))
 
 	processes  = []
-	proc_count = multiprocessing.cpu_count() - 1
+	proc_count = multiprocessing.cpu_count() * 2
 	chunk_size = math.ceil(count / proc_count)
 
 	for i in range(proc_count):
