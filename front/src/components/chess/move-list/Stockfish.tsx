@@ -20,6 +20,7 @@ interface StockfishProps extends PropsFromRedux {
 }
 
 interface StockfishState {
+	available: boolean,
 	score: string,
 	depth: number,
 	enabled: boolean
@@ -30,22 +31,42 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	engine       = null;
 	waiting      = false;
 
+	interval: NodeJS.Timer | undefined = undefined;
+
 	constructor(props: StockfishProps) {
 		super(props);
 
 		this.receiveEval = this.receiveEval.bind(this);
 		this.toggle      = this.toggle.bind(this);
 		this.state       = {
-			score   : "-",
-			depth   : 0,
-			enabled : false
+			available : false,
+			score     : "-",
+			depth     : 0,
+			enabled   : localStorage.getItem("stockfish") === "1"
 		};
 
 		this.setListener();
 	}
+	
+	componentDidMount = () => {
+		if (!window.sf) {
+			this.interval = setInterval(
+				() => {
+					if (window.sf) {
+						this.setListener();
+						window.sf.postMessage("isready");
+					}
+				},
+				1000
+			);
+		} else {
+			this.setListener();
+			window.sf.postMessage("isready");
+		}
+	}
 
-	componentDidUpdate(prev_props: StockfishProps) {
-		if (prev_props.fen !== this.props.fen) {
+	componentDidUpdate(prev_props: StockfishProps, prev_state: StockfishState) {
+		if (prev_props.fen !== this.props.fen || prev_state.available !== this.state.available) {
 			this.runEval(true);
 		}
 
@@ -81,7 +102,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 											<p>{(this.state.depth && this.state.enabled) ? t("depth") + ": " + this.state.depth + "/20" : t("waiting")}</p>
 										</div>
 										<div key="stockfish-switch-container" className="flex justify-end items-center col-span-3">
-											<Switch checked={this.state.enabled} disabled={["review", "lesson"].includes(this.props.mode)} onChange={this.toggle}/>
+											<Switch checked={this.state.enabled} disabled={!this.state.available || ["review", "lesson"].includes(this.props.mode)} onChange={this.toggle}/>
 										</div>
 									</>
 								)
@@ -94,6 +115,7 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 	}
 
 	toggle(enabled: boolean) {
+		localStorage.setItem("stockfish", (enabled) ? "1" : "0");
 		this.setState({
 			enabled: enabled
 		});
@@ -105,9 +127,17 @@ class Stockfish extends React.Component<StockfishProps, StockfishState> {
 		}
 	}
 
-	receiveEval(line: string) {
+	receiveEval(line: string): void {
 		if (line === "readyok" && this.waiting) {
-			this.runEval(false, true);
+			return this.runEval(false, true);
+		} else if (line === "readyok" && !this.state.available) {
+			if (this.interval) {
+				clearInterval(this.interval);
+			}
+
+			return this.setState({
+				available : true
+			});
 		}
 
 		if (line.slice(0, 8) === "bestmove") {

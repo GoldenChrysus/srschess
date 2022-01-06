@@ -27,7 +27,7 @@ for opt, arg in opts:
 	if opt == "-e":
 		enviro = arg
 	else:
-		print("Invalid option: " + opt)
+		print(f"Invalid option: {opt}")
 		sys.exit(2)
 
 if enviro not in valid["enviro"]:
@@ -65,7 +65,7 @@ sql  = """
 					mg.master_game_id = g.id
 				LIMIT
 					1
-			)
+			) LIMIT 500000
 """
 
 cur.execute(sql)
@@ -76,6 +76,8 @@ cur.close()
 conn.close()
 
 def make_process(num, chunk_size):
+	print(f"P{num}: Starting")
+
 	offset = chunk_size * num
 	conn   = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
 	cur    = conn.cursor()
@@ -106,19 +108,23 @@ def make_process(num, chunk_size):
 				master_game_moves
 					(master_game_id, ply, move, uci, fen, created_at, updated_at)
 			VALUES
-		""" + values
+		""" + values + """
+			ON CONFLICT(id)
+				DO NOTHING
+		"""
 
 		cur.execute(sql)
 		conn.commit()
 		sleep(0.01)
 	
+	print(f"P{num}: Finished")
 	cur.close()
 	conn.close()
 
 if __name__ == "__main__":
 	count = len(all_data)
 
-	print("Count: " + str(count))
+	print(f"Count: {count}")
 
 	processes  = []
 	proc_count = multiprocessing.cpu_count() * 2
