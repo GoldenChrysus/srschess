@@ -18,10 +18,10 @@ function DatabaseDemo() {
 
 	return (
 		<div className="flex flex-wrap">
-			<div className="flex-initial w-full lg:w-1/4 lg:pr-8">
+			<div className="flex-initial w-full xl:w-1/4 xl:pr-8">
 				<Results demo={true} record={game} mode="master_games" criteria={{mode : "master_games", data : {}}} onResultClick={onResultClick}/>
 			</div>
-			<div className="flex-1 max-w-full lg:max-w-3/4">
+			<div className="flex-1 max-w-full xl:max-w-3/4">
 				<ApolloConsumer>
 					{client => 
 						<ChessController
