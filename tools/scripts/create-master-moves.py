@@ -48,46 +48,46 @@ db_database = config["MASTERGAMES_DB_DATABASE"]
 conn = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
 cur  = conn.cursor()
 sql  = """
-	WITH
-		pending_games AS (
-			SELECT
-				g.id
-			FROM
-				master_games g
-			WHERE
-				NLEVEL(g.movelist) > 0 AND
-				g.processed = FALSE AND
-				NOT EXISTS
-					(
-						SELECT
-							1
-						FROM
-							master_game_moves mg
-						WHERE
-							mg.master_game_id = g.id
-						LIMIT
-							1
-					)
-			LIMIT
-				500000
-		)
-	UPDATE
-		master_games
-	SET
-		processed = TRUE
+	SELECT
+		g.id,
+		g.pgn
 	FROM
-		pending_games
+		master_games g
 	WHERE
-		master_games.id = pending_games.id
-	RETURNING
-		master_games.id,
-		master_games.pgn
+		NLEVEL(g.movelist) > 0 AND
+		g.processed = FALSE AND
+		NOT EXISTS
+			(
+				SELECT
+					1
+				FROM
+					master_game_moves mg
+				WHERE
+					mg.master_game_id = g.id
+				LIMIT
+					1
+			)
+	LIMIT
+		500000
 """
 
 cur.execute(sql)
-conn.commit()
 
 all_data = cur.fetchall()
+ids      = [record[0] for record in all_data]
+
+if (len(ids) > 0):
+	ids = "', '".join(ids)
+	sql = """
+		UPDATE
+			master_games
+		SET
+			processed = TRUE
+		WHERE
+			id IN ('""" + ids + "')"
+
+	cur.execute(sql)
+	conn.commit()
 
 cur.close()
 conn.close()
