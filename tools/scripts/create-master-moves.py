@@ -109,12 +109,13 @@ def make_process(num, chunk_size):
 					(master_game_id, ply, move, uci, fen, created_at, updated_at)
 			VALUES
 		""" + values + """
-			ON CONFLICT(id)
+			ON CONFLICT
 				DO NOTHING
 		"""
 
 		cur.execute(sql)
 		conn.commit()
+		print(f"P{num}: {id}")
 		sleep(0.01)
 	
 	print(f"P{num}: Finished")
@@ -127,7 +128,7 @@ if __name__ == "__main__":
 	print(f"Count: {count}")
 
 	processes  = []
-	proc_count = multiprocessing.cpu_count() * 2
+	proc_count = multiprocessing.cpu_count() * 4
 	chunk_size = math.ceil(count / proc_count)
 
 	for i in range(proc_count):
