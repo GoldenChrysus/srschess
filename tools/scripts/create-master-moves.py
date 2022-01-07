@@ -44,6 +44,7 @@ db_port     = config["MASTERGAMES_DB_PORT"]
 db_username = config["MASTERGAMES_DB_USERNAME"]
 db_password = config["MASTERGAMES_DB_PASSWORD"]
 db_database = config["MASTERGAMES_DB_DATABASE"]
+proc_count  = multiprocessing.cpu_count() * 4
 
 conn = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
 cur  = conn.cursor()
@@ -92,10 +93,8 @@ if (len(ids) > 0):
 cur.close()
 conn.close()
 
-print(all_data)
-
-def make_process(num, chunk_size):
-	print(f"P{num}: Starting")
+def process_games(num, chunk_size):
+	print(f"P{num}: Starting PGN")
 
 	offset = chunk_size * num
 	conn   = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
@@ -137,7 +136,7 @@ def make_process(num, chunk_size):
 		print(f"P{num}: {id}")
 		sleep(0.01)
 	
-	print(f"P{num}: Finished")
+	print(f"P{num}: Finished PGN")
 	cur.close()
 	conn.close()
 
@@ -147,11 +146,10 @@ if __name__ == "__main__":
 	print(f"Count: {count}")
 
 	processes  = []
-	proc_count = multiprocessing.cpu_count() * 4
 	chunk_size = math.ceil(count / proc_count)
 
 	for i in range(proc_count):
-		process = multiprocessing.Process(target=make_process, args=(i, chunk_size))
+		process = multiprocessing.Process(target=process_games, args=(i, chunk_size))
 
 		processes.append(process)
 		process.start()
