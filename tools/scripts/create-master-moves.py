@@ -48,32 +48,51 @@ db_database = config["MASTERGAMES_DB_DATABASE"]
 conn = psycopg2.connect(database=db_database, user=db_username, password=db_password, host=db_host, port=db_port)
 cur  = conn.cursor()
 sql  = """
-	SELECT
-		g.id,
-		g.pgn
+	WITH
+		pending_games AS (
+			SELECT
+				g.id
+			FROM
+				master_games g
+			WHERE
+				NLEVEL(g.movelist) > 0 AND
+				g.processed = FALSE AND
+				NOT EXISTS
+					(
+						SELECT
+							1
+						FROM
+							master_game_moves mg
+						WHERE
+							mg.master_game_id = g.id
+						LIMIT
+							1
+					)
+			LIMIT
+				500000
+		)
+	UPDATE
+		master_games
+	SET
+		processed = TRUE
 	FROM
-		master_games g
+		pending_games
 	WHERE
-		NLEVEL(g.movelist) > 0 AND
-		NOT EXISTS
-			(
-				SELECT
-					1
-				FROM
-					master_game_moves mg
-				WHERE
-					mg.master_game_id = g.id
-				LIMIT
-					1
-			) LIMIT 500000
+		master_games.id = pending_games.id
+	RETURNING
+		master_games.id,
+		master_games.pgn
 """
 
 cur.execute(sql)
+conn.commit()
 
 all_data = cur.fetchall()
 
 cur.close()
 conn.close()
+
+print(all_data)
 
 def make_process(num, chunk_size):
 	print(f"P{num}: Starting")
