@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(version: 2022_01_03_081108) do
             GROUP BY g.fen, g.move) tmp
     GROUP BY tmp.fen;
   SQL
-  add_index "master_move_stats", ["fen"], name: "master_move_stats_fen_idx", unique: true
+  add_index "master_move_stats", ["fen"], name: "index_master_move_stats_on_fen", unique: true
 
   create_view "fen_master_games", materialized: true, sql_definition: <<-SQL
       SELECT m.fen,

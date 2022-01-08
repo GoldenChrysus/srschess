@@ -246,7 +246,7 @@ module Types
 							WHERE
 								#{where}
 							LIMIT
-								500"
+								25"
 						sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 						res = ::MasterGame.connection.exec_query(sql)
 

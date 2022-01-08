@@ -56,7 +56,6 @@ sql  = """
 		master_games g
 	WHERE
 		NLEVEL(g.movelist) > 0 AND
-		g.processed = FALSE AND
 		NOT EXISTS
 			(
 				SELECT
@@ -68,8 +67,6 @@ sql  = """
 				LIMIT
 					1
 			)
-	LIMIT
-		500000
 """
 
 cur.execute(sql)
@@ -77,7 +74,7 @@ cur.execute(sql)
 all_data = cur.fetchall()
 ids      = [record[0] for record in all_data]
 
-if (len(ids) > 0):
+if (len(ids) > 0 and False):
 	ids = "', '".join(ids)
 	sql = """
 		UPDATE
