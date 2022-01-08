@@ -5,6 +5,7 @@ module Types
 			field :slug, String, null: false
 			field :name, String, null: false
 			field :game_count, Int, null: false
+			field :user_owned, Boolean, null: false
 			field :created_at, GraphQL::Types::ISO8601DateTime, null: false
 			field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

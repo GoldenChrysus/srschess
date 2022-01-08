@@ -1,5 +1,7 @@
 class GamePolicy < ApplicationPolicy
 	def show?
+		return true
+
 		Current.internal_error_code = 100001
 
 		return (record.collection.user == user)

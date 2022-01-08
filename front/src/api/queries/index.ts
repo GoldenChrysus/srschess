@@ -389,6 +389,7 @@ export const GET_COLLECTION = gql`
 	query Collection($slug: String!) {
 		collection(slug: $slug) {
 			...CoreCollectionFields
+			userOwned
 			games {
 				...CoreGameFields
 			}

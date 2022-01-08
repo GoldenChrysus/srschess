@@ -1,5 +1,6 @@
 class Collection < ApplicationRecord
 	attr_accessor :game_count
+	attr_accessor :user_owned
 
 	# Validations
 	validates :user, presence: true

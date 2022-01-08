@@ -10,6 +10,7 @@ export interface CollectionModel {
 	gameCount: number,
 	games?: Array<GameModel> | null,
 	user?: UserModel
+	userOwned: boolean
 }
 
 export interface CollectionQueryData {

@@ -108,6 +108,7 @@ function renderContent(props: GameCollectionProps, t: TFunction, setModalActive:
 		<>
 			{
 				props.authenticated &&
+				props.collection?.userOwned &&
 				<>
 					<Button className="mr-2" type="default" onClick={() => setGameModalActive(true)}>{t("import_pgn")}</Button>
 					<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>

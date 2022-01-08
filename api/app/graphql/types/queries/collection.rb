@@ -9,6 +9,9 @@ module Types
 				collection = ::Collection.where({ slug: slug }).first
 
 				authorize collection, :show?
+
+				collection.user_owned = (context[:user] != nil && collection.user.id == context[:user].id)
+
 				collection
 			end
 		end

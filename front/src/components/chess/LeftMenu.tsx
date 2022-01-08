@@ -81,13 +81,11 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 									</Collapse.Panel>
 								}
 
+								{is_database && this.renderGameList(t)}
 								{is_database && this.props.authenticated &&
-									<>
-										{this.renderGameList(t)}
-										<Collapse.Panel id="collections-panel" header={t("database:game_collections")} key="collections-panel">
-											<GameCollections/>
-										</Collapse.Panel>
-									</>
+									<Collapse.Panel id="collections-panel" header={t("database:game_collections")} key="collections-panel">
+										<GameCollections/>
+									</Collapse.Panel>
 								}
 								{is_database &&
 									<Collapse.Panel id="master-games-panel" header={t("database:search_master_games")} key="master-games-panel">
