@@ -4,22 +4,12 @@
 }
 
 .demo-section > div > h1 {
-	font-family: 'Lato', sans-serif;
+	font-family: 'Red Hat Display', 'Lato', sans-serif;
 	text-transform: uppercase;
 	text-rendering: optimizeLegibility;
-	font-weight: 800;
+	font-weight: 300;
 	font-size: 3em;
 	line-height: 1em;
-	color: #f5f5f5;
-	text-shadow: 1px 1px 1px #919191,
-		1px 2px 1px #919191,
-		1px 3px 1px #10b981,
-		1px 4px 1px #10b981,
-		1px 5px 1px #919191,
-		1px 18px 6px rgba(16,16,16,0.4),
-		1px 22px 10px rgba(16,16,16,0.2),
-		1px 25px 35px rgba(16,16,16,0.2),
-		1px 30px 60px rgba(16,16,16,0.4);
 }
 
 .demo-section > div > p {
