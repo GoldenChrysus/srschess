@@ -70,8 +70,21 @@ ActiveRecord::Schema.define(version: 2022_01_03_081108) do
 
   add_foreign_key "master_game_moves", "master_games"
 
+  create_view "master_game_names", materialized: true, sql_definition: <<-SQL
+      SELECT g.id AS master_game_id,
+      1 AS side,
+      get_searchable_names(g.white) AS names
+     FROM master_games g
+  UNION
+   SELECT g.id AS master_game_id,
+      0 AS side,
+      get_searchable_names(g.black) AS names
+     FROM master_games g;
+  SQL
+  add_index "master_game_names", ["master_game_id", "side"], name: "index_master_game_names_on_master_game_id_and_side", unique: true
+
   create_view "master_move_stats", materialized: true, sql_definition: <<-SQL
-      SELECT tmp.fen,
+      SELECT uuid_in((md5((tmp.fen)::text))::cstring) AS fen_uuid,
       string_agg((((((((((tmp.move)::text || '|'::text) || tmp.white) || '|'::text) || tmp.draw) || '|'::text) || tmp.black) || '|'::text) || tmp.elo), ';'::text ORDER BY ((tmp.white + tmp.draw) + tmp.black) DESC) AS stats
      FROM ( WITH games AS (
                    SELECT m1.fen,
@@ -134,29 +147,16 @@ ActiveRecord::Schema.define(version: 2022_01_03_081108) do
               round((avg((g.white_elo + g.black_elo)) / (2)::numeric)) AS elo
              FROM first_move g
             GROUP BY g.fen, g.move) tmp
-    GROUP BY tmp.fen;
+    GROUP BY (uuid_in((md5((tmp.fen)::text))::cstring));
   SQL
-  add_index "master_move_stats", ["fen"], name: "index_master_move_stats_on_fen", unique: true
+  add_index "master_move_stats", ["fen_uuid"], name: "index_master_move_stats_on_fen_uuid", unique: true
 
   create_view "fen_master_games", materialized: true, sql_definition: <<-SQL
-      SELECT m.fen,
-      array_agg(m.master_game_id) AS master_game_ids
+      SELECT uuid_in((md5((m.fen)::text))::cstring) AS fen_uuid,
+      array_agg(DISTINCT m.master_game_id) AS master_game_ids
      FROM master_game_moves m
-    GROUP BY m.fen;
+    GROUP BY (uuid_in((md5((m.fen)::text))::cstring));
   SQL
-  add_index "fen_master_games", ["fen"], name: "index_fen_master_games_on_fen", unique: true
-
-  create_view "master_game_names", materialized: true, sql_definition: <<-SQL
-      SELECT g.id AS master_game_id,
-      1 AS side,
-      get_searchable_names(g.white) AS names
-     FROM master_games g
-  UNION
-   SELECT g.id AS master_game_id,
-      0 AS side,
-      get_searchable_names(g.black) AS names
-     FROM master_games g;
-  SQL
-  add_index "master_game_names", ["master_game_id", "side"], name: "index_master_game_names_on_master_game_id_and_side", unique: true
+  add_index "fen_master_games", ["fen_uuid"], name: "index_fen_master_games_on_fen_uuid", unique: true
 
 end
