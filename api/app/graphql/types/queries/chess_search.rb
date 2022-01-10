@@ -207,7 +207,7 @@ module Types
 								"JOIN
 									fen_master_games fg1
 								ON
-									fg1.fen = :eco_fen AND
+									fg1.fen_uuid = UUID_IN(md5(:eco_fen)::CSTRING) AND
 									g.id = ANY(fg1.master_game_ids)"
 							)
 						end
@@ -225,7 +225,7 @@ module Types
 								"JOIN
 									fen_master_games fg2
 								ON
-									fg2.fen = :fen AND
+									fg2.fen_uuid = UUID_IN(md5(:fen)::CSTRING) AND
 									g.id = ANY(fg2.master_game_ids)"
 							)
 						end

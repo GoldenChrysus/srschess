@@ -24,7 +24,7 @@ module Types
 					FROM
 						master_move_stats
 					WHERE
-						fen = :fen"
+						fen_uuid = UUID_IN(md5(:fen)::CSTRING)"
 				sql  = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 				res  = ::MasterGame.connection.exec_query(sql)
 				data = []

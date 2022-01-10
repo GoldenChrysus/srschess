@@ -1,5 +1,5 @@
 SELECT
-	tmp.fen,
+	UUID_IN(md5(tmp.fen)::CSTRING) AS fen_uuid,
 	STRING_AGG
 		(
 			tmp.move || '|' || tmp.white || '|' || tmp.draw || '|' || tmp.black || '|' || tmp.elo,
@@ -79,4 +79,4 @@ FROM
 			2
 	) tmp
 GROUP BY
-	tmp.fen;
+	1;
