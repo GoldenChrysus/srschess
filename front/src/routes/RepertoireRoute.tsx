@@ -30,12 +30,19 @@ interface RepertoireRouteParams {
 // or after the mutation request. If after, the possibility of a race condition still exists, so a route-level cache is needed.
 
 function RepertoireRoute(props: RepertoireRouteProps) {
+	const { t }    = useTranslation(["repertoires", "premium"]);
+	const { slug } = useParams<RepertoireRouteParams>();
+
 	let main_query   = GET_REPERTOIRE;
 	let require_auth = false;
 
 	switch (props.mode) {
 		case "repertoire":
 			main_query = GET_REPERTOIRE;
+
+			if (!slug) {
+				require_auth = true;
+			}
 
 			break;
 
@@ -47,8 +54,6 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 			break;
 	}
 
-	const { t } = useTranslation(["repertoires", "premium"]);
-	const { slug } = useParams<RepertoireRouteParams>();
 	const [ createMove, create_move_res ] = useMutation(CREATE_REPERTOIRE_MOVE);
 	const [ transposeMove ] = useMutation(TRANSPOSE_REPERTOIRE_MOVE);
 	const [ createReview ] = useMutation(CREATE_REVIEW, {
