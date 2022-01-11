@@ -95,7 +95,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 				return (
 					<>
 						<LeafSpan demo={this.props.demo} key={"leaf-span-" + move.id} active={active} has_children={child_count > 0} children_active={active_child} onArrowClick={this.toggle} move={move} onClick={this.props.onMoveClick}/>
-						{ul}
+						{active_child && ul}
 					</>
 				);
 			} else {
@@ -105,7 +105,7 @@ class Branch extends React.PureComponent<BranchProps, BranchState> {
 				html.push(
 					<Leaf key={"leaf-" + move.id} move={move}>
 						<LeafSpan demo={this.props.demo} key={"span-" + move.id} active={active} start={true} has_children={move.has_children} children_active={active_child} move={move} first_child={first_child} last_child={last_child} onArrowClick={this.toggle} onClick={this.props.onMoveClick}/>
-						{ul}
+						{active_child && ul}
 					</Leaf>
 				);
 			}

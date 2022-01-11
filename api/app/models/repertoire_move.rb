@@ -68,6 +68,11 @@ class RepertoireMove < ApplicationRecord
 	end
 
 	def self.generateId(repertoire_id, move_number, move, fen)
+		fen = fen.split(" ")
+
+		fen[4] = "x"
+
+		fen  = fen.join(" ")
 		hash = Digest::MD5.hexdigest(repertoire_id + ":" + move_number.to_s + ":" + move + ":" + fen)
 		
 		return ([hash[0, 8], hash[8, 4], hash[12, 4], hash[16, 4], hash[20..-1]]).join("-")

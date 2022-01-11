@@ -40,6 +40,14 @@ export function getColorFromMoveCount(count: number) {
 }
 
 export function generateUUID(move_num: number, move: string, fen: string, repertoire_id?: number) {
+	if (fen) {
+		const tmp_fen = fen.split(" ");
+
+		tmp_fen[4] = "x";
+
+		fen = tmp_fen.join(" ");
+	}
+
 	const hash = SparkMD5.hash(repertoire_id + ":" + move_num + ":" + move + ":" + fen);
 
 	return (
