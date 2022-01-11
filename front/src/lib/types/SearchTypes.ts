@@ -18,7 +18,9 @@ export interface SearchCriteria {
 		movelist?: string,
 		fen?: string,
 		eco?: string,
-		side?: string
+		side?: string,
+		elo?: string,
+		eloComparison?: string
 	}
 }
 

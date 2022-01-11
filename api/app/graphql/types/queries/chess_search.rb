@@ -7,6 +7,8 @@ module Types
 				argument :fen, String, required: false
 				argument :eco, String, required: false
 				argument :side, String, required: false
+				argument :elo, String, required: false
+				argument :elo_comparison, String, required: false
 			end
 
 			class Criteria < Types::BaseInputObject
@@ -31,16 +33,19 @@ module Types
 			argument :criteria, Criteria, required: true
 			
 			def resolve(criteria:)
+				user = context[:user]
+				data = criteria[:data]
+
 				case criteria[:mode]
 					when "repertoires"
 						where  = ["r.public = true"]
 						params = {}
 						skip   = false
 
-						if (criteria[:data][:movelist] != nil)
+						if (data[:movelist] != nil)
 							skip = true
 
-							params[:movelist] = criteria[:data][:movelist]
+							params[:movelist] = data[:movelist]
 							params[:length]   = params[:movelist].split(".").length
 
 							where.push(
@@ -90,8 +95,8 @@ module Types
 							)
 						end
 
-						if (!skip and criteria[:data][:fen].to_s != "")
-							valid = ValidateFen.call(fen: criteria[:data][:fen])
+						if (!skip and data[:fen].to_s != "")
+							valid = ValidateFen.call(fen: data[:fen])
 
 							if (!valid.result)
 								raise ApiErrors::ChessError::InvalidFen.new
@@ -112,10 +117,10 @@ module Types
 									)"
 							)
 
-							params[:fen] = criteria[:data][:fen]
+							params[:fen] = data[:fen]
 						end
 
-						if (!skip and criteria[:data][:eco].to_s != "")
+						if (!skip and data[:eco].to_s != "")
 							where.push(
 								"EXISTS
 									(
@@ -134,13 +139,13 @@ module Types
 									)"
 							)
 
-							params[:eco_id] = criteria[:data][:eco]
+							params[:eco_id] = data[:eco]
 						end
 
-						if (!skip and criteria[:data][:side].to_s != "")
+						if (!skip and data[:side].to_s != "")
 							where.push("r.side = :side")
 
-							params[:side] = ::Repertoire.sides[criteria[:data][:side]]
+							params[:side] = ::Repertoire.sides[data[:side]]
 						end
 
 						where = where.join(" AND ")
@@ -157,7 +162,7 @@ module Types
 								repertoire_moves m
 							ON
 								m.repertoire_id = r.id AND
-								ABS((m.move_number %% 2) - 1) = r.side
+								ABS((m.move_number " + '%' + " 2) - 1) = r.side
 							WHERE
 								#{where}
 							GROUP BY
@@ -172,20 +177,26 @@ module Types
 						return res
 
 					when "master_games"
-						where  = [
+						where = [
 							"g.white != '?'",
 							"g.black != '?'",
 							"g.year IS NOT NULL"
 						]
-						joins  = []
-						params = {}
-						skip   = false
+						joins            = []
+						params           = {}
+						skip             = false
+						limit            = (user != nil) ? 25 : 5
+						valid_comparison = {
+							"lte" => "<=",
+							"gte" => ">=",
+							"eq"  => "="
+						}
 
-						if (criteria[:data][:movelist] != nil and criteria[:data][:movelist] != "")
+						if (data[:movelist] != nil and data[:movelist] != "")
 							skip  = true
 							moves = []
 
-							for move in criteria[:data][:movelist].split(".")
+							for move in data[:movelist].split(".")
 								moves.push(SanitizeSan.call(san: move.to_s).result)
 							end
 
@@ -194,9 +205,22 @@ module Types
 							where.push("g.movelist ~ CONCAT(:movelist, '.*')::LQUERY")
 						end
 
-						if (!skip and criteria[:data][:eco].to_s != "")
+						if (!skip and data[:elo].to_s != "" and valid_comparison.key?(data[:elo_comparison]))
+							params[:elo] = data[:elo]
+
+							comparison = valid_comparison[data[:elo_comparison]]
+
+							where.push("
+								(
+									g.white_elo #{comparison} :elo OR
+									g.black_elo #{comparison} :elo
+								)
+							")
+						end
+
+						if (!skip and data[:eco].to_s != "")
 							begin
-								eco = ::EcoPosition.find(criteria[:data][:eco])
+								eco = ::EcoPosition.find(data[:eco])
 							rescue
 								raise ApiErrors::ChessError::InvalidEco.new
 							end
@@ -212,14 +236,14 @@ module Types
 							)
 						end
 
-						if (!skip and criteria[:data][:fen].to_s != "")
-							valid = ValidateFen.call(fen: criteria[:data][:fen])
+						if (!skip and data[:fen].to_s != "")
+							valid = ValidateFen.call(fen: data[:fen])
 
 							if (!valid.result)
 								raise ApiErrors::ChessError::InvalidFen.new
 							end
 
-							params[:fen] = criteria[:data][:fen].split(" ").slice(0..3).join(" ")
+							params[:fen] = data[:fen].split(" ").slice(0..3).join(" ")
 
 							joins.push(
 								"JOIN
@@ -246,7 +270,7 @@ module Types
 							WHERE
 								#{where}
 							LIMIT
-								25"
+								#{limit}"
 						sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 						res = ::MasterGame.connection.exec_query(sql)
 

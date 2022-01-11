@@ -24,20 +24,26 @@ function Search(props: SearchProps) {
 			if (move_searching && prev_movelist.current !== props.movelist) {
 				prev_movelist.current = props.movelist;
 
-				setState({
-					criteria : {
-						mode : props.mode,
-						data : {
-							movelist : props.movelist
+				if (props.movelist) {
+					setState({
+						criteria : {
+							mode : props.mode,
+							data : {
+								movelist : props.movelist
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		},
 		[ move_searching, props.movelist, props.mode ]
 	);
 
 	function onSubmit(data: SearchCriteria["data"]) {
+		if (data.eloComparison === undefined) {
+			data.eloComparison = "gte";
+		}
+
 		setState({
 			criteria: {
 				mode : props.mode,
@@ -105,6 +111,22 @@ function Search(props: SearchProps) {
 										<Select.Option value="white">{t("chess:white")}</Select.Option>
 										<Select.Option value="black">{t("chess:black")}</Select.Option>
 									</Select>
+								</Form.Item>
+							}
+							{props.mode === "master_games" &&
+								<Form.Item label="Elo" name="elo" key="search-elo-item">
+									<Input
+										addonBefore={
+											<Form.Item noStyle={true} name="eloComparison" key="search-eloComparison-item">
+												<Select defaultValue="gte">
+													<Select.Option value="gte">&gt;=</Select.Option>
+													<Select.Option value="lte">&lt;=</Select.Option>
+													<Select.Option value="eq">=</Select.Option>
+												</Select>
+											</Form.Item>
+										}
+										autoComplete="off"
+									/>
 								</Form.Item>
 							}
 							<Form.Item>

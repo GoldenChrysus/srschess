@@ -57,6 +57,10 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 		if (is_database) {
 			default_active.push("collections-panel");
 			default_active.push("game-list-panel");
+
+			if (!this.props.authenticated) {
+				default_active.push("master-games-panel");
+			}
 		}
 
 		if (is_opening) {

@@ -92,6 +92,9 @@ const PLANS: Array<PlanModel> = [
 					},
 					{
 						key : "search:search_by_fen"
+					},
+					{
+						key : "search:search_by_elo"
 					}
 				]
 			}
@@ -171,7 +174,10 @@ const PLANS: Array<PlanModel> = [
 						}
 					},
 					{
-						key : "search:search_by_elo"
+						key : "search:search_by_player"
+					},
+					{
+						key : "search:search_by_date"
 					},
 					{
 						key : "database:download_pgn"
@@ -261,12 +267,6 @@ const PLANS: Array<PlanModel> = [
 					},
 					{
 						key : "search:search_by_pgn"
-					},
-					{
-						key : "search:search_by_player"
-					},
-					{
-						key : "search:search_by_date"
 					}
 				]
 			}
