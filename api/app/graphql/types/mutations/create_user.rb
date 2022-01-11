@@ -15,7 +15,7 @@ module Types
 				if (!good and type == "auth")
 					user = User.new(email: email, uid: uid)
 					good = user.save
-				elsif (user == context[:user])
+				elsif (user != nil and user == context[:user])
 					user.email = email
 					user.uid   = uid
 					
