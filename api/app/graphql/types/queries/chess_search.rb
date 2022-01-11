@@ -205,8 +205,8 @@ module Types
 							where.push("g.movelist ~ CONCAT(:movelist, '.*')::LQUERY")
 						end
 
-						if (!skip and data[:elo].to_s != "" and valid_comparison.key?(data[:elo_comparison]))
-							params[:elo] = data[:elo]
+						if (!skip and data[:elo].to_s != "" and data[:elo].to_i > 0 and valid_comparison.key?(data[:elo_comparison]))
+							params[:elo] = data[:elo].to_i.to_s
 
 							comparison = valid_comparison[data[:elo_comparison]]
 

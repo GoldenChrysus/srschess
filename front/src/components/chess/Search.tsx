@@ -125,6 +125,7 @@ function Search(props: SearchProps) {
 												</Select>
 											</Form.Item>
 										}
+										maxLength={4}
 										autoComplete="off"
 									/>
 								</Form.Item>
