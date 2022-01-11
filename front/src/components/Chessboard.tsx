@@ -187,7 +187,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 
 	lastMove(): string[] | null {
 		const history   = this.chess.history({ verbose: true });
-		const last_item = (history.length) ? history.at(-1) : null;
+		const last_item = (history.length) ? history[history.length - 1] : null;
 
 		return (last_item)
 			? [last_item.from, last_item.to]

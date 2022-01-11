@@ -395,7 +395,8 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 						return false;
 					}
 
-					const last = this.chess.history({verbose: true}).at(-1);
+					const history = this.chess.history({verbose: true});
+					const last    = history[history.length - 1];
 
 					return this.reducer({
 						type  : "move-repertoire",
@@ -574,7 +575,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 			awaiting_user : this.state.awaiting_user
 		};
 		const move_num  = Math.floor(((new_state.moves.length + 1) / 2) * 10);
-		const last_move = new_state.moves.at(-1) ?? "";
+		const last_move = (new_state.moves.length) ? new_state.moves[new_state.moves.length - 1] ?? "" : "";
 
 		new_state.last_num = move_num;
 
