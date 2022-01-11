@@ -162,7 +162,7 @@ module Types
 								repertoire_moves m
 							ON
 								m.repertoire_id = r.id AND
-								ABS((m.move_number " + '%' + " 2) - 1) = r.side
+								ABS((MOD(m.move_number, 2)) - 1) = r.side
 							WHERE
 								#{where}
 							GROUP BY
