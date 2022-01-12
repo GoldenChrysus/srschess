@@ -26,5 +26,9 @@ module ChessHq
 				"graphql/voyager/rails/voyager.js"
 			]
 		end
+
+		config.hosts << "api"
+
+		config.stripe.signing_secrets = [ENV.fetch("STRIPE_SIGNING_SECRET")]
 	end
 end

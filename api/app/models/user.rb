@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+	include Stripe::Callbacks
+
 	# Validation
 	validates :email, presence: true, uniqueness: {:case_sensitive => false}
 	validates :uid, presence: true, uniqueness: true
@@ -10,6 +12,11 @@ class User < ApplicationRecord
 
 	# Callbacks
 	after_validation :normalize_email, on: :create
+
+	# Stripe
+	after_customer_subscription_created! do |subscription, event|
+		puts "OKKK"
+	end
 
 	def position_count
 		params = {
