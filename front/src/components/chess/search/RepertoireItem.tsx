@@ -10,7 +10,7 @@ interface RepertoireItemProps {
 
 class RepertoireItem extends React.Component<RepertoireItemProps> {
 	render() {
-		const color = (this.props.record.side === 1) ? "white" : "gray-900";
+		const color = (this.props.record.side === 1) ? "gray-100" : "gray-900";
 
 		return (
 			<SearchItem route={"/repertoires/" + this.props.record.slug}>
