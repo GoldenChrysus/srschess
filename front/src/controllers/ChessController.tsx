@@ -129,7 +129,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 				return;
 			}
 
-			const queue = this.props.repertoire?.lessonQueue ?? this.props.repertoire?.reviewQueue;
+			const queue = (this.props.mode === "review") ? this.props.repertoire?.reviewQueue : this.props.repertoire?.lessonQueue;
 
 			if (this.original_queue === undefined || (queue && this.original_queue.length < queue.length)) {
 				this.setOriginalQueue();
@@ -145,7 +145,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 				this.state.quizzing
 			) {
 				if (!this.progressing && !this.state.awaiting_user) {
-					this.progressQueue();
+					return this.progressQueue();
 				}
 			}
 		}
