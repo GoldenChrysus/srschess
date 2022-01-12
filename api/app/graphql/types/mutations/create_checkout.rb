@@ -13,7 +13,7 @@ module Types
 			def resolve(price:)
 				user = context[:user]
 
-				raise ApiErrors::AuthenticationError::Unauthorized.new unless user != nil
+				raise ApiErrors::AuthenticationError::Unauthorized.new unless user != nil and user.tier == 0
 
 				customer = user.customer
 

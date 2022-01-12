@@ -32,7 +32,11 @@ class User < ApplicationRecord
 			ON
 				p.id = s.price_id
 			WHERE
-				c.user_id = :user_id"
+				c.user_id = :user_id AND
+				(
+					s.ended_at IS NULL OR
+					s.ended_at > CURRENT_TIMESTAMP
+				)"
 
 		sql = ActiveRecord::Base.sanitize_sql_array([sql, params].flatten)
 		res = self.class.connection.exec_query(sql)
