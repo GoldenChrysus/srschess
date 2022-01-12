@@ -98,3 +98,6 @@ gem "pgn"
 
 # Support for views in DB
 gem "scenic"
+
+# Stripe payments
+gem "stripe-rails"
