@@ -4,11 +4,12 @@ import Plan from "./upgrade/Plan";
 
 const PLANS: Array<PlanModel> = [
 	{
-		id        : "free",
-		price     : 0,
-		available : true,
-		piece     : "white p",
-		features  : [
+		id            : "free",
+		price_monthly : 0,
+		price_yearly  : 0,
+		available     : true,
+		piece         : "white p",
+		features      : [
 			{
 				text : {
 					key : "repertoires:repertoires"
@@ -101,11 +102,12 @@ const PLANS: Array<PlanModel> = [
 		]
 	},
 	{
-		id        : "bishop",
-		price     : 2.99,
-		available : false,
-		piece     : "black b",
-		features  : [
+		id            : "bishop",
+		price_monthly : 2.99,
+		price_yearly  : 29.99,
+		available     : true,
+		piece         : "black b",
+		features      : [
 			{
 				text : {
 					key : "repertoires:repertoires"
@@ -187,11 +189,12 @@ const PLANS: Array<PlanModel> = [
 		]
 	},
 	{
-		id        : "rook",
-		price     : 5.99,
-		available : false,
-		piece     : "white r",
-		features  : [
+		id            : "rook",
+		price_monthly : 5.99,
+		price_yearly  : 54.99,
+		available     : false,
+		piece         : "white r",
+		features      : [
 			{
 				text : {
 					key : "repertoires:repertoires"
@@ -273,11 +276,12 @@ const PLANS: Array<PlanModel> = [
 		]
 	},
 	{
-		id        : "monarch",
-		price     : 8.99,
-		available : false,
-		piece     : "black q",
-		features  : [
+		id            : "monarch",
+		price_monthly : 8.99,
+		price_yearly  : 79.99,
+		available     : false,
+		piece         : "black q",
+		features      : [
 			{
 				text : {
 					key : "repertoires:repertoires"

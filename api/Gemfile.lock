@@ -350,6 +350,7 @@ DEPENDENCIES
   solargraph
   spring
   sqlite3 (~> 1.4)
+  stripe
   stripe-rails
   turbolinks (~> 5)
   tzinfo-data

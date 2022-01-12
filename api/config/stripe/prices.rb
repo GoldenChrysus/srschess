@@ -60,3 +60,16 @@ Stripe.price :bishop_yearly do |price|
 	}
 	price.unit_amount = 2999
 end
+
+::Price.update_or_create([
+	{
+		id: Stripe::Prices::BISHOP_MONTHLY.id,
+		stripe_id: Stripe::Prices::BISHOP_MONTHLY.stripe_id,
+		tier: 1
+	},
+	{
+		id: Stripe::Prices::BISHOP_YEARLY.id,
+		stripe_id: Stripe::Prices::BISHOP_YEARLY.stripe_id,
+		tier: 2
+	}
+])

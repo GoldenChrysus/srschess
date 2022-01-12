@@ -15,6 +15,7 @@
 	"has_notification_enrollment": "Signed Up for Notifications",
 
 	"month": "Month",
+	"monthly": "Monthly",
 	"notify_when_available": "Notify When Available",
 	"opening_depth_limit": "Maximum opening explorer depth reached.",
 
@@ -27,5 +28,6 @@
 	"premium_only": "Premium feature only.",
 	"register_now": "Register Now",
 	"upgrade": "Upgrade",
-	"upgrade_now": "Upgrade Now"
+	"upgrade_now": "Upgrade Now",
+	"yearly": "Yearly"
 }

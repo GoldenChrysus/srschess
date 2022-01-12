@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require "stripe"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -30,5 +31,7 @@ module ChessHq
 		config.hosts << "api"
 
 		config.stripe.signing_secrets = [ENV.fetch("STRIPE_SIGNING_SECRET")]
+
+		Stripe.api_key = ENV.fetch("STRIPE_SECRET_KEY")
 	end
 end

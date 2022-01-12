@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_02_050729) do
+ActiveRecord::Schema.define(version: 2022_01_12_132100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 2022_01_02_050729) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_communication_enrollments_on_user_id"
+  end
+
+  create_table "customers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "stripe_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stripe_id"], name: "index_customers_on_stripe_id", unique: true
+    t.index ["user_id"], name: "index_customers_on_user_id", unique: true
   end
 
   create_table "eco_positions", force: :cascade do |t|
@@ -117,6 +126,15 @@ ActiveRecord::Schema.define(version: 2022_01_02_050729) do
     t.index ["master_game_id"], name: "index_master_games_to_collections_on_master_game_id"
   end
 
+  create_table "prices", id: :string, force: :cascade do |t|
+    t.string "stripe_id", null: false
+    t.integer "tier", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stripe_id"], name: "index_prices_on_stripe_id", unique: true
+    t.index ["tier"], name: "index_prices_on_tier", unique: true
+  end
+
   create_table "repertoire_move_notes", force: :cascade do |t|
     t.uuid "repertoire_move_id", null: false
     t.string "value"
@@ -166,6 +184,17 @@ ActiveRecord::Schema.define(version: 2022_01_02_050729) do
     t.index ["learned_item_id"], name: "index_reviews_on_learned_item_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "price_id", null: false
+    t.datetime "started_at", null: false
+    t.datetime "ended_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
+    t.index ["price_id"], name: "index_subscriptions_on_price_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -176,6 +205,7 @@ ActiveRecord::Schema.define(version: 2022_01_02_050729) do
 
   add_foreign_key "collections", "users"
   add_foreign_key "communication_enrollments", "users"
+  add_foreign_key "customers", "users"
   add_foreign_key "game_move_notes", "game_moves"
   add_foreign_key "game_moves", "games"
   add_foreign_key "games", "users"
@@ -187,4 +217,6 @@ ActiveRecord::Schema.define(version: 2022_01_02_050729) do
   add_foreign_key "repertoire_moves", "repertoires"
   add_foreign_key "repertoires", "users"
   add_foreign_key "reviews", "learned_items"
+  add_foreign_key "subscriptions", "customers"
+  add_foreign_key "subscriptions", "prices"
 end

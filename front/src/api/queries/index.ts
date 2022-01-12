@@ -544,3 +544,19 @@ export const GET_CHESS_SEARCH = gql`
 		}
 	}
 `;
+
+/**
+ * PREMIUM
+ */
+export const CREATE_CHECKOUT = gql`
+	mutation CreateCheckout($price: String!) {
+		createCheckout(input: {
+			price: $price
+		}) {
+			session {
+				id
+				url
+			}
+		}
+	}
+`

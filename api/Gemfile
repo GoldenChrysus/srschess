@@ -100,4 +100,5 @@ gem "pgn"
 gem "scenic"
 
 # Stripe payments
+gem "stripe"
 gem "stripe-rails"

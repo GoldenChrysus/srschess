@@ -185,7 +185,7 @@ module Types
 						joins            = []
 						params           = {}
 						skip             = false
-						limit            = (user != nil) ? 25 : 5
+						limit            = (user != nil) ? user.database_search_limit : 5
 						valid_comparison = {
 							"lte" => "<=",
 							"gte" => ">=",

@@ -50,5 +50,8 @@ module Types
 
 		# /create_collection_games
 		field :create_collection_games, mutation: Types::Mutations::CreateCollectionGames
+
+		# /create_checkout
+		field :create_checkout, mutation: Types::Mutations::CreateCheckout
 	end
 end

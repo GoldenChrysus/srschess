@@ -1,3 +1,8 @@
+interface CheckoutSessionModel {
+	id: string
+	url: string
+}
+
 interface LimitModel {
 	key: string,
 	options?: {
@@ -12,8 +17,15 @@ interface FeatureModel {
 
 export interface PlanModel {
 	id: string,
-	price: number,
+	price_monthly: number,
+	price_yearly: number,
 	available: boolean,
 	piece: string,
 	features: Array<FeatureModel>
+}
+
+export interface CreateCheckoutMutationData {
+	createCheckout: {
+		session: CheckoutSessionModel
+	}
 }

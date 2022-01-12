@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COMMUNICATION_ENROLLMENT, GET_COMMUNICATION_ENROLLMENTS } from "../../api/queries";
 import { CommunicationEnrollmentsQueryData } from "../../lib/types/models/User";
+import Purchase from "./Purchase";
 
 interface PlanProps extends PropsFromRedux {
 	plan: PlanModel
@@ -34,7 +35,6 @@ function Plan(props: PlanProps) {
 
 	const has_enrollment = (data?.communicationEnrollments?.filter(x => x.name === enrollment_name).length);
 	const unlimited      = t("common:unlimited");
-	const purchase_text  = t("purchase_now") + ": $" + plan.price.toFixed(2) + "/" + t("month").toLocaleLowerCase();
 	let   action         = null;
 	
 	if (props.authenticated && plan.id === "free") {
@@ -42,15 +42,18 @@ function Plan(props: PlanProps) {
 	} else if (plan.available) {
 		const ButtonLink = React.forwardRef((props: any, ref: any) => {
 			return (
-				<Button key="action" type="default" onClick={props.navigate}>{(plan.price) ? purchase_text : t("register_now")}</Button>
+				<Button key="action" type="default" onClick={props.navigate}>{t("register_now")}</Button>
 			)
 		});
 
-		action = <Link to={{
-			pathname : (props.authenticated) ? "stripe_link" : "/login/",
-			state    : {
-				plan : plan.id
-			}}} component={ButtonLink}/>;
+		action = (props.authenticated)
+			? <Purchase plan={props.plan}/>
+			: <Link to={{
+				pathname : "/login/",
+				state    : {
+					plan : plan.id
+				}}} component={ButtonLink}
+			/>;
 	} else if (enrollment_res.data && !enrollment_res.error) {
 		action = <Result className="subscription-notice-success" status="success" title={t("has_notification_enrollment")}/>;
 	} else if (has_enrollment) {
