@@ -296,23 +296,9 @@ module Types
 										bishop = true
 									end
 
-									side_num = (side == "white") ? 1 : 0
-
 									params[side.to_sym] = name
 
 									where.push("(GET_SEARCHABLE_NAMES(:#{side}))[1] = ANY(g.#{side}_names)")
-									# where.push(
-									# 	"g.id IN
-									# 		(
-									# 			SELECT
-									# 				master_game_id
-									# 			FROM
-									# 				master_game_names
-									# 			WHERE
-									# 				side = #{side_num} AND
-									# 				(GET_SEARCHABLE_NAMES(:#{side}))[1] = ANY(names)
-									# 		)"
-									# )
 								end
 							end
 						end

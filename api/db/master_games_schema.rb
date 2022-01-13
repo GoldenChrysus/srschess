@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_03_081108) do
+ActiveRecord::Schema.define(version: 2022_01_13_033840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -54,9 +54,11 @@ ActiveRecord::Schema.define(version: 2022_01_03_081108) do
     t.string "round"
     t.integer "source", null: false
     t.integer "result", null: false
-    t.string "white_names", array: true
+    t.string "white_names", default: [], array: true
+    t.string "black_names", default: [], array: true
     t.index ["black"], name: "index_master_games_on_black"
     t.index ["black_elo"], name: "index_master_games_on_black_elo"
+    t.index ["black_names"], name: "index_master_games_on_black_names"
     t.index ["black_title"], name: "index_master_games_on_black_title"
     t.index ["day"], name: "index_master_games_on_day"
     t.index ["eco"], name: "index_master_games_on_eco"
@@ -65,24 +67,12 @@ ActiveRecord::Schema.define(version: 2022_01_03_081108) do
     t.index ["result"], name: "index_master_games_on_result"
     t.index ["white"], name: "index_master_games_on_white"
     t.index ["white_elo"], name: "index_master_games_on_white_elo"
+    t.index ["white_names"], name: "index_master_games_on_white_names"
     t.index ["white_title"], name: "index_master_games_on_white_title"
     t.index ["year"], name: "index_master_games_on_year"
   end
 
   add_foreign_key "master_game_moves", "master_games"
-
-  create_view "master_game_names", materialized: true, sql_definition: <<-SQL
-      SELECT g.id AS master_game_id,
-      1 AS side,
-      get_searchable_names(g.white) AS names
-     FROM master_games g
-  UNION
-   SELECT g.id AS master_game_id,
-      0 AS side,
-      get_searchable_names(g.black) AS names
-     FROM master_games g;
-  SQL
-  add_index "master_game_names", ["master_game_id", "side"], name: "index_master_game_names_on_master_game_id_and_side", unique: true
 
   create_view "master_move_stats", materialized: true, sql_definition: <<-SQL
       SELECT uuid_in((md5((tmp.fen)::text))::cstring) AS fen_uuid,
