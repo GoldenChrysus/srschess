@@ -57,6 +57,7 @@ export const CREATE_USER = gql`
 		}) {
 			user {
 				id
+				tier
 			}
 			errors
 		}

@@ -2,10 +2,11 @@ import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserLocalPersistence, User } from "firebase/auth";
 
 import store from "../redux/store";
-import { login, logout } from "../redux/slices/auth";
+import { login, logout, setTier } from "../redux/slices/auth";
 import { CREATE_USER } from "../api/queries";
 import { notifyError } from "../helpers";
 import { client } from "./Apollo";
+import { CreateUserMutationData } from "./types/models/User";
 
 const app = initializeApp({
 	apiKey            : process.env.REACT_APP_FIREBASE_KEY,
@@ -21,7 +22,7 @@ export const auth = getAuth(app);
 
 const serverLogin = (user: User | any, type: string) => {
 	client
-		.mutate({
+		.mutate<CreateUserMutationData>({
 			mutation       : CREATE_USER,
 			refetchQueries : "active",
 			variables : {
@@ -30,10 +31,11 @@ const serverLogin = (user: User | any, type: string) => {
 				type  : type
 			}
 		})
-		.then(() => {
+		.then((res) => {
 			// All good
 			localStorage.setItem("firebase_uid", user.uid);
 			localStorage.setItem("firebase_token", user.accessToken);
+			store.dispatch(setTier(res.data?.createUser.user.tier ?? 0));
 		})
 		.catch((err) => {
 			if (type === "auth") {

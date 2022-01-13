@@ -9,6 +9,13 @@ module Types
 				argument :side, String, required: false
 				argument :elo, String, required: false
 				argument :elo_comparison, String, required: false
+				argument :white_last, String, required: false
+				argument :white_first, String, required: false
+				argument :black_last, String, required: false
+				argument :black_first, String, required: false
+				argument :year, String, required: false
+				argument :month, String, required: false
+				argument :day, String, required: false
 			end
 
 			class Criteria < Types::BaseInputObject
@@ -184,7 +191,6 @@ module Types
 						]
 						joins            = []
 						params           = {}
-						skip             = false
 						limit            = (user != nil) ? user.database_search_limit : 5
 						valid_comparison = {
 							"lte" => "<=",
@@ -192,8 +198,9 @@ module Types
 							"eq"  => "="
 						}
 
+						bishop = false
+
 						if (data[:movelist] != nil and data[:movelist] != "")
-							skip  = true
 							moves = []
 
 							for move in data[:movelist].split(".")
@@ -203,55 +210,111 @@ module Types
 							params[:movelist] = moves.join(".")
 
 							where.push("g.movelist ~ CONCAT(:movelist, '.*')::LQUERY")
-						end
-
-						if (!skip and data[:elo].to_s != "" and data[:elo].to_i > 0 and valid_comparison.key?(data[:elo_comparison]))
-							params[:elo] = data[:elo].to_i.to_s
-
-							comparison = valid_comparison[data[:elo_comparison]]
-
-							where.push("
-								(
-									g.white_elo #{comparison} :elo OR
-									g.black_elo #{comparison} :elo
+						else
+							if (data[:elo].to_s != "" and data[:elo].to_i > 0 and valid_comparison.key?(data[:elo_comparison]))
+								params[:elo] = data[:elo].to_i.to_s
+	
+								comparison = valid_comparison[data[:elo_comparison]]
+	
+								where.push("
+									(
+										g.white_elo #{comparison} :elo OR
+										g.black_elo #{comparison} :elo
+									)
+								")
+							end
+	
+							if (data[:eco].to_s != "")
+								begin
+									eco = ::EcoPosition.find(data[:eco])
+								rescue
+									raise ApiErrors::ChessError::InvalidEco.new
+								end
+	
+								params[:eco_fen] = eco.fen
+	
+								joins.push(
+									"JOIN
+										fen_master_games fg1
+									ON
+										fg1.fen_uuid = UUID_IN(md5(:eco_fen)::CSTRING) AND
+										g.id = ANY(fg1.master_game_ids)"
 								)
-							")
-						end
-
-						if (!skip and data[:eco].to_s != "")
-							begin
-								eco = ::EcoPosition.find(data[:eco])
-							rescue
-								raise ApiErrors::ChessError::InvalidEco.new
+							end
+	
+							if (data[:fen].to_s != "")
+								valid = ValidateFen.call(fen: data[:fen])
+	
+								if (!valid.result)
+									raise ApiErrors::ChessError::InvalidFen.new
+								end
+	
+								params[:fen] = data[:fen].split(" ").slice(0..3).join(" ")
+	
+								joins.push(
+									"JOIN
+										fen_master_games fg2
+									ON
+										fg2.fen_uuid = UUID_IN(md5(:fen)::CSTRING) AND
+										g.id = ANY(fg2.master_game_ids)"
+								)
 							end
 
-							params[:eco_fen] = eco.fen
+							["year", "month", "day"].each do |date|
+								part = data[date.to_sym].to_s
 
-							joins.push(
-								"JOIN
-									fen_master_games fg1
-								ON
-									fg1.fen_uuid = UUID_IN(md5(:eco_fen)::CSTRING) AND
-									g.id = ANY(fg1.master_game_ids)"
-							)
-						end
+								if (part != "")
+									if (bishop == false)
+										authorize nil, :bishop?, policy_class: PremiumPolicy
 
-						if (!skip and data[:fen].to_s != "")
-							valid = ValidateFen.call(fen: data[:fen])
+										bishop = true
+									end
 
-							if (!valid.result)
-								raise ApiErrors::ChessError::InvalidFen.new
+									params[date.to_sym] = part.to_i
+	
+									where.push("g.#{date} = :#{date}")
+								end
 							end
 
-							params[:fen] = data[:fen].split(" ").slice(0..3).join(" ")
+							["white", "black"].each do |side|
+								name = []
 
-							joins.push(
-								"JOIN
-									fen_master_games fg2
-								ON
-									fg2.fen_uuid = UUID_IN(md5(:fen)::CSTRING) AND
-									g.id = ANY(fg2.master_game_ids)"
-							)
+								["last", "first"].each do |part|
+									name_part = data[(side + "_" + part).to_sym].to_s.strip
+
+									if (name_part != "")
+										name.push(name_part)
+									end
+								end
+
+								name = name.join(", ")
+
+								if (name != "")
+									if (bishop == false)
+										authorize nil, :bishop?, policy_class: PremiumPolicy
+
+										bishop = true
+									end
+
+									side_num = (side == "white") ? 1 : 0
+
+									params[side.to_sym] = name
+
+									where.push("(GET_SEARCHABLE_NAMES(:#{side}))[1] = ANY(g.#{side}_names)")
+									# where.push(
+									# 	"g.id IN
+									# 		(
+									# 			SELECT
+									# 				master_game_id
+									# 			FROM
+									# 				master_game_names
+									# 			WHERE
+									# 				side = #{side_num} AND
+									# 				(GET_SEARCHABLE_NAMES(:#{side}))[1] = ANY(names)
+									# 		)"
+									# )
+								end
+							end
 						end
 
 						joins = joins.join(" ")

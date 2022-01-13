@@ -37,8 +37,10 @@ function Plan(props: PlanProps) {
 	const unlimited      = t("common:unlimited");
 	let   action         = null;
 	
-	if (props.authenticated && plan.id === "free") {
+	if (props.authenticated && plan.tiers.includes(props.tier)) {
 		action = <Button disabled={true}>{t("current_plan")}</Button>;
+	} else if (props.tier > 0 && plan.available && !plan.tiers.includes(props.tier)) {
+		action = <Button disabled={true}>{t("unavailable")}</Button>;
 	} else if (plan.available) {
 		const ButtonLink = React.forwardRef((props: any, ref: any) => {
 			return (
@@ -109,7 +111,8 @@ function Plan(props: PlanProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-	authenticated : state.Auth.authenticated
+	authenticated : state.Auth.authenticated,
+	tier          : state.Auth.tier
 });
 const connector      = connect(mapStateToProps);
 type PropsFromRedux  = ConnectedProps<typeof connector>;

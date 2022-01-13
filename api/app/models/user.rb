@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+	# Attributes
+	attr_accessor :tier
+
 	# Validation
 	validates :email, presence: true, uniqueness: {:case_sensitive => false}
 	validates :uid, presence: true, uniqueness: true
@@ -70,7 +73,7 @@ class User < ApplicationRecord
 	def repertoire_position_limit # implemented
 		tier = self.tier
 
-		return 3500 unless tier > 0
+		return 2500 unless tier > 0
 		return 10000 unless tier > 2
 		return 30000 unless tier > 4
 		return -1

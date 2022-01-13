@@ -1,10 +1,12 @@
 import React from "react";
-import { Descriptions } from "antd";
+import { Button, Descriptions } from "antd";
 import ChessMaker from "../../../lib/ChessMaker";
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { Translation } from "react-i18next";
+import { RootState } from "../../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-interface PGNDataProps {
+interface PGNDataProps extends PropsFromRedux {
 	game?: ChessControllerProps["game"]
 }
 
@@ -39,6 +41,8 @@ class PGNData extends React.Component<PGNDataProps, PGNDataState> {
 		this.state = {
 			headers : header
 		};
+
+		this.downloadPGN = this.downloadPGN.bind(this);
 	}
 
 	componentDidUpdate(prev_props: PGNDataProps) {
@@ -63,13 +67,47 @@ class PGNData extends React.Component<PGNDataProps, PGNDataState> {
 		return (
 			<Translation ns="database">
 				{t => (
-					<Descriptions layout="vertical" bordered>
-						{items}
-					</Descriptions>
+					<>
+						{
+							this.props.authenticated &&
+							this.props.tier >= 1 &&
+							<Button type="default" className="m-auto my-2" style={{ display: "block" }} onClick={this.downloadPGN}>{t("download_pgn")}</Button>
+						}
+						<Descriptions layout="vertical" bordered>
+							{items}
+						</Descriptions>
+					</>
 				)}
 			</Translation>
 		);
 	}
+
+	downloadPGN() {
+		if (!this.props.game) {
+			return;
+		}
+
+		const blob = new Blob([this.props.game.pgn], {
+			type : "text/plain"
+		});
+		const url = window.URL.createObjectURL(blob);
+		const a   = document.createElement("a");
+
+		a.href     = url;
+		a.download = "game.pgn";
+
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		window.URL.revokeObjectURL(url);
+	}
 }
 
-export default PGNData;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated,
+	tier          : state.Auth.tier
+});
+const connector     = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(PGNData);

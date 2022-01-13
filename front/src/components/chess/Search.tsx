@@ -8,14 +8,16 @@ import { EcoPositionsQueryData } from "../../lib/types/models/EcoPosition";
 import { SearchCriteria, SearchProps, SearchState } from "../../lib/types/SearchTypes";
 
 import Results from "./search/Results";
+import { RootState } from "../../redux/store";
+import { connect, ConnectedProps } from "react-redux";
 
-function Search(props: SearchProps) {
+function Search(props: SearchProps & PropsFromRedux) {
 	const [ active_tab, setActiveTab ] = useState<string>("form");
 	const [ state, setState ] = useState<SearchState>({
 		criteria : undefined
 	});
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
-	const { t } = useTranslation(["search", "chess"]);
+	const { t } = useTranslation(["search", "chess", "common"]);
 	const { data } = useQuery<EcoPositionsQueryData>(GET_ECOS);
 	const prev_movelist = useRef<string>();
 
@@ -114,21 +116,57 @@ function Search(props: SearchProps) {
 								</Form.Item>
 							}
 							{props.mode === "master_games" &&
-								<Form.Item label="Elo" name="elo" key="search-elo-item">
-									<Input
-										addonBefore={
-											<Form.Item noStyle={true} name="eloComparison" key="search-eloComparison-item">
-												<Select defaultValue="gte">
-													<Select.Option value="gte">&gt;=</Select.Option>
-													<Select.Option value="lte">&lt;=</Select.Option>
-													<Select.Option value="eq">=</Select.Option>
-												</Select>
-											</Form.Item>
-										}
-										maxLength={4}
-										autoComplete="off"
-									/>
-								</Form.Item>
+								<>
+									<Form.Item label="Elo" name="elo" key="search-elo-item">
+										<Input
+											addonBefore={
+												<Form.Item noStyle={true} name="eloComparison" key="search-eloComparison-item">
+													<Select defaultValue="gte">
+														<Select.Option value="gte">&gt;=</Select.Option>
+														<Select.Option value="lte">&lt;=</Select.Option>
+														<Select.Option value="eq">=</Select.Option>
+													</Select>
+												</Form.Item>
+											}
+											maxLength={4}
+											autoComplete="off"
+										/>
+									</Form.Item>
+
+									{
+										props.authenticated &&
+										props.tier >= 1 &&
+										<>
+											<div className="grid grid-cols-2 gap-x-2">
+												<Form.Item label={t("chess:white")} name="whiteLast" key="search-whiteLast-item">
+													<Input placeholder={t("last_name")} autoComplete="off"/>
+												</Form.Item>
+												<Form.Item name="whiteFirst" key="search-whiteFirst-item">
+													<Input placeholder={t("first_name")} autoComplete="off"/>
+												</Form.Item>
+											</div>
+											<div className="grid grid-cols-2 gap-x-2">
+												<Form.Item label={t("chess:black")} name="blackLast" key="search-blackLast-item">
+													<Input placeholder={t("last_name")} autoComplete="off"/>
+												</Form.Item>
+												<Form.Item name="blackFirst" key="search-blackFirst-item">
+													<Input placeholder={t("first_name")} autoComplete="off"/>
+												</Form.Item>
+											</div>
+											<div className="grid grid-cols-4 gap-x-2">
+												<Form.Item label={t("date")} name="year" key="search-year-item" className="col-span-2">
+													<Input placeholder={t("year")} autoComplete="off" maxLength={4}/>
+												</Form.Item>
+												<Form.Item name="month" key="search-month-item">
+													<Input placeholder={t("month")} autoComplete="off" maxLength={2}/>
+												</Form.Item>
+												<Form.Item name="day" key="search-day-item">
+													<Input placeholder={t("common:day")} autoComplete="off" maxLength={2}/>
+												</Form.Item>
+											</div>
+										</>
+									}
+								</>
 							}
 							<Form.Item>
 								<Button type="ghost" htmlType="submit">{t("search")}</Button>
@@ -146,4 +184,11 @@ function Search(props: SearchProps) {
 	);
 }
 
-export default Search;
+const mapStateToProps = (state: RootState) => ({
+	authenticated : state.Auth.authenticated,
+	tier          : state.Auth.tier
+});
+const connector     = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Search);

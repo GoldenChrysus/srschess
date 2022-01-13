@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(version: 2022_01_12_132100) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
+    t.string "stripe_id", null: false
     t.bigint "customer_id", null: false
     t.string "price_id", null: false
     t.datetime "started_at", null: false
@@ -193,6 +194,7 @@ ActiveRecord::Schema.define(version: 2022_01_12_132100) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
     t.index ["price_id"], name: "index_subscriptions_on_price_id"
+    t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|

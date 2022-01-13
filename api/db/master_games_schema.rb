@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2022_01_03_081108) do
     t.string "round"
     t.integer "source", null: false
     t.integer "result", null: false
+    t.string "white_names", array: true
     t.index ["black"], name: "index_master_games_on_black"
     t.index ["black_elo"], name: "index_master_games_on_black_elo"
     t.index ["black_title"], name: "index_master_games_on_black_title"

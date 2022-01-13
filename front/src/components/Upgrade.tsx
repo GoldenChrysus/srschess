@@ -7,6 +7,7 @@ const PLANS: Array<PlanModel> = [
 		id            : "free",
 		price_monthly : 0,
 		price_yearly  : 0,
+		tiers         : [0],
 		available     : true,
 		piece         : "white p",
 		features      : [
@@ -18,7 +19,7 @@ const PLANS: Array<PlanModel> = [
 					{
 						key     : "repertoire_limit",
 						options : {
-							count: 2000
+							count: 2500
 						}
 					}
 				]
@@ -105,6 +106,7 @@ const PLANS: Array<PlanModel> = [
 		id            : "bishop",
 		price_monthly : 2.99,
 		price_yearly  : 29.99,
+		tiers         : [1, 2],
 		available     : true,
 		piece         : "black b",
 		features      : [
@@ -192,6 +194,7 @@ const PLANS: Array<PlanModel> = [
 		id            : "rook",
 		price_monthly : 5.99,
 		price_yearly  : 54.99,
+		tiers         : [3, 4],
 		available     : false,
 		piece         : "white r",
 		features      : [
@@ -279,6 +282,7 @@ const PLANS: Array<PlanModel> = [
 		id            : "monarch",
 		price_monthly : 8.99,
 		price_yearly  : 79.99,
+		tiers         : [5, 6],
 		available     : false,
 		piece         : "black q",
 		features      : [

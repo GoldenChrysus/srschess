@@ -5,6 +5,7 @@ export interface AuthState {
 	authenticated : boolean
 	uid?          : string
 	token?        : string
+	tier          : number
 }
 
 export interface AuthStateUserPayload {

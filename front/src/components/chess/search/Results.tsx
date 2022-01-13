@@ -10,6 +10,8 @@ import { useHistory } from "react-router";
 import MasterGameItem from "./MasterGameItem";
 import { useTranslation } from "react-i18next";
 import { DEMO_MASTER_GAME_RESULTS } from "../../../lib/constants/chess";
+import { hasPremiumLockoutError } from "../../../helpers";
+import PremiumWarning from "../../PremiumWarning";
 
 interface ResultsProps {
 	criteria: SearchState["criteria"],
@@ -22,7 +24,7 @@ interface ResultsProps {
 function Results(props: ResultsProps) {
 	const history = useHistory();
 	const { t } = useTranslation(["chess", "common"]);
-	let { loading, data } = useQuery<ChessSearchQueryData>(
+	let { loading, data, error } = useQuery<ChessSearchQueryData>(
 		GET_CHESS_SEARCH,
 		{
 			variables : {
@@ -39,10 +41,14 @@ function Results(props: ResultsProps) {
 	if (props.demo) {
 		loading = false;
 		data    = DEMO_MASTER_GAME_RESULTS;
+		error   = undefined
 	}
+
+	const premium = hasPremiumLockoutError(error) ? <PremiumWarning type="modal"/> : null;
 
 	return (
 		<div className="w-full">
+			{premium}
 			<Table
 				dataSource={data?.chessSearch}
 				loading={loading}

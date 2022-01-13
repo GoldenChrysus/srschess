@@ -19,6 +19,7 @@ export interface PlanModel {
 	id: string,
 	price_monthly: number,
 	price_yearly: number,
+	tiers: number[],
 	available: boolean,
 	piece: string,
 	features: Array<FeatureModel>

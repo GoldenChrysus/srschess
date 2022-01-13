@@ -68,4 +68,14 @@ class PremiumPolicy < ApplicationPolicy
 
 		return valid
 	end
+
+	def bishop?
+		valid = (user.tier >= 1)
+
+		if (!valid)
+			Current.internal_error_code = 200006
+		end
+
+		return valid
+	end
 end
