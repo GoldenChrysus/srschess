@@ -25,8 +25,6 @@ function Purchase(props: PurchaseProps) {
 		})
 	}
 
-	console.log(checkout_res);
-
 	const active_classes   = "bg-gray-200 text-gray-900 shadow-inner";
 	const inactive_classes = "bg-gray-700 hover:bg-gray-600";
 	const monthly_classes  = (active === "monthly") ? active_classes : inactive_classes;

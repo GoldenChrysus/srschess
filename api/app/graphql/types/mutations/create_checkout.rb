@@ -13,7 +13,7 @@ module Types
 			def resolve(price:)
 				user = context[:user]
 
-				raise ApiErrors::AuthenticationError::Unauthorized.new unless user != nil and user.tier == 0
+				raise ApiErrors::AuthenticationError::Unauthorized.new unless user != nil
 
 				customer = user.customer
 
@@ -28,18 +28,27 @@ module Types
 					)
 				end
 
-				stripe_session = Stripe::Checkout::Session.create({
-					cancel_url: ENV["REACT_APP_PUBLIC_URL"] + "/upgrade",
-					success_url: ENV["REACT_APP_PUBLIC_URL"] + "/upgrade",
-					mode: "subscription",
-					customer: customer.stripe_id,
-					line_items: [
-						{
-							price: ("Stripe::Prices::" + price.upcase).constantize.stripe_id,
-							quantity: 1
-						}
-					]
-				})
+				strip_session = nil
+
+				if (user.tier > 0)
+					stripe_session = Stripe::BillingPortal::Session.create({
+						customer: customer.stripe_id,
+						return_url: ENV["REACT_APP_PUBLIC_URL"] + "/upgrade"
+					})
+				else
+					stripe_session = Stripe::Checkout::Session.create({
+						cancel_url: ENV["REACT_APP_PUBLIC_URL"] + "/upgrade",
+						success_url: ENV["REACT_APP_PUBLIC_URL"] + "/upgrade",
+						mode: "subscription",
+						customer: customer.stripe_id,
+						line_items: [
+							{
+								price: ("Stripe::Prices::" + price.upcase).constantize.stripe_id,
+								quantity: 1
+							}
+						]
+					})
+				end
 
 				{
 					session: {

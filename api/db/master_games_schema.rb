@@ -54,11 +54,11 @@ ActiveRecord::Schema.define(version: 2022_01_13_033840) do
     t.string "round"
     t.integer "source", null: false
     t.integer "result", null: false
-    t.string "white_names", default: [], array: true
-    t.string "black_names", default: [], array: true
+    t.string "white_name"
+    t.string "black_name"
     t.index ["black"], name: "index_master_games_on_black"
     t.index ["black_elo"], name: "index_master_games_on_black_elo"
-    t.index ["black_names"], name: "index_master_games_on_black_names"
+    t.index ["black_name"], name: "index_master_games_on_black_name"
     t.index ["black_title"], name: "index_master_games_on_black_title"
     t.index ["day"], name: "index_master_games_on_day"
     t.index ["eco"], name: "index_master_games_on_eco"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 2022_01_13_033840) do
     t.index ["result"], name: "index_master_games_on_result"
     t.index ["white"], name: "index_master_games_on_white"
     t.index ["white_elo"], name: "index_master_games_on_white_elo"
-    t.index ["white_names"], name: "index_master_games_on_white_names"
+    t.index ["white_name"], name: "index_master_games_on_white_name"
     t.index ["white_title"], name: "index_master_games_on_white_title"
     t.index ["year"], name: "index_master_games_on_year"
   end

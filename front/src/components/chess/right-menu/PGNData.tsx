@@ -5,6 +5,7 @@ import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
 import { Translation } from "react-i18next";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
+import SaveGame from "./SaveGame";
 
 interface PGNDataProps extends PropsFromRedux {
 	game?: ChessControllerProps["game"]
@@ -71,7 +72,10 @@ class PGNData extends React.Component<PGNDataProps, PGNDataState> {
 						{
 							this.props.authenticated &&
 							this.props.tier >= 1 &&
-							<Button type="default" className="m-auto my-2" style={{ display: "block" }} onClick={this.downloadPGN}>{t("download_pgn")}</Button>
+							<div className="grid gap-2 m-auto my-2 text-center">
+								<Button type="default" onClick={this.downloadPGN}>{t("download_pgn")}</Button>
+								<SaveGame id={this.props.game?.id}/>
+							</div>
 						}
 						<Descriptions layout="vertical" bordered>
 							{items}

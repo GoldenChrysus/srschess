@@ -51,6 +51,9 @@ module Types
 		# /create_collection_games
 		field :create_collection_games, mutation: Types::Mutations::CreateCollectionGames
 
+		# /save_master_game
+		field :save_master_game, mutation: Types::Mutations::SaveMasterGame
+
 		# /create_checkout
 		field :create_checkout, mutation: Types::Mutations::CreateCheckout
 	end

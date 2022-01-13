@@ -462,6 +462,26 @@ export const CREATE_COLLECTION_GAMES = gql`
 	}
 `;
 
+export const SAVE_MASTER_GAME = gql`
+	${COLLECTION_FRAG}
+	${GAME_FRAG}
+	mutation SaveMasterGame($gameId: ID!, $collectionId: ID!) {
+		saveMasterGame(input: {
+			gameId: $gameId,
+			collectionId: $collectionId
+		}) {
+			collection {
+				...CoreCollectionFields
+				userOwned
+				games {
+					...CoreGameFields
+				}
+			}
+			errors
+		}
+	}
+`;
+
 /**
  * MASTER GAME DATA
  */

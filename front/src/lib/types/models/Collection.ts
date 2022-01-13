@@ -20,3 +20,10 @@ export interface CollectionQueryData {
 export interface CollectionsQueryData {
 	collections: Array<CollectionModel>
 }
+
+export interface SaveMasterGameMutationData {
+	saveMasterGame: {
+		collection: CollectionModel | null,
+		errors: string[]
+	}
+}

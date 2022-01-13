@@ -190,6 +190,7 @@ module Types
 							"g.year IS NOT NULL"
 						]
 						joins            = []
+						with             = []
 						params           = {}
 						limit            = (user != nil) ? user.database_search_limit : 5
 						valid_comparison = {
@@ -198,7 +199,9 @@ module Types
 							"eq"  => "="
 						}
 
-						bishop = false
+						access = {
+							bishop: false
+						}
 
 						if (data[:movelist] != nil and data[:movelist] != "")
 							moves = []
@@ -264,10 +267,10 @@ module Types
 								part = data[date.to_sym].to_s
 
 								if (part != "")
-									if (bishop == false)
+									if (access[:bishop] == false)
 										authorize nil, :bishop?, policy_class: PremiumPolicy
 
-										bishop = true
+										access[:bishop] = true
 									end
 
 									params[date.to_sym] = part.to_i
@@ -275,6 +278,10 @@ module Types
 									where.push("g.#{date} = :#{date}")
 								end
 							end
+
+							# Start name logic
+							selects    = []
+							conditions = []
 
 							["white", "black"].each do |side|
 								name = []
@@ -290,23 +297,48 @@ module Types
 								name = name.join(", ")
 
 								if (name != "")
-									if (bishop == false)
+									if (access[:bishop] == false)
 										authorize nil, :bishop?, policy_class: PremiumPolicy
 
-										bishop = true
+										access[:bishop] = true
 									end
 
 									params[side.to_sym] = name
 
-									where.push("(GET_SEARCHABLE_NAMES(:#{side}))[1] = ANY(g.#{side}_names)")
+									side_name = side + "_name"
+
+									selects.push("(GET_SEARCHABLE_NAMES(:#{side}))[1] AS #{side_name}")
+									conditions.push("n.#{side_name} = g.#{side_name}")
 								end
 							end
+
+							if (selects.count > 0)
+								selects    = selects.join(", ")
+								conditions = conditions.join(" AND ")
+
+								with.push(
+									"names AS (
+										SELECT
+											#{selects}
+									)"
+								)
+								joins.push(
+									"JOIN
+										names n
+									ON
+										#{conditions}"
+								)
+							end
+							# End name logic
 						end
 
 						joins = joins.join(" ")
 						where = where.join(" AND ")
+						with  = with.join(", ")
+						with  = (with != "") ? "WITH #{with}" : ""
 						sql   =
-							"SELECT
+							"#{with}
+							SELECT
 								g.id AS slug,
 								CONCAT(white, ' - ', black) AS name,
 								CONCAT(year, '-', LPAD(COALESCE(month::VARCHAR, '??'), 2, '0'), '-', LPAD(COALESCE(day::VARCHAR, '??'), 2, '0')) AS created_at,

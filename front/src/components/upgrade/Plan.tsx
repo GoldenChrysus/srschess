@@ -11,6 +11,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COMMUNICATION_ENROLLMENT, GET_COMMUNICATION_ENROLLMENTS } from "../../api/queries";
 import { CommunicationEnrollmentsQueryData } from "../../lib/types/models/User";
 import Purchase from "./Purchase";
+import Manage from "./Manage";
 
 interface PlanProps extends PropsFromRedux {
 	plan: PlanModel
@@ -35,12 +36,13 @@ function Plan(props: PlanProps) {
 
 	const has_enrollment = (data?.communicationEnrollments?.filter(x => x.name === enrollment_name).length);
 	const unlimited      = t("common:unlimited");
-	let   action         = null;
+	let action           = null;
 	
-	if (props.authenticated && plan.tiers.includes(props.tier)) {
-		action = <Button disabled={true}>{t("current_plan")}</Button>;
-	} else if (props.tier > 0 && plan.available && !plan.tiers.includes(props.tier)) {
-		action = <Button disabled={true}>{t("unavailable")}</Button>;
+	if (
+		(props.authenticated && plan.tiers.includes(props.tier)) ||
+		(props.tier > 0 && plan.available && !plan.tiers.includes(props.tier))
+	) {
+		action = <Manage plan={props.plan} current_tier={props.tier}/>;
 	} else if (plan.available) {
 		const ButtonLink = React.forwardRef((props: any, ref: any) => {
 			return (

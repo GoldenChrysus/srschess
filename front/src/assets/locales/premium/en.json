@@ -14,6 +14,7 @@
 
 	"has_notification_enrollment": "Signed Up for Notifications",
 
+	"manage_subscription": "Manage Subscription",
 	"month": "Month",
 	"monthly": "Monthly",
 	"notify_when_available": "Notify When Available",
@@ -27,7 +28,6 @@
 	"purchase_now": "Purchase Now",
 	"premium_only": "Premium feature only.",
 	"register_now": "Register Now",
-	"unavailable": "Unavailable",
 	"upgrade": "Upgrade",
 	"upgrade_now": "Upgrade Now",
 	"yearly": "Yearly"
