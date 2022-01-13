@@ -77,6 +77,4 @@ Rails.application.configure do
   config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
   config.action_cable.url = "wss://" + ENV["REACT_APP_API_ADDRESS"] + "/cable"
   config.action_cable.disable_request_forgery_protection = true
-
-  config.hosts << ENV["REACT_APP_API_ADDRESS"]
 end

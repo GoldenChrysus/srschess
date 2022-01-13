@@ -29,6 +29,7 @@ module ChessHq
 		end
 
 		config.hosts << "api"
+		config.hosts << ENV["REACT_APP_API_ADDRESS"]
 
 		config.stripe.signing_secrets = [ENV.fetch("STRIPE_SIGNING_SECRET")]
 
