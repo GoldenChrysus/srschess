@@ -23,14 +23,6 @@ function Manage(props: ManageProps) {
 	const { t } = useTranslation(["premium"]);
 	const [ createCheckout, checkout_res ] = useMutation<CreateCheckoutMutationData>(CREATE_CHECKOUT);
 
-	const checkout = () => {
-		createCheckout({
-			variables : {
-				price : "manage"
-			}
-		})
-	}
-
 	if (checkout_res.data) {
 		window.location.href = checkout_res.data.createCheckout.session.url;
 		
@@ -38,11 +30,17 @@ function Manage(props: ManageProps) {
 	}
 
 	let type: keyof typeof ButtonType = "default";
-	let text = t("upgrade_now");
+	let text                          = t("upgrade_now");
+	let disabled                      = false;
 
 	if (props.plan.tiers.includes(props.current_tier)) {
 		type = "primary";
 		text = t("manage_subscription");
+
+		if (props.plan.id === "free") {
+			disabled = true;
+			text     = t("current_plan");
+		}
 	}
 
 	const highest_tier = props.plan.tiers[props.plan.tiers.length - 1];
@@ -53,7 +51,19 @@ function Manage(props: ManageProps) {
 		text = t("manage_subscription");
 	}
 
-	return <Button type={type} onClick={checkout}>{text}</Button>;
+	const checkout = () => {
+		if (disabled) {
+			return;
+		}
+
+		createCheckout({
+			variables : {
+				price : "manage"
+			}
+		})
+	}
+
+	return <Button type={type} disabled={disabled} onClick={checkout}>{text}</Button>;
 }
 
 export default Manage;

@@ -37,8 +37,12 @@ class Subscription < ApplicationRecord
 		price              = Price.where(stripe_id: subscription.plan.id).first
 
 		if (local_subscription != nil)
-			local_subscription.ended_at = (subscription.ended_at != nil) ? Time.at(subscription.ended_at) : nil
+			local_subscription.ended_at = (subscription.ended_at != nil or subscription.canceled_at != nil) ? Time.at(subscription.ended_at || subscription.canceled_at) : nil
 			local_subscription.price    = price
+
+			if (local_subscription.ended_at == nil and subscription.status != "active")
+				local_subscription.ended_at = Time.now.utc
+			end
 
 			local_subscription.save
 		end
