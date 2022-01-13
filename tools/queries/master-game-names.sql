@@ -1,0 +1,1 @@
+UPDATE master_games SET white_names = GET_SEARCHABLE_NAMES(white), black_names = GET_SEARCHABLE_NAMES(black);
