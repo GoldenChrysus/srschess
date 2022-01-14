@@ -127,7 +127,7 @@ Rails.application.configure do
     port: 587,
     user_name: ENV["AWS_SMTP_USERNAME"],
     password: ENV["AWS_SMTP_PASSWORD"],
-    authentication: :plain,
+    authentication: :login,
     enable_starttls_auto: true
   }
 end
