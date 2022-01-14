@@ -26,6 +26,7 @@ interface DrawBrush {
 export interface Drawable {
 	enabled?: boolean,
 	display?: boolean,
+	eraseOnClick?: boolean,
 	shapes: Array<DrawShape>,
 	autoShapes: DrawShape[],
 	onChange?: (shapes: DrawShape[]) => void,

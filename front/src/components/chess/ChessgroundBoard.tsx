@@ -1,5 +1,5 @@
 import React from "react";
-import Chessground from "react-chessground";
+import Chessground from "@goldenchrysus/react-chessground";
 
 import { ChessControllerProps } from "../../lib/types/ChessControllerTypes";
 import { RootState } from "../../redux/store";

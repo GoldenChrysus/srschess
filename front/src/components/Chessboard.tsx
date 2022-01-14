@@ -6,7 +6,7 @@ import { START_FEN } from "../lib/constants/chess";
 import ChessgroundBoard from "./chess/ChessgroundBoard";
 import Piece from "./chess/Piece";
 
-import "react-chessground/dist/styles/chessground.css";
+import "@goldenchrysus/react-chessground/dist/styles/chessground.css";
 import "../styles/components/chessboard.css";
 import { Modal } from "antd";
 import { Destinations, Drawable, DrawShape } from "../lib/types/models/Chessboard";
@@ -94,9 +94,10 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 
 	render(): JSX.Element {
 		const drawable: Drawable = {
-			shapes     : [],
-			autoShapes : [],
-			brushes    : {
+			eraseOnClick : (this.props.mode === "repertoire") ? false : undefined,
+			shapes       : [],
+			autoShapes   : [],
+			brushes      : {
 				green     : { key: "g", color: "#15781B", opacity: 1, lineWidth: 10 },
 				red       : { key: "r", color: "#882020", opacity: 1, lineWidth: 10 },
 				blue      : { key: "b", color: "#003088", opacity: 1, lineWidth: 10 },
