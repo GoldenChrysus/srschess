@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "firebase/auth";
+import { fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, FacebookAuthProvider, signInWithPopup, TwitterAuthProvider } from "firebase/auth";
 import { auth } from "../lib/Firebase";
 import { Button, Form, Input, notification, Spin } from "antd";
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,8 @@ import { RootState } from "../redux/store";
 import { connect, ConnectedProps } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { LocationState } from "../lib/types/RouteTypes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebookF } from "@fortawesome/free-brands-svg-icons";
 
 enum ProgressStates {
 	initial,
@@ -113,6 +115,31 @@ function Login(props: LoginProps) {
 			.finally(() => setLoading(false));
 	}
 
+	const socialLogin = (type: string) => {
+		let provider = null;
+
+		switch (type) {
+			case "facebook":
+				provider = new FacebookAuthProvider();
+
+				break;
+
+			case "twitter":
+				provider = new TwitterAuthProvider();
+
+				break;
+
+			default:
+				return;
+		}
+
+		signInWithPopup(auth, provider)
+			.then((data) => {
+				auth.updateCurrentUser(data.user);
+			})
+			.catch((e) => notifyError(e.code));
+	}
+
 	const button_key = (progress === "initial") ? "continue" : "submit";
 
 	return (
@@ -167,6 +194,10 @@ function Login(props: LoginProps) {
 					</Form>
 				</div>
 			</Spin>
+
+			<div className="w-3/5 m-auto mt-4 flex justify-center gap-x-2">
+				<div onClick={() => socialLogin("facebook")} className="cursor-pointer w-12 h-12 text-xl rounded-2xl flex items-center justify-center" style={{ background: "#4267b2" }}><FontAwesomeIcon icon={faFacebookF}/></div>
+			</div>
 		</div>
 	);
 }

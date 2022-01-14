@@ -9,6 +9,7 @@
 	"300201": "This move cannot be reviewed yet.",
 	"300302": "Invalid ECO provided.",
 	"300303": "Invalid PGN provided.",
+	"auth/account-exists-with-different-credential": "Cannot sign in this way.",
 	"auth/invalid-email": "Invalid $t(dashboard:email, lowercase) provided.",
 	"auth/weak-password": "Please use a stronger $t(dashboard:password, lowercase).",
 	"auth/wrong-password": "Invalid $t(dashboard:password, lowercase) provided.",
