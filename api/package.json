@@ -1,5 +1,6 @@
 {
-  "name": "chesshq",
+  "name": "chess-hq-api",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.14.5",
@@ -19,7 +20,6 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
-  "version": "0.1.0",
   "devDependencies": {
     "webpack-dev-server": "^4.1.0"
   }
