@@ -11,6 +11,7 @@ import { ApolloProvider } from "@apollo/client";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import { client } from "./lib/Apollo";
+import CacheBuster from "./components/CacheBuster";
 
 FirebaseAuth();
 i18n.setDefaultNamespace("common");
@@ -20,6 +21,7 @@ i18n.setDefaultNamespace("common");
 		<React.StrictMode>
 			<Provider store={store}>
 				<ApolloProvider client={client}>
+					<CacheBuster/>
 					<App />
 				</ApolloProvider>
 			</Provider>

@@ -1,6 +1,6 @@
 {
 	"name": "srs-front",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"private": true,
 	"dependencies": {
 		"@apollo/client": "^3.4.11",
@@ -51,9 +51,10 @@
 		"workbox-streams": "^5.1.4"
 	},
 	"scripts": {
+		"build:version": "node generate-build-version",
 		"build:css": "tailwind --postcss -i src/styles/_base.css -o src/styles/app.css",
-		"start": "npm run build:css && react-scripts start",
-		"build": "NODE_ENV=production npm run build:css && react-scripts build",
+		"start": "npm run build:version && npm run build:css && react-scripts start",
+		"build": "NODE_ENV=production npm run build:version && npm run build:css && react-scripts build",
 		"test": "NODE_ENV=test react-scripts test",
 		"eject": "react-scripts eject",
 		"cy": "npx cypress run-ct --browser chrome"

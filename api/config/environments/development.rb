@@ -77,4 +77,16 @@ Rails.application.configure do
   config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
   config.action_cable.url = "wss://" + ENV["REACT_APP_API_ADDRESS"] + "/cable"
   config.action_cable.disable_request_forgery_protection = true
+
+  config.action_mailer.perform_deliveries    = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method       = :smtp
+  config.action_mailer.smtp_settings         = {
+    address: ENV["AWS_SMTP_ENDPOINT"],
+    port: 587,
+    user_name: ENV["AWS_SMTP_USERNAME"],
+    password: ENV["AWS_SMTP_PASSWORD"],
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
 end
