@@ -1,49 +1,39 @@
 import React, { ChangeEvent, useState } from "react";
 import { Input } from "antd";
 import { useTranslation } from "react-i18next";
-import { EcoPositionModel, EcoPositionsQueryData } from "../lib/types/models/EcoPosition";
+import { EcoPositionsQueryData } from "../lib/types/models/EcoPosition";
 import OpeningVolume from "./opening-explorer/OpeningVolume";
 
-interface OpeningExplorerProps {
-	openings?: EcoPositionsQueryData["ecoPositions"]
+const BLANK_VOLUMES: EcoPositionsQueryData = {
+	ecoPositions : []
 }
 
-let processed = false;
+for (const letter of ["A", "B", "C", "D", "E"]) {
+	BLANK_VOLUMES.ecoPositions.push({
+		letter   : letter,
+		length   : 0,
+		openings : [],
+		fake     : true
+	})
+}
 
-const indexed: {[key: string]: Array<EcoPositionModel>} = {
-	A : [],
-	B : [],
-	C : [],
-	D : [],
-	E : []
-};
-
-function OpeningExplorer(props: OpeningExplorerProps): JSX.Element {
+function OpeningExplorer(): JSX.Element {
 	const [ filter, setFilter ] = useState<string | null>(null);
-	const { t } = useTranslation(["common", "openings"]);
+	const { t }                 = useTranslation(["common", "openings"]);
+	const timeout_ref           = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
-	if (!processed && props?.openings) {
-		for (const opening of props?.openings ?? []) {
-			const index: string = opening.code[0];
-
-			if (!indexed[index]) {
-				continue;
-			}
-
-			indexed[index].push(opening);
+	const onFilter = function(e: ChangeEvent<HTMLInputElement>) {		
+		if (timeout_ref.current !== undefined) {
+			clearTimeout(timeout_ref.current);
 		}
 
-		processed = true;
-	}
-
-	const onFilter = function(e: ChangeEvent<HTMLInputElement>) {
-		setFilter(e.target.value);
+		timeout_ref.current = setTimeout(() => setFilter(e.target.value), 500);
 	}
 
 	const volumes = [];
 
-	for (const volume in indexed) {
-		volumes.push(<OpeningVolume key={"opening-volume-" + volume} volume={volume} openings={indexed[volume]} filter={filter}/>);
+	for (const volume of BLANK_VOLUMES.ecoPositions) {
+		volumes.push(<OpeningVolume key={"opening-volume-" + volume} volume={volume} filter={filter}/>);
 	}
 
 	return (

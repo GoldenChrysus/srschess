@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { ApolloConsumer, useQuery } from "@apollo/client";
-import { GET_ECO, GET_ECOS } from "../api/queries";
-import { EcoPositionQueryData, EcoPositionsQueryData } from "../lib/types/models/EcoPosition";
+import { GET_ECO } from "../api/queries";
+import { EcoPositionQueryData } from "../lib/types/models/EcoPosition";
 import OpeningExplorer from "../components/OpeningExplorer";
 import { useTranslation } from "react-i18next";
 import { createOpeningExplorerRouteMeta } from "../helpers";
@@ -14,14 +14,8 @@ interface OpeningExplorerRouteParams {
 }
 
 function OpeningExplorerRoute() {
-	const { slug }                 = useParams<OpeningExplorerRouteParams>();
-	const { t }                    = useTranslation("openings");
-	const { data } = useQuery<EcoPositionsQueryData>(
-		GET_ECOS,
-		{
-			skip : !!slug
-		}
-	);
+	const { slug }               = useParams<OpeningExplorerRouteParams>();
+	const { t }                  = useTranslation("openings");
 	const { data: opening_data } = useQuery<EcoPositionQueryData>(
 		GET_ECO,
 		{
@@ -47,7 +41,7 @@ function OpeningExplorerRoute() {
 				<meta property="twitter:title" content={meta.og_title}/>
 				<meta property="twitter:description" content={meta.description}/>
 			</Helmet>
-			{!slug && <OpeningExplorer openings={data?.ecoPositions}/>}
+			{!slug && <OpeningExplorer/>}
 			{
 				slug &&
 				<ApolloConsumer>

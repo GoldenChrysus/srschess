@@ -18,7 +18,14 @@ function Search(props: SearchProps & PropsFromRedux) {
 	});
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 	const { t } = useTranslation(["search", "chess", "common"]);
-	const { data } = useQuery<EcoPositionsQueryData>(GET_ECOS);
+	const { data } = useQuery<EcoPositionsQueryData>(GET_ECOS, {
+		variables : {
+			letter : "all",
+			limit  : 999999,
+			page   : 1,
+			filter : null
+		}
+	});
 	const prev_movelist = useRef<string>();
 
 	useEffect(
@@ -78,12 +85,14 @@ function Search(props: SearchProps & PropsFromRedux) {
 	const eco_options = [];
 
 	if (active_tab === "form" && data?.ecoPositions) {
-		for (const eco of data.ecoPositions) {
-			const title = eco.code + ": " + eco.name;
+		for (const volume of data.ecoPositions) {
+			for (const eco of volume.openings) {
+				const title = eco.code + ": " + eco.name;
 
-			eco_options.push(
-				<Select.Option value={eco.id} key={"search-eco-" + eco.id} title={title}>{title}</Select.Option>
-			);
+				eco_options.push(
+					<Select.Option value={eco.id} key={"search-eco-" + eco.id} title={title}>{title}</Select.Option>
+				);
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 import { ChessSearchQueryData } from "../types/models/ChessSearch";
-import { EcoPositionsQueryData } from "../types/models/EcoPosition";
+import { EcoPositionModel } from "../types/models/EcoPosition";
 import { GameModel } from "../types/models/Game";
 
 export const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -171,7 +171,7 @@ Rd1 Qe6 15. Bxd7+ Nxd7 16. Qb8+ Nxb8 17. Rd8# 1-0`,
 	}
 ];
 
-export const DEMO_OPENING_RESULT: EcoPositionsQueryData = {
+export const DEMO_OPENING_RESULT: { ecoPositions: EcoPositionModel[] } = {
 	ecoPositions : [
 		{
 			id   : 9044,

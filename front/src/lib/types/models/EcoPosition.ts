@@ -7,6 +7,13 @@ export interface EcoPositionModel {
 	name: string
 }
 
+export interface EcoVolume {
+	letter: string,
+	length: number,
+	openings: EcoPositionModel[],
+	fake?: boolean
+}
+
 export interface FenEcoQueryData {
 	fenEco: EcoPositionModel
 }
@@ -16,5 +23,5 @@ export interface EcoPositionQueryData {
 }
 
 export interface EcoPositionsQueryData {
-	ecoPositions: Array<EcoPositionModel>
+	ecoPositions: Array<EcoVolume>
 }

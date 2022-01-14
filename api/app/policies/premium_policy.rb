@@ -7,7 +7,7 @@ class PremiumPolicy < ApplicationPolicy
 		end
 
 		if (valid)
-			limit = user.opening_database_limit			
+			limit = (user != nil) ? user.opening_database_limit	: 3
 
 			if (limit != -1)
 				fen_parts = record.split(" ")

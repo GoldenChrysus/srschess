@@ -523,14 +523,18 @@ export const GET_FEN_ECO = gql`
 `;
 
 export const GET_ECOS = gql`
-	query EcoPositions {
-		ecoPositions {
-			id
-			slug
-			fen
-			pgn
-			code
-			name
+	query EcoPositions($letter: String!, $limit: Int!, $page: Int!, $filter: String) {
+		ecoPositions(letter: $letter, limit: $limit, page: $page, filter: $filter) {
+			letter
+			length
+			openings {
+				id
+				slug
+				fen
+				pgn
+				code
+				name
+			}
 		}
 	}
 `;
