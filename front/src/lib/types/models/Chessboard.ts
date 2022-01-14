@@ -11,7 +11,9 @@ export interface DrawShape {
 	brush: string,
 	orig: string,
 	mouseSq: string,
-	dest: string
+	dest: string,
+	snapToValidMove?: boolean
+	pos?: number[]
 }
 
 interface DrawBrush {
@@ -24,8 +26,9 @@ interface DrawBrush {
 export interface Drawable {
 	enabled?: boolean,
 	display?: boolean,
-	autoShapes: Array<DrawShape>,
-	onChange: (shapes: DrawShape[]) => void,
+	shapes: Array<DrawShape>,
+	autoShapes: DrawShape[],
+	onChange?: (shapes: DrawShape[]) => void,
 	brushes: {
 		[key: string]: DrawBrush
 	}

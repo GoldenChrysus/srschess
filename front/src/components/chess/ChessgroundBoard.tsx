@@ -4,6 +4,7 @@ import Chessground from "react-chessground";
 import { ChessControllerProps } from "../../lib/types/ChessControllerTypes";
 import { RootState } from "../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
+import { Drawable, DrawShape } from "../../lib/types/models/Chessboard";
 
 interface ChessgroundProps extends PropsFromRedux {
 	mode: ChessControllerProps["mode"],
@@ -14,7 +15,8 @@ interface ChessgroundProps extends PropsFromRedux {
 	fen?: string,
 	last_move: Array<string> | null,
 	onMove: Function,
-	drawable: any
+	drawable: Drawable
+	onDraw?: (shapes: DrawShape[]) => void
 }
 
 class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
@@ -42,6 +44,8 @@ class ChessgroundBoard extends React.PureComponent<ChessgroundProps> {
 				dest    : this.props.best_move.substring(2, 4),
 			});
 		}
+
+		drawable.onChange = this.props.onDraw;
 
 		return (
 			<Chessground

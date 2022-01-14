@@ -13,7 +13,7 @@ function UserInfo(props: PropsFromRedux) {
 	const [ processing, setProcessing ] = useState(false);
 	const [ logout, setLogout]          = useState(false);
 	const { t }                         = useTranslation(["dashboard", "common", "errors"]);
-	const onSubmit                      = async (values: any, from_refresh?: boolean) => {
+	const onSubmit                      = async (values: any) => {
 		if (processing || !auth.currentUser) {
 			return;
 		}

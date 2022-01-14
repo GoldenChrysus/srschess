@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_12_132100) do
+ActiveRecord::Schema.define(version: 2022_01_14_134113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -135,6 +135,14 @@ ActiveRecord::Schema.define(version: 2022_01_12_132100) do
     t.index ["tier"], name: "index_prices_on_tier", unique: true
   end
 
+  create_table "repertoire_move_arrow_datum", force: :cascade do |t|
+    t.uuid "repertoire_move_id", null: false
+    t.string "data", default: [], array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["repertoire_move_id"], name: "index_repertoire_move_arrow_datum_on_repertoire_move_id", unique: true
+  end
+
   create_table "repertoire_move_notes", force: :cascade do |t|
     t.uuid "repertoire_move_id", null: false
     t.string "value"
@@ -213,6 +221,7 @@ ActiveRecord::Schema.define(version: 2022_01_12_132100) do
   add_foreign_key "games", "users"
   add_foreign_key "learned_items", "repertoire_moves"
   add_foreign_key "master_games_to_collections", "collections"
+  add_foreign_key "repertoire_move_arrow_datum", "repertoire_moves"
   add_foreign_key "repertoire_move_notes", "repertoire_moves"
   add_foreign_key "repertoire_moves", "repertoire_moves", column: "parent_id"
   add_foreign_key "repertoire_moves", "repertoire_moves", column: "transposition_id"

@@ -48,6 +48,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 		this.reducer     = this.reducer.bind(this);
 		this.onMoveClick = this.onMoveClick.bind(this);
+		this.onDraw      = this.onDraw.bind(this);
 		this.ref         = React.createRef<HTMLDivElement>();
 	}
 
@@ -171,7 +172,8 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 	}
 
 	render() {
-		const children      = (this.state.last_uuid) ? this.props.arrows?.[this.state.last_uuid] || [] : this.props.arrows?.["root"] || [];
+		const auto_shapes   = (this.state.last_uuid) ? this.props.arrows?.[this.state.last_uuid] || [] : this.props.arrows?.["root"] || [];
+		const user_shapes   = (this.state.last_uuid) ? getMove(this.props.client, this.state.last_uuid)?.arrow?.data ?? [] : [];
 		const queue_item    = (this.props.mode === "lesson" && this.original_queue) ? this.original_queue[this.state.queue_index] : null;
 		const board_classes = [""];
 		const outer_classes = ["chess-outer flex gap-x-8"];
@@ -208,9 +210,11 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 							orientation={(this.props.demo || (this.props.authenticated && this.props.repertoire?.userOwned)) ? this.props.repertoire?.side : undefined}
 							repertoire_id={this.props.repertoire?.id}
 							onMove={this.reducer}
-							children={children}
+							auto_shapes={auto_shapes}
+							user_shapes={user_shapes}
 							queue_item={(this.state.awaiting_user) ? queue_item : null}
 							quizzing={this.state.quizzing}
+							onDraw={this.onDraw}
 						/>
 						{this.renderMasterMoveList()}
 					</div>
@@ -798,6 +802,14 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 	historyContainsUUID(uuid: string) {
 		return (this.state.history.filter(x => x.id === uuid).length > 0);
+	}
+
+	onDraw(data: string[]): void {
+		if (this.props.mode !== "repertoire" || !this.state.last_uuid) {
+			return;
+		}
+
+		this.props.onDraw?.(this.state.last_uuid, data);
 	}
 }
 

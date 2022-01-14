@@ -14,6 +14,11 @@ export interface RepertoireReviewModel {
 	averageTime: number
 }
 
+export interface RepertoireMoveArrowDatumModel {
+	id: number
+	data: string[]
+}
+
 export interface RepertoireMoveModel {
 	id: string,
 	fen: string,
@@ -21,6 +26,7 @@ export interface RepertoireMoveModel {
 	moveNumber: number,
 	move: string,
 	sort: number,
+	arrow?: RepertoireMoveArrowDatumModel,
 	parentId?: string | null,
 	transpositionId?: string | null,
 }
@@ -71,6 +77,13 @@ export interface RepertoireMoveDeletionMutationData {
 export interface RepertoireMoveNoteMutationData {
 	createRepertoireMoveNote : {
 		note: RepertoireMoveNoteModel | null
+		errors: Array<string>
+	}
+}
+
+export interface RepertoireMoveArrowDatumMutationData {
+	createRepertoireMoveArrowDatum : {
+		move: RepertoireMoveModel | null
 		errors: Array<string>
 	}
 }

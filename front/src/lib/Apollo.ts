@@ -14,7 +14,7 @@ const http_link      = createHttpLink({ uri: URL_SCHEMA + "://" + process.env.RE
 const shouldUseCable = () => {
 	return true;
 };
-const error_link = onError(({ graphQLErrors, networkError }) => {
+const error_link = onError(({ graphQLErrors }) => {
 	if (graphQLErrors) {
 		if (hasPremiumLockoutError(graphQLErrors)) {
 			return;

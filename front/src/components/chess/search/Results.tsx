@@ -59,10 +59,10 @@ function Results(props: ResultsProps) {
 					emptyText : t("common:na")
 				}}
 				rowKey={(record) => "result-item-" + record.slug}
-				onRow={(record, index) => {
+				onRow={(record) => {
 					return {
 						className : ([props.record?.id, props.record?.slug].includes(record.slug)) ? "active-border relative" : "",
-						onClick   : e => {
+						onClick   : () => {
 							props.onResultClick(record.slug);
 
 							if (!props.demo) {

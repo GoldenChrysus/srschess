@@ -28,16 +28,16 @@ function GameList(props: GameListProps) {
 					emptyText : t("na")
 				}}
 				rowKey={(record) => "game-list-item-" + record.id}
-				onRow={(record, index) => {
+				onRow={(record) => {
 					return {
-						onClick : e => {
+						onClick : () => {
 							history.push("/game-database/collection/" + props.collection_slug + "/game/" + record.id);
 						}
 					}
 				}}
 			>
 				<Table.Column
-					render={(text, record: any) => {
+					render={(_text, record: any) => {
 						return <Game game={record} active={props.game?.id === record.id}/>
 					}}
 				/>

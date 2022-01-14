@@ -23,6 +23,10 @@ export const REPERTOIRE_MOVE_FRAG = gql`
 		sort
 		parentId
 		transpositionId
+		arrow {
+			id
+			data
+		}
 	}
 `;
 
@@ -346,6 +350,21 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 				id
 				repertoireMoveId
 				value
+			}
+			errors
+		}
+	}
+`;
+
+export const CREATE_REPERTOIRE_MOVE_ARROW_DATUM = gql`
+	${REPERTOIRE_MOVE_FRAG}
+	mutation CreateRepertoireMoveArrowDatum($moveId: ID!, $data: [String!]) {
+		createRepertoireMoveArrowDatum(input: {
+			moveId: $moveId,
+			data: $data,
+		}) {
+			move {
+				...CoreMoveFields
 			}
 			errors
 		}

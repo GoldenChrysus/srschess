@@ -36,6 +36,9 @@ module Types
 		# /create_repertoire_move_note
 		field :create_repertoire_move_note, mutation: Types::Mutations::CreateRepertoireMoveNote
 
+		# /create_repertoire_move_arrow_datum
+		field :create_repertoire_move_arrow_datum, mutation: Types::Mutations::CreateRepertoireMoveArrowDatum
+
 		# /create_review
 		field :create_review, mutation: Types::Mutations::CreateReview
 

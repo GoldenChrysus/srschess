@@ -19,6 +19,7 @@ module Types
 			field :transposition, Types::Models::RepertoireMoveType, null: true
 			field :transpositions, [Types::Models::RepertoireMoveType], null: true
 			field :note, Types::Models::RepertoireMoveNoteType, null: true
+			field :arrow, Types::Models::RepertoireMoveArrowDatumType, null: true
 		end
 	end
 end

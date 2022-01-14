@@ -28,7 +28,6 @@ function OpeningsDemo() {
 					fen={opening.fen}
 					pgn={opening.pgn}
 					onMove={() => ""}
-					children={[]}
 					queue_item={undefined}
 					quizzing={false}
 				/>

@@ -4,7 +4,7 @@ import { useQuery, useMutation, ApolloConsumer } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
 
-import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_REPERTOIRE_MOVE, TRANSPOSE_REPERTOIRE_MOVE, CREATE_REVIEW } from "../api/queries";
+import { GET_REPERTOIRE, GET_REPERTOIRE_QUEUES, CREATE_REPERTOIRE_MOVE, TRANSPOSE_REPERTOIRE_MOVE, CREATE_REVIEW, CREATE_REPERTOIRE_MOVE_ARROW_DATUM } from "../api/queries";
 import ChessController from "../controllers/ChessController";
 import { ChessControllerProps } from "../lib/types/ChessControllerTypes";
 import { RepertoireMoveModel, RepertoireQueryData, RepertoireReviewModel } from "../lib/types/models/Repertoire";
@@ -55,6 +55,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	}
 
 	const [ createMove, create_move_res ] = useMutation(CREATE_REPERTOIRE_MOVE);
+	const [ createArrow ] = useMutation(CREATE_REPERTOIRE_MOVE_ARROW_DATUM);
 	const [ transposeMove ] = useMutation(TRANSPOSE_REPERTOIRE_MOVE);
 	const [ createReview ] = useMutation(CREATE_REVIEW, {
 		refetchQueries : [ main_query ]
@@ -133,6 +134,15 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 		setMoveSearching(new_state);
 	}
 
+	const draw = function(move_id: RepertoireMoveModel["id"], data: string[]) {
+		createArrow({
+			variables : {
+				moveId : move_id,
+				data   : data
+			}
+		});
+	}
+
 	const meta    = createRepertoireRouteMeta(t, props.mode, data?.repertoire);
 	const premium = hasPremiumLockoutError(create_move_res.error)
 		? <PremiumWarning type="modal" message={t("premium:created_position_limit")}/>
@@ -163,6 +173,7 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 						onReview={doReview}
 						arrows={arrows}
 						onMoveSearchChange={onMoveSearchChange}
+						onDraw={draw}
 					/>
 				}
 			</ApolloConsumer>

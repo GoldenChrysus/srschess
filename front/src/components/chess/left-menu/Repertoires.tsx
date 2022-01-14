@@ -8,7 +8,6 @@ import { CREATE_REPERTOIRE, GET_REPERTOIRES } from "../../../api/queries";
 import "../../../styles/components/chess/left-menu/repertoires.css";
 
 import AddRepertoire from "../../modals/AddRepertoire";
-import { TFunction } from "i18next";
 import { RepertoiresQueryData } from "../../../lib/types/models/Repertoire";
 import Repertoire from "./Repertoires/Repertoire";
 import { RootState } from "../../../redux/store";
@@ -49,10 +48,10 @@ function Repertoires(props: RepertoiresProps) {
 								<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
 							</Menu.Item>
 							<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
-								{renderRepertoires(data, "white", t)}
+								{renderRepertoires(data, "white")}
 							</Menu.SubMenu>
 							<Menu.SubMenu title={t("black_repertoires")} key="black-repertoires">
-								{renderRepertoires(data, "black", t)}
+								{renderRepertoires(data, "black")}
 							</Menu.SubMenu>
 						</Menu>
 					)
@@ -63,7 +62,7 @@ function Repertoires(props: RepertoiresProps) {
 	);
 }
 
-function renderRepertoires(data: RepertoiresQueryData | undefined, color: string, t: TFunction) {
+function renderRepertoires(data: RepertoiresQueryData | undefined, color: string) {
 	if (!data) {
 		return null;
 	}

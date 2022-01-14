@@ -39,7 +39,7 @@ i18n
 		ns            : ["common", "premium", "repertoires", "errors"],
 		interpolation : {
 			escapeValue : false,
-			format      : function(value, format, lng) {
+			format      : function(value, format) {
 				if (format === "lowercase") {
 					value = (value ?? "").toLowerCase();
 				}

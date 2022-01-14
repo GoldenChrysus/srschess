@@ -33,7 +33,7 @@ class Header extends React.Component {
 									<Link
 										to="/login/"
 										component={
-											React.forwardRef((props: any, ref: any) => {
+											React.forwardRef((props: any) => {
 												return (
 													<Button type="default" shape="round" size="large" onClick={props.navigate}>{t("premium:register_now")}</Button>
 												)

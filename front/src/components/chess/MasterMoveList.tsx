@@ -44,9 +44,9 @@ function MasterMoveList(props: MasterMoveListProps) {
 				locale={{
 					emptyText : t("common:na")
 				}}
-				onRow={(record, index) => {
+				onRow={(record) => {
 					return {
-						onClick : e => props.onMoveClick(undefined, record.move)
+						onClick : () => props.onMoveClick(undefined, record.move)
 					}
 				}}
 			>

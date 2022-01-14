@@ -44,7 +44,7 @@ function Plan(props: PlanProps) {
 	) {
 		action = <Manage plan={props.plan} current_tier={props.tier}/>;
 	} else if (plan.available) {
-		const ButtonLink = React.forwardRef((props: any, ref: any) => {
+		const ButtonLink = React.forwardRef((props: any) => {
 			return (
 				<Button key="action" type="default" onClick={props.navigate}>{t("register_now")}</Button>
 			)

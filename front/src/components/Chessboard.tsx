@@ -10,7 +10,7 @@ import "react-chessground/dist/styles/chessground.css";
 import "../styles/components/chessboard.css";
 import { Modal } from "antd";
 import { Destinations, Drawable, DrawShape } from "../lib/types/models/Chessboard";
-import { RepertoireQueueItemModel } from "../lib/types/models/Repertoire";
+import { RepertoireMoveArrowDatumModel, RepertoireQueueItemModel } from "../lib/types/models/Repertoire";
 import { ShortMove, Square } from "chess.js";
 
 interface ChessboardProps {
@@ -20,9 +20,11 @@ interface ChessboardProps {
 	fen?: string,
 	pgn?: string,
 	onMove: (action: ReducerArgument) => void,
-	children: string[]
+	auto_shapes?: string[]
+	user_shapes?: RepertoireMoveArrowDatumModel["data"]
 	queue_item?: RepertoireQueueItemModel | null
 	quizzing: boolean
+	onDraw?: (shapes: string[]) => void
 }
 
 interface Move {
@@ -86,15 +88,15 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 			next_props.queue_item?.id !== this.props.queue_item?.id ||
 			next_props.mode !== this.props.mode ||
 			next_state.promoting !== this.state.promoting ||
-			JSON.stringify(next_props.children) !== JSON.stringify(this.props.children)
+			JSON.stringify(next_props.auto_shapes) !== JSON.stringify(this.props.auto_shapes)
 		);
 	}
 
 	render(): JSX.Element {
 		const drawable: Drawable = {
+			shapes     : [],
 			autoShapes : [],
-			onChange   : this.onDraw,
-			brushes: {
+			brushes    : {
 				green     : { key: "g", color: "#15781B", opacity: 1, lineWidth: 10 },
 				red       : { key: "r", color: "#882020", opacity: 1, lineWidth: 10 },
 				blue      : { key: "b", color: "#003088", opacity: 1, lineWidth: 10 },
@@ -111,12 +113,23 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 
 		switch (this.props.mode) {
 			case "repertoire":
-				for (const uci of this.props.children) {
+				for (const uci of this.props.auto_shapes ?? []) {
 					drawable.autoShapes.push({
 						brush   : "nextMove",
 						orig    : uci.slice(0, 2),
 						mouseSq : uci.slice(2, 4),
 						dest    : uci.slice(2, 4),
+					});
+				}
+
+				for (const data of this.props.user_shapes ?? []) {
+					const parts = data.split(":");
+
+					drawable.shapes.push({
+						brush   : parts[2],
+						orig    : parts[0],
+						mouseSq : parts[1],
+						dest    : parts[1]
 					});
 				}
 
@@ -174,6 +187,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 					last_move={this.lastMove()}
 					onMove={this.onMove}
 					drawable={drawable}
+					onDraw={this.onDraw}
 				/>
 				{
 					this.props.mode !== "static" && 
@@ -319,8 +333,10 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 		const data: string[] = [];
 
 		for (const shape of shapes) {
-			data.push(shape.orig + ":" + shape.dest + ":" + shape.brush);
+			data.push((shape.orig ?? "") + ":" + (shape.dest ?? "") + ":" + shape.brush);
 		}
+
+		this.props.onDraw?.(data);
 	}
 
 	renderCaptures(section: string): JSX.Element[] {

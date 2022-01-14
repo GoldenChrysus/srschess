@@ -40,6 +40,7 @@ export interface ChessControllerProps {
 	onReview?           : Function,
 	onMoveSearchChange? : Function,
 	arrows?             : ForcedArrows
+	onDraw?             : (move_id: RepertoireMoveModel["id"], data: string[]) => void
 }
 
 export interface ChessControllerState {

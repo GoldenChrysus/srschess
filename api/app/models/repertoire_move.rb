@@ -15,6 +15,7 @@ class RepertoireMove < ApplicationRecord
 	has_many :transpositions, class_name: "RepertoireMove", inverse_of: "transposition", foreign_key: :transposition_id
 	has_one :learned_item, required: false, dependent: :destroy
 	has_one :note, class_name: "RepertoireMoveNote", inverse_of: "move", required: false, dependent: :destroy
+	has_one :arrow, class_name: "RepertoireMoveArrowDatum", inverse_of: "move", required: false, dependent: :destroy
 
 	# Callbacks
 	before_validation :set_sort, on: :create

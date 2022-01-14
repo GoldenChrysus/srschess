@@ -17,7 +17,7 @@
 		"antd": "^4.17.0-alpha.0",
 		"axios": "^0.21.4",
 		"chess.js": "github:GoldenChrysus/chess.js",
-		"chessground": "^8.1.7",
+		"chessground": "github:GoldenChrysus/chessground",
 		"eslint": "^7.32.0",
 		"firebase": "^9.1.0",
 		"graphql": "^15.5.3",
@@ -26,7 +26,7 @@
 		"i18next-chained-backend": "^3.0.2",
 		"i18next-resources-to-backend": "^1.0.0",
 		"react": "^17.0.2",
-		"react-chessground": "^1.5.0",
+		"react-chessground": "github:GoldenChrysus/react-chessground",
 		"react-dom": "^17.0.2",
 		"react-helmet": "^6.1.0",
 		"react-i18next": "^11.12.0",
@@ -61,7 +61,6 @@
 	},
 	"eslintConfig": {
 		"extends": [
-			"react-app",
 			"plugin:@typescript-eslint/eslint-recommended",
 			"plugin:@typescript-eslint/recommended"
 		],
