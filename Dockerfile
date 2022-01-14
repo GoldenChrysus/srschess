@@ -4,8 +4,6 @@ RUN mkdir /front
 WORKDIR /front
 COPY ./front /front
 RUN npm i
-WORKDIR /front/node_modules/react-chessground
-RUN npm i
 WORKDIR /front
 RUN npm run build
 
