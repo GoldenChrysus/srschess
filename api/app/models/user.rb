@@ -15,6 +15,7 @@ class User < ApplicationRecord
 
 	# Callbacks
 	after_validation :normalize_email, on: :create
+	after_create :send_welcome
 
 	def tier
 		params = {
@@ -125,5 +126,12 @@ class User < ApplicationRecord
 	private
 		def normalize_email
 			self.email.to_s.downcase!
+		end
+
+		def send_welcome
+			begin
+				UserMailer.welcome(self).deliver
+			rescue
+			end
 		end
 end
