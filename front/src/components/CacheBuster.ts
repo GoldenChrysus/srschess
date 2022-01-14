@@ -25,17 +25,20 @@ const semverGreaterThan = (versionA: string, versionB: string) => {
 
 class CacheBuster extends React.Component {
 	refreshCacheAndReload() {
+		const promises: Promise<boolean>[] = [];
+
 		if (caches) {
+			console.log("busting");
 			// Service worker cache should be cleared with caches.delete()
 			caches.keys().then(function(names) {
 				for (const name of names) {
-					caches.delete(name);
+					promises.push(caches.delete(name));
 				}
 			});
 		}
 
 		// delete browser cache and hard reload
-		window.location.reload();
+		Promise.all(promises).then(() => window.location.reload());
 	}
 
 	componentDidMount() {

@@ -4,7 +4,6 @@ RUN mkdir /front
 WORKDIR /front
 COPY ./front /front
 RUN npm i
-WORKDIR /front
 RUN npm run build
 
 ### STAGE 2: launch
