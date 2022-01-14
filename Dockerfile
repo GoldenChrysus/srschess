@@ -1,9 +1,12 @@
 ### STAGE 1: Build React app
-FROM node:14.18.1 AS build-front
+FROM node:14.18.0 AS build-front
 RUN mkdir /front
 WORKDIR /front
 COPY ./front /front
 RUN npm i
+WORKDIR /front/node_modules/react-chessground
+RUN npm i
+WORKDIR /front
 RUN npm run build
 
 ### STAGE 2: launch
