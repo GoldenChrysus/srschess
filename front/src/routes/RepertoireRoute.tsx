@@ -73,7 +73,13 @@ function RepertoireRoute(props: RepertoireRouteProps) {
 	const [ move_searching, setMoveSearching ] = useState<boolean>(false);
 
 	if (require_auth && !props.authenticated) {
-		return <Redirect to={{ pathname : "/login/", state : { redirect : props.location?.pathname }}}/>;
+		let path = props.location?.pathname;
+
+		if (path?.[0] === "/") {
+			path = path.slice(1);
+		}
+
+		return <Redirect to={{ pathname : "/login/", state : { redirect : path }}}/>;
 	}
 
 	props.setRepertoire(data?.repertoire);
