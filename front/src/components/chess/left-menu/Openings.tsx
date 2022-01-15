@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/client";
 import { Table } from "antd";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
 import { GET_ECOS } from "../../../api/queries";
 import { ChessControllerState } from "../../../lib/types/ChessControllerTypes";
 import { EcoPositionModel, EcoPositionsQueryData } from "../../../lib/types/models/EcoPosition";
@@ -13,7 +12,6 @@ interface OpeningsProps {
 }
 
 function Openings(props: OpeningsProps) {
-	const history           = useHistory();
 	const openings_ref      = React.useRef<EcoPositionModel[]>([]);
 	const count_ref         = React.useRef(0);
 	const { t }             = useTranslation(["common", "openings"]);
@@ -49,7 +47,7 @@ function Openings(props: OpeningsProps) {
 				onRow={(record) => {
 					return {
 						onClick : () => {
-							history.push("/eco-database/" + record.slug);
+							window.open("/eco-database/" + record.slug, "_blank");
 						}
 					}
 				}}
