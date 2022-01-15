@@ -52,6 +52,18 @@ const GAME_FRAG = gql`
 	}
 `;
 
+const USER_SETTING_FRAG = gql`
+	fragment CoreUserSettingFields on UserSetting {
+		id
+		key
+		value
+	}
+`;
+
+/**
+ * USER
+ */
+
 export const CREATE_USER = gql`
 	mutation CreateUser($email: String!, $uid: String!, $type: String!) {
 		createUser(input: {
@@ -89,6 +101,34 @@ export const GET_COMMUNICATION_ENROLLMENTS = gql`
 		}
 	}
 `;
+
+export const GET_USER_SETTINGS = gql`
+	${USER_SETTING_FRAG}
+	query UserSettings($category: String!) {
+		userSettings(category: $category) {
+			...CoreUserSettingFields
+		}
+	}
+`;
+
+export const EDIT_USER_SETTING = gql`
+	${USER_SETTING_FRAG}
+	mutation EditUserSetting($id: ID!, $value: String) {
+		editUserSetting(input: {
+			id: $id,
+			value: $value
+		}) {
+			userSetting {
+				...CoreUserSettingFields
+			}
+			errors
+		}
+	}
+`;
+
+/**
+ * REPERTOIRES
+ */
 
 export const CREATE_REPERTOIRE = gql`
 	mutation CreateRepertoire($name: String!, $side: String!, $public: Boolean!) {

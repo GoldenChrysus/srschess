@@ -10,6 +10,9 @@ module Types
 		# /user
 		field :user, resolver: Types::Queries::User
 
+		# /user_settings
+		field :user_settings, resolver: Types::Queries::UserSettings
+
 		# /communication_enrollments
 		field :communication_enrollments, resolver: Types::Queries::CommunicationEnrollments
 

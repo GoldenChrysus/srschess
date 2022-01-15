@@ -10,12 +10,13 @@ class User < ApplicationRecord
 	has_many :repertoires, dependent: :destroy
 	has_many :collections, dependent: :destroy
 	has_many :communication_enrollments, dependent: :destroy
+	has_many :settings, class_name: "UserSetting", dependent: :destroy
 	has_one :customer, dependent: :destroy
 	has_many :subscriptions, through: :customer
 
 	# Callbacks
 	after_validation :normalize_email, on: :create
-	after_create :send_welcome
+	after_create :onboarding
 
 	def tier
 		params = {
@@ -128,7 +129,29 @@ class User < ApplicationRecord
 			self.email.to_s.downcase!
 		end
 
-		def send_welcome
+		def onboarding
+			categories = {
+				notifications: {
+					account_changes: "1",
+					training_reminders: "1",
+					feature_releases: "1",
+					chess_news: "1"
+				}
+			}
+
+			categories.each do |key, settings|
+				category = SettingCategory.where(key: key).first
+
+				settings.each do |key, value|
+					UserSetting.create(
+						user: self,
+						setting_category: category,
+						key: key,
+						value: value
+					)
+				end
+			end
+
 			begin
 				UserMailer.welcome(self).deliver
 			rescue

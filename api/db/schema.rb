@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_14_142722) do
+ActiveRecord::Schema.define(version: 2022_01_15_041940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -193,6 +193,13 @@ ActiveRecord::Schema.define(version: 2022_01_14_142722) do
     t.index ["learned_item_id"], name: "index_reviews_on_learned_item_id"
   end
 
+  create_table "setting_categories", force: :cascade do |t|
+    t.integer "key", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["key"], name: "index_setting_categories_on_key", unique: true
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.string "stripe_id", null: false
     t.bigint "customer_id", null: false
@@ -204,6 +211,18 @@ ActiveRecord::Schema.define(version: 2022_01_14_142722) do
     t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
     t.index ["price_id"], name: "index_subscriptions_on_price_id"
     t.index ["stripe_id"], name: "index_subscriptions_on_stripe_id", unique: true
+  end
+
+  create_table "user_settings", force: :cascade do |t|
+    t.bigint "setting_category_id", null: false
+    t.bigint "user_id", null: false
+    t.string "key", null: false
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["setting_category_id"], name: "index_user_settings_on_setting_category_id"
+    t.index ["user_id", "key"], name: "index_user_settings_on_user_id_and_key", unique: true
+    t.index ["user_id"], name: "index_user_settings_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -231,4 +250,6 @@ ActiveRecord::Schema.define(version: 2022_01_14_142722) do
   add_foreign_key "reviews", "learned_items"
   add_foreign_key "subscriptions", "customers"
   add_foreign_key "subscriptions", "prices"
+  add_foreign_key "user_settings", "setting_categories"
+  add_foreign_key "user_settings", "users"
 end

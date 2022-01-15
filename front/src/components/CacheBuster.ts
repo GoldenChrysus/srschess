@@ -28,7 +28,6 @@ class CacheBuster extends React.Component {
 		const promises: Promise<boolean>[] = [];
 
 		if (caches) {
-			console.log("busting");
 			// Service worker cache should be cleared with caches.delete()
 			caches.keys().then(function(names) {
 				for (const name of names) {

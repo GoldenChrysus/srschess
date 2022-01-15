@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import "../styles/components/dashboard.css";
 import UserInfo from "./dashboard/UserInfo";
 import Logout from "./dashboard/Logout";
+import Notifications from "./dashboard/Notifications";
 
 interface DashboardProps {
 	active_section: string
@@ -15,6 +16,10 @@ const MENU = [
 	{
 		slug     : "user-info",
 		i18n_key : "user_info"
+	},
+	{
+		slug     : "notifications",
+		i18n_key : "notifications"
 	},
 	{
 		slug     : "logout",
@@ -52,6 +57,9 @@ function renderComponent(section: string) {
 	switch (section) {
 		case "user-info":
 			return <UserInfo/>;
+
+		case "notifications":
+			return <Notifications/>;
 
 		case "logout":
 			return <Logout/>;
