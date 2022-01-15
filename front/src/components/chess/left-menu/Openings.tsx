@@ -31,8 +31,6 @@ function Openings(props: OpeningsProps) {
 		count_ref.current    = data?.ecoPositions?.[0].length ?? 0;
 	}
 
-	console.log(props.movelist);
-
 	return (
 		<div className="w-full">
 			<Table
