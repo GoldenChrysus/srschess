@@ -25,6 +25,8 @@ const semverGreaterThan = (versionA: string, versionB: string) => {
 
 class CacheBuster extends React.Component {
 	refreshCacheAndReload() {
+		return;
+
 		const promises: Promise<boolean>[] = [];
 
 		if (caches) {
