@@ -31,9 +31,13 @@ module Types
 						db_move = ::RepertoireMove.where(id: move["id"]).first
 
 						if (db_move == nil)
+							authorize nil, :create_repertoire_moves?, policy_class: PremiumPolicy
+
 							db_move = ::RepertoireMove.new
 						elsif (db_move != nil and replace == false)
 							next
+						else
+							authorize db_move, :update?
 						end
 
 						db_move.repertoire    = repertoire
