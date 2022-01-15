@@ -11,21 +11,37 @@ module Types
 			argument :limit, Int, required: true
 			argument :page, Int, required: true
 			argument :filter, String, required: false
+			argument :movelist, String, required: false
 
 			# /eco_positions
 			type [Volume], null: false
 			
-			def resolve(letter:, limit:, page:, filter:)
+			def resolve(letter:, limit:, page:, filter:, movelist:)
 				letters = (letter == "all") ? ["A", "B", "C", "D", "E"] : [letter]
 				volumes = []
 
 				letters.each do |letter|
-					params = {
-						letter: letter
-					}
-					where = [
-						"code LIKE CONCAT(:letter, '%')"
-					]
+					params = {}
+					where  = []
+					joiner = if (letter == "*") then "OR" else "AND" end
+
+					if (letter != "*")
+						params[:letter] = letter
+
+						where.push("code LIKE CONCAT(:letter, '%')")
+					end
+
+					if (movelist != "" and movelist != nil)
+						moves = []
+
+						for move in movelist.split(".")
+							moves.push(SanitizeSan.call(san: move.to_s).result)
+						end
+
+						params[:movelist] = moves.join(".")
+
+						where.push("movelist ~ CONCAT(:movelist, '.*')::LQUERY")
+					end
 
 					if (filter != "" and filter != nil)
 						filter.downcase!
@@ -41,7 +57,11 @@ module Types
 						)
 					end
 
-					where     = where.join(" AND ")
+					if (where.length == 0)
+						where.push("1 = 1")
+					end
+
+					where     = where.join(" #{joiner} ")
 					positions = ::EcoPosition.where(where, params).order("code ASC, name ASC").all
 
 					volumes.push(

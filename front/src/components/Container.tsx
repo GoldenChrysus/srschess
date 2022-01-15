@@ -4,13 +4,14 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import MainLayout from "./MainLayout";
 import RepertoireRoute from "../routes/RepertoireRoute";
 import GameDatabaseRoute from "../routes/GameDatabaseRoute";
-import OpeningExplorerRoute from "../routes/OpeningExplorerRoute";
+import ECODatabaseRoute from "../routes/ECODatabaseRoute";
 
 import { ROUTES } from "../helpers";
 import Home from "./Home";
 import DashboardRoute from "../routes/DashboardRoute";
 import LoginRoute from "../routes/LoginRoute";
 import UpgradeRoute from "../routes/UpgradeRoute";
+import OpeningExplorerRoute from "../routes/OpeningExplorerRoute";
 
 class Container extends React.Component {
 	render(): JSX.Element {
@@ -28,6 +29,10 @@ class Container extends React.Component {
 
 						<Route exact path={ROUTES.openings_explorer}>
 							<OpeningExplorerRoute/>
+						</Route>
+
+						<Route exact path={ROUTES.eco_database}>
+							<ECODatabaseRoute/>
 						</Route>
 
 						<Route exact path={ROUTES.game_database}>

@@ -20,10 +20,11 @@ function Search(props: SearchProps & PropsFromRedux) {
 	const { t } = useTranslation(["search", "chess", "common"]);
 	const { data } = useQuery<EcoPositionsQueryData>(GET_ECOS, {
 		variables : {
-			letter : "all",
-			limit  : 999999,
-			page   : 1,
-			filter : null
+			letter   : "all",
+			limit    : 999999,
+			page     : 1,
+			filter   : null,
+			movelist : null
 		}
 	});
 	const prev_movelist = useRef<string>();

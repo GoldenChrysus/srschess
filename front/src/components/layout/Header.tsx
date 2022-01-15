@@ -68,6 +68,9 @@ class Header extends React.Component<PropsFromRedux, HeaderState> {
 									<NavLink to={{ pathname: "/openings-explorer/"}}>
 										{t("openings:openings_explorer")}
 									</NavLink>
+									<NavLink to={{ pathname: "/eco-database/"}}>
+										{t("openings:eco_database")}
+									</NavLink>
 									<NavLink to={{ pathname: "/game-database/"}}>
 										{t("database:game_database")}
 									</NavLink>
@@ -124,6 +127,11 @@ class Header extends React.Component<PropsFromRedux, HeaderState> {
 									<Menu.Item key="menu-item-openings">
 										<NavLink to={{ pathname: "/openings-explorer/"}}>
 											{t("openings:openings_explorer")}
+										</NavLink>
+									</Menu.Item>
+									<Menu.Item key="menu-item-openings">
+										<NavLink to={{ pathname: "/eco-database/"}}>
+											{t("openings:eco_database")}
 										</NavLink>
 									</Menu.Item>
 									<Menu.Item key="menu-item-database">

@@ -1,4 +1,5 @@
 {
+	"eco_database": "ECO Database",
 	"filter": "Filter by ECO, name, or FEN",
 	"meta_description": "Browse over 3,300 known openings at Chess HQ. Search by name, ECO, or FEN; view related master games; and easily import openings into your Chess HQ repertoires.",
 	"opening": "Opening",

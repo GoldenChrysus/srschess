@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from "react";
 import { Input } from "antd";
 import { useTranslation } from "react-i18next";
 import { EcoPositionsQueryData } from "../lib/types/models/EcoPosition";
-import OpeningVolume from "./opening-explorer/OpeningVolume";
+import OpeningVolume from "./eco-database/OpeningVolume";
 
 const BLANK_VOLUMES: EcoPositionsQueryData = {
 	ecoPositions : []
@@ -17,7 +17,7 @@ for (const letter of ["A", "B", "C", "D", "E"]) {
 	})
 }
 
-function OpeningExplorer(): JSX.Element {
+function ECODatabase(): JSX.Element {
 	const [ filter, setFilter ] = useState<string | null>(null);
 	const { t }                 = useTranslation(["common", "openings"]);
 	const timeout_ref           = React.useRef<NodeJS.Timeout | undefined>(undefined);
@@ -44,4 +44,4 @@ function OpeningExplorer(): JSX.Element {
 	);
 }
 
-export default OpeningExplorer;
+export default ECODatabase;

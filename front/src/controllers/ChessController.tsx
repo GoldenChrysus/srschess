@@ -223,6 +223,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 						key="chess-left-menu-component"
 						active_uuid={this.state.last_uuid}
 						movelist={this.state.moves.join(".")}
+						fen={this.state.fen}
 						mode={this.props.mode}
 						repertoire={this.props.repertoire}
 						collection={this.props.collection}
@@ -496,8 +497,31 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 			case "database":
 			case "opening":
+			case "explorer":
 				if (source === "master-movelist") {
-					return;
+					if (this.props.mode !== "explorer") {
+						return;
+					} else {
+						if (!san) {
+							return;
+						}
+	
+						const res = this.chess.move(san);
+	
+						if (!res) {
+							this.chess.undo();
+							return false;
+						}
+	
+						return this.reducer({
+							type  : "move-explorer",
+							data  : {
+								fen   : this.chess.fen(),
+								pgn   : this.chess.pgn(),
+								moves : this.chess.history()
+							}
+						});
+					}
 				}
 
 				if (!uuid) {
@@ -592,7 +616,8 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 			case "move-search":
 			case "click-search":
-				if (action.type === "move-search") {
+			case "move-explorer":
+				if (action.type === "move-search" || action.type === "move-explorer") {
 					this.chess.move(last_move);
 
 					this.fen_history.push({

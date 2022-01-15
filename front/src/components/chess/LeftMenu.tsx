@@ -17,6 +17,7 @@ import GameList from "./left-menu/GameCollections/GameList";
 import Results from "./search/Results";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
+import Openings from "./left-menu/Openings";
 
 interface LeftMenuProps extends PropsFromRedux {
 	repertoire?         : RepertoireModel | null
@@ -24,6 +25,7 @@ interface LeftMenuProps extends PropsFromRedux {
 	game?               : ChessControllerProps["game"],
 	active_uuid         : ChessControllerState["last_uuid"],
 	mode                : ChessControllerProps["mode"],
+	fen                 : ChessControllerState["fen"],
 	movelist            : string,
 	onMoveClick?        : Function
 	onMoveSearchChange? : Function
@@ -37,6 +39,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 			prev_props.movelist !== this.props.movelist ||
 			prev_props.authenticated !== this.props.authenticated ||
 			prev_props.game?.id !== this.props.game?.id ||
+			prev_props.fen !== this.props.fen ||
 			JSON.stringify(prev_props.repertoire) !== JSON.stringify(this.props.repertoire) ||
 			JSON.stringify(prev_props.collection) !== JSON.stringify(this.props.collection)
 		);
@@ -48,6 +51,7 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 		const is_repertoire  = (["repertoire", "review", "lesson"].includes(this.props.mode) || (this.props.mode === "search" && route === "repertoires"));
 		const is_database    = (this.props.mode === "database" || (this.props.mode === "search" && route === "game-database"));
 		const is_opening     = (this.props.mode === "opening");
+		const is_explorer    = (this.props.mode === "explorer");
 
 		if (is_repertoire) {
 			default_active.push("personal-repertoires-panel");
@@ -65,6 +69,10 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 		if (is_opening) {
 			default_active.push("related-master-games-panel");
+		}
+
+		if (is_explorer) {
+			default_active.push("related-openings-panel");
 		}
 
 		return (
@@ -111,6 +119,13 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 											}}
 											onResultClick={() => ""}
 										/>
+									</Collapse.Panel>
+								}
+
+								{
+									is_explorer &&
+									<Collapse.Panel id="related-openings-panel" header={t("openings:openings_explorer")} key="related-openings-panel">
+										<Openings fen={this.props.fen} movelist={this.props.movelist}/>
 									</Collapse.Panel>
 								}
 							</Collapse>

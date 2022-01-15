@@ -22,10 +22,11 @@ function OpeningPaginator(props: OpeningPaginatorProps): JSX.Element {
 	const length_ref            = React.useRef(0);
 	const { data, loading }     = useQuery<EcoPositionsQueryData>(GET_ECOS, {
 		variables : {
-			letter : props.volume.letter,
-			page   : page,
-			limit  : PAGE_SIZE,
-			filter : props.filter
+			letter   : props.volume.letter,
+			page     : page,
+			limit    : PAGE_SIZE,
+			filter   : props.filter,
+			movelist : null
 		}
 	});
 
@@ -34,7 +35,7 @@ function OpeningPaginator(props: OpeningPaginatorProps): JSX.Element {
 	} else {
 		for (const opening of data?.ecoPositions[0].openings ?? []) {
 			boards.push(
-				<Link key={"opening-link-" + opening.id} type="div" className="board-100w" to={"/openings-explorer/" + opening.slug}>
+				<Link key={"opening-link-" + opening.id} type="div" className="board-100w" to={"/eco-database/" + opening.slug}>
 					<h1 style={{ height : "44px", maxHeight : "44px", WebkitLineClamp : 2, WebkitBoxOrient : "vertical", display: "-webkit-box" }} className="overflow-ellipsis overflow-hidden">
 						{opening.code}: {opening.name}
 					</h1>

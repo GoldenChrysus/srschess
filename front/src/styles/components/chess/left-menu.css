@@ -7,6 +7,10 @@
 	overflow-y: auto;
 }
 
+#chess-left-menu #related-openings-panel .ant-collapse-content {
+	max-height: 80vh;
+}
+
 #chess-left-menu #tree-panel .ant-collapse-content {
 	max-height: 800px;
 }

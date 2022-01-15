@@ -69,16 +69,27 @@ export function createRepertoireRouteMeta(t: TFunction<("repertoires" | "premium
 	return meta;
 }
 
-export function createOpeningExplorerRouteMeta(t: TFunction<"openings">, opening?: EcoPositionQueryData["ecoPosition"]) {
+export function createOpeningExplorerRouteMeta(t: TFunction<"openings">) {
+	const meta = getMetaObject();
+
+	meta.title      += t("openings_explorer");
+	meta.og_title    = createOGMetaTitle(meta.title);
+	meta.url         = generateCanonicalURL(ROUTES.openings_explorer);
+	meta.description = t("meta_description");
+
+	return meta;
+}
+
+export function createECODatabaseRouteMeta(t: TFunction<"openings">, opening?: EcoPositionQueryData["ecoPosition"]) {
 	const meta = getMetaObject();
 
 	if (opening) {
 		meta.title = t("opening") + ": " + opening.name + " - ";
 	}
 
-	meta.title      += t("openings_explorer");
+	meta.title      += t("eco_database");
 	meta.og_title    = createOGMetaTitle(meta.title);
-	meta.url         = generateCanonicalURL(ROUTES.openings_explorer.replace(/:slug\??/, opening?.slug ?? ""));
+	meta.url         = generateCanonicalURL(ROUTES.eco_database.replace(/:slug\??/, opening?.slug ?? ""));
 	meta.description = t("meta_description");
 
 	return meta;

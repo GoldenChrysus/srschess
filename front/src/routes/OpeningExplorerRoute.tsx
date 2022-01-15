@@ -1,33 +1,14 @@
 import React from "react";
-import { Helmet } from "react-helmet";
-import { ApolloConsumer, useQuery } from "@apollo/client";
-import { GET_ECO } from "../api/queries";
-import { EcoPositionQueryData } from "../lib/types/models/EcoPosition";
-import OpeningExplorer from "../components/OpeningExplorer";
+import { ApolloConsumer } from "@apollo/client";
 import { useTranslation } from "react-i18next";
-import { createOpeningExplorerRouteMeta } from "../helpers";
-import { useParams } from "react-router-dom";
-import ChessController from "../controllers/ChessController";
+import { Helmet } from "react-helmet";
 
-interface OpeningExplorerRouteParams {
-	slug?: string
-}
+import ChessController from "../controllers/ChessController";
+import { createOpeningExplorerRouteMeta } from "../helpers";
 
 function OpeningExplorerRoute() {
-	const { slug }               = useParams<OpeningExplorerRouteParams>();
-	const { t }                  = useTranslation("openings");
-	const { data: opening_data } = useQuery<EcoPositionQueryData>(
-		GET_ECO,
-		{
-			variables : {
-				slug : slug
-			},
-			skip : !slug
-		}
-	);
-
-	const opening = opening_data?.ecoPosition;
-	const meta    = createOpeningExplorerRouteMeta(t, opening);
+	const { t } = useTranslation("openings");
+	const meta  = createOpeningExplorerRouteMeta(t);
 
 	return (
 		<>
@@ -41,23 +22,18 @@ function OpeningExplorerRoute() {
 				<meta property="twitter:title" content={meta.og_title}/>
 				<meta property="twitter:description" content={meta.description}/>
 			</Helmet>
-			{!slug && <OpeningExplorer/>}
-			{
-				slug &&
-				<ApolloConsumer>
-					{client => 
-						<ChessController
-							demo={false}
-							key="chess-controller"
-							mode="opening"
-							game={opening}
-							client={client}
-						/>
-					}
-				</ApolloConsumer>
-			}
+			<ApolloConsumer>
+				{client => 
+					<ChessController
+						demo={false}
+						key="chess-controller"
+						mode={"explorer"}
+						client={client}
+					/>
+				}
+			</ApolloConsumer>
 		</>
-	);
+	)
 }
 
 export default OpeningExplorerRoute;

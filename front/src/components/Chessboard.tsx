@@ -211,7 +211,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 	}
 
 	onMove(orig: Square, dest: Square, capture?: unknown, promo?: ShortMove["promotion"]): void {
-		if (!this.props.orientation && !["search", "lesson", "review"].includes(this.props.mode)) {
+		if (!this.props.orientation && !["search", "lesson", "review", "explorer"].includes(this.props.mode)) {
 			return;
 		}
 
@@ -290,6 +290,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 			case "repertoire":
 			case "review":
 			case "search":
+			case "explorer":
 				this.buildRealDests(dests);
 				break;
 
@@ -317,7 +318,7 @@ class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
 	}
 
 	buildRealDests(dests: Map<string, string[]>): void {
-		if (this.props.orientation || ["search", "lesson", "review"].includes(this.props.mode)) {
+		if (this.props.orientation || ["search", "lesson", "review", "explorer"].includes(this.props.mode)) {
 			this.chess.SQUARES.forEach(s => {
 				const ms = this.chess.moves({
 					square  : s,

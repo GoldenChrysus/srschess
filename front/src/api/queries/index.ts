@@ -607,8 +607,8 @@ export const GET_FEN_ECO = gql`
 `;
 
 export const GET_ECOS = gql`
-	query EcoPositions($letter: String!, $limit: Int!, $page: Int!, $filter: String) {
-		ecoPositions(letter: $letter, limit: $limit, page: $page, filter: $filter) {
+	query EcoPositions($letter: String!, $limit: Int!, $page: Int!, $filter: String, $movelist: String) {
+		ecoPositions(letter: $letter, limit: $limit, page: $page, filter: $filter, movelist: $movelist) {
 			letter
 			length
 			openings {
