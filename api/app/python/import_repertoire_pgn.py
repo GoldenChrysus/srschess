@@ -15,7 +15,7 @@ try:
 		"G" : "green",
 		"O" : "orange",
 		"B" : "blue",
-		"W" : "white",
+		"W" : "paleGrey",
 		"Y" : "yellow"
 	}
 
