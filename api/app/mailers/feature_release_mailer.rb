@@ -1,4 +1,6 @@
 class FeatureReleaseMailer < ApplicationMailer
+	default from: "news@chesshq.com"
+
 	def pgn_import
 		enrollments = UserSetting.where(key: "feature_releases", value: "1").all
 		recipients  = []
