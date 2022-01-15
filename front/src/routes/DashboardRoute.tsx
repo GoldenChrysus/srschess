@@ -13,7 +13,7 @@ function DashboardRoute(props: PropsFromRedux) {
 	const { section } = useParams<DashboardRouteParams>();
 
 	if (!props.authenticated) {
-		return <Redirect to="/"/>;
+		return <Redirect to={{ pathname : "/login/", state: { redirect : "dashboard/" + section }}}/>;
 	}
 
 	return <Dashboard active_section={section}/>;

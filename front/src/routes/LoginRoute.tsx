@@ -9,7 +9,7 @@ function LoginRoute(props: RouteProps & PropsFromRedux) {
 	const state: LocationState | undefined = props.location?.state as LocationState | undefined;
 
 	if (props.authenticated && state?.redirect) {
-		return <Redirect to={state.redirect}/>;
+		return <Redirect to={"/" + state.redirect}/>;
 	}
 
 	return <Login state={state}/>;
