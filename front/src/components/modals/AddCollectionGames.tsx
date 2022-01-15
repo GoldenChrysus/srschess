@@ -1,17 +1,21 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { Modal, Form, Input, Button } from "antd";
-import { CollectionModel } from "../../lib/types/models/Collection";
+import { Modal, Form, Input, Button, Switch } from "antd";
 
-interface AddCollectionGamesProps {
-	visible: boolean,
-	toggleVisible: Function,
-	onSubmit: Function,
-	collection: CollectionModel
+enum Modes {
+	collection,
+	repertoire
 }
 
-class AddCollectionGames extends React.PureComponent<AddCollectionGamesProps> {
-	constructor(props: AddCollectionGamesProps) {
+interface ImportPGNProps {
+	mode: keyof typeof Modes,
+	visible: boolean,
+	toggleVisible: Function,
+	onSubmit: Function
+}
+
+class ImportPGN extends React.PureComponent<ImportPGNProps> {
+	constructor(props: ImportPGNProps) {
 		super(props);
 
 		this.onSubmit = this.onSubmit.bind(this);
@@ -33,7 +37,6 @@ class AddCollectionGames extends React.PureComponent<AddCollectionGamesProps> {
 						>
 							<Form
 								id="import-pgn"
-								labelCol={{ span: 3 }}
 								onFinish={this.onSubmit}
 								autoComplete="off"
 							>
@@ -44,6 +47,16 @@ class AddCollectionGames extends React.PureComponent<AddCollectionGamesProps> {
 								>
 									<Input.TextArea rows={10}/>
 								</Form.Item>
+
+								{
+									this.props.mode === "repertoire" &&
+									<Form.Item
+										label={t("repertoires:replace_existing_moves")}
+										name="replace"
+									>
+										<Switch defaultChecked={false}/>
+									</Form.Item>
+								}
 							</Form>
 						</Modal>
 					)
@@ -53,12 +66,8 @@ class AddCollectionGames extends React.PureComponent<AddCollectionGamesProps> {
 	}
 
 	onSubmit(values: any) {
-		if (!values.public) {
-			values.public = false;
-		}
-
 		this.props.onSubmit(values);
 	}
 }
 
-export default AddCollectionGames;
+export default ImportPGN;

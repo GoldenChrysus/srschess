@@ -15,6 +15,7 @@
   "public_repertoires": "公開レパートリーズ",
   "repertoire_builder": "レパートリー・ビルダー",
   "repertoires": "レパートリーズ",
+  "replace_existing_moves": "既存の指し手を置き換える",
   "review": "レビュー",
   "reviews": "レビュー",
   "search_public_repertoires": "$t(repertoires:public_repertoires)の検索",

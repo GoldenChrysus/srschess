@@ -431,6 +431,31 @@ export const IMPORT_ECO_TO_REPERTOIRE = gql`
 	}
 `;
 
+export const IMPORT_PGN_TO_REPERTOIRE = gql`
+	${REPERTOIRE_FRAG}
+	${REPERTOIRE_MOVE_FRAG}
+	mutation ImportRepertoireMoves($repertoireId: ID!, $pgn: String!, $replace: Boolean!) {
+		importRepertoireMoves(input: {
+			repertoireId: $repertoireId,
+			pgn: $pgn,
+			replace: $replace
+		}) {
+			repertoire {
+				...CoreRepertoireFields
+				moves {
+					...CoreMoveFields
+					note {
+						id
+						repertoireMoveId
+						value
+					}
+				}
+				userOwned
+			}
+		}
+	}
+`;
+
 /**
  * COLLECTION DATA
  */

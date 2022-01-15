@@ -7,13 +7,14 @@ import { Collapse, Button, Progress, Popconfirm } from "antd";
 import { TFunction } from "i18next";
 
 import { RepertoireModel, RepertoireQueryData } from "../../../lib/types/models/Repertoire";
-import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOIRES, CLONE_REPERTOIRE } from "../../../api/queries";
+import { GET_REPERTOIRE_CACHED, EDIT_REPERTOIRE, DELETE_REPERTOIRE, GET_REPERTOIRES, CLONE_REPERTOIRE, IMPORT_PGN_TO_REPERTOIRE } from "../../../api/queries";
 
 import AddRepertoire from "../../modals/AddRepertoire";
 import { hasPremiumLockoutError } from "../../../helpers";
 import PremiumWarning from "../../PremiumWarning";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
+import ImportPGN from "../../modals/AddCollectionGames";
 
 interface RepertoireProps extends PropsFromRedux {
 	repertoire?: RepertoireModel
@@ -24,15 +25,18 @@ let original_review_count = 0;
 let original_lesson_count = 0;
 
 function Repertoire(props: RepertoireProps) {
-	const [ modal_active, setModalActive ] = useState(false);
-	const [ deleting, setDeleting ]        = useState(false);
+	const [ edit_modal_active, setEditModalActive ]     = useState(false);
+	const [ import_modal_active, setImportModalActive ] = useState(false);
+	const [ deleting, setDeleting ]                     = useState(false);
 
 	const [ editRepertoire, edit_res ]   = useMutation(EDIT_REPERTOIRE);
 	const [ deleteRepertoire, delete_res ] = useMutation(DELETE_REPERTOIRE, {
 		refetchQueries : [ GET_REPERTOIRES ]
 	});
 	const [ cloneRepertoire, clone_res ] = useMutation(CLONE_REPERTOIRE, {
-		refetchQueries: [ GET_REPERTOIRES ]
+		refetchQueries : [ GET_REPERTOIRES ]
+	});
+	const [ importPGN, import_res ] = useMutation(IMPORT_PGN_TO_REPERTOIRE, {
 	});
 
 	const { t }       = useTranslation(["repertoires", "common", "premium"]);
@@ -50,7 +54,7 @@ function Repertoire(props: RepertoireProps) {
 	);
 
 	const onSubmit = (values: any) => {
-		setModalActive(false);
+		setEditModalActive(false);
 		editRepertoire({
 			variables : {
 				...values,
@@ -72,6 +76,26 @@ function Repertoire(props: RepertoireProps) {
 		cloneRepertoire({
 			variables : {
 				id : props.repertoire?.id
+			}
+		});
+	}
+
+	const onImport = (values: any) => {
+		setImportModalActive(false);
+
+		if (!data?.repertoire) {
+			return;
+		}
+
+		if (!values.replace) {
+			values.replace = false;
+		}
+
+		importPGN({
+			variables : {
+				repertoireId : data?.repertoire.id,
+				pgn          : values.pgn,
+				replace      : values.replace
 			}
 		});
 	}
@@ -108,10 +132,13 @@ function Repertoire(props: RepertoireProps) {
 		<>
 			<Collapse bordered={false} activeKey="repertoire-panel">
 				<Collapse.Panel showArrow={false} id="repertoire-panel" header={getTitle(props, t)} key="repertoire-panel">
-					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
-						{renderContent(props, t, lesson_count, review_count, setModalActive, onDelete, onCopy)}
+					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading || import_res.loading}>
+						{renderContent(props, t, lesson_count, review_count, setEditModalActive, setImportModalActive, onDelete, onCopy)}
 						{props.mode === "repertoire" && (
-							<AddRepertoire type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} repertoire={data?.repertoire}/>
+							<>
+								<AddRepertoire type="edit" visible={edit_modal_active} toggleVisible={setEditModalActive} onSubmit={onSubmit} repertoire={data?.repertoire}/>
+								<ImportPGN mode="repertoire" visible={import_modal_active} toggleVisible={setImportModalActive} onSubmit={onImport}/>
+							</>
 						)}
 					</Spin>
 				</Collapse.Panel>
@@ -121,7 +148,7 @@ function Repertoire(props: RepertoireProps) {
 	);
 }
 
-function renderContent(props: RepertoireProps, t: TFunction, lesson_count: number, review_count: number, setModalActive: Function, onDelete: Function, onCopy: Function) {
+function renderContent(props: RepertoireProps, t: TFunction, lesson_count: number, review_count: number, setEditModalActive: Function, setImportModalActive: (active: boolean) => void, onDelete: Function, onCopy: Function) {
 	switch (props.mode) {
 		case "repertoire":
 			return (
@@ -129,14 +156,15 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 					{
 						props.repertoire?.userOwned &&
 						props.authenticated &&
-						<>
+						<div className="flex gap-x-2 gap-y-2 flex-wrap">
 							<Link to={{pathname: "/lessons/" + props.repertoire?.slug}}>
-								<Button className="mr-2" type="primary" disabled={lesson_count === 0}>{t("train")} ({lesson_count})</Button>
+								<Button type="primary" disabled={lesson_count === 0}>{t("train")} ({lesson_count})</Button>
 							</Link>
 							<Link to={{pathname: "/reviews/" + props.repertoire?.slug}}>
-								<Button className="mr-2" type="default" disabled={review_count === 0}>{t("review")} ({review_count})</Button>
+								<Button type="default" disabled={review_count === 0}>{t("review")} ({review_count})</Button>
 							</Link>
-							<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
+							<Button type="ghost" onClick={() => setEditModalActive(true)}>{t("common:edit")}</Button>
+							<Button type="ghost" onClick={() => setImportModalActive(true)}>{t("database:import_pgn")}</Button>
 							<Popconfirm
 								title={t("common:delete_confirm")}
 								okText={t("common:yes")}
@@ -145,7 +173,7 @@ function renderContent(props: RepertoireProps, t: TFunction, lesson_count: numbe
 							>
 								<Button type="ghost">{t("common:delete")}</Button>
 							</Popconfirm>
-						</>
+						</div>
 					}
 					{
 						props.repertoire?.public &&

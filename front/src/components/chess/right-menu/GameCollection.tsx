@@ -12,7 +12,7 @@ import { GET_COLLECTION, EDIT_COLLECTION, DELETE_COLLECTION, GET_COLLECTIONS, CR
 import AddCollection from "../../modals/AddCollection";
 import { hasPremiumLockoutError } from "../../../helpers";
 import PremiumWarning from "../../PremiumWarning";
-import AddCollectionGames from "../../modals/AddCollectionGames";
+import ImportPGN from "../../modals/AddCollectionGames";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
 
@@ -94,7 +94,7 @@ function GameCollection(props: GameCollectionProps) {
 					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
 						{renderContent(props, t, setModalActive, onDelete, setGameModalActive)}
 						<AddCollection type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} collection={data?.collection}/>
-						{data?.collection && <AddCollectionGames visible={game_modal_active} toggleVisible={setGameModalActive} onSubmit={onGamesSubmit} collection={data.collection}/>}
+						{data?.collection && <ImportPGN mode="collection" visible={game_modal_active} toggleVisible={setGameModalActive} onSubmit={onGamesSubmit}/>}
 					</Spin>
 				</Collapse.Panel>
 			</Collapse>

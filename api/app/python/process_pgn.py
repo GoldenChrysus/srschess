@@ -18,6 +18,9 @@ try:
 		fens  = []
 
 		for move in game.mainline():
+			if (len(moves) == 0 and move.ply() != 1):
+				raise ValueError
+
 			moves.append(move.san())
 			ucis.append(move.uci())
 			fens.append(move.board().fen())

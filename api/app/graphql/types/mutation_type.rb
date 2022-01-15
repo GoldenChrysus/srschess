@@ -36,6 +36,9 @@ module Types
 		# /import_eco_to_repertoire
 		field :import_eco_to_repertoire, mutation: Types::Mutations::ImportEcoToRepertoire
 
+		# /import_repertoire_moves
+		field :import_repertoire_moves, mutation: Types::Mutations::ImportRepertoireMoves
+
 		# /create_repertoire_move_note
 		field :create_repertoire_move_note, mutation: Types::Mutations::CreateRepertoireMoveNote
 
