@@ -35,6 +35,8 @@ module Types
 
 							db_move = ::RepertoireMove.new
 						elsif (db_move != nil and replace == false)
+							authorize db_move, :update?
+
 							move_cache[db_move.id] = db_move
 
 							next
