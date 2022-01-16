@@ -7,7 +7,8 @@
 	overflow-y: auto;
 }
 
-#chess-left-menu #related-openings-panel .ant-collapse-content {
+#chess-left-menu #related-openings-panel .ant-collapse-content,
+#chess-left-menu #related-transpositions-panel .ant-collapse-content {
 	max-height: 80vh;
 }
 
