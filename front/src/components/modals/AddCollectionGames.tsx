@@ -31,7 +31,7 @@ class ImportPGN extends React.PureComponent<ImportPGNProps> {
 							visible={this.props.visible}
 							onCancel={() => this.props.toggleVisible(false)}
 							footer={[
-								<Button onClick={() => this.props.toggleVisible(false)}>{t("cancel")}</Button>,
+								<Button type="ghost" onClick={() => this.props.toggleVisible(false)}>{t("cancel")}</Button>,
 								<Button type="default" form="import-pgn" htmlType="submit">{t("submit")}</Button>
 							]}
 						>

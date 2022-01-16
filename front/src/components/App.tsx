@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Translation } from "react-i18next";
 import { generateCanonicalURL, ROUTES } from "../helpers";
 
-import "../styles/app.css";
+import "../styles/_base.less";
 import Container from "./Container";
 import ErrorBoundary from "./ErrorBoundary";
 

@@ -36,7 +36,7 @@ class AddCollection extends React.PureComponent<AddCollectionProps> {
 							visible={this.props.visible}
 							onCancel={() => this.props.toggleVisible(false)}
 							footer={[
-								<Button key="cancel-button" onClick={() => this.props.toggleVisible(false)}>{t("cancel")}</Button>,
+								<Button key="cancel-button" type="ghost" onClick={() => this.props.toggleVisible(false)}>{t("cancel")}</Button>,
 								<Button key="save-button" type="default" form={this.props.type + "-collection"} htmlType="submit">{t(save_text)}</Button>
 							]}
 						>

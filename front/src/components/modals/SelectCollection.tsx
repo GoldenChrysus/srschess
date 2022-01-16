@@ -31,7 +31,7 @@ function SelectCollection(props: SelectCollectionProps) {
 			visible={props.visible}
 			onCancel={() => props.toggleVisible(false)}
 			footer={[
-				<Button key="cancel-button" onClick={() => props.toggleVisible(false)}>{t("cancel")}</Button>,
+				<Button key="cancel-button" type="ghost" onClick={() => props.toggleVisible(false)}>{t("cancel")}</Button>,
 				<Button key="save-button" type="default" form={"select-collection"} htmlType="submit">{t("submit")}</Button>
 			]}
 		>

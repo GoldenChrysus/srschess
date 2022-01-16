@@ -44,8 +44,8 @@ function Repertoires(props: RepertoiresProps) {
 							defaultOpenKeys={["white-repertoires", "black-repertoires"]}
 							selectedKeys={[ "repertoire-" + props.repertoire?.id, "repertoire-" + props.mode + "s-" + props.repertoire?.id ]}
 						>
-							<Menu.Item key="create-repertoire-button" style={{ paddingLeft : 0, marginTop : 0 }}>
-								<Button type="default" onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
+							<Menu.Item className="menu-item-button" key="create-repertoire-button" style={{ paddingLeft : 0, marginTop : 0 }}>
+								<Button onClick={() => setModalActive(true)}>{t("create_repertoire")}</Button>
 							</Menu.Item>
 							<Menu.SubMenu title={t("white_repertoires")} key="white-repertoires">
 								{renderRepertoires(data, "white")}

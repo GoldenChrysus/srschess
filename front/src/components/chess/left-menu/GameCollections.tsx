@@ -43,7 +43,7 @@ function GameCollections(props: PropsFromRedux) {
 					mode="inline"
 					selectedKeys={[ "collection-" + props.collection?.id ]}
 				>
-					<Menu.Item key="create-collection-button" style={{ paddingLeft : 0, marginTop : 0 }}>
+					<Menu.Item className="menu-item-button" key="create-collection-button" style={{ paddingLeft : 0, marginTop : 0 }}>
 						<Button type="default" onClick={() => setModalActive(true)}>{t("create_collection")}</Button>
 					</Menu.Item>
 					{renderCollections(data)}
