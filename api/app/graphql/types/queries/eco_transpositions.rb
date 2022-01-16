@@ -37,15 +37,16 @@ module Types
 					moves[key].push(move)
 				end
 
-				params[:movelist_white] = moves[:white].join(".*.")
-				params[:movelist_black] = moves[:black].join(".*.")
+				[:white, :black].each do |side|
+					if (moves[side].length > 0)
+						moves[side].each_with_index do |move, index|
+							key = side.to_s + "_" + index.to_s
 
-				if (params[:movelist_white] != "")
-					where.push("movelist ~ CONCAT('*.', :movelist_white, '.*')::LQUERY")
-				end
+							params[key.to_sym] = "*.#{move}.*"
 
-				if (params[:movelist_black] != "")
-					where.push("movelist ~ CONCAT('*.', :movelist_black, '.*')::LQUERY")
+							where.push("movelist ~ :#{key}::LQUERY")
+						end
+					end
 				end
 
 				where     = where.join(" AND ")

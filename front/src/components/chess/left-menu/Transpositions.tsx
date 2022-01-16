@@ -22,8 +22,6 @@ function Transpositions(props: TranspositionsProps) {
 		}
 	});
 
-	console.log(data);
-
 	if (!loading) {
 		openings_ref.current = data?.ecoTranspositions?.openings ?? [];
 		count_ref.current    = data?.ecoTranspositions?.length ?? 0;
