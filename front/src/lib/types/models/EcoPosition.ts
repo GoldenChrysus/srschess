@@ -25,3 +25,10 @@ export interface EcoPositionQueryData {
 export interface EcoPositionsQueryData {
 	ecoPositions: Array<EcoVolume>
 }
+
+export interface EcoTranspositionsQueryData {
+	ecoTranspositions: {
+		length: number,
+		openings: EcoPositionModel[]
+	}
+}

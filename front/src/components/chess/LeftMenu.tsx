@@ -18,6 +18,7 @@ import Results from "./search/Results";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../redux/store";
 import Openings from "./left-menu/Openings";
+import Transpositions from "./left-menu/Transpositions";
 
 interface LeftMenuProps extends PropsFromRedux {
 	repertoire?         : RepertoireModel | null
@@ -124,9 +125,14 @@ class LeftMenu extends React.Component<LeftMenuProps> {
 
 								{
 									is_explorer &&
-									<Collapse.Panel id="related-openings-panel" header={t("openings:openings_explorer")} key="related-openings-panel">
-										<Openings fen={this.props.fen} movelist={this.props.movelist}/>
-									</Collapse.Panel>
+									<>
+										<Collapse.Panel id="related-transpositions-panel" header={t("openings:potential_transpositions")} key="related-transpositions-panel">
+											<Transpositions movelist={this.props.movelist}/>
+										</Collapse.Panel>
+										<Collapse.Panel id="related-openings-panel" header={t("openings:openings_explorer")} key="related-openings-panel">
+											<Openings fen={this.props.fen} movelist={this.props.movelist}/>
+										</Collapse.Panel>
+									</>
 								}
 							</Collapse>
 						)

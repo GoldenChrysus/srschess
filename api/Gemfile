@@ -95,6 +95,7 @@ gem "redis"
 
 # Chess logic
 gem "pgn"
+gem "chess", :git => "https://github.com/GoldenChrysus/chess-rules.git"
 
 # Support for views in DB
 gem "scenic"

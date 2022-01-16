@@ -55,6 +55,9 @@ module Types
 		# /eco_position
 		field :eco_position, resolver: Types::Queries::EcoPosition
 
+		# /eco_transpositions
+		field :eco_transpositions, resolver: Types::Queries::EcoTranspositions
+
 		# /chess_search
 		field :chess_search, resolver: Types::Queries::ChessSearch
 	end

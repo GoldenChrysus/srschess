@@ -636,6 +636,22 @@ export const GET_ECO = gql`
 	}
 `;
 
+export const GET_TRANSPOSITIONS = gql`
+	query EcoTranspositions($limit: Int!, $page: Int!, $movelist: String) {
+		ecoTranspositions(limit: $limit, page: $page, movelist: $movelist) {
+			length
+			openings {
+				id
+				slug
+				fen
+				pgn
+				code
+				name
+			}
+		}
+	}
+`;
+
 /**
  * REPERTOIRE/GAME SEARCH
  */

@@ -26,6 +26,7 @@ for file in files
 			name: row["name"],
 			fen: row["epd"],
 			pgn: row["pgn"],
+			uci: row["uci"],
 			movelist: moves.join(".")
 		}])
 	end

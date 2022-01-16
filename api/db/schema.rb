@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_15_041940) do
+ActiveRecord::Schema.define(version: 2022_01_16_071116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2022_01_15_041940) do
     t.datetime "updated_at", precision: 6, null: false
     t.ltree "movelist", null: false
     t.string "slug", null: false
+    t.string "uci"
     t.index ["code", "fen"], name: "index_eco_positions_on_code_and_fen", unique: true
     t.index ["fen"], name: "index_eco_positions_on_fen", unique: true
     t.index ["movelist"], name: "index_eco_positions_on_movelist", using: :gist

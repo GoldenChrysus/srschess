@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/GoldenChrysus/chess-rules.git
+  revision: 129acd30ebd34e27ddb765977e75130762d19a8e
+  specs:
+    chess (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -321,6 +327,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   capybara (>= 3.26)
+  chess!
   database_cleaner
   dotenv-rails
   factory_bot_rails (~> 4.0)
