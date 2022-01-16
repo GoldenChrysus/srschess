@@ -14,7 +14,7 @@ SHELL ["/bin/bash", "-l", "-c"]
 
 # Prereqs
 RUN apt-get update
-RUN apt-get install -y openssl curl nginx libpq-dev procps systemd python3 python3-pip gnupg
+RUN apt-get install -y openssl curl nginx libpq-dev procps systemd python3 python3-pip gnupg git
 
 # Copy previous build steps
 COPY --from=build-front /front/build /usr/share/nginx/html

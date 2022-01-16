@@ -17,6 +17,10 @@ class EcoPosition < ApplicationRecord
 		objects.each do |attributes|
 			record = self.find_or_initialize_by(fen: attributes[:fen])
 
+			if (record.uci != nil)
+				next
+			end
+
 			record.assign_attributes(attributes)
 			record.save
 		end
