@@ -115,7 +115,11 @@ function renderContent(props: GameCollectionProps, t: TFunction, collection: Col
 						props.authenticated &&
 						props.tier >= 3 &&
 						<>
-							<Button type="default">Import chess.com</Button>
+							<Button type="ghost" className="flex-nowrap items-center gap-x-1" style={{ display: "flex" }}>
+								<div className="flex-initial">{t("import")}</div>
+								<div className="flex-initial w-4"><img src={process.env.PUBLIC_URL + "/assets/images/third-party/lichess-icon.svg"}/></div>
+								<div className="flex-initial"><img className="h-4" src={process.env.PUBLIC_URL + "/assets/images/third-party/chesscom-icon.png"}/></div>
+							</Button>
 							<Button type="primary" onClick={() => downloadPGN(collection)}>{t("download_pgn")}</Button>
 						</>
 					}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_16_071116) do
+ActiveRecord::Schema.define(version: 2022_01_17_114446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "ltree"
@@ -105,7 +105,9 @@ ActiveRecord::Schema.define(version: 2022_01_16_071116) do
     t.string "white"
     t.string "black"
     t.integer "result"
+    t.string "source_id"
     t.index ["collection_id"], name: "index_games_on_collection_id"
+    t.index ["source", "source_id"], name: "index_games_on_source_id", unique: true, where: "(source_id IS NOT NULL)"
     t.index ["user_id"], name: "index_games_on_user_id"
   end
 

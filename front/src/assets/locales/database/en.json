@@ -9,6 +9,7 @@
 	"game_database": "Game Database",
 	"game_list": "Game List",
 	"game_save_success": "Successfully imported game into $t(database:collection, lowercase).",
+	"import": "Import",
 	"import_pgn": "Import PGN",
 	"input_collection": "Please select a $t(collection, lowercase).",
 	"input_pgn": "Please input a PGN.",
