@@ -7,6 +7,7 @@
 
 @btn-default-bg: @primary-color;
 @btn-primary-bg: #177ddc;
+@btn-dashed-bg: transparent;
 
 @table-header-bg: rgba(0, 0, 0, 0.15);
 @table-header-sort-bg: @table-header-bg;
@@ -63,6 +64,13 @@ body .ant-btn-default.premium:focus,
 body .ant-btn-default.premium:active {
 	background-color: var(--yellow-500);
 	border-color: var(--yellow-500);
+}
+
+body .ant-btn-dashed,
+body .ant-btn-dashed:hover,
+body .ant-btn-dashed:focus,
+body .ant-btn-dashed:active {
+	background: transparent;
 }
 
 /* Position fixes */

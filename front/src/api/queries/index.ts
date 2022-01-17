@@ -490,6 +490,7 @@ export const GET_COLLECTION = gql`
 			userOwned
 			games {
 				...CoreGameFields
+				pgn
 			}
 		}
 	}
@@ -572,6 +573,7 @@ export const SAVE_MASTER_GAME = gql`
 				userOwned
 				games {
 					...CoreGameFields
+					pgn
 				}
 			}
 			errors

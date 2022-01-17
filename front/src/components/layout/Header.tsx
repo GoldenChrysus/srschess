@@ -54,12 +54,12 @@ class Header extends React.Component<PropsFromRedux, HeaderState> {
 					(t) => (
 						<>
 							<div className="w-full py-1 px-6 hidden md:flex items-center">
-								<div id="logo" className="w-28 mr-6 z-10">
+								<div id="logo" className="w-24 mr-6 z-10" style={{ minWidth: "6rem" }}>
 									<Link to="/">
 										<img alt="Chess HQ" src="/assets/images/business/logo.png"/>
 									</Link>
 								</div>
-								<nav className="flex flex-1 items-center h-full">
+								<nav className="flex flex-1 items-center h-full gap-x-2 lg:gap-x-5 mr-6 text-md">
 									<NavLink to="/repertoires/" isActive={(match, location) => {
 										return (!!match || ["reviews", "lessons"].includes(location.pathname.split("/")[1]))
 									}}>

@@ -176,13 +176,13 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 		const user_shapes   = (this.state.last_uuid) ? getMove(this.props.client, this.state.last_uuid)?.arrow?.data ?? [] : [];
 		const queue_item    = (this.props.mode === "lesson" && this.original_queue) ? this.original_queue[this.state.queue_index] : null;
 		const board_classes = [""];
-		const outer_classes = ["chess-outer flex gap-x-8"];
+		const outer_classes = ["chess-outer flex gap-x-8 md:gap-x-4 lg:gap-x-8"];
 
 		if (this.props.demo) {
 			board_classes.push("board-100w flex-1 demo w-full max-w-full lg:max-w-2/3 lg:w-2/3");
 			outer_classes.push("flex-wrap lg:flex-nowrap");
 		} else {
-			board_classes.push("flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess min-w-chess-small md:min-w-chess");
+			board_classes.push("flow-grow-0 order-1 w-full md:order-2 md:w-chess md:max-w-chess min-w-chess-small md:min-w-chess-tablet lg:min-w-chess");
 			outer_classes.push("flex-wrap min-h-full");
 		}
 

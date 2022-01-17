@@ -92,7 +92,7 @@ function GameCollection(props: GameCollectionProps) {
 			<Collapse bordered={false} activeKey="repertoire-panel">
 				<Collapse.Panel showArrow={false} id="repertoire-panel" header={data?.collection?.name} key="repertoire-panel">
 					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
-						{renderContent(props, t, setModalActive, onDelete, setGameModalActive)}
+						{renderContent(props, t, data?.collection, setModalActive, onDelete, setGameModalActive)}
 						<AddCollection type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} collection={data?.collection}/>
 						{data?.collection && <ImportPGN mode="collection" visible={game_modal_active} toggleVisible={setGameModalActive} onSubmit={onGamesSubmit}/>}
 					</Spin>
@@ -103,15 +103,23 @@ function GameCollection(props: GameCollectionProps) {
 	);
 }
 
-function renderContent(props: GameCollectionProps, t: TFunction, setModalActive: Function, onDelete: Function, setGameModalActive: Function) {
+function renderContent(props: GameCollectionProps, t: TFunction, collection: CollectionModel | null | undefined, setModalActive: Function, onDelete: Function, setGameModalActive: Function) {
 	return (
 		<>
 			{
 				props.authenticated &&
 				props.collection?.userOwned &&
-				<>
-					<Button className="mr-2" type="default" onClick={() => setGameModalActive(true)}>{t("import_pgn")}</Button>
-					<Button className="mr-2" type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
+				<div className="flex flex-wrap gap-2">
+					<Button type="default" onClick={() => setGameModalActive(true)}>{t("import_pgn")}</Button>
+					{
+						props.authenticated &&
+						props.tier >= 3 &&
+						<>
+							<Button type="default">Import chess.com</Button>
+							<Button type="primary" onClick={() => downloadPGN(collection)}>{t("download_pgn")}</Button>
+						</>
+					}
+					<Button type="ghost" onClick={() => setModalActive(true)}>{t("common:edit")}</Button>
 					<Popconfirm
 						title={t("common:delete_confirm")}
 						okText={t("common:yes")}
@@ -120,14 +128,41 @@ function renderContent(props: GameCollectionProps, t: TFunction, setModalActive:
 					>
 						<Button type="ghost">{t("common:delete")}</Button>
 					</Popconfirm>
-				</>
+				</div>
 			}
 		</>
 	);
 }
 
+function downloadPGN(collection: CollectionModel | undefined | null) {
+	if (!collection) {
+		return;
+	}
+
+	const pgns = []
+
+	for (const game of collection.games ?? []) {
+		pgns.push(game.pgn);
+	}
+
+	const blob = new Blob([pgns.join("\n\n") + "\n"], {
+		type : "text/plain"
+	});
+	const url = window.URL.createObjectURL(blob);
+	const a   = document.createElement("a");
+
+	a.href     = url;
+	a.download = "games.pgn";
+
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	window.URL.revokeObjectURL(url);
+}
+
 const mapStateToProps = (state: RootState) => ({
-	authenticated : state.Auth.authenticated
+	authenticated : state.Auth.authenticated,
+	tier          : state.Auth.tier
 });
 const connector      = connect(mapStateToProps);
 type PropsFromRedux  = ConnectedProps<typeof connector>;

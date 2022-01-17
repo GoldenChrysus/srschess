@@ -22,3 +22,8 @@ Stripe.product :bishop do |product|
 	product.name = "Bishop Plan"
 	product.type = "service"
 end
+
+Stripe.product :rook do |product|
+	product.name = "Rook Plan"
+	product.type = "service"
+end

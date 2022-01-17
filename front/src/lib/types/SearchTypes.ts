@@ -16,11 +16,17 @@ export interface SearchCriteria {
 	mode: SearchProps["mode"],
 	data: {
 		movelist?: string,
-		fen?: string,
+		fens?: string[],
+		fenSearchType?: string,
 		eco?: string,
+		pgn?: string,
 		side?: string,
 		elo?: string,
-		eloComparison?: string
+		eloComparison?: string,
+		whiteFirst?: string,
+		whiteLast?: string,
+		blackFirst?: string,
+		blackLast?: string,
 	}
 }
 

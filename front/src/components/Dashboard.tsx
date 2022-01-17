@@ -10,6 +10,7 @@ import Notifications from "./dashboard/Notifications";
 import { RootState } from "../redux/store";
 import { connect, ConnectedProps } from "react-redux";
 import Connections from "./dashboard/Connections";
+import PremiumWarning from "./PremiumWarning";
 
 interface DashboardProps extends PropsFromRedux {
 	active_section: string
@@ -59,13 +60,13 @@ function Dashboard(props: DashboardProps): JSX.Element {
 				</Menu>
 			</div>
 			<div className="col-span-12 md:col-span-10">
-				{renderComponent(props.active_section)}
+				{renderComponent(props.active_section, props.tier)}
 			</div>
 		</div>
 	);
 }
 
-function renderComponent(section: string) {
+function renderComponent(section: string, tier: number) {
 	switch (section) {
 		case "user-info":
 			return <UserInfo/>;
@@ -74,6 +75,10 @@ function renderComponent(section: string) {
 			return <Notifications/>;
 
 		case "connections":
+			if (tier < 3) {
+				return <PremiumWarning type="embed"/>
+			}
+
 			return <Connections/>;
 
 		case "logout":

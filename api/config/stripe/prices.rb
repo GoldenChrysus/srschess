@@ -61,6 +61,22 @@ Stripe.price :bishop_yearly do |price|
 	price.unit_amount = 2999
 end
 
+Stripe.price :rook_monthly do |price|
+	price.product_id = Stripe::Products::ROOK.id
+	price.recurring  = {
+		interval: "month"
+	}
+	price.unit_amount = 599
+end
+
+Stripe.price :rook_yearly do |price|
+	price.product_id = Stripe::Products::ROOK.id
+	price.recurring  = {
+		interval: "year"
+	}
+	price.unit_amount = 5499
+end
+
 ::Price.update_or_create([
 	{
 		id: Stripe::Prices::BISHOP_MONTHLY.id,
@@ -71,5 +87,15 @@ end
 		id: Stripe::Prices::BISHOP_YEARLY.id,
 		stripe_id: Stripe::Prices::BISHOP_YEARLY.stripe_id,
 		tier: 2
+	},
+	{
+		id: Stripe::Prices::ROOK_MONTHLY.id,
+		stripe_id: Stripe::Prices::ROOK_MONTHLY.stripe_id,
+		tier: 3
+	},
+	{
+		id: Stripe::Prices::ROOK_YEARLY.id,
+		stripe_id: Stripe::Prices::ROOK_YEARLY.stripe_id,
+		tier: 4
 	}
 ])

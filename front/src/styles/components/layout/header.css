@@ -1,14 +1,7 @@
 nav > a {
-	font-size: 1.15em;
-	line-height: 1.15em;
-	margin-right: 1.5em;
 	color: rgba(255, 255, 255, 1);
 }
 
 nav > a.active {
 	color: var(--green-500);
-}
-
-nav > a:last-child {
-	margin-right: 0;
 }

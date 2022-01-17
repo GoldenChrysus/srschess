@@ -2,6 +2,8 @@ import React from "react";
 import { PlanModel } from "../lib/types/models/Premium";
 import Plan from "./upgrade/Plan";
 
+import "../styles/components/upgrade.css";
+
 const PLANS: Array<PlanModel> = [
 	{
 		id            : "free",
@@ -195,7 +197,7 @@ const PLANS: Array<PlanModel> = [
 		price_monthly : 5.99,
 		price_yearly  : 54.99,
 		tiers         : [3, 4],
-		available     : false,
+		available     : true,
 		piece         : "white r",
 		features      : [
 			{
@@ -348,8 +350,11 @@ function Upgrade(): JSX.Element {
 	}
 
 	return (
-		<div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+		<div id="upgrade" className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 			{plans}
+			<div className="col-span-1 md:col-span-2 lg:col-span-4 opacity-70">
+				<img src={process.env.PUBLIC_URL + "/assets/images/third-party/stripe.svg"} className="block m-auto" style={{ maxWidth: "130px" }}/>
+			</div>
 		</div>
 	);
 }

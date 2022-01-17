@@ -10,8 +10,29 @@ import { SearchCriteria, SearchProps, SearchState } from "../../lib/types/Search
 import Results from "./search/Results";
 import { RootState } from "../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinusCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
+
+const formItemLayout = {
+	labelCol: {
+		xs: { span: 24 },
+		sm: { span: 2 },
+	},
+	wrapperCol: {
+		xs: { span: 24 },
+		sm: { span: 24 },
+	},
+};
+
+const formItemLayoutWithOutLabel = {
+	wrapperCol: {
+		xs: { span: 24, offset: 0 },
+		sm: { span: 24, offset: 2 },
+	},
+};
 
 function Search(props: SearchProps & PropsFromRedux) {
+	const [ form ] = Form.useForm();
 	const [ active_tab, setActiveTab ] = useState<string>("form");
 	const [ state, setState ] = useState<SearchState>({
 		criteria : undefined
@@ -52,6 +73,10 @@ function Search(props: SearchProps & PropsFromRedux) {
 	function onSubmit(data: SearchCriteria["data"]) {
 		if (data.eloComparison === undefined) {
 			data.eloComparison = "gte";
+		}
+
+		if (data.fenSearchType === undefined) {
+			data.fenSearchType = "or";
 		}
 
 		setState({
@@ -103,10 +128,45 @@ function Search(props: SearchProps & PropsFromRedux) {
 				<Tabs.TabPane tab={t("by_criteria")} key="form">
 					{
 						active_tab === "form" &&
-						<Form onFinish={onSubmit} key="search-form">
-							<Form.Item label="FEN" name="fen" key="search-fen-item">
-								<Input autoComplete="off"/>
-							</Form.Item>
+						<Form onFinish={onSubmit} key="search-form" form={form}>
+							<Form.List
+								name="fens"
+								initialValue={[""]}
+							>
+								{(fields, { add, remove }) => (
+									<>
+										{fields.map((field, index) => (
+											<Form.Item
+												{...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+												label={(index === 0) ? "FEN" : ""}
+												required={false}
+												key={field.key}
+											>
+												<Form.Item {...field} noStyle>
+													<Input autoComplete="off" style={{ width: (index > 0) ? "calc(100% - 14px - 0.5rem" : "100%" }}/>
+												</Form.Item>
+
+												{
+													index > 0 &&
+													<FontAwesomeIcon className="ml-2 cursor-pointer" icon={faMinusCircle} onClick={() => remove(field.name)}/>
+												}
+											</Form.Item>
+										))}
+
+										{
+											props.authenticated &&
+											props.tier >= 3 &&
+											props.mode === "master_games" &&
+											<Form.Item {...formItemLayoutWithOutLabel}>
+												<Button type="dashed" onClick={() => add()} className="mr-2">
+													<FontAwesomeIcon icon={faPlus} className="mr-2"/>
+													{t("common:add_item", { item: "FEN" })}
+												</Button>
+											</Form.Item>
+										}
+									</>
+								)}
+							</Form.List>
 							<Form.Item label="ECO" name="eco" key="search-eco-item">
 								<Select
 									key="search-eco-select"
@@ -175,6 +235,14 @@ function Search(props: SearchProps & PropsFromRedux) {
 												</Form.Item>
 											</div>
 										</>
+									}
+
+									{
+										props.authenticated &&
+										props.tier >= 3 &&
+										<Form.Item label="PGN" name="pgn">
+											<Input.TextArea autoSize={{ maxRows: 6, minRows: 2 }}/>
+										</Form.Item>
 									}
 								</>
 							}

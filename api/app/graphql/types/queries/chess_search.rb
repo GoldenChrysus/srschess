@@ -4,7 +4,9 @@ module Types
 			# /chess_search
 			class CriteriaItem < Types::BaseInputObject
 				argument :movelist, String, required: false
-				argument :fen, String, required: false
+				argument :fens, [String], required: false
+				argument :fen_search_type, String, required: false
+				argument :pgn, String, required: false
 				argument :eco, String, required: false
 				argument :side, String, required: false
 				argument :elo, String, required: false
@@ -102,8 +104,8 @@ module Types
 							)
 						end
 
-						if (!skip and data[:fen].to_s != "")
-							valid = ValidateFen.call(fen: data[:fen])
+						if (!skip and data[:fens] != nil and data[:fens][0].to_s != "")
+							valid = ValidateFen.call(fen: data[:fens][0])
 
 							if (!valid.result)
 								raise ApiErrors::ChessError::InvalidFen.new
@@ -124,7 +126,7 @@ module Types
 									)"
 							)
 
-							params[:fen] = data[:fen]
+							params[:fen] = data[:fens][0]
 						end
 
 						if (!skip and data[:eco].to_s != "")
@@ -189,11 +191,12 @@ module Types
 							"g.black != '?'",
 							"g.year IS NOT NULL"
 						]
-						joins            = []
-						with             = []
-						params           = {}
-						limit            = (user != nil) ? user.database_search_limit : 5
-						valid_comparison = {
+						joins              = []
+						with               = []
+						params             = {}
+						limit              = (user != nil) ? user.database_search_limit : 5
+						valid_search_types = ["or"]
+						valid_comparison   = {
 							"lte" => "<=",
 							"gte" => ">=",
 							"eq"  => "="
@@ -245,22 +248,59 @@ module Types
 								)
 							end
 	
-							if (data[:fen].to_s != "")
-								valid = ValidateFen.call(fen: data[:fen])
-	
-								if (!valid.result)
-									raise ApiErrors::ChessError::InvalidFen.new
+							if (data[:fens] != nil)
+								search_type = data[:fen_search_type]
+								fens        = []
+
+								if (!valid_search_types.include?(search_type))
+									search_type = "or"
 								end
-	
-								params[:fen] = data[:fen].split(" ").slice(0..3).join(" ")
-	
-								joins.push(
-									"JOIN
-										fen_master_games fg2
-									ON
-										fg2.fen_uuid = UUID_IN(md5(:fen)::CSTRING) AND
-										g.id = ANY(fg2.master_game_ids)"
-								)
+
+								data[:fens].each do |fen|
+									next unless fen.to_s != ""
+									raise ApiErrors::ChessError::InvalidFen.new unless ValidateFen.call(fen: fen).result
+									fens.push(fen)
+								end
+
+								fens.each_with_index do |fen, i|
+									params[("fen_" + i.to_s).to_sym] = fen.split(" ").slice(0..3).join(" ")
+								end
+
+								if (fens.length > 0)
+									case search_type
+										when "and" then
+											fens.each_with_index do |fen, i|
+												key   = "fen_" + i.to_s
+												table = "user_fens_all" + i.to_s
+
+												joins.push(
+													"JOIN
+														fen_master_games #{table}
+													ON
+														#{table}.fen_uuid = UUID_IN(md5(:#{key})::CSTRING) AND
+														g.id = ANY(#{table}.master_game_ids)"
+												)
+											end
+										when "or" then
+											tmp_in = []
+
+											fens.each_with_index do |fen, i|
+												key = "fen_" + i.to_s
+
+												tmp_in.push("UUID_IN(md5(:#{key})::CSTRING)")
+											end
+
+											tmp_in = tmp_in.join(", ")
+
+											joins.push(
+												"JOIN
+													fen_master_games user_fens_any
+												ON
+													user_fens_any.fen_uuid IN (#{tmp_in}) AND
+													g.id = ANY(user_fens_any.master_game_ids)"
+											)
+									end
+								end
 							end
 
 							["year", "month", "day"].each do |date|
@@ -277,6 +317,37 @@ module Types
 	
 									where.push("g.#{date} = :#{date}")
 								end
+							end
+
+							if (data[:pgn].to_s != "")
+								pgn = data[:pgn].to_s.strip
+
+								if (pgn[0] != "[")
+									pgn = "[Event \"None\"] " + pgn
+								end
+
+								reverse = pgn.reverse
+
+								if (!["0-1", "1-0"].include?(pgn.slice(0, 3)) and pgn.slice(0, 7) != "1/2-1/2")
+									pgn = pgn + " 1-0"
+								end
+
+								pgn = ProcessPgnRuby.call(pgn: pgn).result
+
+								if (!pgn)
+									raise ApiErrors::ChessError::InvalidPgn.new
+								end
+
+								game  = pgn[0]
+								moves = []
+
+								game.moves.each do |move|
+									moves.push(SanitizeSan.call(san: move.to_s).result)
+								end
+
+								params[:movelist] = moves.join(".")
+
+								where.push("g.movelist ~ CONCAT(:movelist, '.*')::LQUERY")
 							end
 
 							# Start name logic

@@ -6,6 +6,8 @@
 	"last_name": "Last name",
 	"month": "Month",
 	"move_input_prompt": "To begin searching, please click the \"$t(start_searching)\" button below, then make moves on the board.",
+	"must_include_all": "Must include every {{item}}",
+	"must_include_any": "Must include any {{item}}",
 	"search": "Search",
 	"search_by_date": "Search by date",
 	"search_by_elo": "Search by Elo",
