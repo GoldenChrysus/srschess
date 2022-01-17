@@ -69,6 +69,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # Use ltree Postgres type
 gem "pg_ltree"
 
+# Data seeding
+gem "seedbank"
+
 # GraphQL
 gem "graphql"
 

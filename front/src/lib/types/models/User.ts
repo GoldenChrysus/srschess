@@ -34,3 +34,9 @@ export interface EditUserSettingMutationData {
 		user_setting: UserSettingModel
 	}
 }
+
+export interface EditUserSettingsMutationData {
+	editSettings: {
+		user_settings: UserSettingModel[]
+	}
+}

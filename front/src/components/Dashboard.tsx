@@ -7,8 +7,11 @@ import "../styles/components/dashboard.css";
 import UserInfo from "./dashboard/UserInfo";
 import Logout from "./dashboard/Logout";
 import Notifications from "./dashboard/Notifications";
+import { RootState } from "../redux/store";
+import { connect, ConnectedProps } from "react-redux";
+import Connections from "./dashboard/Connections";
 
-interface DashboardProps {
+interface DashboardProps extends PropsFromRedux {
 	active_section: string
 }
 
@@ -22,6 +25,11 @@ const MENU = [
 		i18n_key : "notifications"
 	},
 	{
+		slug     : "connections",
+		i18n_key : "connections",
+		tier     : 1
+	},
+	{
 		slug     : "logout",
 		i18n_key : "logout"
 	}
@@ -32,6 +40,10 @@ function Dashboard(props: DashboardProps): JSX.Element {
 	const items = [];
 
 	for (const item of MENU) {
+		if (item.tier !== undefined && props.tier < item.tier) {
+			continue;
+		}
+
 		items.push(
 			<Menu.Item key={"dashboard-menu-item-" + item.slug}>
 				<NavLink className="font-bold" to={"/dashboard/" + item.slug}>{t(item.i18n_key)}</NavLink>
@@ -61,6 +73,9 @@ function renderComponent(section: string) {
 		case "notifications":
 			return <Notifications/>;
 
+		case "connections":
+			return <Connections/>;
+
 		case "logout":
 			return <Logout/>;
 
@@ -69,4 +84,10 @@ function renderComponent(section: string) {
 	}
 }
 
-export default Dashboard;
+const mapStateToProps = (state: RootState) => ({
+	tier : state.Auth.tier
+});
+const connector     = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Dashboard);

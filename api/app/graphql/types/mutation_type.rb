@@ -6,6 +6,9 @@ module Types
 		# /edit_user_setting
 		field :edit_user_setting, mutation: Types::Mutations::EditUserSetting
 
+		# /edit_user_settings
+		field :edit_user_settings, mutation: Types::Mutations::EditUserSettings
+
 		# /create_communication_enrollment
 		field :create_communication_enrollment, mutation: Types::Mutations::CreateCommunicationEnrollment
 

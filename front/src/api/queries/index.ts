@@ -126,6 +126,19 @@ export const EDIT_USER_SETTING = gql`
 	}
 `;
 
+export const EDIT_USER_SETTINGS = gql`
+	${USER_SETTING_FRAG}
+	mutation EditUserSettings($settings: [Setting!]!) {
+		editUserSettings(input: {
+			settings: $settings
+		}) {
+			userSettings {
+				...CoreUserSettingFields
+			}
+		}
+	}
+`;
+
 /**
  * REPERTOIRES
  */

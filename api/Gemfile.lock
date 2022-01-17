@@ -254,6 +254,8 @@ GEM
     scenic (1.5.4)
       activerecord (>= 4.0.0)
       railties (>= 4.0.0)
+    seedbank (0.5.0)
+      rake (>= 10.0)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -352,6 +354,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (>= 6)
   scenic
+  seedbank
   selenium-webdriver
   shoulda-matchers (~> 3.1)
   solargraph
