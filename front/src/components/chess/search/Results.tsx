@@ -22,9 +22,9 @@ interface ResultsProps {
 }
 
 function Results(props: ResultsProps) {
-	const history = useHistory();
-	const { t } = useTranslation(["chess", "common"]);
-	let { loading, data, error } = useQuery<ChessSearchQueryData>(
+	const history                  = useHistory();
+	const { t }                    = useTranslation(["chess", "common"]);
+	let { loading, data, error }   = useQuery<ChessSearchQueryData>(
 		GET_CHESS_SEARCH,
 		{
 			variables : {

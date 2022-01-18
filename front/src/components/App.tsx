@@ -1,13 +1,21 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { Translation } from "react-i18next";
+import { connect, ConnectedProps } from "react-redux";
 import { generateCanonicalURL, ROUTES } from "../helpers";
+import { setMobile } from "../redux/slices/ui";
 
 import "../styles/_base.less";
 import Container from "./Container";
 import ErrorBoundary from "./ErrorBoundary";
 
-class App extends React.Component {
+class App extends React.Component<PropsFromRedux> {
+	constructor(props: PropsFromRedux) {
+		super(props);
+
+		this.setMobile = this.setMobile.bind(this);
+	}
+
 	componentDidMount(): void {
 		document.addEventListener("click", (e) => {
 			const target = e.target;
@@ -20,6 +28,13 @@ class App extends React.Component {
 				}
 			}
 		});
+
+		this.setMobile();
+		window.addEventListener("resize", this.setMobile);
+	}
+
+	setMobile() {
+		this.props.setMobile(window.innerWidth < 768);
 	}
 
 	render(): JSX.Element {
@@ -58,4 +73,10 @@ class App extends React.Component {
 	}
 }
 
-export default App;
+const mapDispatchToProps = {
+	setMobile : (mobile: boolean) => setMobile(mobile)
+};
+const connector      = connect(undefined, mapDispatchToProps);
+type PropsFromRedux  = ConnectedProps<typeof connector>;
+
+export default connector(App);
