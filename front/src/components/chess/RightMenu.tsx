@@ -11,6 +11,7 @@ import RepertoireMoveNote from "./right-menu/RepertoireMoveNote";
 import ECO from "./right-menu/ECO";
 import GameCollection from "./right-menu/GameCollection";
 import Opening from "./right-menu/Opening";
+import Game from "./right-menu/Game";
 
 interface RightMenuProps {
 	active_num?: ChessControllerState["last_num"],
@@ -48,6 +49,11 @@ class RightMenu extends React.Component<RightMenuProps> {
 				{
 					this.props.collection?.id && this.props.mode === "database" &&
 					<GameCollection collection={this.props.collection}/>
+				}
+				{
+					this.props.game?.id &&
+					this.props.mode === "database" &&
+					<Game game={this.props.game}/>
 				}
 				{
 					this.props.game?.id && this.props.mode === "opening" &&

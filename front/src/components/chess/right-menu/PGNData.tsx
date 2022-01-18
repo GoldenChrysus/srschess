@@ -1,11 +1,9 @@
 import React from "react";
-import { Button, Descriptions } from "antd";
+import { Descriptions } from "antd";
 import ChessMaker from "../../../lib/ChessMaker";
 import { ChessControllerProps } from "../../../lib/types/ChessControllerTypes";
-import { Translation } from "react-i18next";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
-import SaveGame from "./SaveGame";
 
 interface PGNDataProps extends PropsFromRedux {
 	game?: ChessControllerProps["game"]
@@ -42,8 +40,6 @@ class PGNData extends React.Component<PGNDataProps, PGNDataState> {
 		this.state = {
 			headers : header
 		};
-
-		this.downloadPGN = this.downloadPGN.bind(this);
 	}
 
 	componentDidUpdate(prev_props: PGNDataProps) {
@@ -66,44 +62,10 @@ class PGNData extends React.Component<PGNDataProps, PGNDataState> {
 		}
 
 		return (
-			<Translation ns="database">
-				{t => (
-					<>
-						{
-							this.props.authenticated &&
-							this.props.tier >= 1 &&
-							<div className="grid gap-2 m-auto my-2 text-center">
-								<Button type="default" onClick={this.downloadPGN}>{t("download_pgn")}</Button>
-								<SaveGame id={this.props.game?.id}/>
-							</div>
-						}
-						<Descriptions layout="vertical" bordered>
-							{items}
-						</Descriptions>
-					</>
-				)}
-			</Translation>
+			<Descriptions layout="vertical" bordered>
+				{items}
+			</Descriptions>
 		);
-	}
-
-	downloadPGN() {
-		if (!this.props.game) {
-			return;
-		}
-
-		const blob = new Blob([this.props.game.pgn], {
-			type : "text/plain"
-		});
-		const url = window.URL.createObjectURL(blob);
-		const a   = document.createElement("a");
-
-		a.href     = url;
-		a.download = "game.pgn";
-
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		window.URL.revokeObjectURL(url);
 	}
 }
 

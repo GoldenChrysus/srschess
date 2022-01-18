@@ -224,7 +224,7 @@ function Search(props: SearchProps & PropsFromRedux) {
 												</Form.Item>
 											</div>
 											<div className="grid grid-cols-4 gap-x-2">
-												<Form.Item label={t("date")} name="year" key="search-year-item" className="col-span-2">
+												<Form.Item label={t("common:date")} name="year" key="search-year-item" className="col-span-2">
 													<Input placeholder={t("year")} autoComplete="off" maxLength={4}/>
 												</Form.Item>
 												<Form.Item name="month" key="search-month-item">

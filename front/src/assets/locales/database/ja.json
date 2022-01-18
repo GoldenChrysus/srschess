@@ -27,5 +27,7 @@
   "save_database_games": "データベース試合の保存",
   "save_to_collection": "コレクションに保存",
   "search_master_games": "マスター試合の検索",
-  "select_collection": "$t(database:collection)の選び"
+  "select_collection": "$t(database:collection)の選び",
+  "sign_up_game": "試合を保存するために、サインアップください",
+  "upgrade_game": "試合を保存するために、アップグレードください"
 }

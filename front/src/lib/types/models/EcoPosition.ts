@@ -5,6 +5,9 @@ export interface EcoPositionModel {
 	pgn: string,
 	code: string,
 	name: string
+
+	white?: string
+	black?: string
 }
 
 export interface EcoVolume {

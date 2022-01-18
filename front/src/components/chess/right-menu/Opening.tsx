@@ -8,6 +8,7 @@ import { useMutation } from "@apollo/client";
 import { GET_REPERTOIRE, GET_REPERTOIRES, IMPORT_ECO_TO_REPERTOIRE } from "../../../api/queries";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
+import { Link } from "react-router-dom";
 
 interface OpeningProps extends PropsFromRedux {
 	opening?: ChessControllerProps["game"]
@@ -60,6 +61,26 @@ function Opening(props: OpeningProps) {
 				{
 					props.authenticated &&
 					<Button type="default" onClick={() => setModalActive(true)}>{t("add_to_repertoire")}</Button>
+				}
+				{
+					!props.authenticated &&
+					<Link
+						to={{
+							pathname : "/login/",
+							state    : {
+								redirect : "eco-database/" + props.opening?.slug
+							}
+						}}
+						component={
+							React.forwardRef((props: any, ref: any) => { // eslint-disable-line
+								return (
+									<Button className="premium" type="default" onClick={props.navigate}>
+										{t("sign_up_opening")}
+									</Button>
+								)
+							})
+						}
+					/>
 				}
 				<SelectRepertoire
 					visible={modal_active}

@@ -27,5 +27,7 @@
 	"save_database_games": "Save database games",
 	"save_to_collection": "Save to Collection",
 	"select_collection": "Select $t(database:collection)",
-	"search_master_games": "Search Master Games"
+	"search_master_games": "Search Master Games",
+	"sign_up_game": "Sign Up to Save this Game",
+	"upgrade_game": "Upgrade to Save this Game"
 }
