@@ -1,6 +1,9 @@
 {
 	"average_elo": "Average Elo",
 	"black": "Black",
+	"blitz": "Blitz",
+	"bullet": "Bullet",
+	"classical": "Classical",
 	"choose_side": "Please choose a side.",
 	"depth": "Depth",
 	"eco_a": "Flank Openings",
@@ -16,8 +19,9 @@
 	"move_other": "Moves",
 	"outcome_percent": "Outcome %",
 	"position_data": "Position Data",
+	"rapid": "Rapid",
 	"result": "Result",
-	"side": "Side",
+	"side": "Side{{plural}}",
 	"total_games": "Total Games",
 	"waiting": "Waiting...",
 	"white": "White"

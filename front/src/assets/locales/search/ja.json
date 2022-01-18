@@ -6,6 +6,8 @@
   "last_name": "姓",
   "month": "月",
   "move_input_prompt": "検索を開始するには、下の「$t(start_searching)」ボタンをクリックして、ボードで指し手を入力してください。",
+  "must_include_all": "すべての{{item}}を含める必要があります",
+  "must_include_any": "任意の{{item}}を含める必要があります",
   "search": "検索",
   "search_by_date": "日付で検索",
   "search_by_elo": "Eloで検索",

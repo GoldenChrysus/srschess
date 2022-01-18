@@ -1,10 +1,6 @@
 {
   "100001": "このリソースへのアクセスは許可されていません。",
-  "100002": "$t(errors:100001)",
-  "100003": "$t(errors:100001)",
-  "100004": "$t(errors:100001)",
   "300101": "ログインに失敗しました。$t(dashboard:email, lowercase)または$t(dashboard:password, lowercase)が正しくありません。",
-  "300102": "$t(errors:100001)",
   "300201": "この指し手はまだレビューできません。",
   "300301": "入力されたFENが無効です。",
   "300302": "入力されたECOが無効です。",
@@ -13,6 +9,7 @@
   "auth/invalid-email": "入力された$t(dashboard:email, lowercase)が無効です。",
   "auth/weak-password": "より強い$t(dashboard:password, lowercase)をご入力ください。",
   "auth/wrong-password": "入力された$t(dashboard:password, lowercase)が無効です。",
+  "no_games_found": "試合が見つかりませんでした。",
   "relogin": "この変更を行うには、最初にログインし直す必要があります。",
   "unexpected": "予想されなかったエラーが出ました。"
 }

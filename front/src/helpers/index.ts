@@ -71,6 +71,10 @@ export function formateDate(date: string) {
 export function notifyError(code?: string) {
 	const duration = (process.env.NODE_ENV === "development") ? 0 : 4.5;
 
+	if (code && ["100002", "100003", "100004", "300102"].includes(code)) {
+		code = "100001";
+	}
+
 	notification.error({
 		message  : (code && i18n.exists("errors:" + code)) ? i18n.t("errors:" + code) : i18n.t("errors:unexpected"),
 		duration : duration

@@ -1,7 +1,10 @@
 {
   "average_elo": "平均レイティング",
   "black": "ブラック",
+  "blitz": "ブリッツ",
+  "bullet": "ブレット",
   "choose_side": "サイドをお選びください。",
+  "classical": "クラシカル",
   "depth": "深さ",
   "eco_a": "フランク・オープニング",
   "eco_b": "セミオープン・ゲーム",
@@ -16,6 +19,7 @@
   "move_other": "指し手",
   "outcome_percent": "結果％",
   "position_data": "局面データ",
+  "rapid": "ラピッド",
   "result": "結果",
   "side": "サイド",
   "total_games": "総試合数",

@@ -1,10 +1,12 @@
 {
+  "add_item": "{{item}}の追加",
   "cancel": "キャンセル",
   "continue": "続行",
   "copy": "コピー",
   "copy_confirm": "これをコピーしてもよろしいですか？",
   "create": "作成",
   "date": "日付",
+  "date_range": "日付範囲",
   "day": "日",
   "days": "日",
   "delete": "削除",

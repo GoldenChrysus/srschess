@@ -560,6 +560,20 @@ export const CREATE_COLLECTION_GAMES = gql`
 	}
 `;
 
+export const IMPORT_EXTERNAL_GAMES = gql`
+	mutation ImportExternalGames($collectionId: ID!, $games: [ExternalGameData!]!) {
+		importExternalGames(input: {
+			collectionId: $collectionId,
+			games: $games
+		}) {
+			games {
+				id
+			}
+			errors
+		}
+	}
+`;
+
 export const SAVE_MASTER_GAME = gql`
 	${COLLECTION_FRAG}
 	${GAME_FRAG}

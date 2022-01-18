@@ -63,6 +63,9 @@ module Types
 		# /create_collection_games
 		field :create_collection_games, mutation: Types::Mutations::CreateCollectionGames
 
+		# /import_external_games
+		field :import_external_games, mutation: Types::Mutations::ImportExternalGames
+
 		# /save_master_game
 		field :save_master_game, mutation: Types::Mutations::SaveMasterGame
 

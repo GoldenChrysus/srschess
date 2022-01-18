@@ -24,6 +24,8 @@
 @select-background: @component-background;
 @select-dropdown-bg: @component-background;
 @notification-bg: @component-background;
+@picker-bg: @component-background;
+@calendar-bg: @component-background;
 @drawer-bg: rgba(0, 0, 0, 0.8);
 
 @error-color: #ef4444;
@@ -31,6 +33,8 @@
 @label-required-color: @error-color;
 
 @border-radius-base: 0.125rem;
+
+@picker-basic-cell-disabled-bg: rgba(0, 0, 0, 0.06);
 
 /* Background changes */
 body .ant-menu-submenu-title {
@@ -80,7 +84,11 @@ body .ant-message-notice-content .anticon {
 
 body .ant-pagination-item-link > span.anticon,
 body .ant-pagination-item-container > span.anticon,
-body span.ant-btn-loading-icon {
+body span.ant-btn-loading-icon,
+body .ant-picker .anticon.anticon-swap-right,
+body .ant-picker .anticon.anticon-swap-left,
+body .ant-select .anticon-close,
+body .ant-select .anticon-close-circle {
 	position: relative;
 	top: -3px;
 }

@@ -106,8 +106,8 @@ ActiveRecord::Schema.define(version: 2022_01_17_114446) do
     t.string "black"
     t.integer "result"
     t.string "source_id"
+    t.index ["collection_id", "source", "source_id"], name: "index_games_on_collection_id_source_source_id", unique: true, where: "(source_id IS NOT NULL)"
     t.index ["collection_id"], name: "index_games_on_collection_id"
-    t.index ["source", "source_id"], name: "index_games_on_source_id", unique: true, where: "(source_id IS NOT NULL)"
     t.index ["user_id"], name: "index_games_on_user_id"
   end
 

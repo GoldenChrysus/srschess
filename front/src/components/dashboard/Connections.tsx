@@ -48,11 +48,11 @@ function Connections() {
 		settings[setting.key] = setting.value;
 	}
 
-	if (loading && !started_ref.current) {
+	if (!started_ref.current) {
 		started_ref.current = true;
 	}
 
-	if (!loading && started_ref.current && !loaded_ref.current) {
+	if (data && started_ref.current && !loaded_ref.current) {
 		loaded_ref.current = true;
 
 		form.setFieldsValue(settings);

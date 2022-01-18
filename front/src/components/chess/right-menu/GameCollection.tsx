@@ -7,7 +7,7 @@ import { Collapse, Button, Popconfirm } from "antd";
 import { TFunction } from "i18next";
 
 import { CollectionModel, CollectionQueryData } from "../../../lib/types/models/Collection";
-import { GET_COLLECTION, EDIT_COLLECTION, DELETE_COLLECTION, GET_COLLECTIONS, CREATE_COLLECTION_GAMES } from "../../../api/queries";
+import { GET_COLLECTION, EDIT_COLLECTION, DELETE_COLLECTION, GET_COLLECTIONS, CREATE_COLLECTION_GAMES, IMPORT_EXTERNAL_GAMES } from "../../../api/queries";
 
 import AddCollection from "../../modals/AddCollection";
 import { hasPremiumLockoutError } from "../../../helpers";
@@ -15,15 +15,17 @@ import PremiumWarning from "../../PremiumWarning";
 import ImportPGN from "../../modals/AddCollectionGames";
 import { RootState } from "../../../redux/store";
 import { connect, ConnectedProps } from "react-redux";
+import ImportExternalGames, { ExternalGameData } from "../../modals/ImportExternalGames";
 
 interface GameCollectionProps extends PropsFromRedux {
 	collection?: CollectionModel
 }
 
 function GameCollection(props: GameCollectionProps) {
-	const [ modal_active, setModalActive ] = useState(false);
-	const [ game_modal_active, setGameModalActive ] = useState(false);
-	const [ deleting, setDeleting ]        = useState(false);
+	const [ modal_active, setModalActive ]                  = useState(false);
+	const [ game_modal_active, setGameModalActive ]         = useState(false);
+	const [ external_modal_active, setExternalModalActive ] = useState(false);
+	const [ deleting, setDeleting ]                         = useState(false);
 
 	const [ editCollection, edit_res ]   = useMutation(EDIT_COLLECTION, {
 		refetchQueries : [ GET_COLLECTION ]
@@ -32,6 +34,9 @@ function GameCollection(props: GameCollectionProps) {
 		refetchQueries : [ GET_COLLECTIONS ]
 	});
 	const [ createCollectionGames, games_res ] = useMutation(CREATE_COLLECTION_GAMES, {
+		refetchQueries : [ GET_COLLECTION ]
+	});
+	const [ importExternalGames, import_res ] = useMutation(IMPORT_EXTERNAL_GAMES, {
 		refetchQueries : [ GET_COLLECTION ]
 	});
 
@@ -77,13 +82,23 @@ function GameCollection(props: GameCollectionProps) {
 		setDeleting(true);
 	}
 
+	const onExternalSubmit = (games: ExternalGameData[]) => {
+		setExternalModalActive(false);
+		importExternalGames({
+			variables : {
+				collectionId : data?.collection?.id,
+				games        : games
+			}
+		})
+	}
+
 	if (deleting && !delete_res.loading) {
 		return (
 			<Redirect to="/game-database/"/>
 		);
 	}
 
-	const premium = hasPremiumLockoutError(games_res.error)
+	const premium = hasPremiumLockoutError(games_res.error || import_res.error)
 		? <PremiumWarning message={t("premium:collection_game_limit")} type="modal"/>
 		: null;
 
@@ -91,10 +106,16 @@ function GameCollection(props: GameCollectionProps) {
 		<>
 			<Collapse bordered={false} activeKey="repertoire-panel">
 				<Collapse.Panel showArrow={false} id="repertoire-panel" header={data?.collection?.name} key="repertoire-panel">
-					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading}>
-						{renderContent(props, t, data?.collection, setModalActive, onDelete, setGameModalActive)}
+					<Spin spinning={error !== undefined || loading || delete_res.loading || edit_res.loading || games_res.loading || import_res.loading}>
+						{renderContent(props, t, data?.collection, setModalActive, onDelete, setGameModalActive, setExternalModalActive)}
 						<AddCollection type="edit" visible={modal_active} toggleVisible={setModalActive} onSubmit={onSubmit} collection={data?.collection}/>
 						{data?.collection && <ImportPGN mode="collection" visible={game_modal_active} toggleVisible={setGameModalActive} onSubmit={onGamesSubmit}/>}
+						{
+							data?.collection &&
+							props.authenticated &&
+							props.tier >= 3 &&
+							<ImportExternalGames visible={external_modal_active} toggleVisible={setExternalModalActive} onSubmit={onExternalSubmit}/>
+						}
 					</Spin>
 				</Collapse.Panel>
 			</Collapse>
@@ -103,7 +124,7 @@ function GameCollection(props: GameCollectionProps) {
 	);
 }
 
-function renderContent(props: GameCollectionProps, t: TFunction, collection: CollectionModel | null | undefined, setModalActive: Function, onDelete: Function, setGameModalActive: Function) {
+function renderContent(props: GameCollectionProps, t: TFunction, collection: CollectionModel | null | undefined, setModalActive: React.Dispatch<React.SetStateAction<boolean>>, onDelete: () => void, setGameModalActive: React.Dispatch<React.SetStateAction<boolean>>, setExternalModalActive: React.Dispatch<React.SetStateAction<boolean>>) {
 	return (
 		<>
 			{
@@ -112,11 +133,10 @@ function renderContent(props: GameCollectionProps, t: TFunction, collection: Col
 				<div className="flex flex-wrap gap-2">
 					<Button type="default" onClick={() => setGameModalActive(true)}>{t("import_pgn")}</Button>
 					{
-						props.authenticated &&
 						props.tier >= 3 &&
 						<>
-							<Button type="ghost" className="flex-nowrap items-center gap-x-1" style={{ display: "flex" }}>
-								<div className="flex-initial">{t("import")}</div>
+							<Button type="ghost" className="flex-nowrap items-center gap-x-1" style={{ display: "flex" }} onClick={() => setExternalModalActive(true)}>
+								<div className="flex-initial">{t("database:import")}</div>
 								<div className="flex-initial w-4"><img src={process.env.PUBLIC_URL + "/assets/images/third-party/lichess-icon.svg"}/></div>
 								<div className="flex-initial"><img className="h-4" src={process.env.PUBLIC_URL + "/assets/images/third-party/chesscom-icon.png"}/></div>
 							</Button>
