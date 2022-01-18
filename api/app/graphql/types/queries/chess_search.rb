@@ -203,7 +203,8 @@ module Types
 						}
 
 						access = {
-							bishop: false
+							bishop: false,
+							rook: false
 						}
 
 						if (data[:movelist] != nil and data[:movelist] != "")
@@ -260,6 +261,12 @@ module Types
 									next unless fen.to_s != ""
 									raise ApiErrors::ChessError::InvalidFen.new unless ValidateFen.call(fen: fen).result
 									fens.push(fen)
+								end
+
+								if (fens.length > 1 and access[:rook] == false)
+									authorize nil, :rook?, policy_class: PremiumPolicy
+
+									access[:rook] = true
 								end
 
 								fens.each_with_index do |fen, i|
@@ -320,6 +327,12 @@ module Types
 							end
 
 							if (data[:pgn].to_s != "")
+								if (access[:rook] == false)
+									authorize nil, :rook?, policy_class: PremiumPolicy
+
+									access[:rook] = true
+								end
+
 								pgn = data[:pgn].to_s.strip
 
 								if (pgn[0] != "[")

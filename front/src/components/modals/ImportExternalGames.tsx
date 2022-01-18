@@ -26,6 +26,8 @@ export interface ExternalGameData {
 	pgn: string
 }
 
+const GAME_LIMIT = 500;
+
 async function fetchChess(data_holder: ExternalGameData[], username: string, criteria: ExternalImportFormData) {
 	let archives = await(await fetch(`https://api.chess.com/pub/player/${username}/games/archives`)).json();
 
@@ -47,7 +49,7 @@ async function fetchChess(data_holder: ExternalGameData[], username: string, cri
 	let game_count = 0;
 
 	for (const archive_url of archives) {
-		if (game_count >= 100) {
+		if (game_count >= GAME_LIMIT) {
 			break;
 		}
 
@@ -77,7 +79,7 @@ async function fetchChess(data_holder: ExternalGameData[], username: string, cri
 			const games = archive_data["games"].reverse();
 
 			for (const game of games) {
-				if (game_count >= 100) {
+				if (game_count >= GAME_LIMIT) {
 					break;
 				}
 
@@ -116,7 +118,7 @@ async function fetchChess(data_holder: ExternalGameData[], username: string, cri
 
 async function fetchLichess(data_holder: ExternalGameData[], username: string, criteria: ExternalImportFormData) {
 	const params = [
-		"max=100",
+		"max=" + GAME_LIMIT,
 		"perfType=" + criteria.types.join(","),
 	];
 
@@ -284,7 +286,7 @@ function ImportExternalGames(props: ImportExternalGamesProps) {
 								/>
 							</Form.Item>
 						</Form>
-						<Alert message={t("database:import_max", { count : 100 })} type="info"/>
+						<Alert message={t("database:import_max", { count : GAME_LIMIT })} type="info"/>
 					</>
 				}
 				{

@@ -78,4 +78,14 @@ class PremiumPolicy < ApplicationPolicy
 
 		return valid
 	end
+
+	def rook?
+		valid = (user.tier >= 3)
+
+		if (!valid)
+			Current.internal_error_code = 200007
+		end
+
+		return valid
+	end
 end
