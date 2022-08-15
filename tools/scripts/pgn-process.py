@@ -88,9 +88,13 @@ files = [file for file in sorted(listdir(path)) if isfile(join(path, file))]
 def getGame(data):
 	good = False
 
+	class NoErrorVisitor(chess.pgn.GameBuilder):
+		def handle_error(self, error: Exception) -> None:
+			raise ValueError("Reading error")
+
 	while (good == False):
 		try:
-			game = chess.pgn.read_game(data)
+			game = chess.pgn.read_game(data, Visitor=NoErrorVisitor)
 			good = True
 		except:
 			pass

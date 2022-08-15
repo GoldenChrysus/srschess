@@ -433,11 +433,12 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 				return this.reducer({
 					type  : "click-" + source,
 					data  : {
-						pgn       : this.chess.pgn(),
-						last_uuid : uuid,
-						fen       : this.chess.fen(),
-						moves     : data.moves,
-						history   : (source === "tree") ? data.history : this.state.history,
+						pgn         : this.chess.pgn(),
+						last_uuid   : uuid,
+						fen         : this.chess.fen(),
+						moves       : data.moves,
+						history     : (source === "tree") ? data.history : this.state.history,
+						tmp_history : data.history,
 					}
 				});
 
@@ -597,6 +598,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 			last_uuid     : action.data.last_uuid ?? this.state.last_uuid,
 			moves         : action.data.moves,
 			history       : action.data.history ?? this.state.history,
+			tmp_history   : action.data.tmp_history ?? this.state.tmp_history,
 			queue_index   : this.state.queue_index,
 			preloading    : action.data.preloading ?? this.state.preloading,
 			quizzing      : this.state.quizzing,
@@ -778,14 +780,17 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 				new_state.last_uuid = uuid;
 
 				if (!this.historyContainsUUID(uuid)) {
-					if (!new_state.history) {
-						new_state.history = [...this.state.history];
+					if (!new_state.history || new_state.tmp_history) {
+						new_state.history     = (new_state.tmp_history) ? [...new_state.tmp_history] : [...this.state.history];
+						new_state.tmp_history = undefined;
 					}
 
 					new_state.history.push({
 						id   : uuid,
 						move : last_move
 					});
+				} else if (new_state.tmp_history) {
+					new_state.tmp_history = this.generateHistory(uuid).history;
 				}
 
 				const cached_move = (!this.props.demo) ? getMove(this.props.client, uuid) : getMoveSimple(this.props.repertoire.moves ?? [], uuid);

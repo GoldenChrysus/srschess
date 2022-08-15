@@ -51,6 +51,7 @@ export interface ChessControllerState {
 	last_uuid     : string | null,
 	moves         : Array<string>,
 	history       : Array<ChessControllerHistoryItem>,
+	tmp_history?  : Array<ChessControllerHistoryItem>,
 	queue_index   : number,
 	preloading    : boolean,
 	quizzing      : boolean,
@@ -64,6 +65,7 @@ export const initial_state: ChessControllerState = {
 	last_uuid     : null,
 	moves         : [],
 	history       : [],
+	tmp_history   : undefined,
 	queue_index   : 0,
 	preloading    : false,
 	quizzing      : false,
@@ -98,6 +100,7 @@ export interface ReducerArgument {
 		pgn: string,
 		fen: string,
 		moves: string[],
-		history?: ChessControllerHistoryItem[]
+		history?: ChessControllerHistoryItem[],
+		tmp_history?: ChessControllerHistoryItem[],
 	}
 }

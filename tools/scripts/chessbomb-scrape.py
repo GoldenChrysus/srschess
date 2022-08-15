@@ -7,13 +7,13 @@ from os import path
 from os import remove
 from datetime import datetime
 
-api_path  = "https://www.chessbomb.com/api/"
+api_path  = "https://nxt.chessbomb.com/events/api/"
 path      = "data/chessbomb/"
 date_fmt  = "%Y-%m-%dT%H:%M:%S.%fZ"
 headers   = {
 	"Content-Type" : "application/json",
 	"Accept"       : "application/json",
-	"cookie"       : "_ga=GA1.2.1000128209.1637314987; cbs=eyJzZWNyZXQiOiJHcXltM0JhUmFjUloyVm5vVXhuMXVrU0oiLCJfZXhwaXJlIjoxNjQwNTcyNTc5NDc5LCJfbWF4QWdlIjoyNTkyMDAwMDAwfQ==; cbs.sig=PxH8jMwap1gTPjXiUnmwRCJ5sR0; _gid=GA1.2.1246786706.1638623389; _gat=1"
+	"cookie"       : "__cf_bm=yRI8jisRTdm77Ho8drDgh3lSnXMQWr8OlXKoNw80YBc-1659345195-0-AYXC/w6+a9UOEXhEHxRfGVceTffR3F4vFQPijKC5pWMuic2c2VCopKPFDSf6DYbeXZbBkQcQeJmveHkLqEfIqNg="
 }
 base_data = {
 	"_csrf" : "2J01Heky-GHvq4achgU_SZWRdPxsRdIkveFU"
@@ -54,7 +54,7 @@ def getRoom(slug, attempt = 0):
 
 def getGame(room_slug, round, game_slug, attempt = 0):
 	data = base_data
-	url  = api_path + "game/" + room_slug + "/" + round + "-" + game_slug
+	url  = api_path + "game/" + room_slug + "/" + round + "/" + game_slug
 	res  = requests.post(url = url, data = json.dumps(data), headers = headers)
 
 	if (res.status_code == requests.codes.not_found or res.status_code == requests.codes.no_content):
@@ -69,7 +69,7 @@ def getGame(room_slug, round, game_slug, attempt = 0):
 			return getGame(room_slug, round, game_slug, attempt + 1)
 
 after     = None
-last_run  = "2021-12-26T01:00:00.000Z";
+last_run  = "2022-08-11T14:00:00.000Z";
 last_run  = datetime.strptime(last_run, date_fmt)
 valid_res = [
 	"1/2-1/2",
@@ -101,6 +101,10 @@ with open(path + "state/latest.txt", "w+") as file:
 				continue
 			
 			room_path = path + "games/" + str(room["room"]["id"]) + ".pgn"
+			rounds    = {}
+
+			for round in room["rounds"]:
+				rounds[round["id"]] = round["slug"]
 
 			with open(room_path, "w+") as pgn_file:
 				pgn_file.truncate()
@@ -108,13 +112,14 @@ with open(path + "state/latest.txt", "w+") as file:
 				exporter = chess.pgn.FileExporter(pgn_file)
 
 				for game in room["games"]:
-					if "?" in game["roundSlug"]:
+					if "?" in game["slug"]:
 						continue
 					
 					if game["result"] not in valid_res:
 						continue
 
-					game = getGame(room["room"]["slug"], game["roundSlug"], game["slug"])
+					round = rounds[game["roundId"]]
+					game  = getGame(room["room"]["slug"], round, game["slug"])
 
 					if (game == False or game["game"] == None):
 						continue
@@ -125,11 +130,11 @@ with open(path + "state/latest.txt", "w+") as file:
 					if "black" not in game_info or "white" not in game_info:
 						continue
 
-					print(room["room"]["slug"], game_info["roundSlug"], game_info["slug"])
+					print(room["room"]["slug"], round, game_info["slug"])
 
 					pgn.headers["Event"]      = room["room"]["name"]
 					pgn.headers["Date"]       = room["room"]["startAt"]
-					pgn.headers["Round"]      = game_info["roundSlug"]
+					pgn.headers["Round"]      = round
 					pgn.headers["ID"]         = str(game_info["id"])
 					pgn.headers["Result"]     = game_info["result"]
 					pgn.headers["White"]      = game_info["white"]["name"]

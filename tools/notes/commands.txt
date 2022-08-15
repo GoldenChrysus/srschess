@@ -12,3 +12,6 @@ GPG:
 Docker:
 	docker build .
 	docker run -d -p 80:80 <image from previous command>
+
+Ngrok:
+	./ngrok start chesshq-api chesshq-front
