@@ -13,6 +13,7 @@ FROM debian:11.1 AS start-server
 SHELL ["/bin/bash", "-l", "-c"]
 
 # Prereqs
+RUN ln -s /bin/mkdir /usr/bin/mkdir
 RUN apt-get update
 RUN apt-get install -y openssl curl nginx libpq-dev procps systemd python3 python3-pip gnupg git
 
