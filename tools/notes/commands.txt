@@ -15,3 +15,11 @@ Docker:
 
 Ngrok:
 	./ngrok start chesshq-api chesshq-front
+
+
+
+Run entire app locally:
+	sudo nginx start
+	cd ~/ && ./ngrok start chesshq-api chesshq-front
+	cd ~/projects/srschess/api && rails s
+	cd ~/projects/srschess/front && PORT=5000 npm start

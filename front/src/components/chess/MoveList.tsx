@@ -35,6 +35,25 @@ class MoveList extends React.Component<MoveListProps> {
 
 	componentDidMount = () => {
 		window.dispatchEvent(new Event("resize"));
+
+		document.addEventListener('keydown', this.handleArrowPress.bind(this));
+	}
+
+	componentWillUnmount(): void {
+		document.removeEventListener('keydown', this.handleArrowPress.bind(this));
+	}
+
+	handleArrowPress(e: KeyboardEvent) {
+		const key = e.key;
+
+		if (!['ArrowLeft', 'ArrowRight'].includes(key)) {
+			return true;
+		}
+
+		const direction = (key === 'ArrowLeft') ? 'prev' : 'next';
+
+		this.onButtonClick(direction);
+		return false;
 	}
 
 	render() {
