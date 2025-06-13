@@ -302,11 +302,11 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 
 		if (pre_moves.join(":") === this.preloaded_moves.join(":")) {
 			pre_moves = [];
-		} else if (pre_moves.slice(0, -1).join(":") === this.preloaded_moves.join(":")) {
-			pre_moves = pre_moves.slice(-1);
+		} else if (pre_moves.slice(0, this.preloaded_moves.length).join(':') === this.preloaded_moves.join(':')) {
+			pre_moves = pre_moves.slice(this.preloaded_moves.length);
 		} else {
 			this.preloaded_moves = [];
-			this.fen_history         = [];
+			this.fen_history     = [];
 
 			this.chess.reset();
 		}
@@ -331,8 +331,8 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 					this.progressing = (pre_move_index !== (pre_moves.length - 1));
 
 					this.reducer({
-						type  : "queue-premove",
-						data  : {
+						type : "queue-premove",
+						data : {
 							preloading : this.progressing,
 							pgn        : this.chess.pgn(),
 							fen        : this.chess.fen(),
@@ -506,14 +506,14 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 						if (!san) {
 							return;
 						}
-	
+
 						const res = this.chess.move(san);
-	
+
 						if (!res) {
 							this.chess.undo();
 							return false;
 						}
-	
+
 						return this.reducer({
 							type  : "move-explorer",
 							data  : {
@@ -772,7 +772,7 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 					move_id : uuid,
 					fen     : new_state.fen
 				});
-				
+
 				if (!action.moved) {
 					this.chess.move(last_move);
 				}
@@ -822,9 +822,9 @@ class ChessController extends React.Component<ChessControllerProps & PropsFromRe
 				} else {
 					this.setState(new_state);
 				}
-	
+
 				break;
-	
+
 			default:
 				break;
 		}

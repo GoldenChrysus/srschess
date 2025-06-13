@@ -40,6 +40,9 @@ module Types
 		# /repertoire_move_note
 		field :repertoire_move_note, resolver: Types::Queries::RepertoireMoveNote
 
+		# /repertoire_move_arrow_datum
+		field :repertoire_move_arrow_datum, resolver: Types::Queries::RepertoireMoveArrowDatum
+
 		# /master_moves
 		field :master_moves, resolver: Types::Queries::MasterMoves
 

@@ -75,7 +75,7 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
-  config.action_cable.url = "wss://" + ENV["REACT_APP_API_ADDRESS"] + "/cable"
+  config.action_cable.url = "ws://" + ENV["REACT_APP_API_ADDRESS"] + "/cable"
   config.action_cable.disable_request_forgery_protection = true
 
   config.action_mailer.perform_deliveries    = true

@@ -409,6 +409,15 @@ export const CREATE_REPERTOIRE_MOVE_NOTE = gql`
 	}
 `;
 
+export const GET_REPERTOIRE_MOVE_ARROW_DATUM = gql`
+	query RepertoireMoveArrowDatum($moveId: ID!) {
+		repertoireMoveArrowDatum(moveId: $moveId) {
+			id
+			data
+		}
+	}
+`;
+
 export const CREATE_REPERTOIRE_MOVE_ARROW_DATUM = gql`
 	${REPERTOIRE_MOVE_FRAG}
 	mutation CreateRepertoireMoveArrowDatum($moveId: ID!, $data: [String!]) {
@@ -472,7 +481,7 @@ export const IMPORT_PGN_TO_REPERTOIRE = gql`
 /**
  * COLLECTION DATA
  */
- export const GET_COLLECTIONS = gql`
+export const GET_COLLECTIONS = gql`
 	${COLLECTION_FRAG}
 	query Collections {
 		collections {
