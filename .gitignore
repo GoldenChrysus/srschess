@@ -8,3 +8,5 @@ api/data/**/*.*
 config/*.json
 config/*.key
 api/config/firebase.*.json
+
+dev_db
